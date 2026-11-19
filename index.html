@@ -3041,7 +3041,7 @@ function render() {
 
 /* ================= LED 전광판 ================= */
 function tickerFor(state, text, lane) {
-  const clean = String(text).replace(/^[🔵🔴]\s*/, "");
+  const clean = String(text).replace(/^(?:🔵|🔴)\uFE0F?\s*/, "");   // 서로게이트 반쪽만 지워지지 않게 낱자 대신 낱말로 비교
   const mark = lane === "red" ? "🔴 " : lane === "blue" ? "🔵 " : state === "alert" ? "🔵 " : "";
   return mark + clean;
 }
@@ -3346,7 +3346,7 @@ function renderSignals(raw) {
     // 전광판 앞머리 🔴/🔵 표시도 남은 건 기준으로 즉시 다시 붙인다
     const track = document.getElementById("track-" + r.id);
     if (track && typeof track.dataset.text === "string") {
-      const clean = track.dataset.text.replace(/^[🔵🔴]\s*/, "");
+      const clean = track.dataset.text.replace(/^(?:🔵|🔴)\uFE0F?\s*/, "");
       const mark = rd > 0 ? "🔴 " : b > 0 ? "🔵 " : "";
       if (mark + clean !== track.dataset.text) {
         const st = el.classList.contains("alert") ? "alert" : el.classList.contains("working") ? "working" : "idle";
