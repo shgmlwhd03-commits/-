@@ -950,6 +950,12 @@
   }
   .pr-head { display: flex; align-items: center; gap: 4px; margin-bottom: 3px; font-size: 8.2px; font-weight: 900; color: #ede9fe; min-width: 0; }
   .pr-head em { margin-left: auto; font-style: normal; font-size: 6.2px; font-weight: 800; color: #c4b5fd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* 6F 분장표: 눌러서 접기/펼치기 (기본은 접힘) */
+  .pr-toggle { cursor: pointer; touch-action: manipulation; }
+  .pr-toggle:focus-visible { outline: 2px solid #38bdf8; outline-offset: 1px; border-radius: 5px; }
+  .pr-caret { flex: none; margin-left: 3px; font-size: 8px; color: #fbbf24; }
+  .pr-body { overflow: hidden; max-height: 1400px; opacity: 1; transition: max-height 0.32s ease, opacity 0.22s ease; }
+  .pr-body.collapsed { max-height: 0; opacity: 0; pointer-events: none; }
   .pr-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px; }
   .pr-item { display: flex; flex-direction: column; gap: 1px; min-width: 0; padding: 2px 4px; border-radius: 6px; background: rgba(6, 11, 20, 0.66); border: 1px solid rgba(148, 163, 184, 0.18); }
   .pr-item.on { border-color: rgba(56, 189, 248, 0.45); }
@@ -3600,6 +3606,36 @@ function rosterData(raw) {
   };
 }
 
+let ROSTER_OPEN = null;
+
+function rosterOpenState() {
+  if (ROSTER_OPEN === null) {
+    let v = null;
+    try { v = localStorage.getItem("liveoffice_roster_open"); } catch (e) {}
+    ROSTER_OPEN = (v === "1");
+  }
+  return ROSTER_OPEN;
+}
+
+function applyRosterState() {
+  const open = rosterOpenState();
+  const head = document.getElementById("pr-toggle");
+  const body = document.getElementById("pr-body");
+  const caret = document.getElementById("pr-caret");
+  if (body) {
+    body.classList.toggle("collapsed", !open);
+    body.setAttribute("aria-hidden", open ? "false" : "true");
+  }
+  if (head) head.setAttribute("aria-expanded", open ? "true" : "false");
+  if (caret) caret.textContent = open ? "▾" : "▸";
+}
+
+function toggleRoster() {
+  ROSTER_OPEN = !rosterOpenState();
+  try { localStorage.setItem("liveoffice_roster_open", ROSTER_OPEN ? "1" : "0"); } catch (e) {}
+  applyRosterState();
+}
+
 function renderRoster(raw) {
   const d = rosterData(raw);
   ROSTER = d;
@@ -3607,7 +3643,11 @@ function renderRoster(raw) {
   if (!el) return;
   const isTd = (c) => /투덜이|tudeori/i.test(c.owner + " " + c.handle);
   el.innerHTML = `
-    <div class="pr-head"><span>🧩 ${esc(d.title)}</span><em>${esc(d.note)}</em></div>
+    <div class="pr-head pr-toggle" id="pr-toggle" role="button" tabindex="0" aria-expanded="false" aria-controls="pr-body" title="눌러서 6F 분장표 접기·펼치기"
+      onclick="toggleRoster()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleRoster();}">
+      <span>🧩 ${esc(d.title)}</span><em>${esc(d.note)}</em><span class="pr-caret" id="pr-caret">▸</span>
+    </div>
+    <div class="pr-body collapsed" id="pr-body">
     <div class="pr-grid">${d.items.map(it => `
       <div class="pr-item ${it.state}" title="${esc(it.name + " · " + it.role)}">
         <span class="pr-name"><span>${esc(it.name)}</span><span class="pr-st">${esc(it.chip)}</span></span>
@@ -3616,8 +3656,10 @@ function renderRoster(raw) {
     <div class="pr-chan">${d.channels.map(c => `<a class="${isTd(c) ? "td" : ""}" href="${esc(c.url)}" target="_blank" rel="noopener">🧵 ${esc(c.handle)}</a><span class="topic">${esc(c.topic)}</span>`).join("")}</div>
     ${d.sites.length ? `<div class="pr-chan pr-sites">${d.sites.map(s => `<a class="site" href="${esc(s.url)}" target="_blank" rel="noopener">🌐 ${esc(s.label)} ↗</a>`).join("")}</div>` : ""}
     <div class="pr-rule"><b>⚡ 크레딧 절감</b> ${esc(d.rule)}</div>
-    <div class="pr-backup" id="pent-backup" aria-label="비상 업무 백업 매트릭스"></div>`;
+    <div class="pr-backup" id="pent-backup" aria-label="비상 업무 백업 매트릭스"></div>
+    </div>`;
   renderBackup(undefined);
+  applyRosterState();
 }
 
 /* ================= 상태 동기화 ================= */
