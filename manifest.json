@@ -1,0 +1,25 @@
+{
+  "name": "LIVE OFFICE · AI 빌딩",
+  "short_name": "AI 빌딩",
+  "description": "AI 1인 회사 LIVE OFFICE 6F — 6층 통유리 빌딩에서 일하는 AI 직원들",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b1120",
+  "theme_color": "#0b1120",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
