@@ -1959,6 +1959,57 @@
   .rm-btn.shop { flex: 0 0 auto; border-color: #fbbf24; background: rgba(60, 42, 8, 0.8); color: #fde68a; }
   .rm-btn[hidden] { display: none; }
 
+  /* ===== 💼 비서실장 · 총괄 보고 · 긴급 처리 (최상단 통합 패널) =====
+     두 대표(해병이·투덜이)의 미결·대기 건을 🔴 → 🔵 → 일반 대기 순으로 모아 보여 준다.
+     개인정보 없음: 부서명·할 일·공개 사이트 주소만 담는다. */
+  .chief {
+    position: relative; z-index: 4; margin: 0 6px 5px;
+    border-radius: 9px; border: 1px solid rgba(250, 204, 21, 0.45);
+    background: linear-gradient(180deg, rgba(38, 30, 8, 0.94), rgba(9, 14, 24, 0.96));
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  }
+  .chief-head {
+    display: flex; align-items: center; gap: 5px; width: 100%; padding: 5px 7px;
+    font-family: inherit; background: none; border: 0; cursor: pointer; color: #fef3c7; text-align: left;
+    touch-action: manipulation;
+  }
+  .chief-ava { flex: none; font-size: 13px; line-height: 1; filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.55)); }
+  .chief-t { display: flex; flex-direction: column; min-width: 0; }
+  .chief-t b { font-size: 8.8px; font-weight: 900; color: #fde68a; }
+  .chief-t i { font-style: normal; font-size: 6.4px; font-weight: 800; color: #cbd5e1; }
+  .chief-cnt { margin-left: auto; display: flex; gap: 3px; flex: none; }
+  .chief-cnt span { font-size: 7px; font-weight: 900; padding: 0 5px; border-radius: 999px; white-space: nowrap; }
+  .cc-red { color: #fecaca; background: rgba(127, 29, 29, 0.8); border: 1px solid rgba(248, 113, 113, 0.55); }
+  .cc-blue { color: #bae6fd; background: rgba(8, 47, 73, 0.8); border: 1px solid rgba(56, 189, 248, 0.5); }
+  .cc-wait { color: #e2e8f0; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(148, 163, 184, 0.45); }
+  .chief-caret { flex: none; font-size: 8px; color: #fbbf24; }
+  .chief-say { padding: 0 8px 4px 26px; font-size: 6.8px; font-weight: 800; line-height: 1.35; color: #fcd34d; }
+  .chief-body { display: flex; flex-direction: column; gap: 2px; padding: 0 5px 5px; }
+  .chief-body[hidden] { display: none; }
+  .chief-row {
+    display: flex; align-items: flex-start; gap: 4px; padding: 3px 5px; border-radius: 6px;
+    background: rgba(6, 11, 20, 0.72); border: 1px solid rgba(148, 163, 184, 0.2);
+    font-size: 7px; line-height: 1.35; cursor: pointer; touch-action: manipulation;
+  }
+  .chief-row.red { border-color: rgba(248, 113, 113, 0.5); background: rgba(45, 10, 10, 0.75); }
+  .chief-row.blue { border-color: rgba(56, 189, 248, 0.4); background: rgba(8, 25, 45, 0.72); }
+  .chief-row.wait { border-color: rgba(148, 163, 184, 0.28); }
+  .chief-row:focus-visible { outline: 2px solid #38bdf8; outline-offset: 1px; }
+  .cr-lane { flex: none; font-size: 7.6px; }
+  .cr-tx { display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; }
+  .cr-tx b { font-size: 7.2px; font-weight: 900; color: #e8eef8; }
+  .cr-tx .cr-rm { font-size: 6.2px; font-weight: 900; color: #7dd3fc; }
+  .cr-tx i { font-style: normal; font-size: 6.2px; font-weight: 700; color: #93a8c0; }
+  .cr-go, .cr-url {
+    flex: none; align-self: center; font-family: inherit; font-size: 6.4px; font-weight: 900;
+    padding: 1px 6px; border-radius: 999px; border: 1px solid #64748b;
+    background: rgba(15, 23, 42, 0.9); color: #e2e8f0; text-decoration: none; white-space: nowrap;
+  }
+  .cr-go { cursor: pointer; }
+  .chief-row.red .cr-go { border-color: rgba(248, 113, 113, 0.6); color: #fecaca; }
+  .chief-row.blue .cr-go { border-color: rgba(56, 189, 248, 0.55); color: #bae6fd; }
+  .cr-url { border-color: rgba(52, 211, 153, 0.5); color: #a7f3d0; }
+
   @media (max-width: 560px) {
     .sync-note { display: none; }
     .cview { padding: 5px 5px 8px; }
@@ -2377,6 +2428,19 @@
 
   @media (min-width: 561px) {
     .sigbar { padding: 0 12px 6px; gap: 6px; }
+    .chief { margin: 0 12px 7px; }
+    .chief-head { padding: 7px 10px; gap: 7px; }
+    .chief-ava { font-size: 17px; }
+    .chief-t b { font-size: 11px; }
+    .chief-t i { font-size: 8px; }
+    .chief-cnt span { font-size: 9px; padding: 1px 7px; }
+    .chief-say { font-size: 8.4px; padding: 0 11px 6px 32px; }
+    .chief-body { padding: 0 8px 8px; gap: 3px; }
+    .chief-row { font-size: 9px; padding: 4px 7px; gap: 6px; }
+    .cr-lane { font-size: 10px; }
+    .cr-tx b { font-size: 9.4px; }
+    .cr-tx .cr-rm, .cr-tx i { font-size: 8px; }
+    .cr-go, .cr-url { font-size: 8.2px; padding: 2px 8px; }
     .sig { padding: 3px 9px; gap: 5px; }
     .sig .sig-word { font-size: 9.5px; }
     .sig .sig-n { font-size: 10.5px; min-width: 16px; }
@@ -2466,6 +2530,18 @@
       <button class="btn" onclick="clearAll()">✅ 전체 복구</button>
     </div>
   </div>
+
+  <!-- 💼 비서실장(총괄 보고 · 긴급 처리): 두 대표 미결·대기 통합 · 🔴 → 🔵 → 일반 대기 자동 정렬 -->
+  <section class="chief" id="chief" aria-label="비서실장 총괄 보고">
+    <button class="chief-head" id="chief-head" type="button" onclick="toggleChief()" aria-expanded="true" aria-controls="chief-body">
+      <span class="chief-ava" aria-hidden="true">💼</span>
+      <span class="chief-t"><b>💼 비서실장 · 총괄 보고</b><i>긴급 처리 · 두 대표 미결 통합</i></span>
+      <span class="chief-cnt" id="chief-cnt"></span>
+      <span class="chief-caret" id="chief-caret">▾</span>
+    </button>
+    <div class="chief-say" id="chief-say">두 대표 미결·대기 건을 모으는 중…</div>
+    <div class="chief-body" id="chief-body"></div>
+  </section>
 
   <!-- 🚦 신호등 요약 배너: 🔵 파란불(일반 확인·승인) / 🔴 빨간불(자금·결제, 오너 직접) -->
   <div class="sigbar" id="sigbar" aria-label="신호등 요약">
@@ -2891,6 +2967,7 @@ function render() {
   renderRevenue(null);
   renderShop(null);
   renderSignals(null);
+  renderChief(null);
   renderRoster(null);
   applyCorridor();
   requestAnimationFrame(() => { liftPark(); buildTicks(); });
@@ -3193,6 +3270,109 @@ function toggleSig(lane) {
   renderSignals(SIGNALS);
 }
 
+/* ================= 💼 비서실장 (총괄 보고 · 긴급 처리) =================
+   두 대표(해병이·투덜이)의 미결·대기 건을 하나로 모아 🔴 자금·인증 → 🔵 승인·확인 → ⏳ 일반 대기
+   순으로 자동 정렬한다. 줄을 누르면 해당 부서 보고 모달(체크리스트·담당·해결 복사)이 열리고,
+   공개 사이트가 있으면 바로가기 버튼도 제공한다. 개인정보 없음(부서명·할 일·공개 주소만). */
+const CHIEF_LANE = { red: 0, blue: 1, wait: 2 };
+const CHIEF_ICON = { red: "🔴", blue: "🔵", wait: "⏳" };
+let CHIEF = null;
+let CHIEF_OPEN = null;
+
+function chiefData(raw) {
+  const src = (raw && typeof raw === "object" && !Array.isArray(raw)) ? raw : {};
+  const str = (v, d) => (typeof v === "string" && v.trim()) ? v.trim() : d;
+  const list = Array.isArray(src.items) ? src.items : [];
+  const items = list
+    .filter(it => it && typeof it === "object" && typeof it.title === "string" && it.title.trim())
+    .map(it => ({
+      lane: (it.lane === "red" || it.lane === "blue" || it.lane === "wait") ? it.lane : "wait",
+      room: (typeof it.room === "string" && rooms.some(r => r.id === it.room)) ? it.room : "",
+      title: it.title.trim(),
+      detail: str(it.detail, ""),
+      url: (typeof it.url === "string" && /^https?:\/\//.test(it.url)) ? it.url : "",
+      urlLabel: str(it.url_label || it.urlLabel, "열기")
+    }));
+  const fallback = () => {
+    const out = [];
+    (SIGNALS.red || []).forEach(x => out.push({ lane: "red", room: x.room, title: x.title, detail: x.detail, url: "", urlLabel: "열기" }));
+    (SIGNALS.blue || []).forEach(x => out.push({ lane: "blue", room: x.room, title: x.title, detail: x.detail, url: "", urlLabel: "열기" }));
+    return out;
+  };
+  const merged = items.length ? items : fallback();
+  merged.sort((a, b) => (CHIEF_LANE[a.lane] - CHIEF_LANE[b.lane]));
+  return {
+    title: str(src.title, "비서실장 · 총괄 보고 · 긴급 처리"),
+    note: str(src.note, "두 대표 미결·대기 통합 · 🔴 자금 최우선 → 🔵 승인 → ⏳ 대기"),
+    updated: str(src.updated, ""),
+    items: merged
+  };
+}
+
+function chiefOpenState() {
+  if (CHIEF_OPEN === null) {
+    let v = null;
+    try { v = localStorage.getItem("liveoffice_chief"); } catch (e) {}
+    CHIEF_OPEN = (v === "0") ? false : true;
+  }
+  return CHIEF_OPEN;
+}
+
+function applyChiefState() {
+  const open = chiefOpenState();
+  const body = document.getElementById("chief-body");
+  const head = document.getElementById("chief-head");
+  const caret = document.getElementById("chief-caret");
+  if (body) body.hidden = !open;
+  if (head) head.setAttribute("aria-expanded", open ? "true" : "false");
+  if (caret) caret.textContent = open ? "▾" : "▸";
+}
+
+function toggleChief() {
+  CHIEF_OPEN = !chiefOpenState();
+  try { localStorage.setItem("liveoffice_chief", CHIEF_OPEN ? "1" : "0"); } catch (e) {}
+  applyChiefState();
+}
+
+function chiefClick(e, room) {
+  if (e && e.target && e.target.closest && e.target.closest("button, a")) return;
+  if (room) openReport(room);
+}
+
+function renderChief(raw) {
+  if (raw !== undefined) CHIEF = chiefData(raw);
+  if (!CHIEF) CHIEF = chiefData(null);
+  const body = document.getElementById("chief-body");
+  if (!body) return;
+  const items = CHIEF.items;
+  const n = { red: 0, blue: 0, wait: 0 };
+  items.forEach(it => { n[it.lane] += 1; });
+  const cnt = document.getElementById("chief-cnt");
+  if (cnt) cnt.innerHTML = `<span class="cc-red">🔴 ${n.red}</span><span class="cc-blue">🔵 ${n.blue}</span><span class="cc-wait">⏳ ${n.wait}</span>`;
+  const say = document.getElementById("chief-say");
+  if (say) {
+    say.textContent = n.red
+      ? `🔴 자금·인증 ${n.red}건 최우선 — 오너가 직접 처리해 주세요 (AI 실행 금지) · 🔵 ${n.blue} · ⏳ ${n.wait}`
+      : n.blue
+        ? `🔵 승인·확인 ${n.blue}건 · ⏳ 대기 ${n.wait}건 — 줄을 누르면 해당 부서 보고가 열립니다`
+        : `지금 급한 건 없습니다 · ⏳ 대기 ${n.wait}건`;
+  }
+  body.innerHTML = items.length ? items.map(it => {
+    const rr = rooms.find(r => r.id === it.room);
+    const rm = rr ? rr.title : "";
+    return `<div class="chief-row ${it.lane}" role="button" tabindex="0" data-room="${esc(it.room)}"
+        title="${esc(it.title + (rm ? " · " + rm : "") + " · 누르면 부서 보고 열기")}"
+        onclick="chiefClick(event, '${esc(it.room)}')"
+        onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();chiefClick(event,'${esc(it.room)}');}">
+        <span class="cr-lane" aria-hidden="true">${CHIEF_ICON[it.lane]}</span>
+        <span class="cr-tx"><b>${esc(it.title)}</b>${rm ? `<span class="cr-rm">${esc(rm)}</span>` : ""}${it.detail ? `<i>${esc(it.detail)}</i>` : ""}</span>
+        ${it.room ? `<button class="cr-go" type="button" onclick="event.stopPropagation();openReport('${esc(it.room)}')">보고 ›</button>` : ""}
+        ${it.url ? `<a class="cr-url" href="${esc(it.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ ${esc(it.urlLabel)}</a>` : ""}
+      </div>`;
+  }).join("") : `<div class="chief-row wait"><span class="cr-lane">✅</span><span class="cr-tx"><b>지금 대기 중인 건이 없습니다</b></span></div>`;
+  applyChiefState();
+}
+
 /* ================= 🛟 비상 업무 재분장(백업) 매트릭스 =================
    5인(두 비서·아부지워커·엄마워커·까실이) 중 누가 오프·크레딧 소진·연결 지연으로
    빠져도 남은 인원이 1차→2차로 빈자리를 메운다. 부모님 폰 직접 접근은 하지 않는다. */
@@ -3347,6 +3527,7 @@ function applyStatus(data) {
   /* 신호등·백업을 방 상태보다 먼저 반영 (방 카드 레인·LED 접두에 쓰인다) */
   BACKUP = backupData(src.backup);
   renderSignals(src.signals);
+  renderChief(src.chief);
 
   rooms.forEach(r => {
     const s = src[r.id] || {};
