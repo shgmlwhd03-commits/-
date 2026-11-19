@@ -1,0 +1,34 @@
+{
+  "_note": "AI 1인 회사 부서 상태판. 개인정보 없음(이름/연락처/계정/블로그명 미포함). status: working | idle | alert",
+  "updated": "2026-11-19T21:55+09:00",
+  "ceo": {
+    "status": "idle",
+    "ticker": "총괄 지휘 중 · 비용 0원 원칙 가동 · 승인 대기",
+    "updated": "21:55"
+  },
+  "grant": {
+    "status": "idle",
+    "ticker": "1차 스캔 완료 (아델·장려금 12/1 마감 등) · 다음 브리핑 08:30",
+    "updated": "21:42"
+  },
+  "naver": {
+    "status": "working",
+    "ticker": "첫 트렌드 초안 임시저장 진행 중...",
+    "updated": "21:48"
+  },
+  "tistory": {
+    "status": "working",
+    "ticker": "첫 애드센스 초안 작성 중...",
+    "updated": "21:49"
+  },
+  "deal": {
+    "status": "idle",
+    "ticker": "대기 중 · 다음 실행 내일 12:30",
+    "updated": "21:50"
+  },
+  "prize": {
+    "status": "idle",
+    "ticker": "무료 경품 3건 스캔 완료 (문화포털 내일 마감)",
+    "updated": "21:42"
+  }
+}
