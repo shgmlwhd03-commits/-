@@ -4759,10 +4759,11 @@ async function staffBreak() {
   const who = el.querySelector(".w-who");
   const say = document.getElementById("lob-hc-say");
   const pz = document.getElementById("pantry");
+  const label = String(room.title || room.name || "쉬는 사원").replace(/^[^\p{L}\p{N}]+/u, "");
   staffBusy = true;
   try {
     if (body) body.textContent = room.worker || "🙂";
-    if (who) who.textContent = room.name || "쉬는 사원";
+    if (who) who.textContent = label;
     if (say) say.textContent = "☕ 잠깐 커피 한잔";
     el.style.transitionDuration = "0s, 0.3s";
     el.style.left = "20%";
@@ -4779,7 +4780,7 @@ async function staffBreak() {
     await sleep(1300);
     if (pz) pz.classList.remove("brewing");
     el.classList.add("carrying", "talking");
-    if (say) say.textContent = "☕ " + (room.name || "쉬는 사원") + " · 잠깐 쉬는 중";
+    if (say) say.textContent = "☕ " + label + " · 잠깐 쉬는 중";
     await sleep(1500);
     el.classList.add("sipping");
     await sleep(1400);
@@ -4796,7 +4797,7 @@ async function staffBreak() {
 
 function staffLoop() {
   if (reduceMotion) return;
-  setTimeout(() => { staffBreak(); staffLoop(); }, 52000 + Math.random() * 26000);
+  setTimeout(() => { staffBreak(); staffLoop(); }, 38000 + Math.random() * 22000);
 }
 
 /* 지하 오락실에 들른 최응모 사원 (혼자 방문) */

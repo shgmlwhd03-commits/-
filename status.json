@@ -1,6 +1,6 @@
 {
   "_note": "6층 LIVE OFFICE(6F 2인 대표실 + 6F 분장표 4파트 + 비상 백업 매트릭스) + 5F 해병이 수익·스토어층(미국 S&P500 적립투자부 포함) + 4F·3F + 2F 투덜이 B2B층(큐맥스 사업지원부 포함) + 1F 로비(리셉션·탕비실) + B1 지하 휴게층(노래방·오락실·휴게실) + 🛍️ 위탁판매실 부서 상태판. 개인정보 없음(실명/연락처/계정/블로그 주소 미포함 · 직급은 역할 별칭). floor: f6~f2, f1(로비/탕비실), b1(지하 휴게). zone: direct(해병이 피클 직접 운영) | partner(투덜이 피클 전담). status: working(노트북 앞 집중) | idle(자율 휴게·이동) | alert. signals: 신호등(blue=🔵 파란불 일반 확인·승인 대기, red=🔴 빨간불 자금·계좌·이체·결제 → AI 임의 실행 금지, 오너 직접). backup: 비상 업무 재분장 매트릭스(5인 1·2차 백업, 부모님 폰 직접 접근 금지). roster는 6F 분장표, commerce는 위탁판매실 현황판, reports는 방을 눌렀을 때 뜨는 업무 보고 내용. 이동 규칙: working/alert 캐릭터는 책상 앞 고정(층 이동·산책 없음), idle(대기·휴게) 캐릭터만 1F 탕비실·B1 휴게실·노래방·오락실·엘리베이터로 이동.",
-  "updated": "2026-11-20T07:30+09:00",
+  "updated": "2026-11-20T07:36+09:00",
   "collab": {
     "active": true,
     "note": "두 피클 협업 가동 · 투덜이 ONLINE 복귀 · 분장표 4파트 동기화 완료"
@@ -8,17 +8,17 @@
   "ceo": {
     "status": "working",
     "ticker": "2인 대표 체제 · 6F 분장표 4파트 · 11개 부서 · 신호등 가동",
-    "updated": "07:30"
+    "updated": "07:36"
   },
   "ceo_haebyeong": {
     "status": "working",
     "ticker": "6F 분장표 동기화 · 7개 부서 총괄 · 채널 @daily.moneynote",
-    "updated": "07:30"
+    "updated": "07:36"
   },
   "ceo_tudeori": {
     "status": "working",
     "ticker": "ONLINE · 4개 부서 · 전담 채널 @tudeori.carlife 연동",
-    "updated": "07:30"
+    "updated": "07:36"
   },
   "roster": {
     "title": "6F 분장표 · 4파트",
@@ -71,7 +71,7 @@
     ]
   },
   "signals": {
-    "updated": "07:30",
+    "updated": "07:36",
     "note": "🔵 파란불=오너가 꼭 알아야 하는 보고·외부 발송·게시·계약 전 일반 승인 대기 · 🔴 빨간불=자금·계좌·이체·결제·금융 인증(오너 직접 실행, AI 임의 실행 금지)",
     "blue": [
       {
@@ -111,7 +111,7 @@
   "backup": {
     "title": "비상 업무 백업 매트릭스 · 5인",
     "note": "부모님 폰 직접 접근 금지 · 자금 실행은 오너",
-    "updated": "07:30",
+    "updated": "07:36",
     "rule": "1차가 오프·크레딧 소진·연결 지연이면 2차가 이어받고, 3명 이상 동시에 빠지면 오너 승인 대기로 전환한다.",
     "members": [
       { "id": "td", "name": "투덜이 비서", "part": "카페·B2B·티스토리", "state": "on", "backup1": "해병이 비서", "backup2": "까실이" },
@@ -182,7 +182,7 @@
   "invest_sp500": {
     "status": "working",
     "ticker": "확정안 · 카카오페이증권 중개형 ISA + TIGER 미국S&P500(360750) · 월 10만 원(약 4주) · 계좌 개설 4단계 안내 중 🔴",
-    "updated": "07:30"
+    "updated": "07:36"
   },
   "grant": {
     "status": "idle",
@@ -217,7 +217,7 @@
   "cumex": {
     "status": "idle",
     "ticker": "화성 제조·물류·도급 협력사 후보 리스트업 · 외부 발송은 🔵 승인 후",
-    "updated": "07:30"
+    "updated": "07:36"
   },
   "reports": {
     "ceo_haebyeong": {
