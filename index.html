@@ -320,6 +320,67 @@
   }
   .room.alert .resolve-btn { display: inline-block; }
 
+  /* 🔴 경보 박스: 원인 + 해결 안내 + 원클릭 조치 */
+  .alert-box {
+    display: none;
+    margin-top: 7px;
+    background: rgba(69, 10, 10, 0.72);
+    border: 1px solid #ef4444;
+    border-radius: 9px;
+    padding: 7px 8px 8px;
+    box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.22);
+  }
+  .room.alert .alert-box { display: block; }
+  .alert-guide {
+    font-size: 10.5px;
+    line-height: 1.45;
+    font-weight: 700;
+    color: #fecaca;
+    margin-bottom: 6px;
+    word-break: keep-all;
+  }
+  .alert-guide .guide-tag {
+    display: inline-block;
+    background: rgba(239, 68, 68, 0.28);
+    border: 1px solid rgba(239, 68, 68, 0.55);
+    color: #fee2e2;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    border-radius: 4px;
+    padding: 0 4px;
+    margin-right: 4px;
+  }
+  .alert-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .copy-btn {
+    background: #1f2937;
+    border: 1px solid #94a3b8;
+    color: #e2e8f0;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .copy-btn:active { background: #334155; }
+  .copy-toast {
+    display: none;
+    margin-top: 6px;
+    background: #052e16;
+    border: 1px solid #22c55e;
+    color: #86efac;
+    font-size: 10.5px;
+    font-weight: 800;
+    line-height: 1.4;
+    border-radius: 6px;
+    padding: 4px 7px;
+  }
+  .copy-toast.show { display: block; animation: toastIn 0.25s ease-out; }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(-3px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   /* ===================== LED 전광판 ===================== */
   .led-board {
     position: relative;
@@ -643,6 +704,7 @@ const rooms = [
     say: "오늘 수익화 가보자!",
     foot: "최종 승인 · 총괄 지휘",
     issue: "승인 대기 중인 건이 있어요!",
+    guide: "승인 대기 건을 확인해 주세요. 진행 여부만 알려주시면 바로 실행합니다.",
     state: "idle",
     ticker: "총괄 지휘 중 · 비용 0원 원칙 가동",
     updated: "21:55"
@@ -655,6 +717,7 @@ const rooms = [
     say: "청약 일정 스캔 중",
     foot: "매일 08:30 브리핑",
     issue: "공모주 페이지 확인 필요!",
+    guide: "공모주·지원금 일정 페이지에서 확인이 필요한 항목을 열어 주세요.",
     state: "idle",
     ticker: "1차 스캔 완료 (아델·장려금 12/1 마감 등)",
     updated: "21:42"
@@ -667,6 +730,7 @@ const rooms = [
     say: "초안 쓰는 중…",
     foot: "매일 09:00 · 네이버 블로그",
     issue: "네이버 재로그인 필요!",
+    guide: "네이버 블로그에 다시 로그인해 주세요. 비밀번호만 입력하면 이어서 작업합니다.",
     state: "working",
     ticker: "첫 트렌드 초안 임시저장 진행 중...",
     updated: "21:48"
@@ -679,6 +743,7 @@ const rooms = [
     say: "고단가 키워드 찾는 중",
     foot: "매일 11:00 · 티스토리",
     issue: "카카오 인증이 필요해요!",
+    guide: "카카오 계정 인증을 마쳐 주세요. 인증이 끝나면 티스토리 발행이 이어집니다.",
     state: "working",
     ticker: "첫 애드센스 초안 작성 중...",
     updated: "21:49"
@@ -691,6 +756,7 @@ const rooms = [
     say: "적립 이벤트 체크!",
     foot: "매일 12:30 · 비용 0원",
     issue: "이벤트 링크 변경됨!",
+    guide: "이벤트 링크가 바뀌었어요. 새 링크로 다시 확인할지 알려주세요.",
     state: "idle",
     ticker: "대기 중 · 다음 실행 내일 12:30",
     updated: "21:50"
@@ -703,6 +769,7 @@ const rooms = [
     say: "무료 경품 응모 중~",
     foot: "매일 15:00 · 자동 응모",
     issue: "본인인증 팝업 떴어요!",
+    guide: "본인인증 팝업을 닫아 주세요. 닫은 뒤 다시 응모를 진행합니다.",
     state: "idle",
     ticker: "무료 경품 3건 스캔 완료 (문화포털 내일 마감)",
     updated: "21:42"
@@ -715,6 +782,7 @@ const rooms = [
     say: "카페 모니터링 중",
     foot: "수시 · 카페 관리",
     issue: "카페 계정 로그인 대기 중!",
+    guide: "카페 부매니저 계정으로 다시 로그인해 주세요. 비밀번호만 입력하면 관리 작업을 시작합니다.",
     state: "alert",
     ticker: "카페 계정 비밀번호 입력 대기 중",
     updated: "21:58"
@@ -756,7 +824,14 @@ function render() {
       </div>
       <div class="room-foot">
         <span class="foot-txt" id="foot-${r.id}">${r.foot}</span>
-        <button class="resolve-btn" onclick="toggleRoom('${r.id}')">해결 완료</button>
+      </div>
+      <div class="alert-box" id="alertbox-${r.id}">
+        <div class="alert-guide" id="guide-${r.id}"><span class="guide-tag">해결 방법</span>${r.guide}</div>
+        <div class="alert-actions">
+          <button class="copy-btn" onclick="copyIssue('${r.id}')">📋 해결 내용 복사</button>
+          <button class="resolve-btn" onclick="toggleRoom('${r.id}')">해결 완료</button>
+        </div>
+        <div class="copy-toast" id="toast-${r.id}">복사됨! 피클 채팅에 붙여넣어 주세요</div>
       </div>
     </div>
   `).join("");
@@ -912,6 +987,8 @@ function toggleRoom(id) {
     setRoomState(id, base);
     say.textContent = r.say;
     foot.textContent = r.foot;
+    const toast = document.getElementById("toast-" + id);
+    if (toast) toast.classList.remove("show");
   } else {
     setRoomState(id, "alert");
     say.textContent = "도와주세요! 🚨";
@@ -919,6 +996,45 @@ function toggleRoom(id) {
   }
   applyRoam();
   updatePill();
+}
+
+/* 경보 내용을 복사해서 피클 채팅에 바로 붙여넣게 한다 */
+function copyIssue(id) {
+  const r = rooms.find(x => x.id === id);
+  if (!r) return;
+  const text = `[관제탑 해결] ${r.title}: ${r.issue}`;
+  const toast = document.getElementById("toast-" + id);
+  const showToast = () => {
+    if (!toast) return;
+    toast.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toast.classList.remove("show"), 3600);
+  };
+  const fallback = () => {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.top = "0";
+      ta.style.left = "0";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, text.length);
+      const ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      if (ok) showToast();
+      else window.prompt("아래 문구를 복사해 피클 채팅에 붙여넣어 주세요", text);
+    } catch (e) {
+      window.prompt("아래 문구를 복사해 피클 채팅에 붙여넣어 주세요", text);
+    }
+  };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(showToast).catch(fallback);
+  } else {
+    fallback();
+  }
 }
 
 function testAlert() {
