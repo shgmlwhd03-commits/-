@@ -511,8 +511,50 @@
     100% { filter: brightness(1); }
   }
 
-  /* 사무실을 돌아다니는 도우미 캐릭터: 작업 중인 부서가 있을 때만 보인다 */
-  #roamers { display: none; }
+  /* 사무실을 돌아다니는 도우미 캐릭터: 작업 중인 부서가 있을 때만 복도에 나온다 */
+  #roamers {
+    display: none;
+    position: relative;
+    height: 62px;
+    margin: 0 0 12px;
+    border-radius: 10px;
+    border: 1px dashed rgba(140, 115, 85, 0.5);
+    background: linear-gradient(180deg, rgba(45, 36, 27, 0.55), rgba(24, 19, 15, 0.55));
+    overflow: hidden;
+  }
+  #roamers.show { display: block; }
+  .hall-item {
+    position: absolute;
+    top: 5px;
+    left: 12%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: left 3.2s cubic-bezier(0.45, 0, 0.55, 1);
+    white-space: nowrap;
+  }
+  .hall-item .say {
+    background: #fff;
+    color: #0f172a;
+    font-size: 9px;
+    font-weight: 800;
+    padding: 1px 5px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+    margin-bottom: 1px;
+  }
+  .hall-item .body { font-size: 20px; line-height: 1; }
+  .hall-item .who {
+    font-size: 8.5px;
+    font-weight: 800;
+    color: #e2e8f0;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid #475569;
+    border-radius: 5px;
+    padding: 0 4px;
+    margin-top: 1px;
+  }
 
   @media (max-width: 520px) {
     .led-text { font-size: 10.5px; padding-right: 34px; }
@@ -535,14 +577,14 @@
   </div>
 
   <div class="floor-grid" id="floor"></div>
-  <div id="roamers" style="position:relative; height:0; overflow:visible; pointer-events:none;"></div>
+  <div id="roamers" aria-hidden="true"></div>
 </div>
 
 <script>
 // 부서 간 이동 도우미: 작업 중인 부서가 하나라도 있을 때만 움직인다.
 const roamers = [
-  { avatar: "🤖", name: "전달봇", say: "자료 전달 중!", startX: 15, startY: -220 },
-  { avatar: "🧑‍🚀", name: "지원팀", say: "수고 많으십니다 :)", startX: 65, startY: -120 }
+  { avatar: "🤖", name: "전달봇", say: "자료 전달 중!" },
+  { avatar: "🧑‍🚀", name: "지원팀", say: "수고 많으십니다 :)" }
 ];
 let roamTimer = null;
 
@@ -550,10 +592,10 @@ function buildRoamers() {
   const wrap = document.getElementById("roamers");
   if (!wrap) return;
   wrap.innerHTML = roamers.map((rm, idx) => `
-    <div id="roamer-${idx}" style="position:absolute; left:${rm.startX}%; top:${rm.startY}px; transition: all 3.2s ease-in-out; z-index:20; display:flex; flex-direction:column; align-items:center;">
-      <div style="background:#fff;color:#0f172a;font-size:10px;font-weight:800;padding:2px 7px;border-radius:8px;box-shadow:0 3px 8px rgba(0,0,0,0.35);margin-bottom:2px;white-space:nowrap;">${rm.say}</div>
-      <div style="font-size:28px;filter:drop-shadow(0 4px 4px rgba(0,0,0,0.6));">${rm.avatar}</div>
-      <div style="background:rgba(15,23,42,0.9);border:1px solid #475569;color:#e2e8f0;font-size:10px;font-weight:700;padding:1px 6px;border-radius:6px;">${rm.name}</div>
+    <div class="hall-item" id="roamer-${idx}">
+      <div class="say">${rm.say}</div>
+      <div class="body">${rm.avatar}</div>
+      <div class="who">${rm.name}</div>
     </div>
   `).join("");
 }
@@ -562,8 +604,7 @@ function moveRoamers() {
   roamers.forEach((rm, idx) => {
     const el = document.getElementById("roamer-" + idx);
     if (!el) return;
-    el.style.left = (8 + Math.random() * 78) + "%";
-    el.style.top = (-320 + Math.random() * 260) + "px";
+    el.style.left = (10 + Math.random() * 76) + "%";
   });
 }
 
@@ -571,14 +612,14 @@ function setRoamActive(on) {
   const wrap = document.getElementById("roamers");
   if (!wrap) return;
   if (on) {
-    wrap.style.display = "block";
+    wrap.classList.add("show");
     if (!roamTimer) {
       roamTimer = setInterval(moveRoamers, 3400);
       moveRoamers();
     }
   } else {
     if (roamTimer) { clearInterval(roamTimer); roamTimer = null; }
-    wrap.style.display = "none";
+    wrap.classList.remove("show");
   }
 }
 
