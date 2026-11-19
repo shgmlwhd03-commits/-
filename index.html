@@ -706,6 +706,18 @@ const rooms = [
     state: "idle",
     ticker: "무료 경품 3건 스캔 완료 (문화포털 내일 마감)",
     updated: "21:42"
+  },
+  {
+    id: "cafe",
+    title: "🛡️ 카페 관리팀",
+    worker: "👮",
+    name: "부매니저 06",
+    say: "카페 모니터링 중",
+    foot: "수시 · 카페 관리",
+    issue: "카페 계정 로그인 대기 중!",
+    state: "alert",
+    ticker: "카페 계정 비밀번호 입력 대기 중",
+    updated: "21:58"
   }
 ];
 
@@ -923,23 +935,18 @@ function clearAll() {
 
 function updatePill() {
   const alerts = document.querySelectorAll(".room.alert").length;
-  const working = document.querySelectorAll(".room.working").length;
   const pill = document.getElementById("summary-pill");
   if (alerts > 0) {
     pill.textContent = `🔴 해결 요청 ${alerts}건`;
     pill.style.background = "#7f1d1d";
     pill.style.borderColor = "#ef4444";
     pill.style.color = "#fecaca";
-  } else if (working > 0) {
-    pill.textContent = `🟢 ${working}개 부서 작업 중 · ${rooms.length - working}곳 대기`;
+  } else {
+    // 경보 없음: 부서 전체가 가동 중인 상태 (부서 수는 rooms 기준 → 7개)
+    pill.textContent = `🟢 ${rooms.length}개 부서 가동 중`;
     pill.style.background = "#0c2d48";
     pill.style.borderColor = "#38bdf8";
     pill.style.color = "#bae6fd";
-  } else {
-    pill.textContent = "💤 전체 대기 · 다음 일정 대기 중";
-    pill.style.background = "#1e293b";
-    pill.style.borderColor = "#64748b";
-    pill.style.color = "#cbd5e1";
   }
 }
 
