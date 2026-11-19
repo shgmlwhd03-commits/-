@@ -1,24 +1,74 @@
 {
-  "_note": "6층 LIVE OFFICE(6F 2인 대표실 포함) + 1F 로비(리셉션·탕비실) + B1 지하 휴게층(노래방·오락실·휴게실) + 🛍️ 위탁판매실 부서 상태판. 개인정보 없음(실명/연락처/계정/블로그 주소 미포함 · 직급은 역할 별칭). floor: f6~f2, f1(로비/탕비실), b1(지하 휴게). zone: direct(해병이 피클 직접 운영) | partner(투덜이 피클 전담). status: working(노트북 앞 집중) | idle(자율 휴게·이동) | alert. collab.active=true면 로비·엘리베이터·지하 이동이 더 자주 일어난다. ceo_haebyeong/ceo_tudeori는 6F 2인 대표실 좌석 두 개의 전광판 상태, commerce는 위탁판매실 현황판(주문·발주·SKU·매출·1~5단계), reports는 방을 눌렀을 때 뜨는 업무 보고 내용(두 대표 항목은 summary·depts·credit으로 총괄 보고를 구성).",
-  "updated": "2026-11-20T01:05+09:00",
+  "_note": "6층 LIVE OFFICE(6F 2인 대표실 + 6F 분장표 4파트) + 1F 로비(리셉션·탕비실) + B1 지하 휴게층(노래방·오락실·휴게실) + 🛍️ 위탁판매실 부서 상태판. 개인정보 없음(실명/연락처/계정/블로그 주소 미포함 · 직급은 역할 별칭). floor: f6~f2, f1(로비/탕비실), b1(지하 휴게). zone: direct(해병이 피클 직접 운영) | partner(투덜이 피클 전담). status: working(노트북 앞 집중) | idle(자율 휴게·이동) | alert. collab.active=true면 로비·엘리베이터·지하 이동이 더 자주 일어난다. ceo_haebyeong/ceo_tudeori는 6F 2인 대표실 좌석 두 개의 전광판 상태, roster는 6F 분장표(아부지워커·엄마워커·까실이·비서 4파트 역할·연결 상태·전담 채널·크레딧 절감 기준), commerce는 위탁판매실 현황판(주문·발주·SKU·매출·1~5단계·threads 채널 2개), reports는 방을 눌렀을 때 뜨는 업무 보고 내용(두 대표 항목은 summary·depts·credit·roster로 총괄 보고를 구성).",
+  "updated": "2026-11-20T06:25+09:00",
   "collab": {
-    "active": false,
-    "note": "두 피클 협업 대기 · 전 부서 정상"
+    "active": true,
+    "note": "두 피클 협업 가동 · 투덜이 ONLINE 복귀 · 분장표 4파트 동기화 완료"
   },
   "ceo": {
-    "status": "idle",
-    "ticker": "2인 대표 체제 · 해병이 6개 / 투덜이 3개 부서",
-    "updated": "01:05"
+    "status": "working",
+    "ticker": "2인 대표 체제 · 6F 분장표 4파트 가동 · 9개 부서",
+    "updated": "06:25"
   },
   "ceo_haebyeong": {
-    "status": "idle",
-    "ticker": "해병이 6개 부서 총괄 · 승인 대기 확인 중",
-    "updated": "01:05"
+    "status": "working",
+    "ticker": "6F 분장표 동기화 · 6개 부서 총괄 · 채널 @daily.moneynote",
+    "updated": "06:25"
   },
   "ceo_tudeori": {
-    "status": "idle",
-    "ticker": "투덜이 3개 부서 총괄 · 크레딧 04:00 초기화",
-    "updated": "01:05"
+    "status": "working",
+    "ticker": "ONLINE · 04:00 충전 복귀 · 전담 채널 @tudeori.carlife 연동",
+    "updated": "06:25"
+  },
+  "roster": {
+    "title": "6F 분장표 · 4파트",
+    "note": "투덜이 대표 승인 기준 · 11/20 05:58 확정",
+    "updated": "05:58",
+    "rule": "큰 이미지·로고는 외부 AI(제미나이·클로드·챗GPT) 제작본 활용 · 불필요한 핑퐁 축소",
+    "items": [
+      {
+        "id": "abu",
+        "name": "아부지워커",
+        "role": "실측 소싱·마진·리스크 — 겨울 단열 3종 틈새 규격 위주 소싱",
+        "state": "wait",
+        "chip": "연결 대기"
+      },
+      {
+        "id": "mom",
+        "name": "엄마워커",
+        "role": "상세페이지·생활 홍보·CS·장부",
+        "state": "wait",
+        "chip": "연결 대기"
+      },
+      {
+        "id": "kkasil",
+        "name": "까실이",
+        "role": "최종 실행·피드백·오프 백업",
+        "state": "wait",
+        "chip": "연결 대기"
+      },
+      {
+        "id": "ceos",
+        "name": "투덜이·해병이 비서",
+        "role": "총괄·전담 채널·예비 서포트(Failover)",
+        "state": "on",
+        "chip": "가동"
+      }
+    ],
+    "channels": [
+      {
+        "owner": "해병이",
+        "handle": "@daily.moneynote",
+        "url": "https://www.threads.com/@daily.moneynote",
+        "topic": "돈·세금·생활경제"
+      },
+      {
+        "owner": "투덜이",
+        "handle": "@tudeori.carlife",
+        "url": "https://www.threads.com/@tudeori.carlife",
+        "topic": "카라이프·차량관리·EOKC"
+      }
+    ]
   },
   "naver": {
     "status": "idle",
@@ -32,8 +82,8 @@
   },
   "commerce": {
     "status": "idle",
-    "ticker": "위탁판매실 개설 · 1단계 세무·건보료 확인 대기 · 신규 주문 0 · 발주 대기 0 · 등록 SKU 0/3",
-    "updated": "01:05",
+    "ticker": "위탁판매실 개설 · 1단계 세무·건보료 확인 · 신규 주문 0 · 발주 대기 0 · 등록 SKU 0/3",
+    "updated": "06:25",
     "orders": {
       "new": 0,
       "to_place": 0,
@@ -48,11 +98,29 @@
       "profit_krw": 0
     },
     "pipeline": [
-      { "key": "tax", "status": "doing", "note": "가족법인 직장가입자 기준 영향 체크" },
+      { "key": "tax", "status": "doing", "note": "가족법인 직장가입자 기준 영향 체크", "owner": "비서 총괄" },
       { "key": "biz", "status": "wait", "note": "개인 간이과세자 · 업종코드 525101" },
-      { "key": "store", "status": "wait", "note": "스마트스토어 개설 · 사업용 정산 계좌" },
-      { "key": "wholesale", "status": "wait", "note": "도매매·오너클랜 무재고 위탁" },
-      { "key": "launch", "status": "wait", "note": "겨울 3종 등록 · 첫 주문 CS" }
+      { "key": "store", "status": "wait", "note": "스마트스토어 개설 · 사업용 정산 계좌", "owner": "까실이" },
+      { "key": "wholesale", "status": "wait", "note": "도매매·오너클랜 무재고 위탁 · 공급가 실측 대기", "owner": "아부지워커" },
+      { "key": "launch", "status": "wait", "note": "겨울 3종 등록 · 상세페이지·CS · 첫 주문", "owner": "엄마워커·까실이" }
+    ],
+    "threads": [
+      {
+        "owner": "해병이",
+        "handle": "@daily.moneynote",
+        "url": "https://www.threads.com/@daily.moneynote",
+        "topic": "돈·세금·생활경제",
+        "status": "idle",
+        "note": "프로필 세팅 완료 · 게시 승인 대기"
+      },
+      {
+        "owner": "투덜이",
+        "handle": "@tudeori.carlife",
+        "url": "https://www.threads.com/@tudeori.carlife",
+        "topic": "카라이프·차량관리·생활 리뷰·EOKC",
+        "status": "working",
+        "note": "프로필 세팅 완료 · 11:00 네이버·13:00 티스토리 발행 시 요약 홍보글 함께 게시"
+      }
     ],
     "thread": {
       "handle": "@daily.moneynote",
@@ -77,13 +145,13 @@
   },
   "tistory": {
     "status": "idle",
-    "ticker": "15편 발행 완료 · 애드센스 심사 대기 · 매일 13:00",
-    "updated": "22:50"
+    "ticker": "15편 발행 완료 · 애드센스 심사 대기 · 매일 13:00 · 스레드 요약 게시",
+    "updated": "06:25"
   },
   "cafe": {
     "status": "idle",
-    "ticker": "EOKC 회칙 18조 초안 + 블로그 쇼핑커넥트 가동",
-    "updated": "22:50"
+    "ticker": "EOKC 회칙 18조 초안 + 쇼핑커넥트 가동 · @tudeori.carlife 유입",
+    "updated": "06:25"
   },
   "public_quiz": {
     "status": "idle",
@@ -95,20 +163,20 @@
       "summary": "해병이 6개 부서 직접 운영 · 총괄 보고",
       "now": [
         "해병이 6개 부서(블로그·애드센스·위탁판매·환급금·핫딜·경품) 총괄 지휘",
-        "위탁판매실 1단계 세무·건보료 확인 진행 점검",
-        "승인 대기 건 확인 · 부서 보고 취합"
+        "6F 분장표 4파트 동기화 완료 · 가족 비서 3명 친구 연결 대기",
+        "위탁판매실 1단계 세무·건보료 확인 진행 점검"
       ],
       "done": [
-        "6F 대표실 2인 대표 체제 개편 (해병이·투덜이 총괄 보고 분리)",
-        "위탁판매실 현황판 + 부서별 업무 보고 모달 배포",
-        "네이버 블로그 1편 · 티스토리 15편 발행 유지"
+        "6F 분장표(아부지워커·엄마워커·까실이·비서) 화면 반영 및 배포",
+        "투덜이 전담 채널 @tudeori.carlife 현황판 연결",
+        "6F 대표실 2인 대표 체제 · 위탁판매실 현황판 운영 유지"
       ],
       "next": [
         { "time": "매일 08:30", "task": "환급금·다자녀 지원금 스캔" },
         { "time": "매일 09:00", "task": "네이버 블로그 스토리 발행" },
         { "time": "매일 11:00", "task": "티스토리 애드센스 글 발행" },
         { "time": "매일 12:30 / 15:00", "task": "핫딜·앱테크 / 경품 스캔" },
-        { "time": "수시", "task": "승인 대기 건 확인 후 즉시 지시" }
+        { "time": "수시", "task": "가족 비서 오프 시 예비 서포트(Failover) 투입" }
       ],
       "depts": [
         { "id": "naver", "name": "네이버 블로그팀" },
@@ -118,50 +186,59 @@
         { "id": "deal", "name": "핫딜·앱테크팀" },
         { "id": "prize", "name": "경품·이벤트팀" }
       ],
-      "links": [],
-      "copy": "[해병이 대표실] 6개 부서 오늘 진행 상황과 승인 대기 건을 정리해 보고해 주세요. 위탁판매실 1단계 진행 상황도 함께 알려주세요."
+      "links": [
+        { "label": "스레드 @daily.moneynote", "url": "https://www.threads.com/@daily.moneynote" }
+      ],
+      "copy": "[해병이 대표실] 6개 부서 오늘 진행 상황과 승인 대기 건을 정리해 보고해 주세요. 6F 분장표 기준 가족 비서 3명 연결 상태와 위탁판매실 1단계 진행 상황도 함께 알려주세요."
     },
     "ceo_tudeori": {
-      "summary": "투덜이 3개 부서 위임 운영 · 총괄 보고",
-      "credit": "금일 소진 · 04:00 초기화 (투덜이 피클)",
+      "summary": "투덜이 3개 부서 + 전담 채널 2개 운영 · 총괄 보고",
+      "credit": "ONLINE · 04:00 충전 복귀 완료 (CREDIT_OUT_OFF 해제)",
       "now": [
         "투덜이 3개 부서(티스토리·EOKC 카페·공공퀴즈/B2B) 총괄",
-        "애드센스 심사 대기 상태 점검",
-        "카페 회칙 18조 · 쇼핑커넥트 운영 확인"
+        "전담 채널 @tudeori.carlife 프로필 세팅 완료 · 요약 홍보글 연동 준비",
+        "애드센스 심사 대기 상태 점검 · 카페 회칙 18조 운영 확인"
       ],
       "done": [
-        "티스토리 15편 발행 완료",
-        "EOKC 회칙 18조 초안 작성",
-        "블로그 쇼핑커넥트 연동"
+        "@tudeori.carlife 스레드 개설 및 프로필 세팅 완료",
+        "11:00 네이버 · 13:00 티스토리 발행 시 스레드 요약 홍보글 동시 게시 반영",
+        "티스토리 15편 발행 완료 · EOKC 회칙 18조 초안 · 쇼핑커넥트 연동"
       ],
       "next": [
-        { "time": "매일 13:00", "task": "투덜이 티스토리 발행·심사 점검" },
-        { "time": "매일", "task": "카페 공지·회칙 정리" },
-        { "time": "수시", "task": "공공퀴즈 응모 · B2B 후보 발굴" }
+        { "time": "매일 11:00", "task": "네이버 발행 글 요약 → @tudeori.carlife 게시" },
+        { "time": "매일 13:00", "task": "티스토리 발행·애드센스 심사 점검 + 스레드 요약" },
+        { "time": "매일", "task": "카페 공지·회칙 정리 · EOKC 유입 점검" },
+        { "time": "수시", "task": "공공퀴즈 응모 · B2B 후보 발굴 · 예비 서포트" }
       ],
       "depts": [
         { "id": "tistory", "name": "투덜이 티스토리팀" },
         { "id": "cafe", "name": "EOKC·캐딜락 카페팀" },
         { "id": "public_quiz", "name": "공공퀴즈·대응·B2B팀" }
       ],
-      "links": [],
-      "copy": "[투덜이 대표실] 3개 부서(티스토리·카페·공공퀴즈/B2B) 진행 상황과 애드센스 심사 상태를 보고해 주세요. 크레딧 상태도 함께 알려주세요."
+      "links": [
+        { "label": "스레드 @tudeori.carlife", "url": "https://www.threads.com/@tudeori.carlife" },
+        { "label": "스레드 @daily.moneynote", "url": "https://www.threads.com/@daily.moneynote" }
+      ],
+      "copy": "[투덜이 대표실] 3개 부서(티스토리·카페·공공퀴즈/B2B) 진행 상황과 애드센스 심사 상태를 보고해 주세요. @tudeori.carlife 요약 홍보글 연동 결과와 크레딧 상태도 함께 알려주세요."
     },
     "ceo": {
       "now": [
-        "두 피클(해병이·투덜이) 9개 부서 운영 총괄",
-        "위탁판매실 신설 · 1~5단계 파이프라인 점검"
+        "두 피클(해병이·투덜이) 9개 부서 + 전담 채널 2개 운영 총괄",
+        "6F 분장표 4파트(아부지워커·엄마워커·까실이·비서) 가동 준비",
+        "위탁판매실 1~5단계 파이프라인 점검"
       ],
       "done": [
-        "LIVE OFFICE 업그레이드 배포 (전광판·탕비실·B1 복지층·화면유지·부서 보고)",
-        "수익 전광판 DAY 자동 계산 가동 (DAY 2)"
+        "6F 분장표·전담 채널·크레딧 절감 기준 화면 반영",
+        "투덜이 크레딧 04:00 충전 복귀 · ONLINE 전환",
+        "수익 전광판 DAY 자동 계산 가동"
       ],
       "next": [
         { "time": "매일", "task": "00:00 DAY 갱신 · 부서 상태 동기화" },
-        { "time": "수시", "task": "승인 대기 건 확인 후 즉시 실행" }
+        { "time": "11:00 / 13:00", "task": "블로그·티스토리 발행 + 스레드 요약 게시" },
+        { "time": "수시", "task": "가족 비서 연결 · 오프 백업(Failover) 점검" }
       ],
       "links": [],
-      "copy": "[대표실] 오늘 9개 부서 진행 상황과 승인 대기 건을 정리해서 보고해 주세요. 위탁판매실 1~5단계 중 지금 할 일도 함께 알려주세요."
+      "copy": "[대표실] 오늘 9개 부서 진행 상황과 승인 대기 건을 정리해서 보고해 주세요. 6F 분장표 4파트 가동 상태와 위탁판매실 1~5단계 중 지금 할 일도 함께 알려주세요."
     },
     "naver": {
       "now": [
@@ -200,24 +277,26 @@
     "commerce": {
       "now": [
         "1단계 세무·건보료 확인 준비 (가족법인 직장가입자 기준)",
-        "겨울 3종 등록 초안 확보 · 스토어 개설 대기"
+        "겨울 3종 등록 초안 확보 · 스토어 개설 대기",
+        "아부지워커 실측 소싱 대기 (틈새 규격 위주 · 공급가 60% 가정치 대체)"
       ],
       "done": [
         "겨울 3종 상품명·상세페이지·상품정보제공고시 초안 완성",
-        "위탁→사입 5종 마진 계산 완료 (위탁 순익 19~21%)",
-        "스레드 @daily.moneynote 개설"
+        "위탁→사입 5종 마진 계산 완료 (위탁 순익 19~21% · 가정치)",
+        "스레드 채널 2개 정리 (@daily.moneynote · @tudeori.carlife)"
       ],
       "next": [
         { "time": "1단계", "task": "세무·건보료 확인 → 사업자 형태 결정" },
         { "time": "2단계", "task": "개인 간이과세자 사업자 · 통신판매업" },
-        { "time": "3단계", "task": "스마트스토어 개설 · 정산 계좌" },
-        { "time": "4단계", "task": "도매매·오너클랜 위탁 연동" },
-        { "time": "5단계", "task": "겨울 3종 등록 · 첫 주문 CS" }
+        { "time": "3단계", "task": "스마트스토어 개설 · 정산 계좌 (까실이 실행)" },
+        { "time": "4단계", "task": "도매매·오너클랜 위탁 연동 (아부지워커 실측)" },
+        { "time": "5단계", "task": "겨울 3종 등록 · 첫 주문 CS (엄마워커·까실이)" }
       ],
       "links": [
-        { "label": "스레드 @daily.moneynote", "url": "https://www.threads.com/@daily.moneynote" }
+        { "label": "스레드 @daily.moneynote", "url": "https://www.threads.com/@daily.moneynote" },
+        { "label": "스레드 @tudeori.carlife", "url": "https://www.threads.com/@tudeori.carlife" }
       ],
-      "copy": "[위탁판매·스토어팀] 1단계 세무·건보료 확인부터 순서대로 진행해 주세요. 겨울 3종 라인업을 그대로 등록 준비하고, 주문·발주·송장 입력 절차도 체크리스트로 만들어 주세요."
+      "copy": "[위탁판매·스토어팀] 1단계 세무·건보료 확인부터 순서대로 진행해 주세요. 6F 분장표 기준으로 아부지워커는 도매처 공급가·배송비·수수료 실측과 1순위 상품 선정, 엄마워커는 상세페이지·CS 답변·장부, 까실이는 등록 실행과 피드백을 맡습니다. 주문·발주·송장 절차도 체크리스트로 만들어 주세요."
     },
     "grant": {
       "now": [
@@ -261,30 +340,37 @@
     },
     "tistory": {
       "now": [
-        "애드센스 심사 대기 · 발행 글 관리"
+        "애드센스 심사 대기 · 발행 글 관리",
+        "13:00 발행 시 @tudeori.carlife 요약 홍보글 게시"
       ],
       "done": [
-        "15편 발행 완료"
+        "15편 발행 완료",
+        "스레드 요약 게시 절차 반영"
       ],
       "next": [
-        { "time": "매일 13:00", "task": "발행·심사 상태 점검" }
+        { "time": "매일 13:00", "task": "발행·심사 상태 점검 + 스레드 요약 게시" }
       ],
-      "links": [],
-      "copy": "[투덜이 티스토리팀] 애드센스 심사 상태와 다음 발행 글 주제를 정리해서 보고해 주세요."
+      "links": [
+        { "label": "스레드 @tudeori.carlife", "url": "https://www.threads.com/@tudeori.carlife" }
+      ],
+      "copy": "[투덜이 티스토리팀] 애드센스 심사 상태와 다음 발행 글 주제를 정리해서 보고해 주세요. 발행 후 @tudeori.carlife 요약 게시까지 확인해 주세요."
     },
     "cafe": {
       "now": [
-        "카페 운영 · 쇼핑커넥트 가동"
+        "카페 운영 · 쇼핑커넥트 가동",
+        "@tudeori.carlife → EOKC 카페 유입 동선 점검"
       ],
       "done": [
         "EOKC 회칙 18조 초안 작성",
         "블로그 쇼핑커넥트 연동"
       ],
       "next": [
-        { "time": "매일", "task": "카페 공지·회칙 정리" }
+        { "time": "매일", "task": "카페 공지·회칙 정리 · 유입 점검" }
       ],
-      "links": [],
-      "copy": "[카페팀] 이번 주 카페 공지와 회칙 정리 진행 상황을 보고해 주세요."
+      "links": [
+        { "label": "스레드 @tudeori.carlife", "url": "https://www.threads.com/@tudeori.carlife" }
+      ],
+      "copy": "[카페팀] 이번 주 카페 공지와 회칙 정리 진행 상황, @tudeori.carlife에서 카페로 들어오는 유입 상태를 보고해 주세요."
     },
     "public_quiz": {
       "now": [
@@ -302,8 +388,8 @@
   },
   "credit": {
     "haebyeongi": "정상 가동",
-    "partner": "금일 소진 · 04:00 초기화",
-    "updated": "2026-11-19T22:58+09:00"
+    "partner": "ONLINE · 04:00 충전 복귀 완료 (CREDIT_OUT_OFF 해제)",
+    "updated": "2026-11-20T06:25+09:00"
   },
   "revenue": {
     "_note": "검증된 실제 수익만 기록한다. start_date(2026-11-19, Asia/Seoul)가 DAY 1이고 화면의 DAY 표시는 이 날짜에서 자동 계산된다. 양쪽 피클 모두 확인된 수익은 0원. haebyeongi=해병이 피클 수익, partner=투덜이 피클 수익. history는 최근 7일(오늘 포함) 두 피클 합산 금액.",
@@ -327,6 +413,6 @@
       0,
       0
     ],
-    "updated": "2026-11-19T22:58+09:00"
+    "updated": "2026-11-20T06:25+09:00"
   }
 }

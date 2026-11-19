@@ -936,6 +936,36 @@
   .pent-bar .rev-chart { height: 18px; }
   .pent-bar .credit { padding-top: 1px; }
 
+  /* 6F 분장표 (4파트 역할 · 전담 채널 · 크레딧 절감 기준) */
+  .pent-roster {
+    position: relative;
+    z-index: 1;
+    margin-top: 3px;
+    padding: 4px 6px;
+    border: 1px solid rgba(167, 139, 250, 0.28);
+    border-radius: 8px;
+    background: linear-gradient(180deg, rgba(38, 24, 72, 0.45), rgba(8, 12, 20, 0.62));
+    box-shadow: inset 0 1px 0 rgba(196, 181, 253, 0.08);
+  }
+  .pr-head { display: flex; align-items: center; gap: 4px; margin-bottom: 3px; font-size: 8.2px; font-weight: 900; color: #ede9fe; min-width: 0; }
+  .pr-head em { margin-left: auto; font-style: normal; font-size: 6.2px; font-weight: 800; color: #c4b5fd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pr-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px; }
+  .pr-item { display: flex; flex-direction: column; gap: 1px; min-width: 0; padding: 2px 4px; border-radius: 6px; background: rgba(6, 11, 20, 0.66); border: 1px solid rgba(148, 163, 184, 0.18); }
+  .pr-item.on { border-color: rgba(56, 189, 248, 0.45); }
+  .pr-item.wait { border-color: rgba(251, 191, 36, 0.38); }
+  .pr-name { display: flex; align-items: center; gap: 3px; min-width: 0; font-size: 8px; font-weight: 900; color: #e8eef8; white-space: nowrap; }
+  .pr-name > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .pr-st { flex: none; margin-left: auto; font-size: 6px; font-weight: 900; padding: 0 3px; border-radius: 999px; border: 1px solid #475569; color: #cbd5e1; line-height: 1.5; }
+  .pr-item.on .pr-st { border-color: #38bdf8; color: #bae6fd; background: rgba(8, 47, 73, 0.65); }
+  .pr-item.wait .pr-st { border-color: #fbbf24; color: #fef3c7; background: rgba(40, 28, 8, 0.6); }
+  .pr-role { font-size: 7px; line-height: 1.3; color: #a9bcd4; }
+  .pr-chan { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 5px; margin-top: 3px; }
+  .pr-chan a { display: inline-flex; align-items: center; gap: 2px; font-size: 7px; font-weight: 900; color: #bae6fd; text-decoration: none; padding: 0 5px; border-radius: 999px; border: 1px solid rgba(56, 189, 248, 0.45); background: rgba(8, 47, 73, 0.6); white-space: nowrap; }
+  .pr-chan a.td { border-color: rgba(167, 139, 250, 0.55); background: rgba(46, 16, 101, 0.6); color: #e9d5ff; }
+  .pr-chan .topic { font-size: 6.4px; font-weight: 800; color: #8aa0b8; }
+  .pr-rule { margin-top: 3px; font-size: 6.6px; line-height: 1.3; color: #8aa0b8; }
+  .pr-rule b { color: #fde68a; font-weight: 900; }
+
   /* 대표 총괄 보고 모달 전용 */
   .rm-sum {
     display: flex;
@@ -971,6 +1001,15 @@
   .rm-dept.working i { background: #38bdf8; box-shadow: 0 0 6px #38bdf8; }
   .rm-dept.alert { border-color: #ef4444; background: rgba(64, 12, 12, 0.6); color: #fecaca; }
   .rm-dept.alert i { background: #ef4444; box-shadow: 0 0 6px #ef4444; }
+  .rm-roster { display: flex; flex-direction: column; gap: 2px; }
+  .rm-r { display: flex; align-items: center; gap: 4px; padding: 1px 5px; border-radius: 5px; background: rgba(6, 11, 20, 0.6); border: 1px solid rgba(148, 163, 184, 0.18); font-size: 7.6px; color: #a9bcd4; }
+  .rm-r b { flex: none; color: #e8eef8; font-weight: 900; }
+  .rm-r span { min-width: 0; }
+  .rm-r em { flex: none; margin-left: auto; font-style: normal; font-size: 6.6px; font-weight: 900; padding: 0 4px; border-radius: 999px; border: 1px solid #475569; color: #cbd5e1; }
+  .rm-r.on { border-color: rgba(56, 189, 248, 0.4); }
+  .rm-r.on em { border-color: #38bdf8; color: #bae6fd; background: rgba(8, 47, 73, 0.6); }
+  .rm-r.wait { border-color: rgba(251, 191, 36, 0.35); }
+  .rm-r.wait em { border-color: #fbbf24; color: #fef3c7; background: rgba(40, 28, 8, 0.55); }
   .rm-credit {
     display: flex;
     align-items: center;
@@ -1786,6 +1825,7 @@
   .pname { display: block; font-size: 9.2px; font-weight: 900; color: #e8eef8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pnote-line { display: flex; align-items: center; gap: 3px; min-width: 0; }
   .pchip { flex: none; font-size: 6.8px; font-weight: 900; padding: 0 3px; border-radius: 999px; border: 1px solid #475569; color: #cbd5e1; line-height: 1.5; }
+  .pown { flex: none; font-size: 6.8px; font-weight: 900; padding: 0 3px; border-radius: 999px; border: 1px solid rgba(167, 139, 250, 0.55); color: #e9d5ff; background: rgba(46, 16, 101, 0.5); line-height: 1.5; white-space: nowrap; }
   .pstep.done .pchip { border-color: #4ade80; color: #bbf7d0; }
   .pstep.doing .pchip { border-color: #fbbf24; color: #fef3c7; }
   .pnote { min-width: 0; font-size: 7.4px; color: #8fa8c4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1810,7 +1850,11 @@
   .rules li::before { content: "·"; position: absolute; left: 2px; top: 0; color: #38bdf8; font-weight: 900; }
   .rules b { color: #fde68a; font-weight: 900; }
 
-  .thread { display: flex; align-items: center; gap: 4px; min-width: 0; }
+  .thread { display: flex; align-items: center; gap: 4px; min-width: 0; flex-wrap: wrap; }
+  .thread .trow { display: flex; align-items: center; gap: 4px; min-width: 0; width: 100%; }
+  .thread .trow + .trow { padding-top: 2px; border-top: 1px dashed rgba(148, 163, 184, 0.22); }
+  .thread .town { flex: none; font-size: 6.4px; font-weight: 900; padding: 0 4px; border-radius: 999px; border: 1px solid #475569; color: #cbd5e1; line-height: 1.5; }
+  .thread .town.td { border-color: rgba(167, 139, 250, 0.55); background: rgba(46, 16, 101, 0.5); color: #e9d5ff; }
   .thread a { flex: none; font-size: 9px; font-weight: 900; color: #bae6fd; text-decoration: none; }
   .thread .tstat { flex: none; font-size: 7px; font-weight: 900; padding: 0 4px; border-radius: 999px; border: 1px solid #475569; color: #cbd5e1; line-height: 1.6; }
   .thread .tstat.working { border-color: #38bdf8; color: #bae6fd; background: rgba(8, 47, 73, 0.6); }
@@ -2057,6 +2101,17 @@
     .rev-labels { font-size: 6.6px; }
     .credit { font-size: 8.5px; gap: 6px; }
     .credit .cred { padding: 0 6px; }
+    .pent-roster { padding: 5px 8px; margin-top: 6px; }
+    .pr-head { font-size: 9.5px; }
+    .pr-head em { font-size: 7px; }
+    .pr-grid { gap: 4px; }
+    .pr-item { padding: 3px 5px; }
+    .pr-name { font-size: 9px; }
+    .pr-st { font-size: 7px; }
+    .pr-role { font-size: 8px; }
+    .pr-chan a { font-size: 8px; }
+    .pr-chan .topic { font-size: 7px; }
+    .pr-rule { font-size: 7.6px; }
     .lobby { height: 64px; }
     .b1 { height: 68px; }
     .lobby .recep { width: 62px; height: 18px; bottom: 4px; border-radius: 4px; left: 58%; }
@@ -2188,6 +2243,8 @@
     .rm-sum { font-size: 9.4px; padding: 3px 7px; margin-bottom: 6px; }
     .rm-dept { font-size: 8.6px; padding: 1px 7px; gap: 4px; }
     .rm-dept i { width: 5px; height: 5px; }
+    .rm-r { font-size: 9px; padding: 2px 7px; }
+    .rm-r em { font-size: 8px; }
     .rm-credit { font-size: 9.4px; padding: 3px 7px; margin-bottom: 6px; }
     .rm-foot { padding: 7px 12px 10px; gap: 6px; }
     .rm-btn { font-size: 10px; padding: 6px 9px; }
@@ -2295,7 +2352,7 @@
     </div>
 
     <div class="csec">
-      <div class="csec-h">❄️ 겨울 3종 라인업 <em>위탁 기준 · 공급가 60% 가정</em></div>
+      <div class="csec-h">❄️ 겨울 3종 라인업 <em>가정치 · 아부지워커 실측 전</em></div>
       <div class="lineup" id="lineup"></div>
     </div>
 
@@ -2359,10 +2416,10 @@ const rooms = [
   {
     id: "ceo_tudeori", floor: "f6", zone: "partner", tag: "투덜이", ceo: true,
     title: "👑 투덜이 대표", worker: "😤", name: "👑 투덜이 대표",
-    say: "3개 부서 보고 정리 중!", foot: "총괄 지휘 · 투덜이 3개 부서",
+    say: "3개 부서 + 채널 2개 가동 중!", foot: "총괄 지휘 · 투덜이 3개 부서",
     issue: "크레딧 확인이 필요해요!",
-    guide: "투덜이 피클 크레딧 상태를 확인해 주세요. 04:00에 초기화됩니다.",
-    state: "idle", ticker: "투덜이 3개 부서 총괄 · 크레딧 04:00 초기화", updated: "--:--"
+    guide: "투덜이 피클 크레딧 상태를 확인해 주세요. 04:00 충전으로 정상 복귀했습니다.",
+    state: "working", ticker: "ONLINE · 04:00 충전 복귀 · 채널 2개 가동", updated: "--:--"
   },
   {
     id: "naver", floor: "f5", zone: "direct", tag: "해병이",
@@ -2622,9 +2679,10 @@ function floorHTML(f) {
          <div class="pent-bar-top">${revHTML()}</div>
          <div class="credit">
            <span class="cred" id="cred-hb">🔵 해병이: 정상 가동</span>
-           <span class="cred td" id="cred-td">🟣 투덜이: 금일 소진 · 04:00 초기화</span>
+           <span class="cred td" id="cred-td">🟣 투덜이: ONLINE · 04:00 충전 복귀</span>
          </div>
-       </div>`
+       </div>
+       <div class="pent-roster" id="pent-roster" aria-label="6F 분장표"></div>`
     : "";
   return `
     <section class="floor tone-${f.tone}" id="floor-${f.id}">
@@ -2648,6 +2706,7 @@ function render() {
   rooms.forEach(r => setBoardText(r.id, tickerFor(r.state, r.ticker), r.updated, r.state));
   renderRevenue(null);
   renderShop(null);
+  renderRoster(null);
   applyCorridor();
   requestAnimationFrame(() => { liftPark(); buildTicks(); });
 }
@@ -2845,7 +2904,70 @@ function renderCredit(raw) {
   const hb = document.getElementById("cred-hb");
   const td = document.getElementById("cred-td");
   if (hb) hb.textContent = "🔵 해병이: " + (c.haebyeongi || "정상 가동");
-  if (td) td.textContent = "🟣 투덜이: " + (c.partner || "금일 소진 · 04:00 초기화");
+  if (td) td.textContent = "🟣 투덜이: " + (c.partner || "ONLINE · 04:00 충전 복귀");
+}
+
+/* ================= 🧩 6F 분장표 (4파트 역할 · 전담 채널) =================
+   개인정보 없음: 역할 별칭·담당 업무·공개 채널만 담는다. */
+const ROSTER_DEFAULT = {
+  title: "6F 분장표 · 4파트",
+  note: "역할 별칭으로만 표기 · status.json 동기화",
+  rule: "큰 이미지·로고는 외부 AI(제미나이·클로드·챗GPT) 제작본 활용 · 불필요한 핑퐁 축소",
+  items: [
+    { id: "abu", name: "아부지워커", role: "실측 소싱·마진·리스크 — 겨울 단열 3종 틈새 규격 소싱", state: "wait", chip: "연결 대기" },
+    { id: "mom", name: "엄마워커", role: "상세페이지·생활 홍보·CS·장부", state: "wait", chip: "연결 대기" },
+    { id: "kkasil", name: "까실이", role: "최종 실행·피드백·오프 백업", state: "wait", chip: "연결 대기" },
+    { id: "ceos", name: "투덜이·해병이 비서", role: "총괄·전담 채널·예비 서포트(Failover)", state: "on", chip: "가동" }
+  ],
+  channels: [
+    { owner: "해병이", handle: "@daily.moneynote", url: "https://www.threads.com/@daily.moneynote", topic: "돈·세금·생활경제" },
+    { owner: "투덜이", handle: "@tudeori.carlife", url: "https://www.threads.com/@tudeori.carlife", topic: "카라이프·차량관리·EOKC" }
+  ]
+};
+let ROSTER = null;
+
+function rosterData(raw) {
+  const src = (raw && typeof raw === "object" && !Array.isArray(raw)) ? raw : {};
+  const str = (v, d) => (typeof v === "string" && v.trim()) ? v.trim() : d;
+  const st = (v, d) => (v === "on" || v === "work" || v === "working") ? "on" : (v === "wait" || v === "waiting" || v === "idle") ? "wait" : d;
+  const list = Array.isArray(src.items) ? src.items.filter(it => it && typeof it === "object" && typeof it.id === "string" && it.id) : [];
+  const byId = {};
+  list.forEach(it => { byId[it.id] = it; });
+  const items = ROSTER_DEFAULT.items.map(d => {
+    const it = byId[d.id] || {};
+    return { id: d.id, name: str(it.name, d.name), role: str(it.role, d.role), state: st(it.state, d.state), chip: str(it.chip, d.chip) };
+  });
+  list.forEach(it => {
+    if (ROSTER_DEFAULT.items.some(d => d.id === it.id)) return;
+    items.push({ id: it.id, name: str(it.name, it.id), role: str(it.role, ""), state: st(it.state, "wait"), chip: str(it.chip, "") });
+  });
+  const chans = (Array.isArray(src.channels) ? src.channels : [])
+    .filter(c => c && typeof c === "object" && typeof c.url === "string" && /^https?:\/\//.test(c.url))
+    .map(c => ({ owner: str(c.owner, ""), handle: str(c.handle, ""), url: c.url, topic: str(c.topic, "") }));
+  return {
+    title: str(src.title, ROSTER_DEFAULT.title),
+    note: str(src.note, ROSTER_DEFAULT.note),
+    rule: str(src.rule, ROSTER_DEFAULT.rule),
+    items,
+    channels: chans.length ? chans : ROSTER_DEFAULT.channels
+  };
+}
+
+function renderRoster(raw) {
+  const d = rosterData(raw);
+  ROSTER = d;
+  const el = document.getElementById("pent-roster");
+  if (!el) return;
+  const isTd = (c) => /투덜이|tudeori/i.test(c.owner + " " + c.handle);
+  el.innerHTML = `
+    <div class="pr-head"><span>🧩 ${esc(d.title)}</span><em>${esc(d.note)}</em></div>
+    <div class="pr-grid">${d.items.map(it => `
+      <div class="pr-item ${it.state}" title="${esc(it.name + " · " + it.role)}">
+        <span class="pr-name"><span>${esc(it.name)}</span><span class="pr-st">${esc(it.chip)}</span></span>
+        <span class="pr-role">${esc(it.role)}</span>
+      </div>`).join("")}</div>
+    <div class="pr-chan">${d.channels.map(c => `<a class="${isTd(c) ? "td" : ""}" href="${esc(c.url)}" target="_blank" rel="noopener">🧵 ${esc(c.handle)}</a><span class="topic">${esc(c.topic)}</span>`).join("")}</div>
+    <div class="pr-rule"><b>⚡ 크레딧 절감</b> ${esc(d.rule)}</div>`;
 }
 
 /* ================= 상태 동기화 ================= */
@@ -2907,6 +3029,7 @@ function applyStatus(data) {
   renderRevenue(src.revenue);
   renderCredit(src.credit);
   renderShop(src.commerce);
+  renderRoster(src.roster);
   refreshReport();
   updatePill();
 }
@@ -2981,8 +3104,28 @@ function shopData(raw) {
     const p = byKey[s.key] || {};
     const st = (p.status === "done" || p.status === "doing" || p.status === "wait") ? p.status : (i === 0 ? "doing" : "wait");
     const note = (typeof p.note === "string" && p.note.trim()) ? p.note.trim() : s.note;
-    return { key: s.key, name: s.name, status: st, note };
+    const owner = (typeof p.owner === "string" && p.owner.trim()) ? p.owner.trim() : "";
+    return { key: s.key, name: s.name, status: st, note, owner };
   });
+
+  const thStatus = (v) => v === "working" ? "working" : v === "alert" ? "alert" : "idle";
+  const normHandle = (h) => { const t = String(h || "").trim(); return t ? (t.charAt(0) === "@" ? t : "@" + t) : ""; };
+  const thOne = (t) => {
+    const o = (t && typeof t === "object") ? t : {};
+    const handle = normHandle(o.handle) || "@daily.moneynote";
+    return {
+      owner: (typeof o.owner === "string" && o.owner.trim()) ? o.owner.trim() : "",
+      handle,
+      url: (typeof o.url === "string" && /^https?:\/\//.test(o.url)) ? o.url : ("https://www.threads.com/" + handle),
+      topic: (typeof o.topic === "string" && o.topic.trim()) ? o.topic.trim() : "",
+      status: thStatus(o.status),
+      note: (typeof o.note === "string" && o.note.trim()) ? o.note.trim() : ""
+    };
+  };
+  const thList = (Array.isArray(src.threads) ? src.threads : [])
+    .filter(t => t && typeof t === "object" && typeof t.handle === "string" && t.handle.trim())
+    .map(thOne);
+  const threads = thList.length ? thList : [thOne(th)];
 
   return {
     status,
@@ -2992,11 +3135,8 @@ function shopData(raw) {
     sku: { reg: num(sk.registered, 0), plan: num(sk.planned, 3) },
     sales: { rev: num(sa.revenue_krw, 0), profit: num(sa.profit_krw, 0) },
     pipeline,
-    thread: {
-      handle: (typeof th.handle === "string" && th.handle.trim()) ? th.handle.trim() : "@daily.moneynote",
-      status: th.status === "working" ? "working" : th.status === "alert" ? "alert" : "idle",
-      note: (typeof th.note === "string" && th.note.trim()) ? th.note.trim() : "프로필 소개·첫 게시물 초안 완료 · 게시 승인 대기"
-    }
+    threads,
+    thread: threads[0]
   };
 }
 
@@ -3028,7 +3168,7 @@ function renderShop(raw) {
         <span class="pnum">${i + 1}</span>
         <span class="pbody">
           <span class="pname">${esc(p.name)}</span>
-          <span class="pnote-line"><span class="pchip">${STEP_TXT[p.status]}</span><span class="pnote">${esc(p.note)}</span></span>
+          <span class="pnote-line"><span class="pchip">${STEP_TXT[p.status]}</span>${p.owner ? `<span class="pown">${esc(p.owner)}</span>` : ""}<span class="pnote">${esc(p.note)}</span></span>
         </span>
         <button class="pcopy" type="button" data-lab="지시 복사" onclick="copyStep('${p.key}', this)">지시 복사</button>
       </li>`).join("");
@@ -3050,11 +3190,17 @@ function renderShop(raw) {
 
   const thEl = document.getElementById("thread");
   if (thEl) {
-    const label = d.thread.status === "working" ? "홍보 중" : d.thread.status === "alert" ? "확인 필요" : "대기";
-    thEl.innerHTML = `
-      <a href="https://www.threads.com/${esc(d.thread.handle)}" target="_blank" rel="noopener">🧵 ${esc(d.thread.handle)} ↗</a>
-      <span class="tstat ${d.thread.status}">${label}</span>
-      <span class="tnote">${esc(d.thread.note)}</span>`;
+    const label = (s) => s === "working" ? "홍보 중" : s === "alert" ? "확인 필요" : "대기";
+    thEl.innerHTML = d.threads.map(t => {
+      const td = /투덜이|tudeori/i.test(t.owner + " " + t.handle);
+      return `
+      <div class="trow">
+        ${t.owner ? `<span class="town${td ? " td" : ""}">${esc(t.owner)}</span>` : ""}
+        <a href="${esc(t.url)}" target="_blank" rel="noopener">🧵 ${esc(t.handle)} ↗</a>
+        <span class="tstat ${t.status}">${label(t.status)}</span>
+        <span class="tnote">${esc(t.topic ? t.topic + " · " + t.note : t.note)}</span>
+      </div>`;
+    }).join("");
   }
 
   updateShopBadge(d);
@@ -3124,6 +3270,7 @@ function reportData(id) {
   const summary = (typeof base.summary === "string" && base.summary.trim()) ? base.summary.trim() : "";
   const credit = (typeof base.credit === "string" && base.credit.trim()) ? base.credit.trim() : "";
   const now = arr(base.now);
+  const roster = (r.ceo === true && ROSTER) ? ROSTER : null;
   return {
     id,
     title: r.title || id,
@@ -3133,6 +3280,7 @@ function reportData(id) {
     summary,
     credit,
     depts,
+    roster,
     state,
     stateTxt: REPORT_STATE_TXT[state],
     ticker: (typeof s.ticker === "string" && s.ticker.trim()) ? s.ticker.trim() : (r.ticker || ""),
@@ -3163,6 +3311,7 @@ function openReport(id) {
       d.ticker ? `<div class="rm-live"><span class="rm-live-h">📺 전광판</span><span class="rm-live-t">${esc(d.ticker)}</span><span class="rm-live-u">${esc(d.updated)}</span></div>` : "",
       d.credit ? `<div class="rm-credit"><span>⚡ 크레딧</span><span>${esc(d.credit)}</span></div>` : "",
       d.depts.length ? `<div class="rm-sec"><div class="rm-h">🏢 담당 부서 현황 · ${d.depts.length}개</div><div class="rm-depts">${d.depts.map(x => `<span class="rm-dept ${x.state}" title="${esc(REPORT_STATE_TXT[x.state])}"><i></i>${esc(x.name)}</span>`).join("")}</div></div>` : "",
+      d.roster ? `<div class="rm-sec"><div class="rm-h">🧩 6F 분장표 · ${d.roster.items.length}파트</div><div class="rm-roster">${d.roster.items.map(it => `<div class="rm-r ${it.state}"><b>${esc(it.name)}</b><span>${esc(it.role)}</span><em>${esc(it.chip)}</em></div>`).join("")}</div></div>` : "",
       `<div class="rm-sec"><div class="rm-h">📌 지금 진행 중</div><ul class="rm-list">${list(d.now)}</ul></div>`,
       d.done.length ? `<div class="rm-sec"><div class="rm-h">✅ 최근 완료 보고</div><ul class="rm-list done">${list(d.done)}</ul></div>` : "",
       d.next.length ? `<div class="rm-sec"><div class="rm-h">⏰ 다음 예정 · 스케줄</div><ul class="rm-sched">${d.next.map(n => `<li><b>${esc(n.time)}</b><span>${esc(n.task)}</span></li>`).join("")}</ul></div>` : "",
@@ -3200,6 +3349,7 @@ function copyReport() {
   if (d.ticker) out.push("전광판: " + d.ticker + (d.updated ? " (" + d.updated + ")" : ""));
   if (d.credit) out.push("⚡ 크레딧: " + d.credit);
   if (d.depts.length) out.push("", "🏢 담당 부서 현황", ...d.depts.map(x => " - " + x.name + " (" + REPORT_STATE_TXT[x.state] + ")"));
+  if (d.roster) out.push("", "🧩 6F 분장표", ...d.roster.items.map(x => " - " + x.name + " (" + x.chip + "): " + x.role));
   if (d.now.length) out.push("", "▶ 지금 진행 중", ...d.now.map(t => " - " + t));
   if (d.done.length) out.push("", "✔ 최근 완료 보고", ...d.done.map(t => " - " + t));
   if (d.next.length) out.push("", "⏰ 다음 예정", ...d.next.map(n => " - " + (n.time ? n.time + " " : "") + n.task));
