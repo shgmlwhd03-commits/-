@@ -2005,6 +2005,22 @@
     padding: 1px 6px; border-radius: 999px; border: 1px solid #64748b;
     background: rgba(15, 23, 42, 0.9); color: #e2e8f0; text-decoration: none; white-space: nowrap;
   }
+  .cr-act { display: flex; flex: none; align-self: center; gap: 3px; }
+  .cr-ok, .cr-no, .cr-undo, .cr-cp {
+    font-family: inherit; font-size: 6.4px; font-weight: 900; padding: 1px 6px; border-radius: 999px;
+    cursor: pointer; white-space: nowrap; touch-action: manipulation;
+  }
+  .cr-ok { border: 1px solid rgba(74, 222, 128, 0.6); background: rgba(6, 45, 28, 0.85); color: #bbf7d0; }
+  .cr-no { border: 1px solid rgba(248, 113, 113, 0.55); background: rgba(45, 10, 10, 0.85); color: #fecaca; }
+  .cr-undo { border: 1px solid #475569; background: rgba(15, 23, 42, 0.9); color: #cbd5e1; }
+  .cr-cp { border: 1px solid rgba(56, 189, 248, 0.55); background: rgba(8, 47, 73, 0.8); color: #bae6fd; }
+  .cr-dec { flex: none; align-self: center; font-size: 6.6px; font-weight: 900; padding: 1px 6px; border-radius: 999px; white-space: nowrap; }
+  .cr-dec.ok { border: 1px solid rgba(74, 222, 128, 0.65); background: rgba(6, 45, 28, 0.9); color: #bbf7d0; }
+  .cr-dec.no { border: 1px solid rgba(148, 163, 184, 0.65); background: rgba(30, 41, 59, 0.92); color: #e2e8f0; }
+  .chief-row.decided { flex-wrap: wrap; }
+  .chief-row.decided.ok { border-color: rgba(74, 222, 128, 0.55); background: rgba(6, 45, 28, 0.62); }
+  .chief-row.decided.no { border-color: rgba(148, 163, 184, 0.55); background: rgba(30, 30, 34, 0.7); }
+  .chief-row.decided .cr-tx b { color: #cbd5e1; }
   .cr-go { cursor: pointer; }
   .chief-row.red .cr-go { border-color: rgba(248, 113, 113, 0.6); color: #fecaca; }
   .chief-row.blue .cr-go { border-color: rgba(56, 189, 248, 0.55); color: #bae6fd; }
@@ -2441,6 +2457,8 @@
     .cr-tx b { font-size: 9.4px; }
     .cr-tx .cr-rm, .cr-tx i { font-size: 8px; }
     .cr-go, .cr-url { font-size: 8.2px; padding: 2px 8px; }
+    .cr-ok, .cr-no, .cr-undo, .cr-cp { font-size: 8px; padding: 2px 8px; }
+    .cr-dec { font-size: 8.2px; padding: 2px 8px; }
     .sig { padding: 3px 9px; gap: 5px; }
     .sig .sig-word { font-size: 9.5px; }
     .sig .sig-n { font-size: 10.5px; min-width: 16px; }
@@ -3301,6 +3319,7 @@ function chiefData(raw) {
   };
   const merged = items.length ? items : fallback();
   merged.sort((a, b) => (CHIEF_LANE[a.lane] - CHIEF_LANE[b.lane]));
+  merged.forEach(it => { it.id = it.lane + "|" + it.room + "|" + it.title; });
   return {
     title: str(src.title, "비서실장 · 총괄 보고 · 긴급 처리"),
     note: str(src.note, "두 대표 미결·대기 통합 · 🔴 자금 최우선 → 🔵 승인 → ⏳ 대기"),
@@ -3339,28 +3358,110 @@ function chiefClick(e, room) {
   if (room) openReport(room);
 }
 
+/* 승인·불허 결정: 정적 페이지라 localStorage에 남기고, 동시에 비서에게 붙여넣을 문구를 복사한다. */
+let CHIEF_DEC = null;
+
+function chiefDecisions() {
+  if (CHIEF_DEC === null) {
+    try {
+      const raw = localStorage.getItem("liveoffice_chief_dec");
+      CHIEF_DEC = raw ? JSON.parse(raw) : {};
+    } catch (e) { CHIEF_DEC = {}; }
+    if (!CHIEF_DEC || typeof CHIEF_DEC !== "object" || Array.isArray(CHIEF_DEC)) CHIEF_DEC = {};
+  }
+  return CHIEF_DEC;
+}
+
+function chiefSaveDecisions() {
+  try { localStorage.setItem("liveoffice_chief_dec", JSON.stringify(chiefDecisions())); } catch (e) {}
+}
+
+function chiefItem(idx) {
+  return (CHIEF && Array.isArray(CHIEF.items)) ? (CHIEF.items[idx] || null) : null;
+}
+
+function chiefPhrase(it, state) {
+  const rr = rooms.find(r => r.id === it.room);
+  const who = rr ? " · " + rr.tag : "";
+  const where = rr ? " (" + rr.title + ")" : "";
+  const head = (state === "ok" ? "[비서실장 승인" : "[비서실장 불허") + who + "] ";
+  const nm = it.title + where;
+  if (state === "ok") {
+    return it.lane === "red"
+      ? head + nm + " — 오너 직접 실행 건입니다. 실행은 오너가 직접 하고, 비서는 안내·기록만 해 주세요."
+      : head + nm + " — 승인했습니다. 그대로 진행해 주세요.";
+  }
+  return it.lane === "red"
+    ? head + nm + " — 보류합니다. 자금·인증 건이니 대안·비용·일정을 정리한 재검토안을 다시 보고해 주세요."
+    : head + nm + " — 보류합니다. 재검토안을 정리해 다시 보고해 주세요.";
+}
+
+function chiefDecide(e, idx, state) {
+  if (e) e.stopPropagation();
+  const it = chiefItem(idx);
+  if (!it) return;
+  const d = chiefDecisions();
+  d[it.id] = { s: state, t: hhmm() };
+  chiefSaveDecisions();
+  copyText(chiefPhrase(it, state), null);
+  renderChief();
+}
+
+function chiefUndo(e, idx) {
+  if (e) e.stopPropagation();
+  const it = chiefItem(idx);
+  if (!it) return;
+  const d = chiefDecisions();
+  delete d[it.id];
+  chiefSaveDecisions();
+  renderChief();
+}
+
+function chiefCopyPhrase(e, idx) {
+  if (e) e.stopPropagation();
+  const it = chiefItem(idx);
+  if (!it) return;
+  const d = chiefDecisions();
+  if (!d[it.id]) return;
+  copyText(chiefPhrase(it, d[it.id].s), e && e.currentTarget ? e.currentTarget : null);
+}
+
 function renderChief(raw) {
   if (raw !== undefined) CHIEF = chiefData(raw);
   if (!CHIEF) CHIEF = chiefData(null);
   const body = document.getElementById("chief-body");
   if (!body) return;
   const items = CHIEF.items;
+  const dec = chiefDecisions();
   const n = { red: 0, blue: 0, wait: 0 };
-  items.forEach(it => { n[it.lane] += 1; });
+  let okN = 0, noN = 0;
+  items.forEach(it => {
+    const d = dec[it.id];
+    if (d) { if (d.s === "ok") okN += 1; else noN += 1; }
+    else n[it.lane] += 1;
+  });
   const cnt = document.getElementById("chief-cnt");
   if (cnt) cnt.innerHTML = `<span class="cc-red">🔴 ${n.red}</span><span class="cc-blue">🔵 ${n.blue}</span><span class="cc-wait">⏳ ${n.wait}</span>`;
   const say = document.getElementById("chief-say");
+  const tail = (okN || noN) ? ` · 결정 ✅ ${okN} ⛔ ${noN}` : "";
   if (say) {
-    say.textContent = n.red
+    say.textContent = (n.red
       ? `🔴 자금·인증 ${n.red}건 최우선 — 오너가 직접 처리해 주세요 (AI 실행 금지) · 🔵 ${n.blue} · ⏳ ${n.wait}`
       : n.blue
-        ? `🔵 승인·확인 ${n.blue}건 · ⏳ 대기 ${n.wait}건 — 줄을 누르면 해당 부서 보고가 열립니다`
-        : `지금 급한 건 없습니다 · ⏳ 대기 ${n.wait}건`;
+        ? `🔵 승인·확인 ${n.blue}건 · ⏳ 대기 ${n.wait}건 — [승인]/[불허]를 누르면 비서용 문구가 복사됩니다`
+        : `남은 대기 ${n.wait}건 — [승인]/[불허]를 누르면 비서용 문구가 복사됩니다`) + tail;
   }
-  body.innerHTML = items.length ? items.map(it => {
+  body.innerHTML = items.length ? items.map((it, idx) => {
     const rr = rooms.find(r => r.id === it.room);
     const rm = rr ? rr.title : "";
-    return `<div class="chief-row ${it.lane}" role="button" tabindex="0" data-room="${esc(it.room)}"
+    const d = dec[it.id];
+    const act = d
+      ? `<span class="cr-dec ${d.s === "ok" ? "ok" : "no"}">${d.s === "ok" ? "✅ 승인(진행)" : "⛔ 불허(재검토)"}</span>` +
+        `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${idx})" title="비서에게 붙여넣을 문구 복사">📋 문구</button>` +
+        `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${idx})" title="결정 되돌리기">↺</button>`
+      : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${idx}, 'ok')" title="${it.lane === "red" ? "승인 — 실행은 오너가 직접" : "승인하고 진행"}">승인</button>` +
+        `<button class="cr-no" type="button" onclick="chiefDecide(event, ${idx}, 'no')" title="보류하고 재검토">불허</button>`;
+    return `<div class="chief-row ${it.lane}${d ? " decided " + (d.s === "ok" ? "ok" : "no") : ""}" role="button" tabindex="0" data-room="${esc(it.room)}"
         title="${esc(it.title + (rm ? " · " + rm : "") + " · 누르면 부서 보고 열기")}"
         onclick="chiefClick(event, '${esc(it.room)}')"
         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();chiefClick(event,'${esc(it.room)}');}">
@@ -3368,6 +3469,7 @@ function renderChief(raw) {
         <span class="cr-tx"><b>${esc(it.title)}</b>${rm ? `<span class="cr-rm">${esc(rm)}</span>` : ""}${it.detail ? `<i>${esc(it.detail)}</i>` : ""}</span>
         ${it.room ? `<button class="cr-go" type="button" onclick="event.stopPropagation();openReport('${esc(it.room)}')">보고 ›</button>` : ""}
         ${it.url ? `<a class="cr-url" href="${esc(it.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ ${esc(it.urlLabel)}</a>` : ""}
+        <span class="cr-act">${act}</span>
       </div>`;
   }).join("") : `<div class="chief-row wait"><span class="cr-lane">✅</span><span class="cr-tx"><b>지금 대기 중인 건이 없습니다</b></span></div>`;
   applyChiefState();
