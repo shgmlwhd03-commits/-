@@ -2595,10 +2595,10 @@ const rooms = [
   {
     id: "invest_sp500", floor: "f5", zone: "direct", tag: "해병이",
     title: "📈 미국 S&P500 적립투자부", worker: "📈", name: "오적립 주임",
-    say: "ISA·연금저축 비교 중!", foot: "월 10만 원 적립 · 리서치·비교·기록",
-    issue: "계좌 개설·이체·매수 승인 대기!",
-    guide: "계좌 개설·자동이체·매수는 오너가 직접 합니다. 비교안만 확인해 주세요.",
-    state: "idle", ticker: "ISA·연금저축·일반 위탁 비교안 정리 · 월 10만 원 루틴 설계 · 계좌 개설은 승인 대기", updated: "07:35"
+    say: "ISA 개설 4단계 안내 중!", foot: "월 10만 원 적립 · 중개형 ISA + TIGER 360750",
+    issue: "계좌 개설·첫 매수는 오너 직접!",
+    guide: "계좌 개설·인증·첫 매수는 오너가 직접 입력합니다. 4단계 화면 순서만 안내합니다.",
+    state: "idle", ticker: "카카오페이증권 중개형 ISA + TIGER 미국S&P500(360750) · 월 10만 원(약 4주) · 계좌 개설 4단계 안내 중", updated: "07:35"
   },
   {
     id: "commerce", floor: "f5", zone: "direct", tag: "해병이",
@@ -3099,11 +3099,11 @@ const SIGNAL_FALLBACK = {
   blue: [
     { room: "cafe", title: "카페 댓글·게시글 초안 발송 전 승인", detail: "규칙 확인 완료 · 초안 대기" },
     { room: "cumex", title: "큐맥스 제안서·메일 초안 외부 발송", detail: "협력사 후보 정리 후 발송 전 승인" },
-    { room: "invest_sp500", title: "적립 계좌 유형·ETF 선택안 결정", detail: "ISA·연금저축·일반 위탁 비교안 중 선택" },
+    { room: "invest_sp500", title: "ISA 계좌 개설 4단계 진행 확인", detail: "카카오페이증권 중개형 ISA · 인증·계좌정보는 오너가 직접 입력" },
     { room: "commerce", title: "위탁판매 1단계 세무·사업자 형태 결정", detail: "개인 간이과세자 vs 가족법인 영향 확인" }
   ],
   red: [
-    { room: "invest_sp500", title: "적립 계좌 개설·자동이체·매수", detail: "월 10만 원 적립 · 오너 직접 실행 (AI 실행 금지)" },
+    { room: "invest_sp500", title: "계좌 개설·자동이체·첫 매수", detail: "중개형 ISA · 월 10만 원 · 개설·첫 매수 완료 전까지 유지 (오너 직접)" },
     { room: "commerce", title: "스마트스토어 정산 계좌 개설", detail: "사업용 계좌·정산 정보 · 오너 직접 실행" }
   ]
 };
