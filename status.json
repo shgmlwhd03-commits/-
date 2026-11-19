@@ -1,6 +1,6 @@
 {
   "_note": "AI 1인 회사 부서 상태판. 개인정보 없음(이름/연락처/계정/블로그명 미포함). status: working | idle | alert",
-  "updated": "2026-11-19T21:58+09:00",
+  "updated": "2026-11-19T22:16+09:00",
   "ceo": {
     "status": "idle",
     "ticker": "총괄 지휘 중 · 비용 0원 원칙 가동 · 승인 대기",
@@ -12,9 +12,9 @@
     "updated": "21:42"
   },
   "naver": {
-    "status": "working",
-    "ticker": "첫 글 이미지 첨부·발행 중...",
-    "updated": "21:58"
+    "status": "idle",
+    "ticker": "첫 글 발행 완료! (수능 이후 일정)",
+    "updated": "22:16"
   },
   "tistory": {
     "status": "working",
@@ -33,7 +33,7 @@
   },
   "cafe": {
     "status": "alert",
-    "ticker": "카페 계정 비밀번호 입력 대기 중",
-    "updated": "21:58"
+    "ticker": "비밀번호 확인 필요 · 로그인 오류 2회",
+    "updated": "22:16"
   }
 }
