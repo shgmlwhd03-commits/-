@@ -971,8 +971,8 @@
   .pr-toggle { cursor: pointer; touch-action: manipulation; }
   .pr-toggle:focus-visible { outline: 2px solid #38bdf8; outline-offset: 1px; border-radius: 5px; }
   .pr-caret { flex: none; margin-left: 3px; font-size: 8px; color: #fbbf24; }
-  .pr-body { overflow: hidden; max-height: 1400px; opacity: 1; transition: max-height 0.32s ease, opacity 0.22s ease; }
-  .pr-body.collapsed { max-height: 0; opacity: 0; pointer-events: none; }
+  .pr-body { overflow: hidden; max-height: 1400px; opacity: 1; visibility: visible; transition: max-height 0.32s ease, opacity 0.22s ease, visibility 0s; }
+  .pr-body.collapsed { max-height: 0; opacity: 0; pointer-events: none; visibility: hidden; transition: max-height 0.32s ease, opacity 0.22s ease, visibility 0s linear 0.32s; }
   .pr-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px; }
   .pr-item { display: flex; flex-direction: column; gap: 1px; min-width: 0; padding: 2px 4px; border-radius: 6px; background: rgba(6, 11, 20, 0.66); border: 1px solid rgba(148, 163, 184, 0.18); }
   .pr-item.on { border-color: rgba(56, 189, 248, 0.45); }
@@ -5170,6 +5170,8 @@ function staffAway(room, label) {
   if (!el) return;
   el.classList.add("away");
   el.dataset.away = label;
+  const stage = el.querySelector(".room-stage");
+  if (stage) stage.dataset.away = label;
 }
 
 function staffHome(room) {
@@ -5178,6 +5180,8 @@ function staffHome(room) {
   if (!el) return;
   el.classList.remove("away");
   delete el.dataset.away;
+  const stage = el.querySelector(".room-stage");
+  if (stage) delete stage.dataset.away;
 }
 
 /* 부서 층 ↔ 1F·B1을 유리 엘리베이터로 실제 이동하는 연출 */
