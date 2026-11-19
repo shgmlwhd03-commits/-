@@ -1643,7 +1643,7 @@
     z-index: 3;
     transition: left 2.4s cubic-bezier(0.45, 0.05, 0.55, 0.95), opacity 0.3s ease;
   }
-  .lob-walker.hidden { opacity: 0; }
+  .lob-walker.hidden { opacity: 0; visibility: hidden; }
   .lob-walker .w-body { font-size: 14px; line-height: 1; transform-origin: 50% 100%; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.55)); }
   .lob-walker.walking .w-body { animation: walkBob 0.52s ease-in-out infinite; }
   .lob-walker.resting .w-body { animation: calmRest 4.2s ease-in-out infinite; }
@@ -5096,31 +5096,6 @@ function roomTalkLoop() {
   }, 24000 + Math.random() * 16000);
 }
 
-function setRoomBreak(id, on) {
-  const el = document.getElementById("room-" + id);
-  const r = rooms.find(x => x.id === id);
-  if (!el || !r) return;
-  const say = document.getElementById("say-" + id);
-  const foot = document.getElementById("foot-" + id);
-  el.classList.toggle("break", !!on);
-  if (say) say.textContent = on ? "☕ 커피 한잔" : r.say;
-  if (foot) foot.textContent = on ? "☕ 자율 휴식 · 탕비실 다녀오는 중" : r.foot;
-}
-
-function breakLoop() {
-  if (reduceMotion) return;
-  setTimeout(() => {
-    const idle = Array.from(document.querySelectorAll(".room.idle:not(.break)"));
-    if (idle.length) {
-      const pick = idle[Math.floor(Math.random() * idle.length)];
-      const id = pick.id.replace("room-", "");
-      setRoomBreak(id, true);
-      setTimeout(() => setRoomBreak(id, false), 6000 + Math.random() * 5000);
-    }
-    breakLoop();
-  }, 12000 + Math.random() * 10000);
-}
-
 /* ---- 1F 탕비실에 들르는 '쉬는 사원' ----
    대기(IDLE) 중인 부서 사원 한 명만 커피를 뽑으러 나온다.
    업무 중(WORK) · 승인 대기(alert) · 자리 비움(break) 부서 사원은 나오지 않는다. */
@@ -5369,10 +5344,10 @@ let soloBusy = false;function soloWalk(el, pct, dur) {
   el.style.left = pct + "%";
 }
 async function soloScene() {
-  if (soloBusy || collabRunning || VENUE === "b1") return;
-  /* 지하 오락실은 쉬는(대기) 캐릭터만 간다 — 업무 중엔 자리 지킴 */
+  if (soloBusy || collabRunning || b1StaffBusy || VENUE === "b1") return;
+  /* 지하 오락실은 쉬는(대기) 캐릭터만 간다 — 업무 중·자리 비움 중엔 가지 않는다 */
   const prizeRoom = document.getElementById("room-prize");
-  if (!prizeRoom || !prizeRoom.classList.contains("idle") || prizeRoom.classList.contains("break")) return;
+  if (!prizeRoom || !prizeRoom.classList.contains("idle") || prizeRoom.classList.contains("break") || AWAY.has("prize")) return;
   const el = document.getElementById("b1-hc");
   const room = document.getElementById("b1-room");
   if (!el) return;
@@ -5572,7 +5547,6 @@ window.addEventListener("resize", () => { buildTicks(); liftPark(); });
 setTimeout(() => liftPark(), 60);
 scheduleLobby(1600);
 roomTalkLoop();
-breakLoop();
 soloLoop();
 startStaffLife();
 </script>
