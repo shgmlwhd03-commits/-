@@ -416,6 +416,23 @@
   .room.idle .worker { animation: patrol 9.5s ease-in-out infinite; animation-delay: var(--wd, 0s); }
   /* ALERT: 다급하게 손 흔들기 */
   .room.alert .worker { animation: panicWave 0.5s infinite ease-in-out; }
+  /* 자리를 비운 캐릭터: 부서 자리에서는 사라지고, 무엇을 하는지 표시한다
+     (한 캐릭터가 위·아래에 동시에 두 번 보이지 않게 한다) */
+  .room.away .worker { opacity: 0; visibility: hidden; animation: none; }
+  .room.away .desk { opacity: 0.5; }
+  .room.away .room-stage::after {
+    content: attr(data-away);
+    position: absolute; left: 4px; bottom: 1px;
+    font-size: 6.8px; font-weight: 900; line-height: 1.6; white-space: nowrap;
+    color: #bae6fd; background: rgba(8, 47, 73, 0.9);
+    border: 1px solid rgba(56, 189, 248, 0.5); border-radius: 999px; padding: 0 5px;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
+  }
+  .room.away .room-stage::before {
+    content: "";
+    position: absolute; left: 10px; bottom: 12px; width: 26px; height: 2px;
+    border-radius: 2px; background: rgba(148, 163, 184, 0.35);
+  }
   @keyframes workBob {
     0%, 100% { transform: translateY(0) rotate(0deg); }
     25% { transform: translateY(-2.6px) rotate(-2.4deg); }
@@ -2085,6 +2102,8 @@
   }
   .lift .rider { font-size: 8px; line-height: 1; opacity: 0; transition: opacity 0.25s ease; }
   .lift.riding .rider { opacity: 1; }
+  .lift.staff-ride .rider#rider-hb, .lift.staff-ride .rider#rider-td { opacity: 0; }
+  #rider-st[hidden] { display: none; }
   .lift.riding { box-shadow: 0 0 20px rgba(56, 189, 248, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.28); }
   .tick {
     position: absolute;
@@ -2590,6 +2609,7 @@
       <div class="lift" id="lift" style="top:0%">
         <span class="rider" id="rider-hb">🫡</span>
         <span class="rider" id="rider-td">😤</span>
+        <span class="rider" id="rider-st" hidden>🙂</span>
         <span class="lift-say" id="lift-say">👑 대표실 보고 중</span>
       </div>
     </div>
@@ -5005,7 +5025,7 @@ function scheduleLobby(delay) {
     if (collabRunning) { scheduleLobby(1200); return; }
     /* 업무 중(WORK) 캐릭터만 있으면 이동 연출을 시작하지 않는다 */
     if (!canRoam()) { syncWalkerPins(); scheduleLobby(20000); return; }
-    if (staffBusy) { scheduleLobby(4000); return; }
+    if (staffBusy || b1StaffBusy || staffRiding) { scheduleLobby(3000); return; }
     collabRunning = true;
     try { await lobShow(); }
     catch (e) {}
@@ -5108,7 +5128,7 @@ function idleDeptRooms() {
   return rooms.filter(r => {
     if (r.ceo) return false;
     const el = document.getElementById("room-" + r.id);
-    return !!el && el.classList.contains("idle") && !el.classList.contains("break") && !el.classList.contains("alert");
+    return !!el && el.classList.contains("idle") && !el.classList.contains("break") && !el.classList.contains("alert") && !AWAY.has(r.id);
   });
 }
 
@@ -5140,78 +5160,148 @@ function staffPaint(el, sayEl, room, line, item) {
   return label;
 }
 
+/* 자리를 비운 부서: 자리 아이콘을 숨기고 무슨 일 중인지 표시한다 (중복 표시 방지) */
+const AWAY = new Set();
+let staffRiding = false;
+
+function staffAway(room, label) {
+  const el = document.getElementById("room-" + room.id);
+  AWAY.add(room.id);
+  if (!el) return;
+  el.classList.add("away");
+  el.dataset.away = label;
+}
+
+function staffHome(room) {
+  const el = document.getElementById("room-" + room.id);
+  AWAY.delete(room.id);
+  if (!el) return;
+  el.classList.remove("away");
+  delete el.dataset.away;
+}
+
+/* 부서 층 ↔ 1F·B1을 유리 엘리베이터로 실제 이동하는 연출 */
+async function staffLift(from, to, line, emoji) {
+  const lift = document.getElementById("lift");
+  if (!lift) return;
+  const st = document.getElementById("rider-st");
+  staffRiding = true;
+  try {
+    liftGo(from, 0.8);
+    liftSay(true, line);
+    await sleep(850);
+    if (st) { st.textContent = emoji || "🙂"; st.hidden = false; }
+    lift.classList.add("riding", "staff-ride");
+    SFX.ding(to, to === "b1" ? "down" : "up");
+    liftGo(to, 1.35);
+    await sleep(1450);
+    if (st) st.hidden = true;
+    lift.classList.remove("riding", "staff-ride");
+    liftSay(false);
+  } finally {
+    staffRiding = false;
+  }
+}
+
 async function staffPantryOne(room, slot, line) {
   const id = "lob-hc" + (slot === 2 ? "2" : "");
   const el = document.getElementById(id);
   const say = document.getElementById(id + "-say");
-  if (!el || !staffStillIdle(room)) return;
-  const label = staffPaint(el, say, room, line, "☕");
+  if (!el || !staffStillIdle(room) || AWAY.has(room.id)) return;
+  const emoji = room.worker || "🙂";
+  const label = String(room.title || room.name || "쉬는 사원").replace(/^[^\p{L}\p{N}]+/u, "");
   const startPct = slot === 2 ? 58 : 20;
-  el.style.transitionDuration = "0s, 0.3s";
-  el.style.left = startPct + "%";
-  el.classList.remove("walking", "carrying", "sipping", "talking", "edge", "hidden");
-  el.classList.add("resting");
-  void el.offsetWidth;
-  await sleep(80);
-  soloWalk(el, 47, 1.6);
-  await sleep(1750);
-  el.classList.remove("walking");
-  el.classList.add("resting");
-  if (!staffStillIdle(room)) { el.classList.add("hidden"); return; }
   const pz = document.getElementById("pantry");
-  if (pz) pz.classList.add("brewing");
-  SFX.coffee("f1");
-  await sleep(1200);
-  if (pz) pz.classList.remove("brewing");
-  el.classList.add("carrying", "talking");
-  if (say) say.textContent = "☕ " + label + " · 잠깐 쉬는 중";
-  await sleep(1500);
-  el.classList.add("sipping");
-  await sleep(1400);
-  el.classList.remove("talking", "sipping", "carrying");
-  soloWalk(el, startPct, 1.5);
-  await sleep(1600);
-  el.classList.remove("walking");
-  el.classList.add("resting", "hidden");
+  staffAway(room, "☕ 탕비실 가는 중");
+  try {
+    await staffLift(room.floor, "f1", "☕ " + label + " · 탕비실 가는 중", emoji);
+    if (!staffStillIdle(room)) return;
+    staffAway(room, "☕ 탕비실에서 쉬는 중");
+    staffPaint(el, say, room, line, "☕");
+    el.classList.remove("walking", "carrying", "sipping", "talking", "edge", "hidden");
+    el.style.transitionDuration = "0s, 0.3s";
+    el.style.left = startPct + "%";
+    el.classList.add("resting");
+    void el.offsetWidth;
+    await sleep(120);
+    soloWalk(el, 47, 1.4);
+    await sleep(1550);
+    el.classList.remove("walking");
+    el.classList.add("resting");
+    if (!staffStillIdle(room)) return;
+    if (pz) pz.classList.add("brewing");
+    SFX.coffee("f1");
+    await sleep(1150);
+    if (pz) pz.classList.remove("brewing");
+    el.classList.add("carrying", "talking");
+    if (say) say.textContent = "☕ " + label + " · 잠깐 쉬는 중";
+    await sleep(1400);
+    el.classList.add("sipping");
+    await sleep(1300);
+    el.classList.remove("talking", "sipping", "carrying");
+    soloWalk(el, startPct, 1.4);
+    await sleep(1500);
+    el.classList.remove("walking");
+    el.classList.add("resting");
+  } finally {
+    if (pz) pz.classList.remove("brewing");
+    el.classList.add("hidden");
+    el.classList.remove("walking", "talking", "carrying", "sipping");
+    await staffLift("f1", room.floor, "🏢 " + label + " · 자리 복귀", emoji).catch(() => {});
+    staffHome(room);
+  }
 }
 
 async function staffBasementOne(room) {
   const el = document.getElementById("b1-hc2");
   const say = document.getElementById("b1-hc2-say");
-  if (!el || !staffStillIdle(room)) return;
+  if (!el || !staffStillIdle(room) || AWAY.has(room.id)) return;
+  const emoji = room.worker || "🙂";
+  const label = String(room.title || room.name || "쉬는 사원").replace(/^[^\p{L}\p{N}]+/u, "");
   const karaoke = Math.random() < 0.55;
-  const label = staffPaint(el, say, room, karaoke ? "🎤 한 곡만 부르고 갈게" : "🛋️ 소파에서 잠깐", karaoke ? "🎤" : "🛋️");
   const bz = document.getElementById("b1-room");
   const startPct = 96;
-  el.style.transitionDuration = "0s, 0.3s";
-  el.style.left = startPct + "%";
-  el.classList.remove("walking", "talking", "edge", "hidden");
-  el.classList.add("resting");
-  void el.offsetWidth;
-  await sleep(80);
-  soloWalk(el, karaoke ? 50 : 24, 1.8);
-  await sleep(1950);
-  el.classList.remove("walking");
-  el.classList.add("resting");
-  if (!staffStillIdle(room)) { el.classList.add("hidden"); return; }
-  if (karaoke) {
-    if (bz) bz.classList.add("singing");
-    SFX.karaoke("b1");
-    if (say) say.textContent = "🎤 " + label + " · 한 곡 신나게!";
-    el.classList.add("talking");
-    await sleep(2400);
-    if (say) say.textContent = "🎶 박수!";
+  staffAway(room, karaoke ? "🎤 B1 노래방 중" : "🛋️ B1 휴게 중");
+  try {
+    await staffLift(room.floor, "b1", (karaoke ? "🎤 " : "🛋️ ") + label + " · B1 내려가는 중", emoji);
+    if (!staffStillIdle(room)) return;
+    staffPaint(el, say, room, karaoke ? "🎤 한 곡만 부르고 갈게" : "🛋️ 소파에서 잠깐", karaoke ? "🎤" : "🛋️");
+    el.classList.remove("walking", "talking", "edge", "hidden");
+    el.style.transitionDuration = "0s, 0.3s";
+    el.style.left = startPct + "%";
+    el.classList.add("resting");
+    void el.offsetWidth;
+    await sleep(120);
+    soloWalk(el, karaoke ? 50 : 24, 1.6);
+    await sleep(1750);
+    el.classList.remove("walking");
+    el.classList.add("resting");
+    if (!staffStillIdle(room)) return;
+    if (karaoke) {
+      if (bz) bz.classList.add("singing");
+      SFX.karaoke("b1");
+      if (say) say.textContent = "🎤 " + label + " · 한 곡 신나게!";
+      el.classList.add("talking");
+      await sleep(2300);
+      if (say) say.textContent = "🎶 박수!";
+      if (bz) bz.classList.remove("singing");
+    } else {
+      if (say) say.textContent = "🛋️ " + label + " · 잠깐 눕자";
+      el.classList.add("talking");
+      await sleep(2400);
+    }
+    el.classList.remove("talking");
+    soloWalk(el, startPct, 1.4);
+    await sleep(1550);
+    el.classList.remove("walking");
+    el.classList.add("resting");
+  } finally {
     if (bz) bz.classList.remove("singing");
-  } else {
-    if (say) say.textContent = "🛋️ " + label + " · 잠깐 눕자";
-    el.classList.add("talking");
-    await sleep(2600);
+    el.classList.add("hidden");
+    el.classList.remove("walking", "talking");
+    await staffLift("b1", room.floor, "🏢 " + label + " · 자리 복귀", emoji).catch(() => {});
+    staffHome(room);
   }
-  el.classList.remove("talking");
-  soloWalk(el, startPct, 1.6);
-  await sleep(1700);
-  el.classList.remove("walking");
-  el.classList.add("resting", "hidden");
 }
 
 async function staffPantry() {
