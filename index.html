@@ -907,7 +907,9 @@ function toggleRoom(id) {
   const say = document.getElementById("say-" + id);
   const foot = document.getElementById("foot-" + id);
   if (el.classList.contains("alert")) {
-    setRoomState(id, r.state || "idle");
+    // 경보 해제: 기본 상태가 alert인 방(카페 관리팀)은 대기로 돌린다
+    const base = (r.state && r.state !== "alert") ? r.state : "idle";
+    setRoomState(id, base);
     say.textContent = r.say;
     foot.textContent = r.foot;
   } else {
