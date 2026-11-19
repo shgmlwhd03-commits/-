@@ -1080,8 +1080,8 @@ function renderRevenue(raw) {
 
 /* ---------------- 전광판 ---------------- */
 function tickerFor(state, text) {
-  if (state === "alert") return "🔴 " + String(text).replace(/^🔴\s*/, "");
-  return text;
+  const clean = String(text).replace(/^🔴\s*/, "");
+  return state === "alert" ? "🔴 " + clean : clean;
 }
 
 /* 전광판 글자 폭 어림값 (한글·이모지는 넓게) */
@@ -1234,6 +1234,10 @@ function toggleRoom(id) {
     setRoomState(id, base);
     say.textContent = r.say;
     foot.textContent = r.foot;
+    // 경보를 내리면 전광판의 🔴 문구도 함께 내린다
+    const track = document.getElementById("track-" + id);
+    const raw = track ? String(track.dataset.text || "") : r.ticker;
+    setBoardText(id, tickerFor(base, raw), undefined, base);
     const toast = document.getElementById("toast-" + id);
     if (toast) toast.classList.remove("show");
   } else {
