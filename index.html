@@ -311,6 +311,7 @@
   .rooms { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; position: relative; z-index: 1; }
   .rooms.one { grid-template-columns: 1fr; }
   .rooms.three .room:nth-child(3) { grid-column: 1 / -1; }
+  .rooms.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .rooms.one .room-stage { justify-content: center; gap: 34px; }
 
   .room {
@@ -2249,6 +2250,149 @@
     .rm-foot { padding: 7px 12px 10px; gap: 6px; }
     .rm-btn { font-size: 10px; padding: 6px 9px; }
   }
+
+  /* ============================================================
+     🚦 신호등 체계
+     🔵 파란불 = 필수 확인 · 일반 승인 대기 (외부 발송·게시·계약 전)
+     🔴 빨간불 = 금융 · 결제 · 자금 승인 (AI 임의 실행 금지, 오너 직접)
+     ============================================================ */
+  .sigbar { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 0 6px 5px; position: relative; z-index: 3; }
+  .sig {
+    display: flex; align-items: center; gap: 3px; min-width: 0;
+    padding: 2px 5px; border-radius: 7px;
+    font-family: inherit; font-weight: 900; cursor: pointer; text-align: left;
+    transition: box-shadow 0.25s ease, opacity 0.25s ease;
+  }
+  .sig-blue { border: 1px solid rgba(56, 189, 248, 0.5); background: rgba(8, 47, 73, 0.55); color: #bae6fd; }
+  .sig-red { border: 1px solid rgba(248, 113, 113, 0.5); background: rgba(64, 12, 12, 0.6); color: #fecaca; }
+  .sig .sig-word { flex: none; font-size: 7.6px; white-space: nowrap; }
+  .sig .sig-n { flex: none; min-width: 13px; text-align: center; font-size: 9px; line-height: 1.5; padding: 0 3px; border-radius: 999px; background: rgba(2, 6, 23, 0.6); }
+  .sig .sig-sub { min-width: 0; font-size: 6.2px; font-weight: 800; opacity: 0.82; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sig.zero { opacity: 0.6; }
+  .sig.open { box-shadow: 0 0 10px rgba(56, 189, 248, 0.42); }
+  .sig-red.open { box-shadow: 0 0 12px rgba(239, 68, 68, 0.55); }
+  .sig-list { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 2px; }
+  .sig-lh { font-size: 6.6px; font-weight: 900; line-height: 1.4; padding: 2px 5px; border-radius: 5px; }
+  .sig-lh.blue { color: #bae6fd; background: rgba(8, 47, 73, 0.5); border: 1px solid rgba(56, 189, 248, 0.35); }
+  .sig-lh.red { color: #fecaca; background: rgba(64, 12, 12, 0.5); border: 1px solid rgba(248, 113, 113, 0.4); }
+  .sig-row { display: flex; align-items: flex-start; gap: 4px; padding: 2px 5px; border-radius: 5px; background: rgba(6, 11, 20, 0.72); border: 1px solid rgba(148, 163, 184, 0.18); font-size: 6.8px; line-height: 1.35; }
+  .sig-row.blue { border-color: rgba(56, 189, 248, 0.36); }
+  .sig-row.red { border-color: rgba(248, 113, 113, 0.42); }
+  .sig-rm { flex: none; max-width: 42%; font-weight: 900; color: #fde68a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sig-tx { min-width: 0; display: flex; flex-direction: column; color: #dbe6f4; }
+  .sig-tx b { font-weight: 900; }
+  .sig-tx i { font-style: normal; font-size: 6.2px; color: #93a7bf; }
+  .sig-go { flex: none; margin-left: auto; font-family: inherit; font-size: 6.4px; font-weight: 900; padding: 1px 5px; border-radius: 999px; border: 1px solid #64748b; background: rgba(15, 23, 42, 0.85); color: #e2e8f0; cursor: pointer; }
+
+  /* 방 카드 레인 칩 */
+  .room-lanes { flex: none; display: inline-flex; align-items: center; gap: 2px; }
+  .lane { font-size: 6.2px; font-weight: 900; line-height: 1.5; padding: 0 3px; border-radius: 999px; white-space: nowrap; }
+  .lane.blue { border: 1px solid rgba(56, 189, 248, 0.55); background: rgba(8, 47, 73, 0.7); color: #bae6fd; }
+  .lane.red { border: 1px solid rgba(248, 113, 113, 0.7); background: rgba(69, 10, 10, 0.8); color: #fecaca; animation: workPulse 1.8s ease-in-out infinite; }
+  .room.money { border-color: #f87171; box-shadow: 0 0 14px rgba(248, 113, 113, 0.4); }
+  .room.money .status-dot { background: #ef4444; box-shadow: 0 0 9px #ef4444; animation: blink 0.9s infinite; }
+  .room.money .room-title { color: #fecaca; }
+
+  /* 🔵 일반 확인·승인은 파란불 (기존 빨간불 색을 덮어쓴다) */
+  .room.alert { border-color: #38bdf8; background: rgba(8, 32, 56, 0.62); box-shadow: 0 0 14px rgba(56, 189, 248, 0.36); }
+  .room.alert .status-dot { background: #38bdf8; box-shadow: 0 0 9px #38bdf8; animation: blink 0.85s infinite; }
+  .room.alert .badge-alert { background: #0ea5e9; }
+  .room.alert .laptop .lid { box-shadow: 0 0 8px rgba(56, 189, 248, 0.6); }
+  .room.alert .laptop .lid::after { background: linear-gradient(160deg, #bae6fd, #38bdf8); box-shadow: 0 0 8px rgba(56, 189, 248, 0.9); }
+  .room.alert .led-board {
+    background-color: #020b16;
+    background-image: radial-gradient(circle at 1px 1px, rgba(56, 189, 248, 0.2) 1px, transparent 1.7px);
+    border-color: #0c4a6e;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9), 0 0 14px rgba(56, 189, 248, 0.5);
+    animation: ledAlarmBlue 1.7s ease-in-out infinite;
+  }
+  @keyframes ledAlarmBlue {
+    0%, 100% { box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9), 0 0 8px rgba(56, 189, 248, 0.3); }
+    50% { box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9), 0 0 18px rgba(56, 189, 248, 0.75); }
+  }
+  .room.alert .led-text { color: #bae6fd; text-shadow: 0 0 5px rgba(56, 189, 248, 0.95); }
+  .room.alert .led-tag { color: #7dd3fc; background: linear-gradient(180deg, rgba(56, 189, 248, 0.3), rgba(56, 189, 248, 0.06)); }
+  .room.alert .led-tag i { background: #38bdf8; box-shadow: 0 0 7px #38bdf8; animation: blink 0.8s infinite; }
+  .room.alert .led-time { color: #7dd3fc; }
+  .room.alert .alert-box { border-color: #0ea5e9; background: rgba(4, 32, 54, 0.8); }
+  .room.alert .alert-guide { color: #bae6fd; }
+  .room.alert .alert-guide .guide-tag { background: rgba(56, 189, 248, 0.24); border-color: rgba(56, 189, 248, 0.55); color: #e0f2fe; }
+  .room.alert .resolve-btn { background: #0ea5e9; }
+
+  /* 🔴 자금 신호등은 빨간색 유지 (파란불보다 우선) */
+  .room.alert.money { border-color: #ef4444; background: rgba(64, 12, 12, 0.66); box-shadow: 0 0 16px rgba(239, 68, 68, 0.5); }
+  .room.alert.money .status-dot { background: #ef4444; box-shadow: 0 0 9px #ef4444; }
+  .room.alert.money .badge-alert { background: #ef4444; }
+  .room.alert.money .led-board {
+    background-color: #0c0303;
+    background-image: radial-gradient(circle at 1px 1px, rgba(248, 113, 113, 0.18) 1px, transparent 1.7px);
+    border-color: #7f1d1d;
+    animation: ledAlarm 1.5s ease-in-out infinite;
+  }
+  .room.alert.money .led-text { color: #fecaca; text-shadow: 0 0 5px rgba(239, 68, 68, 0.95); }
+  .room.alert.money .led-tag { color: #fca5a5; background: linear-gradient(180deg, rgba(239, 68, 68, 0.3), rgba(239, 68, 68, 0.06)); }
+  .room.alert.money .led-tag i { background: #ef4444; box-shadow: 0 0 7px #ef4444; }
+  .room.alert.money .led-time { color: #fca5a5; }
+  .room.alert.money .alert-box { border-color: #ef4444; background: rgba(69, 10, 10, 0.72); }
+  .room.alert.money .alert-guide { color: #fecaca; }
+  .room.alert.money .alert-guide .guide-tag { background: rgba(239, 68, 68, 0.28); border-color: rgba(239, 68, 68, 0.55); color: #fee2e2; }
+  .room.alert.money .resolve-btn { background: #ef4444; }
+  .room.alert.money .laptop .lid { box-shadow: 0 0 8px rgba(239, 68, 68, 0.6); }
+  .room.alert.money .laptop .lid::after { background: linear-gradient(160deg, #fecaca, #ef4444); box-shadow: 0 0 8px rgba(239, 68, 68, 0.9); }
+
+  /* 🛟 비상 업무 백업 매트릭스 (6F 분장표 패널) */
+  .pr-backup { margin-top: 4px; padding-top: 3px; border-top: 1px dashed rgba(251, 191, 36, 0.35); }
+  .pr-bk-head { display: flex; align-items: center; gap: 4px; margin-bottom: 2px; font-size: 8px; font-weight: 900; color: #fde68a; min-width: 0; }
+  .pr-bk-head em { margin-left: auto; font-style: normal; font-size: 6.2px; font-weight: 800; color: #fbbf24; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pr-bk-grid { display: grid; gap: 2px; }
+  .pr-bk-row { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.9fr) minmax(0, 1fr); gap: 3px; align-items: center; padding: 1px 4px; border-radius: 5px; background: rgba(6, 11, 20, 0.66); border: 1px solid rgba(148, 163, 184, 0.16); font-size: 6.4px; line-height: 1.35; }
+  .pr-bk-row.head { padding: 0 4px; border: none; background: none; font-weight: 900; color: #93a7bf; }
+  .pr-bk-who { font-weight: 900; color: #e8eef8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pr-bk-who small { display: block; font-size: 5.8px; font-weight: 800; color: #8aa0b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pr-bk-cell { color: #cbd5e1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pr-bk-cell.first { color: #7dd3fc; font-weight: 900; }
+  .pr-bk-row.wait .pr-bk-who { color: #fcd34d; }
+  .pr-bk-note { margin-top: 2px; font-size: 6.2px; line-height: 1.3; color: #fca5a5; font-weight: 800; }
+
+  /* 모달: 신호등 · 백업 매트릭스 */
+  .rm-sigs { display: flex; flex-direction: column; gap: 2px; }
+  .rm-sig { display: flex; align-items: flex-start; gap: 4px; padding: 2px 5px; border-radius: 5px; background: rgba(6, 11, 20, 0.66); border: 1px solid rgba(148, 163, 184, 0.18); font-size: 7px; line-height: 1.35; color: #dbe6f4; }
+  .rm-sig.blue { border-color: rgba(56, 189, 248, 0.4); }
+  .rm-sig.red { border-color: rgba(248, 113, 113, 0.45); }
+  .rm-sig .rs-lane { flex: none; font-weight: 900; }
+  .rm-sig .rs-rm { flex: none; font-weight: 900; color: #fde68a; }
+  .rm-sig .rs-tx { flex: 1 1 auto; min-width: 0; }
+  .rm-sig .rs-tx b { font-weight: 900; }
+  .rm-sig .rs-tx i { font-style: normal; display: block; color: #93a7bf; }
+  .rm-sig-note { font-size: 6.6px; font-weight: 800; color: #fca5a5; margin-bottom: 2px; }
+  .rm-bk { display: flex; flex-direction: column; gap: 2px; }
+  .rm-bk-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr); gap: 4px; padding: 2px 5px; border-radius: 5px; background: rgba(6, 11, 20, 0.6); border: 1px solid rgba(148, 163, 184, 0.18); font-size: 7px; color: #cbd5e1; }
+  .rm-bk-row b { font-weight: 900; color: #e8eef8; }
+  .rm-bk-row span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  @media (min-width: 561px) {
+    .sigbar { padding: 0 12px 6px; gap: 6px; }
+    .sig { padding: 3px 9px; gap: 5px; }
+    .sig .sig-word { font-size: 9.5px; }
+    .sig .sig-n { font-size: 10.5px; min-width: 16px; }
+    .sig .sig-sub { font-size: 8px; }
+    .sig-lh { font-size: 8.4px; padding: 3px 8px; }
+    .sig-row { font-size: 8.4px; padding: 3px 7px; }
+    .sig-tx i { font-size: 7.6px; }
+    .sig-go { font-size: 8px; padding: 2px 7px; }
+    .lane { font-size: 7.4px; padding: 0 4px; }
+    .pr-backup { margin-top: 6px; padding-top: 5px; }
+    .pr-bk-head { font-size: 9.5px; }
+    .pr-bk-head em { font-size: 7.4px; }
+    .pr-bk-row { font-size: 8px; padding: 2px 6px; }
+    .pr-bk-row.head { padding: 0 6px; }
+    .pr-bk-who small { font-size: 7px; }
+    .pr-bk-note { font-size: 7.4px; }
+    .rm-sig { font-size: 8.6px; padding: 3px 7px; }
+    .rm-sig .rs-tx i { font-size: 7.6px; }
+    .rm-sig-note { font-size: 8px; }
+    .rm-bk-row { font-size: 8.6px; padding: 3px 7px; }
+  }
 </style>
 </head>
 <body>
@@ -2312,10 +2456,21 @@
       <span class="sync-note" id="sync-note">status.json 동기화 중…</span>
     </div>
     <div class="top-btns">
-      <button class="btn btn-red" onclick="testAlert()">🚨 빨간불 테스트</button>
+      <button class="btn btn-red" onclick="testAlert()">🔵 확인요청 테스트</button>
       <button class="btn btn-snd" id="snd-btn" onclick="toggleSound()" aria-pressed="false">🔇 전체 소리</button>
       <button class="btn" onclick="clearAll()">✅ 전체 복구</button>
     </div>
+  </div>
+
+  <!-- 🚦 신호등 요약 배너: 🔵 파란불(일반 확인·승인) / 🔴 빨간불(자금·결제, 오너 직접) -->
+  <div class="sigbar" id="sigbar" aria-label="신호등 요약">
+    <button class="sig sig-blue" id="sig-blue" type="button" onclick="toggleSig('blue')" aria-expanded="false" title="꼭 알아야 하는 보고·외부 발송·게시·계약 전 승인 대기">
+      <span class="sig-word">🔵 파란불</span><span class="sig-n" id="sig-blue-n">0</span><span class="sig-sub">일반 확인·승인</span>
+    </button>
+    <button class="sig sig-red" id="sig-red" type="button" onclick="toggleSig('red')" aria-expanded="false" title="자금·계좌·이체·결제·금융 인증 — AI 임의 실행 금지, 오너 직접">
+      <span class="sig-word">🔴 빨간불</span><span class="sig-n" id="sig-red-n">0</span><span class="sig-sub">자금·결제 · 오너 직접</span>
+    </button>
+    <div class="sig-list" id="sig-list" hidden></div>
   </div>
 
   <nav class="viewtabs" role="tablist" aria-label="화면 전환">
@@ -2408,15 +2563,15 @@ const rooms = [
   {
     id: "ceo_haebyeong", floor: "f6", zone: "direct", tag: "해병이", ceo: true,
     title: "👑 해병이 대표", worker: "🫡", name: "👑 해병이 대표",
-    say: "6개 부서 보고 받는 중!", foot: "총괄 지휘 · 해병이 6개 부서",
+    say: "7개 부서 보고 받는 중!", foot: "총괄 지휘 · 해병이 7개 부서",
     issue: "승인 대기 중인 건이 있어요!",
     guide: "승인 대기 건을 확인해 주세요. 진행 여부만 알려주시면 바로 실행합니다.",
-    state: "idle", ticker: "해병이 6개 부서 총괄 · 승인 대기 확인 중", updated: "--:--"
+    state: "idle", ticker: "해병이 7개 부서 총괄 · 승인 대기 확인 중", updated: "--:--"
   },
   {
     id: "ceo_tudeori", floor: "f6", zone: "partner", tag: "투덜이", ceo: true,
     title: "👑 투덜이 대표", worker: "😤", name: "👑 투덜이 대표",
-    say: "3개 부서 + 채널 2개 가동 중!", foot: "총괄 지휘 · 투덜이 3개 부서",
+    say: "4개 부서 + 채널 2개 가동 중!", foot: "총괄 지휘 · 투덜이 4개 부서",
     issue: "크레딧 확인이 필요해요!",
     guide: "투덜이 피클 크레딧 상태를 확인해 주세요. 04:00 충전으로 정상 복귀했습니다.",
     state: "working", ticker: "ONLINE · 04:00 충전 복귀 · 채널 2개 가동", updated: "--:--"
@@ -2436,6 +2591,14 @@ const rooms = [
     issue: "티스토리 첫 발행 준비가 필요해요!",
     guide: "티스토리 첫 글감만 정해 주시면 바로 발행을 시작합니다.",
     state: "idle", ticker: "첫 글 발행 완료! (연말정산 미리보기) · 매일 11:00", updated: "23:24"
+  },
+  {
+    id: "invest_sp500", floor: "f5", zone: "direct", tag: "해병이",
+    title: "📈 미국 S&P500 적립투자부", worker: "📈", name: "오적립 주임",
+    say: "ISA·연금저축 비교 중!", foot: "월 10만 원 적립 · 리서치·비교·기록",
+    issue: "계좌 개설·이체·매수 승인 대기!",
+    guide: "계좌 개설·자동이체·매수는 오너가 직접 합니다. 비교안만 확인해 주세요.",
+    state: "idle", ticker: "ISA·연금저축·일반 위탁 비교안 정리 · 월 10만 원 루틴 설계 · 계좌 개설은 승인 대기", updated: "07:35"
   },
   {
     id: "commerce", floor: "f5", zone: "direct", tag: "해병이",
@@ -2492,6 +2655,14 @@ const rooms = [
     issue: "투덜이 피클 확인이 필요해요!",
     guide: "투덜이 피클에 공공퀴즈·대응 상태를 확인 요청해 주세요.",
     state: "idle", ticker: "퀴즈 5건 응모 완료 · 공동대응·B2B 발굴 진행 중", updated: "22:50"
+  },
+  {
+    id: "cumex", floor: "f2", zone: "partner", tag: "투덜이",
+    title: "🏭 큐맥스 사업지원부", worker: "🏭", name: "배지원 과장",
+    say: "협력사 후보 정리 중!", foot: "화성 제조·물류·도급 · 제안·인원투입 추적",
+    issue: "제안서·메일 발송 승인 대기!",
+    guide: "제안서·메일은 초안까지만 만들고, 외부 발송 전에 승인을 받습니다.",
+    state: "idle", ticker: "화성 제조·물류·도급 협력사 후보 리스트업 · 외부 발송은 승인 후", updated: "07:35"
   }
 ];
 
@@ -2554,6 +2725,7 @@ function roomHTML(r, i) {
            onclick="roomTap(event, this, '${r.id}')" title="눌러서 업무 보고 열기">
         <div class="room-head">
           <span class="room-title">${esc(r.title)}</span>
+          <span class="room-lanes" id="lanes-${r.id}" aria-hidden="true"></span>
           <span class="room-tag${partner ? " partner" : ""}" title="${partner ? "투덜이 피클이 전담 운영하는 방" : "해병이 피클이 직접 운영하는 방"}">${r.tag}</span>
           <span class="room-open">${shop ? "현황판▸" : ceo ? "총괄▸" : "보고"}</span>
           <span class="status-dot" aria-hidden="true"></span>
@@ -2616,6 +2788,13 @@ function lobbyHTML() {
           <span class="w-who">투덜이 팀장</span>
           <span class="w-item" aria-hidden="true">📊</span>
         </div>
+        <!-- 쉬는(대기) 부서 사원만 탕비실에 들른다. 업무 중(WORK) 부서 사원은 나오지 않는다. -->
+        <div class="lob-walker staff resting hidden" id="lob-hc" style="left:20%">
+          <span class="w-say" id="lob-hc-say">☕ 잠깐 커피 한잔</span>
+          <span class="w-body">☕</span>
+          <span class="w-who">쉬는 사원</span>
+          <span class="w-item" aria-hidden="true">☕</span>
+        </div>
       </div>
     </section>`;
 }
@@ -2672,7 +2851,7 @@ function basementHTML() {
 
 function floorHTML(f) {
   const list = rooms.filter(r => r.floor === f.id);
-  const cls = list.length === 1 ? "rooms one" : list.length >= 3 ? "rooms three" : "rooms";
+  const cls = list.length === 1 ? "rooms one" : list.length >= 4 ? "rooms four" : list.length === 3 ? "rooms three" : "rooms";
   // 6F 대표실: 두 대표 아래에 수익 전광판 · 크레딧을 전폭으로 깔아 겹치지 않게 한다
   const pentBar = f.id === "f6"
     ? `<div class="pent-bar" aria-label="수익 전광판">
@@ -2703,18 +2882,20 @@ function render() {
     FLOORS.map(floorHTML).join("") + lobbyHTML() + basementHTML();
 
   // 전광판 기본 문구 (status.json 오기 전에도 꽉 차 보이게)
-  rooms.forEach(r => setBoardText(r.id, tickerFor(r.state, r.ticker), r.updated, r.state));
+  rooms.forEach(r => setBoardText(r.id, tickerFor(r.state, r.ticker, laneOf(r.id)), r.updated, r.state));
   renderRevenue(null);
   renderShop(null);
+  renderSignals(null);
   renderRoster(null);
   applyCorridor();
   requestAnimationFrame(() => { liftPark(); buildTicks(); });
 }
 
 /* ================= LED 전광판 ================= */
-function tickerFor(state, text) {
-  const clean = String(text).replace(/^🔴\s*/, "");
-  return state === "alert" ? "🔴 " + clean : clean;
+function tickerFor(state, text, lane) {
+  const clean = String(text).replace(/^[🔵🔴]\s*/, "");
+  const mark = lane === "red" ? "🔴 " : lane === "blue" ? "🔵 " : state === "alert" ? "🔵 " : "";
+  return mark + clean;
 }
 
 function estWidth(text) {
@@ -2772,7 +2953,7 @@ function setRoomState(id, state) {
   el.classList.add(state);
   if (state !== "idle") el.classList.remove("break");
   const tag = document.getElementById("tag-" + id);
-  if (tag) tag.textContent = STATE_LABEL[state] || "IDLE";
+  if (tag) tag.textContent = state === "alert" ? (laneOf(id) === "red" ? "자금" : "확인") : (STATE_LABEL[state] || "IDLE");
 }
 
 /* ================= 수익 전광판 ================= */
@@ -2907,6 +3088,163 @@ function renderCredit(raw) {
   if (td) td.textContent = "🟣 투덜이: " + (c.partner || "ONLINE · 04:00 충전 복귀");
 }
 
+/* ================= 🚦 신호등 (🔵 일반 확인·승인 / 🔴 자금·결제) =================
+   개인정보 없음: 부서명·할 일 문구만 담는다.
+   🔵 파란불 = 오너가 꼭 알아야 하는 보고·외부 발송·게시·계약 전 일반 승인 대기
+   🔴 빨간불 = 자금이 실제로 움직이는 건(계좌 개설·이체·매수·결제·금융 인증).
+   AI는 리서치·초안·비교·알림·기록까지만 하고 실행은 오너가 직접 한다. */
+const SIGNAL_FALLBACK = {
+  note: "🔵 파란불=일반 확인·승인 · 🔴 빨간불=자금·결제(오너 직접)",
+  updated: "--:--",
+  blue: [
+    { room: "cafe", title: "카페 댓글·게시글 초안 발송 전 승인", detail: "규칙 확인 완료 · 초안 대기" },
+    { room: "cumex", title: "큐맥스 제안서·메일 초안 외부 발송", detail: "협력사 후보 정리 후 발송 전 승인" },
+    { room: "invest_sp500", title: "적립 계좌 유형·ETF 선택안 결정", detail: "ISA·연금저축·일반 위탁 비교안 중 선택" },
+    { room: "commerce", title: "위탁판매 1단계 세무·사업자 형태 결정", detail: "개인 간이과세자 vs 가족법인 영향 확인" }
+  ],
+  red: [
+    { room: "invest_sp500", title: "적립 계좌 개설·자동이체·매수", detail: "월 10만 원 적립 · 오너 직접 실행 (AI 실행 금지)" },
+    { room: "commerce", title: "스마트스토어 정산 계좌 개설", detail: "사업용 계좌·정산 정보 · 오너 직접 실행" }
+  ]
+};
+
+function signalData(raw) {
+  const src = (raw && typeof raw === "object" && !Array.isArray(raw)) ? raw : SIGNAL_FALLBACK;
+  const list = (v) => Array.isArray(v) ? v.filter(x => x && typeof x === "object" && typeof x.title === "string" && x.title.trim()).map(x => ({
+    room: (typeof x.room === "string") ? x.room.trim() : "",
+    title: x.title.trim(),
+    detail: (typeof x.detail === "string" && x.detail.trim()) ? x.detail.trim() : ""
+  })) : [];
+  return {
+    blue: list(src.blue),
+    red: list(src.red),
+    note: (typeof src.note === "string" && src.note.trim()) ? src.note.trim() : SIGNAL_FALLBACK.note,
+    updated: (typeof src.updated === "string" && src.updated.trim()) ? src.updated.trim() : ""
+  };
+}
+
+let SIGNALS = signalData(null);
+let SIG_OPEN = null;
+
+function laneCount(id, lane) {
+  return (SIGNALS[lane] || []).filter(it => it.room === id).length;
+}
+function laneOf(id) {
+  if (laneCount(id, "red") > 0) return "red";
+  if (laneCount(id, "blue") > 0) return "blue";
+  return "";
+}
+function roomSignals(id, all) {
+  const pick = (lane) => (SIGNALS[lane] || []).filter(it => all ? true : it.room === id);
+  return { blue: pick("blue"), red: pick("red") };
+}
+
+function renderSignals(raw) {
+  SIGNALS = signalData(raw);
+  const bn = document.getElementById("sig-blue-n"), rn = document.getElementById("sig-red-n");
+  if (bn) bn.textContent = SIGNALS.blue.length;
+  if (rn) rn.textContent = SIGNALS.red.length;
+  const bBtn = document.getElementById("sig-blue"), rBtn = document.getElementById("sig-red");
+  if (bBtn) {
+    bBtn.classList.toggle("zero", SIGNALS.blue.length === 0);
+    bBtn.classList.toggle("open", SIG_OPEN === "blue");
+    bBtn.setAttribute("aria-expanded", SIG_OPEN === "blue" ? "true" : "false");
+  }
+  if (rBtn) {
+    rBtn.classList.toggle("zero", SIGNALS.red.length === 0);
+    rBtn.classList.toggle("open", SIG_OPEN === "red");
+    rBtn.setAttribute("aria-expanded", SIG_OPEN === "red" ? "true" : "false");
+  }
+  rooms.forEach(r => {
+    if (r.ceo) return;
+    const b = laneCount(r.id, "blue"), rd = laneCount(r.id, "red");
+    const box = document.getElementById("lanes-" + r.id);
+    if (box) box.innerHTML = (rd ? `<span class="lane red">🔴${rd > 1 ? rd : ""}</span>` : "") + (b ? `<span class="lane blue">🔵${b > 1 ? b : ""}</span>` : "");
+    const el = document.getElementById("room-" + r.id);
+    if (el) el.classList.toggle("money", rd > 0);
+  });
+  renderSigList();
+  updatePill();
+}
+
+function renderSigList() {
+  const box = document.getElementById("sig-list");
+  if (!box) return;
+  if (!SIG_OPEN) { box.hidden = true; box.innerHTML = ""; return; }
+  const items = SIGNALS[SIG_OPEN] || [];
+  const head = SIG_OPEN === "red"
+    ? "🔴 빨간불 · 자금·계좌·이체·결제 — AI 임의 실행 금지, 오너가 직접 처리"
+    : "🔵 파란불 · 꼭 확인해야 하는 보고·외부 발송·게시·계약 전 승인";
+  box.hidden = false;
+  box.innerHTML = `<div class="sig-lh ${SIG_OPEN}">${esc(head)}</div>` + (items.length
+    ? items.map(it => {
+        const r = rooms.find(x => x.id === it.room);
+        return `<div class="sig-row ${SIG_OPEN}"><span class="sig-rm">${esc(r ? r.title : "공통")}</span><span class="sig-tx"><b>${esc(it.title)}</b>${it.detail ? `<i>${esc(it.detail)}</i>` : ""}</span>${r ? `<button class="sig-go" type="button" onclick="openReport('${esc(r.id)}')">열기</button>` : ""}</div>`;
+      }).join("")
+    : `<div class="sig-row">지금 대기 중인 건이 없습니다.</div>`);
+}
+
+function toggleSig(lane) {
+  SIG_OPEN = (SIG_OPEN === lane) ? null : lane;
+  renderSignals(SIGNALS);
+}
+
+/* ================= 🛟 비상 업무 재분장(백업) 매트릭스 =================
+   5인(두 비서·아부지워커·엄마워커·까실이) 중 누가 오프·크레딧 소진·연결 지연으로
+   빠져도 남은 인원이 1차→2차로 빈자리를 메운다. 부모님 폰 직접 접근은 하지 않는다. */
+const BACKUP_FALLBACK = {
+  title: "비상 업무 백업 매트릭스 · 5인",
+  note: "부모님 폰 직접 접근 금지 · 자금 실행은 오너",
+  rule: "1차가 오프·크레딧 소진·연결 지연이면 2차가 이어받고, 3명 이상 동시에 빠지면 오너 승인 대기로 전환한다.",
+  members: [
+    { name: "투덜이 비서", part: "카페·B2B·티스토리", state: "on", backup1: "해병이 비서", backup2: "까실이" },
+    { name: "해병이 비서", part: "블로그·자산·총괄", state: "on", backup1: "투덜이 비서", backup2: "까실이" },
+    { name: "아부지워커", part: "실측 소싱·마진", state: "wait", backup1: "까실이", backup2: "해병이 비서" },
+    { name: "엄마워커", part: "상세페이지·CS·장부", state: "wait", backup1: "까실이", backup2: "해병이 비서" },
+    { name: "까실이", part: "최종 실행·등록·피드백", state: "wait", backup1: "해병이 비서", backup2: "투덜이 비서" }
+  ]
+};
+
+function backupData(raw) {
+  const src = (raw && typeof raw === "object" && !Array.isArray(raw)) ? raw : BACKUP_FALLBACK;
+  const str = (v, d) => (typeof v === "string" && v.trim()) ? v.trim() : d;
+  const st = (v, d) => (v === "on" || v === "work" || v === "working") ? "on" : (v === "wait" || v === "waiting" || v === "idle") ? "wait" : d;
+  const list = Array.isArray(src.members) ? src.members.filter(m => m && typeof m === "object" && typeof m.name === "string" && m.name.trim()) : [];
+  const members = (list.length ? list : BACKUP_FALLBACK.members).map(m => ({
+    name: str(m.name, "—"),
+    part: str(m.part, ""),
+    state: st(m.state, "wait"),
+    backup1: str(m.backup1, "—"),
+    backup2: str(m.backup2, "—")
+  }));
+  return {
+    title: str(src.title, BACKUP_FALLBACK.title),
+    note: str(src.note, BACKUP_FALLBACK.note),
+    rule: str(src.rule, BACKUP_FALLBACK.rule),
+    updated: str(src.updated, ""),
+    members
+  };
+}
+
+let BACKUP = backupData(null);
+
+function backupRowsHTML(members) {
+  return `<div class="pr-bk-grid">
+      <div class="pr-bk-row head"><span>담당 · 파트</span><span>1차 백업</span><span>2차 백업</span></div>
+      ${members.map(m => `<div class="pr-bk-row ${m.state}"><span class="pr-bk-who">${esc(m.name)}<small>${esc(m.part)}</small></span><span class="pr-bk-cell first">${esc(m.backup1)}</span><span class="pr-bk-cell">${esc(m.backup2)}</span></div>`).join("")}
+    </div>`;
+}
+
+function renderBackup(raw) {
+  if (raw !== undefined) BACKUP = backupData(raw);
+  const el = document.getElementById("pent-backup");
+  if (!el) return;
+  el.innerHTML = `
+    <div class="pr-bk-head"><span>🛟 ${esc(BACKUP.title)}</span><em>${esc(BACKUP.note)}</em></div>
+    ${backupRowsHTML(BACKUP.members)}
+    ${BACKUP.rule ? `<div class="pr-bk-note">${esc(BACKUP.rule)}</div>` : ""}`;
+}
+
 /* ================= 🧩 6F 분장표 (4파트 역할 · 전담 채널) =================
    개인정보 없음: 역할 별칭·담당 업무·공개 채널만 담는다. */
 const ROSTER_DEFAULT = {
@@ -2967,7 +3305,9 @@ function renderRoster(raw) {
         <span class="pr-role">${esc(it.role)}</span>
       </div>`).join("")}</div>
     <div class="pr-chan">${d.channels.map(c => `<a class="${isTd(c) ? "td" : ""}" href="${esc(c.url)}" target="_blank" rel="noopener">🧵 ${esc(c.handle)}</a><span class="topic">${esc(c.topic)}</span>`).join("")}</div>
-    <div class="pr-rule"><b>⚡ 크레딧 절감</b> ${esc(d.rule)}</div>`;
+    <div class="pr-rule"><b>⚡ 크레딧 절감</b> ${esc(d.rule)}</div>
+    <div class="pr-backup" id="pent-backup" aria-label="비상 업무 백업 매트릭스"></div>`;
+  renderBackup(undefined);
 }
 
 /* ================= 상태 동기화 ================= */
@@ -2990,6 +3330,10 @@ function setSyncNote(ok, msg) {
 function applyStatus(data) {
   const src = (data && typeof data === "object" && !Array.isArray(data)) ? data : {};
 
+  /* 신호등·백업을 방 상태보다 먼저 반영 (방 카드 레인·LED 접두에 쓰인다) */
+  BACKUP = backupData(src.backup);
+  renderSignals(src.signals);
+
   rooms.forEach(r => {
     const s = src[r.id] || {};
     let state;
@@ -3000,7 +3344,7 @@ function applyStatus(data) {
 
     const tickerRaw = (typeof s.ticker === "string" && s.ticker.trim()) ? s.ticker.trim() : r.ticker;
     const updated = (typeof s.updated === "string" && s.updated.trim()) ? s.updated.trim() : r.updated;
-    const ticker = tickerFor(state, tickerRaw);
+    const ticker = tickerFor(state, tickerRaw, laneOf(r.id));
 
     const track = document.getElementById("track-" + r.id);
     const before = track ? track.dataset.text : undefined;
@@ -3014,8 +3358,9 @@ function applyStatus(data) {
     const foot = document.getElementById("foot-" + r.id);
     const onBreak = el.classList.contains("break") && state === "idle";
     if (state === "alert") {
-      if (say) say.textContent = "도와주세요! 🚨";
-      if (foot) foot.textContent = "🔴 " + r.issue;
+      const lane = laneOf(r.id);
+      if (say) say.textContent = lane === "red" ? "자금 승인 필요! 🔴" : "확인 부탁드려요! 🔵";
+      if (foot) foot.textContent = (lane === "red" ? "🔴 " : "🔵 ") + r.issue;
     } else {
       if (say) say.textContent = onBreak ? "☕ 커피 한잔" : r.say;
       if (foot) foot.textContent = onBreak ? "☕ 자율 휴식 · 탕비실 다녀오는 중" : r.foot;
@@ -3271,6 +3616,8 @@ function reportData(id) {
   const credit = (typeof base.credit === "string" && base.credit.trim()) ? base.credit.trim() : "";
   const now = arr(base.now);
   const roster = (r.ceo === true && ROSTER) ? ROSTER : null;
+  const signals = roomSignals(id, r.ceo === true);
+  const backup = (r.ceo === true) ? BACKUP : null;
   return {
     id,
     title: r.title || id,
@@ -3281,6 +3628,8 @@ function reportData(id) {
     credit,
     depts,
     roster,
+    signals,
+    backup,
     state,
     stateTxt: REPORT_STATE_TXT[state],
     ticker: (typeof s.ticker === "string" && s.ticker.trim()) ? s.ticker.trim() : (r.ticker || ""),
@@ -3304,14 +3653,18 @@ function openReport(id) {
   if (st) { st.className = "cstat " + d.state; st.textContent = d.stateTxt; }
 
   const list = (items) => items.map(x => `<li>${esc(x)}</li>`).join("");
+  const roomTitle = (rid) => { const rr = rooms.find(x => x.id === rid); return rr ? rr.title : rid; };
+  const sigRow = (x, lane) => `<div class="rm-sig ${lane}"><span class="rs-lane">${lane === "red" ? "🔴" : "🔵"}</span><span class="rs-tx"><b>${esc(x.title)}</b>${x.detail ? `<i>${esc(x.detail)}</i>` : ""}</span>${d.ceo && x.room ? `<span class="rs-rm">${esc(roomTitle(x.room))}</span>` : ""}</div>`;
   const body = document.getElementById("rm-body");
   if (body) {
     body.innerHTML = [
       d.summary ? `<div class="rm-sum"><span>👑</span><span>${esc(d.summary)}</span></div>` : "",
       d.ticker ? `<div class="rm-live"><span class="rm-live-h">📺 전광판</span><span class="rm-live-t">${esc(d.ticker)}</span><span class="rm-live-u">${esc(d.updated)}</span></div>` : "",
       d.credit ? `<div class="rm-credit"><span>⚡ 크레딧</span><span>${esc(d.credit)}</span></div>` : "",
+      (d.signals.red.length || d.signals.blue.length) ? `<div class="rm-sec"><div class="rm-h">🚦 승인 대기 신호 · 🔵 ${d.signals.blue.length} · 🔴 ${d.signals.red.length}</div>${d.signals.red.length ? `<div class="rm-sig-note">🔴 자금·계좌·이체·결제는 AI가 실행하지 않습니다. 오너가 직접 처리해 주세요.</div>` : ""}<div class="rm-sigs">${d.signals.red.map(x => sigRow(x, "red")).join("")}${d.signals.blue.map(x => sigRow(x, "blue")).join("")}</div></div>` : "",
       d.depts.length ? `<div class="rm-sec"><div class="rm-h">🏢 담당 부서 현황 · ${d.depts.length}개</div><div class="rm-depts">${d.depts.map(x => `<span class="rm-dept ${x.state}" title="${esc(REPORT_STATE_TXT[x.state])}"><i></i>${esc(x.name)}</span>`).join("")}</div></div>` : "",
       d.roster ? `<div class="rm-sec"><div class="rm-h">🧩 6F 분장표 · ${d.roster.items.length}파트</div><div class="rm-roster">${d.roster.items.map(it => `<div class="rm-r ${it.state}"><b>${esc(it.name)}</b><span>${esc(it.role)}</span><em>${esc(it.chip)}</em></div>`).join("")}</div></div>` : "",
+      d.backup ? `<div class="rm-sec"><div class="rm-h">🛟 비상 업무 백업 매트릭스 · ${d.backup.members.length}인</div><div class="rm-bk">${d.backup.members.map(m => `<div class="rm-bk-row"><b>${esc(m.name)}</b><span>1차 · ${esc(m.backup1)}</span><span>2차 · ${esc(m.backup2)}</span></div>`).join("")}</div><div class="rm-sig-note">${esc(d.backup.rule)}</div></div>` : "",
       `<div class="rm-sec"><div class="rm-h">📌 지금 진행 중</div><ul class="rm-list">${list(d.now)}</ul></div>`,
       d.done.length ? `<div class="rm-sec"><div class="rm-h">✅ 최근 완료 보고</div><ul class="rm-list done">${list(d.done)}</ul></div>` : "",
       d.next.length ? `<div class="rm-sec"><div class="rm-h">⏰ 다음 예정 · 스케줄</div><ul class="rm-sched">${d.next.map(n => `<li><b>${esc(n.time)}</b><span>${esc(n.task)}</span></li>`).join("")}</ul></div>` : "",
@@ -3349,7 +3702,18 @@ function copyReport() {
   if (d.ticker) out.push("전광판: " + d.ticker + (d.updated ? " (" + d.updated + ")" : ""));
   if (d.credit) out.push("⚡ 크레딧: " + d.credit);
   if (d.depts.length) out.push("", "🏢 담당 부서 현황", ...d.depts.map(x => " - " + x.name + " (" + REPORT_STATE_TXT[x.state] + ")"));
+  const sig = d.signals || { blue: [], red: [] };
+  if (sig.red.length || sig.blue.length) {
+    out.push("", "🚦 승인 대기 신호");
+    sig.red.forEach(x => out.push(" - 🔴 [자금·오너 직접] " + x.title + (x.detail ? " — " + x.detail : "")));
+    sig.blue.forEach(x => out.push(" - 🔵 [확인·승인] " + x.title + (x.detail ? " — " + x.detail : "")));
+  }
   if (d.roster) out.push("", "🧩 6F 분장표", ...d.roster.items.map(x => " - " + x.name + " (" + x.chip + "): " + x.role));
+  if (d.backup) {
+    out.push("", "🛟 비상 업무 백업 매트릭스");
+    d.backup.members.forEach(m => out.push(" - " + m.name + " (" + m.part + ") → 1차 " + m.backup1 + " / 2차 " + m.backup2));
+    if (d.backup.rule) out.push("   · " + d.backup.rule);
+  }
   if (d.now.length) out.push("", "▶ 지금 진행 중", ...d.now.map(t => " - " + t));
   if (d.done.length) out.push("", "✔ 최근 완료 보고", ...d.done.map(t => " - " + t));
   if (d.next.length) out.push("", "⏰ 다음 예정", ...d.next.map(n => " - " + (n.time ? n.time + " " : "") + n.task));
@@ -3420,14 +3784,15 @@ function toggleRoom(id) {
     if (foot) foot.textContent = r.foot;
     const track = document.getElementById("track-" + id);
     const raw = track ? String(track.dataset.text || "") : r.ticker;
-    setBoardText(id, tickerFor(base, raw), undefined, base);
+    setBoardText(id, tickerFor(base, raw, laneOf(id)), undefined, base);
     const toast = document.getElementById("toast-" + id);
     if (toast) toast.classList.remove("show");
     SFX.resolve(r.floor);
   } else {
     setRoomState(id, "alert");
-    if (say) say.textContent = "도와주세요! 🚨";
-    if (foot) foot.textContent = "🔴 " + r.issue;
+    const lane = laneOf(id);
+    if (say) say.textContent = lane === "red" ? "자금 승인 필요! 🔴" : "확인 부탁드려요! 🔵";
+    if (foot) foot.textContent = (lane === "red" ? "🔴 " : "🔵 ") + r.issue;
     SFX.alert(r.floor);
   }
   applyCorridor();
@@ -3487,14 +3852,26 @@ function clearAll() {
 }
 
 function updatePill() {
-  const alerts = document.querySelectorAll(".room.alert").length;
   const pill = document.getElementById("summary-pill");
   if (!pill) return;
-  if (alerts > 0) {
-    pill.textContent = `🔴 해결 요청 ${alerts}건`;
+  const blue = (SIGNALS.blue || []).length;
+  const red = (SIGNALS.red || []).length;
+  const alerts = document.querySelectorAll(".room.alert").length;
+  if (red > 0) {
+    pill.textContent = `🔴 자금 승인 ${red} · 🔵 확인 ${blue}`;
     pill.style.background = "#7f1d1d";
     pill.style.borderColor = "#ef4444";
     pill.style.color = "#fecaca";
+  } else if (blue > 0) {
+    pill.textContent = `🔵 확인·승인 ${blue}건`;
+    pill.style.background = "#0c2d48";
+    pill.style.borderColor = "#38bdf8";
+    pill.style.color = "#bae6fd";
+  } else if (alerts > 0) {
+    pill.textContent = `🔵 확인 요청 ${alerts}건`;
+    pill.style.background = "#0c2d48";
+    pill.style.borderColor = "#38bdf8";
+    pill.style.color = "#bae6fd";
   } else {
     pill.textContent = "🟢 전 부서 가동";
     pill.style.background = "#0c2d48";
@@ -3761,6 +4138,43 @@ let collabTimer = null;
 let collabRunning = false;
 let collabWasBusy = false;
 
+/* ================= 근무 중 자리 지킴 / 쉬는 캐릭터만 이동 (사용자 지시) =================
+   WORK(working)·승인 대기(alert) 상태인 캐릭터는 책상 앞을 지키고 일만 한다.
+   1F 탕비실 · B1 휴게실·노래방·오락실 · 엘리베이터 이동은
+   IDLE / REST(대기·휴게) 상태인 캐릭터만 한다.
+   일이 시작되면 이동 연출에서 빠지고 자기 자리(책상)로 돌아간다. */
+const WALKER_CEO = { hb: "ceo_haebyeong", td: "ceo_tudeori" };
+let P = [];                       // 이번 연출에 등장하는 캐릭터 ("hb" / "td")
+let staffBusy = false;            // 1F 탕비실 나들이(쉬는 사원) 진행 중
+
+function roomStateOf(id) {
+  const el = document.getElementById("room-" + id);
+  if (!el) return "idle";
+  if (el.classList.contains("working")) return "working";
+  if (el.classList.contains("alert")) return "alert";
+  return "idle";
+}
+/* working / alert = 업무 중 → 자리 지킴. idle(자율 휴게)만 이동 가능 */
+function roomBusy(id) { return roomStateOf(id) !== "idle"; }
+function walkerPinned(k) { return roomBusy(WALKER_CEO[k]); }
+/* 연출에 등장하고, 아직 업무 중이 아닌 캐릭터만 움직인다 */
+function active(k) { return P.indexOf(k) >= 0 && !walkerPinned(k); }
+function freeWalkers() { return ["hb", "td"].filter(k => !walkerPinned(k)); }
+function canRoam() { return freeWalkers().length > 0; }
+function syncWalkerPins() { ["hb", "td"].forEach(k => castHide(k, walkerPinned(k))); }
+function castShow(k) { if (P.indexOf(k) < 0) return; castHide(k, walkerPinned(k)); }
+/* 연출에 참여하는 캐릭터만 잠시 숨긴다 (층 이동) */
+function castSceneHide() { P.forEach(k => castHide(k, true)); }
+/* 연출 없이 제자리로 즉시 돌려 놓는다 (숨김 상태에서 쓰인다) */
+function placeHomeQuiet(k) {
+  const el = venEl(k);
+  if (!el) return;
+  el.style.transitionDuration = "0s, 0.3s";
+  el.style.left = VEN[VENUE][k === "hb" ? "hbHome" : "tdHome"] + "%";
+  el.classList.remove("walking");
+  el.classList.add("resting");
+}
+
 const CEO_LINES = ["두 피클 협업 보고!", "수익 보고 받는 중", "역할 분담 정상 가동!", "☕ 커피 향 좋은데?"];
 const HANDOFF_LINES = ["🤝 업데이트 전달!", "💬 브리핑 공유!", "🤝 수익 자료 전달", "💬 진행 상황 공유!"];
 const KARAOKE_LINES = ["🎤 18번 불러볼까?", "🎶 박수 준비 완료!", "🎤 한 곡만 부르고 갈게"];
@@ -3771,7 +4185,7 @@ function venFloor() { return VEN[VENUE].floor; }
 
 function castTo(k, pct, dur) {
   const el = venEl(k);
-  if (!el) return;
+  if (!el || !active(k)) return;
   el.style.transitionDuration = dur + "s, 0.3s";
   el.classList.remove("resting");
   el.classList.add("walking");
@@ -3792,12 +4206,14 @@ function castPlace(k, pct) {
 
 function castStand(k) {
   const el = venEl(k);
-  if (el) { el.classList.remove("walking"); el.classList.add("resting"); }
+  if (!el || !active(k)) return;
+  el.classList.remove("walking");
+  el.classList.add("resting");
 }
 
 function castHome(k, dur) {
   const el = venEl(k);
-  if (!el) return;
+  if (!el || !active(k)) return;
   const d = dur || 1.8;
   const home = VEN[VENUE][k === "hb" ? "hbHome" : "tdHome"];
   if (el.classList.contains("resting") && parseFloat(el.style.left) === home) return;
@@ -3816,6 +4232,7 @@ function castHome(k, dur) {
 }
 
 function castSay(k, text) {
+  if (!active(k)) return;
   const s = venSayEl(k);
   if (s && text) s.textContent = text;
   const el = venEl(k);
@@ -3823,22 +4240,26 @@ function castSay(k, text) {
 }
 
 function castHush(k) {
+  if (!active(k)) return;
   const el = venEl(k);
   if (el) el.classList.remove("talking");
 }
 
 function castItem(k, emoji) {
+  if (!active(k)) return;
   const el = venEl(k);
   const it = el ? el.querySelector(".w-item") : null;
   if (it && emoji) it.textContent = emoji;
 }
 
 function castCarry(k, on) {
+  if (!active(k)) return;
   const el = venEl(k);
   if (el) el.classList.toggle("carrying", !!on);
 }
 
 function castSip(k, on) {
+  if (!active(k)) return;
   const el = venEl(k);
   if (el) el.classList.toggle("sipping", !!on);
 }
@@ -3895,7 +4316,7 @@ async function sceneRide() {
   castTo("td", 87, 1.7);
   await sleep(1800);
   castHush("hb");
-  castHide("hb", true); castHide("td", true);
+  castSceneHide();
   liftRide(true);
   liftGo("f6", 1.9);
   await sleep(2000);
@@ -3910,7 +4331,7 @@ async function sceneRide() {
   liftGo("f1", 1.6);
   await sleep(1750);
   liftRide(false);
-  castHide("hb", false); castHide("td", false);
+  castShow("hb"); castShow("td");
   castPlace("hb", 82); castPlace("td", 87);
   await sleep(80);
   castCarry("hb", false); castCarry("td", false);
@@ -3920,7 +4341,7 @@ async function sceneRide() {
 
 /* ---- 지하로 내려가고 올라오기 ---- */
 async function rideDown() {
-  castHide("hb", true); castHide("td", true);
+  castSceneHide();
   const solo = document.getElementById("b1-hc");
   if (solo) solo.classList.add("hidden");
   liftRide(true);
@@ -3930,14 +4351,14 @@ async function rideDown() {
   liftRide(false);
   VENUE = "b1";
   castPlace("hb", 93); castPlace("td", 97);
-  castHide("hb", false); castHide("td", false);
+  castShow("hb"); castShow("td");
   await sleep(90);
 }
 
 async function rideUp() {
   castTo("hb", 93, 1.3); castTo("td", 97, 1.3);
   await sleep(1450);
-  castHide("hb", true); castHide("td", true);
+  castSceneHide();
   liftRide(true);
   liftGo("f1", 1.9);
   await sleep(2000);
@@ -3945,7 +4366,7 @@ async function rideUp() {
   liftRide(false);
   VENUE = "lobby";
   castPlace("hb", 93); castPlace("td", 97);
-  castHide("hb", false); castHide("td", false);
+  castShow("hb"); castShow("td");
   await sleep(80);
   castCarry("hb", false); castCarry("td", false);
   castSip("hb", false); castSip("td", false);
@@ -4066,7 +4487,7 @@ async function scenePantry() {
     castTo("hb", 82, 1.5);
     castTo("td", 87, 1.5);
     await sleep(1600);
-    castHide("hb", true); castHide("td", true);
+    castSceneHide();
     liftRide(true);
     liftGo("f6", 1.9);
     await sleep(2000);
@@ -4082,7 +4503,7 @@ async function scenePantry() {
     liftRide(false);
     VENUE = "lobby";
     castPlace("hb", 82); castPlace("td", 87);
-    castHide("hb", false); castHide("td", false);
+    castShow("hb"); castShow("td");
     await sleep(80);
     castCarry("hb", false); castCarry("td", false);
     castHome("hb", 1.7); castHome("td", 1.7);
@@ -4167,10 +4588,12 @@ function settleScene() {
   });
   VENUE = "lobby";
   ["hb", "td"].forEach(k => {
-    castHide(k, false);
+    /* 연출에 없던 캐릭터와 업무 중 캐릭터는 조용히 제자리로 돌려 둔다 */
+    if (!active(k)) placeHomeQuiet(k);
     castCarry(k, false);
     castSip(k, false);
     castHush(k);
+    castHide(k, walkerPinned(k));
   });
   castHome("hb", 1.4);
   castHome("td", 1.4);
@@ -4185,12 +4608,17 @@ function corridorActive() {
 }
 
 async function lobShow() {
-  const busy = corridorActive();
+  /* 이번 연출에 나오는 캐릭터는 '일하지 않는(IDLE)' 캐릭터뿐이다 */
+  P = freeWalkers();
+  if (!P.length) { syncWalkerPins(); return; }
   const roll = Math.random();
-  let mode;
+  const pair = P.length > 1;
   if (VENUE !== "lobby") { settleScene(); await sleep(160); }
-  if (busy) mode = roll < 0.30 ? "pantry" : roll < 0.56 ? "ride" : roll < 0.80 ? "meet" : "stroll";
-  else mode = roll < 0.30 ? "pantry" : roll < 0.52 ? "basement" : roll < 0.70 ? "meet" : roll < 0.86 ? "stroll" : "ride";
+  /* 쉬는 캐릭터만 움직인다: 탕비실 · 지하 휴게실 · 대표실 보고(엘리베이터) · 잠깐 산책
+     한 명만 쉬는 중이면 둘이서 하는 연출(대화·보고)은 건너뛴다 */
+  const mode = !pair
+    ? (roll < 0.44 ? "pantry" : roll < 0.76 ? "basement" : "stroll")
+    : (roll < 0.30 ? "pantry" : roll < 0.52 ? "basement" : roll < 0.72 ? "meet" : roll < 0.90 ? "stroll" : "ride");
 
   castCarry("hb", false); castCarry("td", false);
   castSip("hb", false); castSip("td", false);
@@ -4205,21 +4633,33 @@ async function lobShow() {
 function scheduleLobby(delay) {
   if (reduceMotion) return;
   if (collabTimer) clearTimeout(collabTimer);
-  const base = (typeof delay === "number") ? delay : (corridorActive() ? 1400 : 2600);
+  /* 업무 중에는 아예 움직이지 않고, 쉬는 캐릭터가 있어도 12~20초에 한 번만 움직인다
+     (자리에서 반복해서 왔다갔다 하던 문제를 줄임) */
+  const base = (typeof delay === "number") ? delay : (canRoam() ? 12000 : 20000);
   collabTimer = setTimeout(async () => {
     collabTimer = null;
     if (collabRunning) { scheduleLobby(1200); return; }
+    /* 업무 중(WORK) 캐릭터만 있으면 이동 연출을 시작하지 않는다 */
+    if (!canRoam()) { syncWalkerPins(); scheduleLobby(20000); return; }
+    if (staffBusy) { scheduleLobby(4000); return; }
     collabRunning = true;
     try { await lobShow(); }
     catch (e) {}
-    finally { collabRunning = false; settleScene(); }
+    finally { collabRunning = false; settleScene(); syncWalkerPins(); }
     scheduleLobby();
-  }, base + Math.random() * 1500);
+  }, base + Math.random() * 5000);
 }
 
 function applyCorridor() {
   const busy = corridorActive();
-  if (busy && !collabWasBusy) scheduleLobby(400);
+  if (!canRoam()) {
+    /* 근무가 시작되면 나와 있던 캐릭터는 자기 자리로 복귀 */
+    if (VENUE !== "lobby") settleScene();
+    syncWalkerPins();
+  } else {
+    syncWalkerPins();
+    if (busy && !collabWasBusy) scheduleLobby(600);
+  }
   collabWasBusy = busy;
 }
 
@@ -4297,9 +4737,70 @@ function breakLoop() {
   }, 12000 + Math.random() * 10000);
 }
 
+/* ---- 1F 탕비실에 들르는 '쉬는 사원' ----
+   대기(IDLE) 중인 부서 사원 한 명만 커피를 뽑으러 나온다.
+   업무 중(WORK) · 승인 대기(alert) · 자리 비움(break) 부서 사원은 나오지 않는다. */
+function idleDeptRooms() {
+  return rooms.filter(r => {
+    if (r.ceo) return false;
+    const el = document.getElementById("room-" + r.id);
+    return !!el && el.classList.contains("idle") && !el.classList.contains("break") && !el.classList.contains("alert");
+  });
+}
+
+async function staffBreak() {
+  if (staffBusy || collabRunning || reduceMotion || VENUE !== "lobby") return;
+  const cands = idleDeptRooms();
+  if (!cands.length) return;
+  const el = document.getElementById("lob-hc");
+  if (!el) return;
+  const room = cands[Math.floor(Math.random() * cands.length)];
+  const body = el.querySelector(".w-body");
+  const who = el.querySelector(".w-who");
+  const say = document.getElementById("lob-hc-say");
+  const pz = document.getElementById("pantry");
+  staffBusy = true;
+  try {
+    if (body) body.textContent = room.worker || "🙂";
+    if (who) who.textContent = room.name || "쉬는 사원";
+    if (say) say.textContent = "☕ 잠깐 커피 한잔";
+    el.style.transitionDuration = "0s, 0.3s";
+    el.style.left = "20%";
+    el.classList.remove("walking", "carrying", "sipping", "talking", "edge", "hidden");
+    el.classList.add("resting");
+    void el.offsetWidth;
+    await sleep(120);
+    soloWalk(el, 47, 1.8);
+    await sleep(1900);
+    el.classList.remove("walking");
+    el.classList.add("resting");
+    if (pz) pz.classList.add("brewing");
+    SFX.coffee("f1");
+    await sleep(1300);
+    if (pz) pz.classList.remove("brewing");
+    el.classList.add("carrying", "talking");
+    if (say) say.textContent = "☕ " + (room.name || "쉬는 사원") + " · 잠깐 쉬는 중";
+    await sleep(1500);
+    el.classList.add("sipping");
+    await sleep(1400);
+    el.classList.remove("talking", "sipping", "carrying");
+    soloWalk(el, 20, 1.6);
+    await sleep(1700);
+    el.classList.remove("walking");
+    el.classList.add("resting", "hidden");
+  } finally {
+    if (pz) pz.classList.remove("brewing");
+    staffBusy = false;
+  }
+}
+
+function staffLoop() {
+  if (reduceMotion) return;
+  setTimeout(() => { staffBreak(); staffLoop(); }, 52000 + Math.random() * 26000);
+}
+
 /* 지하 오락실에 들른 최응모 사원 (혼자 방문) */
-let soloBusy = false;
-function soloWalk(el, pct, dur) {
+let soloBusy = false;function soloWalk(el, pct, dur) {
   el.style.transitionDuration = dur + "s, 0.3s";
   el.classList.remove("resting");
   el.classList.add("walking");
@@ -4308,6 +4809,9 @@ function soloWalk(el, pct, dur) {
 }
 async function soloScene() {
   if (soloBusy || collabRunning || VENUE === "b1") return;
+  /* 지하 오락실은 쉬는(대기) 캐릭터만 간다 — 업무 중엔 자리 지킴 */
+  const prizeRoom = document.getElementById("room-prize");
+  if (!prizeRoom || !prizeRoom.classList.contains("idle") || prizeRoom.classList.contains("break")) return;
   const el = document.getElementById("b1-hc");
   const room = document.getElementById("b1-room");
   if (!el) return;
@@ -4342,7 +4846,7 @@ async function soloScene() {
 
 function soloLoop() {
   if (reduceMotion) return;
-  setTimeout(() => { soloScene(); soloLoop(); }, 34000 + Math.random() * 22000);
+  setTimeout(() => { soloScene(); soloLoop(); }, 45000 + Math.random() * 30000);
 }
 
 /* 근무 중 키보드 소리 */
@@ -4509,6 +5013,7 @@ scheduleLobby(1600);
 roomTalkLoop();
 breakLoop();
 soloLoop();
+staffLoop();
 </script>
 </body>
 </html>
