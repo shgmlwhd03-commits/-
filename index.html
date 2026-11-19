@@ -14,7 +14,7 @@
     background: #1c1611;
     color: #f8fafc;
     min-height: 100vh;
-    padding: 12px;
+    padding: 8px;
   }
   .office-frame {
     max-width: 980px;
@@ -27,56 +27,56 @@
         #35291e 28px,
         #35291e 30px
       );
-    border: 3px solid #6b563f;
-    border-radius: 18px;
-    padding: 14px;
+    border: 2px solid #6b563f;
+    border-radius: 14px;
+    padding: 9px 10px;
     box-shadow: 0 16px 40px rgba(0,0,0,0.65);
   }
   .topbar {
     background: linear-gradient(180deg, #273042, #1b2230);
     border: 2px solid #475569;
-    border-radius: 12px;
-    padding: 10px 14px;
+    border-radius: 9px;
+    padding: 6px 10px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 14px;
+    gap: 6px;
+    margin-bottom: 8px;
   }
   .brand {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
     font-weight: 800;
-    font-size: 15px;
-    letter-spacing: 0.3px;
+    font-size: 12.5px;
+    letter-spacing: 0.2px;
   }
   .live-pill {
     background: #14532d;
     border: 1px solid #22c55e;
     color: #86efac;
-    font-size: 11px;
-    padding: 2px 8px;
+    font-size: 9.5px;
+    padding: 1px 7px;
     border-radius: 999px;
   }
   .sync-note {
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 10px;
+    font-size: 9px;
     color: #94a3b8;
     letter-spacing: 0.02em;
   }
   .sync-note.live { color: #86efac; }
   .sync-note.stale { color: #fca5a5; }
-  .top-btns { display: flex; gap: 8px; }
+  .top-btns { display: flex; gap: 5px; }
   .btn {
     background: #334155;
     color: #f8fafc;
     border: 1px solid #64748b;
-    border-radius: 8px;
-    padding: 6px 10px;
-    font-size: 12px;
+    border-radius: 6px;
+    padding: 3px 7px;
+    font-size: 10px;
     font-weight: 700;
     cursor: pointer;
   }
@@ -84,17 +84,26 @@
 
   .floor-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(182px, 1fr));
+    gap: 7px;
+  }
+  /* 대표실은 수익 그래프 자리를 위해 두 칸을 쓴다 */
+  .room--ceo { grid-column: span 2; }
+  /* 화면 폭이 넓을 때는 열 수를 고정해 7개 방이 2~3줄에 딱 들어오게 한다 */
+  @media (min-width: 820px) {
+    .floor-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  @media (min-width: 561px) and (max-width: 819px) {
+    .floor-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 
   .room {
     position: relative;
     background: rgba(24, 28, 36, 0.72);
     border: 2px solid #786248;
-    border-radius: 14px;
-    padding: 12px;
-    min-height: 170px;
+    border-radius: 10px;
+    padding: 7px 8px;
+    min-height: 122px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -116,25 +125,30 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
+    gap: 4px;
+    margin-bottom: 4px;
   }
   .room-title {
     background: #27221d;
     border: 1px solid #8c7355;
     color: #fde68a;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 800;
-    padding: 4px 10px;
-    border-radius: 8px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .status-dot {
-    width: 13px;
-    height: 13px;
+    flex: none;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background: #475569;
     box-shadow: 0 0 4px rgba(71, 85, 105, 0.8);
     cursor: pointer;
-    border: 2px solid #0f172a;
+    border: 1.5px solid #0f172a;
     transition: background 0.3s, box-shadow 0.3s;
   }
   .room.working .status-dot {
@@ -158,12 +172,17 @@
 
   .room-space {
     position: relative;
-    height: 92px;
+    min-height: 58px;
     display: flex;
     align-items: center;
     justify-content: space-around;
-    padding: 6px 4px;
+    gap: 6px;
+    padding: 13px 2px 2px;
   }
+  /* 대표실: 캐릭터 옆에 수익 그래프가 붙는다 */
+  .room--ceo .room-space { justify-content: flex-start; gap: 8px; }
+  /* 왼쪽 끝에 붙은 캐릭터라 말풍선은 오른쪽으로 펼친다 (카드 밖으로 나가지 않게) */
+  .room--ceo .speech { left: 0; translate: 0 0; }
 
   /* Desks */
   .desk-unit {
@@ -173,8 +192,8 @@
     align-items: center;
   }
   .desk-top {
-    width: 68px;
-    height: 22px;
+    width: 52px;
+    height: 17px;
     background: #926c44;
     border: 2px solid #5c4024;
     border-radius: 5px;
@@ -184,12 +203,12 @@
     justify-content: center;
   }
   .pc {
-    width: 22px;
-    height: 14px;
+    width: 16px;
+    height: 11px;
     background: #38bdf8;
     border: 2px solid #0f172a;
     border-radius: 3px;
-    margin-top: -12px;
+    margin-top: -9px;
     box-shadow: 0 0 8px rgba(56, 189, 248, 0.55);
     transition: background 0.35s, box-shadow 0.35s, opacity 0.35s;
   }
@@ -241,7 +260,7 @@
   }
 
   .avatar {
-    font-size: 30px;
+    font-size: 22px;
     line-height: 1;
     filter: drop-shadow(0 3px 3px rgba(0,0,0,0.6));
     transition: filter 0.35s;
@@ -253,22 +272,27 @@
     background: rgba(15, 23, 42, 0.9);
     border: 1px solid #475569;
     color: #e2e8f0;
-    font-size: 10px;
+    font-size: 8px;
     font-weight: 700;
-    padding: 1px 6px;
-    border-radius: 6px;
-    margin-top: 2px;
+    padding: 0 4px;
+    border-radius: 5px;
+    margin-top: 1px;
   }
   .speech {
     position: absolute;
-    top: -26px;
+    top: -16px;
+    left: 50%;
+    translate: -50% 0;
+    max-width: 132px;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
     background: #ffffff;
     color: #0f172a;
-    font-size: 10px;
+    font-size: 8px;
     font-weight: 800;
-    padding: 3px 7px;
-    border-radius: 8px;
+    padding: 2px 5px;
+    border-radius: 6px;
     box-shadow: 0 3px 8px rgba(0,0,0,0.35);
   }
   /* 말풍선도 작업 중일 때만 살짝 떠오른다 */
@@ -284,14 +308,14 @@
     right: -8px;
     background: #ef4444;
     color: #fff;
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
-    font-size: 11px;
+    font-size: 9px;
     font-weight: 900;
     align-items: center;
     justify-content: center;
-    border: 2px solid #fff;
+    border: 1.5px solid #fff;
   }
   .room.alert .badge-alert { display: flex; }
 
@@ -299,11 +323,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 6px;
-    font-size: 11px;
+    gap: 4px;
+    font-size: 9px;
     color: #cbd5e1;
     border-top: 1px dashed rgba(148, 163, 184, 0.25);
-    padding-top: 6px;
+    padding-top: 3px;
+    margin-top: 4px;
   }
   .room-foot .foot-txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .resolve-btn {
@@ -313,8 +338,8 @@
     color: #fff;
     border: none;
     border-radius: 6px;
-    padding: 3px 8px;
-    font-size: 11px;
+    padding: 2px 6px;
+    font-size: 9px;
     font-weight: 800;
     cursor: pointer;
   }
@@ -323,20 +348,20 @@
   /* 🔴 경보 박스: 원인 + 해결 안내 + 원클릭 조치 */
   .alert-box {
     display: none;
-    margin-top: 7px;
+    margin-top: 5px;
     background: rgba(69, 10, 10, 0.72);
     border: 1px solid #ef4444;
-    border-radius: 9px;
-    padding: 7px 8px 8px;
+    border-radius: 7px;
+    padding: 5px 6px 6px;
     box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.22);
   }
   .room.alert .alert-box { display: block; }
   .alert-guide {
-    font-size: 10.5px;
-    line-height: 1.45;
+    font-size: 9px;
+    line-height: 1.35;
     font-weight: 700;
     color: #fecaca;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     word-break: keep-all;
   }
   .alert-guide .guide-tag {
@@ -344,21 +369,21 @@
     background: rgba(239, 68, 68, 0.28);
     border: 1px solid rgba(239, 68, 68, 0.55);
     color: #fee2e2;
-    font-size: 9px;
+    font-size: 8px;
     font-weight: 900;
     letter-spacing: 0.04em;
-    border-radius: 4px;
-    padding: 0 4px;
-    margin-right: 4px;
+    border-radius: 3px;
+    padding: 0 3px;
+    margin-right: 3px;
   }
   .alert-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
   .copy-btn {
     background: #1f2937;
     border: 1px solid #94a3b8;
     color: #e2e8f0;
-    border-radius: 6px;
-    padding: 3px 8px;
-    font-size: 11px;
+    border-radius: 5px;
+    padding: 2px 6px;
+    font-size: 9px;
     font-weight: 800;
     cursor: pointer;
   }
@@ -369,11 +394,11 @@
     background: #052e16;
     border: 1px solid #22c55e;
     color: #86efac;
-    font-size: 10.5px;
+    font-size: 9px;
     font-weight: 800;
-    line-height: 1.4;
-    border-radius: 6px;
-    padding: 4px 7px;
+    line-height: 1.35;
+    border-radius: 5px;
+    padding: 3px 6px;
   }
   .copy-toast.show { display: block; animation: toastIn 0.25s ease-out; }
   @keyframes toastIn {
@@ -384,10 +409,10 @@
   /* ===================== LED 전광판 ===================== */
   .led-board {
     position: relative;
-    margin-top: 9px;
+    margin-top: 5px;
     display: flex;
     align-items: stretch;
-    min-height: 34px;
+    min-height: 25px;
     background-color: #05080b;
     background-image:
       radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.09) 1px, transparent 1.7px);
@@ -419,20 +444,20 @@
     flex: none;
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 0 7px;
+    gap: 3px;
+    padding: 0 5px;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 9px;
+    font-size: 8px;
     font-weight: 900;
-    letter-spacing: 0.09em;
+    letter-spacing: 0.07em;
     color: #94a3b8;
     background: linear-gradient(180deg, rgba(148, 163, 184, 0.16), rgba(148, 163, 184, 0.04));
     border-right: 1px solid #1b2733;
     transition: color 0.35s, background 0.35s, border-color 0.35s, text-shadow 0.35s;
   }
   .led-tag i {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
     background: #64748b;
     transition: background 0.35s, box-shadow 0.35s;
@@ -456,11 +481,11 @@
   .led-group { display: inline-flex; flex: none; }
   .led-text {
     display: inline-block;
-    padding-right: 48px;
+    padding-right: 34px;
     font-family: ui-monospace, SFMono-Regular, Menlo, "D2Coding", monospace;
-    font-size: 11.5px;
+    font-size: 10px;
     font-weight: 800;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     color: #cbd5e1;
     transition: color 0.35s, text-shadow 0.35s;
   }
@@ -473,11 +498,11 @@
     flex: none;
     display: flex;
     align-items: center;
-    padding: 0 7px;
+    padding: 0 5px;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 10px;
+    font-size: 8.5px;
     font-weight: 800;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
     color: #94a3b8;
     background: rgba(10, 15, 20, 0.85);
     border-left: 1px solid #1b2733;
@@ -581,12 +606,99 @@
     100% { filter: brightness(1); }
   }
 
+  /* ===================== 💰 대표실 수익 전광판 ===================== */
+  .rev-block {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+  }
+  .rev-pill {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0;
+    padding: 2px 6px;
+    background-color: #04100c;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(74, 222, 128, 0.16) 1px, transparent 1.7px);
+    background-size: 4px 4px;
+    border: 1px solid #10321f;
+    border-radius: 5px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9);
+    font-family: ui-monospace, SFMono-Regular, Menlo, "D2Coding", monospace;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #86efac;
+    text-shadow: 0 0 5px rgba(74, 222, 128, 0.85);
+    transition: border-color 0.35s, box-shadow 0.35s;
+  }
+  .rev-pill .rev-sep { color: #2f6b45; text-shadow: none; margin: 0 3px; }
+  .rev-pill .rev-today { color: #5eead4; text-shadow: 0 0 5px rgba(94, 234, 212, 0.8); }
+  /* 오늘 실제 수익이 발생했을 때만 맥동 */
+  .rev-pill.earned {
+    border-color: #22c55e;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9), 0 0 12px rgba(34, 197, 94, 0.45);
+    animation: revGlow 2.4s ease-in-out infinite;
+  }
+  @keyframes revGlow {
+    0%, 100% { box-shadow: inset 0 0 10px rgba(0,0,0,0.9), 0 0 8px rgba(34,197,94,0.35); }
+    50% { box-shadow: inset 0 0 10px rgba(0,0,0,0.9), 0 0 16px rgba(34,197,94,0.7); }
+  }
+  .rev-chart-wrap { position: relative; }
+  .rev-chart {
+    display: block;
+    width: 100%;
+    height: 22px;
+    background: rgba(5, 8, 11, 0.65);
+    border: 1px solid #16202b;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  /* 아직 수익이 없을 때: 빈 상자로 보이지 않게 한 줄 안내 */
+  .rev-empty {
+    display: none;
+    position: absolute;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    font-size: 6.5px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    pointer-events: none;
+  }
+  .rev-block.is-empty .rev-empty { display: flex; }
+  .rev-block.is-empty .rev-labels span:last-child { color: #64748b; }
+  .rev-labels {
+    display: flex;
+    justify-content: space-around;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 6.5px;
+    line-height: 1;
+    color: #64748b;
+    letter-spacing: -0.02em;
+  }
+  .rev-labels span { flex: 1 1 0; text-align: center; }
+  .rev-labels span:last-child { color: #5eead4; font-weight: 800; }
+  .rev-note {
+    font-size: 6.5px;
+    text-align: right;
+    color: #475569;
+    letter-spacing: 0.02em;
+  }
+
   /* 사무실을 돌아다니는 도우미 캐릭터: 작업 중인 부서가 있을 때만 복도에 나온다 */
   #roamers {
     display: none;
     position: relative;
-    height: 62px;
-    margin: 0 0 12px;
+    height: 42px;
+    margin: 0 0 4px;
     border-radius: 10px;
     border: 1px dashed rgba(140, 115, 85, 0.5);
     background: linear-gradient(180deg, rgba(45, 36, 27, 0.55), rgba(24, 19, 15, 0.55));
@@ -607,16 +719,16 @@
   .hall-item .say {
     background: #fff;
     color: #0f172a;
-    font-size: 9px;
+    font-size: 8px;
     font-weight: 800;
-    padding: 1px 5px;
-    border-radius: 6px;
+    padding: 1px 4px;
+    border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
     margin-bottom: 1px;
   }
-  .hall-item .body { font-size: 20px; line-height: 1; }
+  .hall-item .body { font-size: 14px; line-height: 1; }
   .hall-item .who {
-    font-size: 8.5px;
+    font-size: 7.5px;
     font-weight: 800;
     color: #e2e8f0;
     background: rgba(15, 23, 42, 0.85);
@@ -626,9 +738,44 @@
     margin-top: 1px;
   }
 
-  @media (max-width: 520px) {
-    .led-text { font-size: 10.5px; padding-right: 34px; }
-    .led-time { font-size: 9px; padding: 0 5px; }
+  /* ---------- 화면 크기별 압축: 7개 방이 한눈에 들어오게 ---------- */
+  @media (max-width: 560px) {
+    body { padding: 5px; }
+    .office-frame { padding: 6px; border-radius: 11px; }
+    .topbar { padding: 5px 7px; margin-bottom: 6px; gap: 4px; }
+    .brand { font-size: 11px; gap: 3px; }
+    .live-pill { font-size: 8.5px; padding: 1px 5px; }
+    .sync-note { font-size: 7.5px; }
+    .btn { font-size: 9px; padding: 2px 6px; }
+    .floor-grid {
+      grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+      gap: 5px;
+    }
+    .room { padding: 6px; min-height: 108px; }
+    .room--ceo { grid-column: 1 / -1; }
+    .room-title { font-size: 9px; padding: 2px 5px; }
+    .room-space { min-height: 50px; padding: 11px 1px 1px; gap: 4px; }
+    .speech { font-size: 7px; top: -13px; max-width: 96px; }
+    .avatar { font-size: 19px; }
+    .nametag { font-size: 7px; }
+    .desk-top { width: 42px; height: 14px; }
+    .pc { width: 13px; height: 9px; margin-top: -8px; }
+    .led-board { min-height: 21px; }
+    .led-text { font-size: 9px; padding-right: 26px; }
+    .led-tag { font-size: 7px; padding: 0 4px; }
+    .led-time { font-size: 7.5px; padding: 0 4px; }
+    .room-foot { font-size: 8px; }
+    .rev-pill { font-size: 8px; padding: 2px 4px; gap: 3px; }
+    .rev-chart { height: 17px; }
+    .rev-labels { font-size: 6px; }
+    /* 장식용 복도 캐릭터는 폰에서 빼서 7개 방이 다 보이게 */
+    #roamers { display: none !important; }
+  }
+  @media (max-width: 380px) {
+    .floor-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+    .office-frame { padding: 4px; }
+    .room { padding: 5px; min-height: 104px; }
+    .rev-pill { font-size: 7.5px; }
   }
 </style>
 </head>
@@ -711,15 +858,15 @@ const rooms = [
   },
   {
     id: "grant",
-    title: "🏛️ 지원금·공모주팀",
+    title: "🏛️ 지원금·환급금팀",
     worker: "👩‍🔬",
     name: "조사원 01",
-    say: "청약 일정 스캔 중",
-    foot: "매일 08:30 브리핑",
-    issue: "공모주 페이지 확인 필요!",
-    guide: "공모주·지원금 일정 페이지에서 확인이 필요한 항목을 열어 주세요.",
+    say: "지원금·환급금·무료혜택",
+    foot: "매일 08:30 · 지원금·환급금·무료혜택",
+    issue: "지원금 신청 페이지 확인 필요!",
+    guide: "지원금·환급금 신청 페이지에서 확인이 필요한 항목을 열어 주세요.",
     state: "idle",
-    ticker: "1차 스캔 완료 (아델·장려금 12/1 마감 등)",
+    ticker: "지원금·환급금·무료혜택 1차 스캔 완료 · 다음 브리핑 08:30",
     updated: "21:42"
   },
   {
@@ -799,7 +946,7 @@ function esc(s) {
 
 function render() {
   document.getElementById("floor").innerHTML = rooms.map((r, i) => `
-    <div class="room ${r.state}" id="room-${r.id}" style="--wd:${(i * 0.27).toFixed(2)}s">
+    <div class="room ${r.state}${r.id === "ceo" ? " room--ceo" : ""}" id="room-${r.id}" style="--wd:${(i * 0.27).toFixed(2)}s">
       <div class="room-head">
         <span class="room-title">${r.title}</span>
         <span class="status-dot" title="상태 전환 (수동 경보)" onclick="toggleRoom('${r.id}')"></span>
@@ -814,6 +961,7 @@ function render() {
         <div class="desk-unit">
           <div class="desk-top"><div class="pc"></div></div>
         </div>
+        ${r.id === "ceo" ? revHTML() : ""}
       </div>
       <div class="led-board" id="led-${r.id}">
         <span class="led-tag"><i></i><span id="tag-${r.id}">${STATE_LABEL[r.state]}</span></span>
@@ -837,13 +985,110 @@ function render() {
   `).join("");
   // 전광판 기본 문구 먼저 표시 (status.json 오기 전에도 꽉 차 보이게)
   rooms.forEach(r => setBoardText(r.id, tickerFor(r.state, r.ticker), r.updated, r.state));
+  // 수익은 status.json을 받기 전까지 검증된 0원으로 표시
+  renderRevenue(null);
   applyRoam();
+}
+
+/* ---------------- 💰 대표실 수익 (전광판 + 미니 그래프) ---------------- */
+function revHTML() {
+  return `
+    <div class="rev-block" id="rev-block">
+      <div class="rev-pill" id="rev-pill" title="검증된 실제 수익만 표시합니다">
+        <span id="rev-total">누적 ₩0</span><span class="rev-sep">·</span><span class="rev-today" id="rev-today">오늘 +₩0</span>
+      </div>
+      <div class="rev-chart-wrap">
+        <svg class="rev-chart" id="rev-chart" viewBox="0 0 140 30" preserveAspectRatio="none" role="img" aria-label="최근 7일 수익 0원"></svg>
+        <span class="rev-empty" id="rev-empty">7일 수익 없음</span>
+      </div>
+      <div class="rev-labels" id="rev-labels"></div>
+    </div>`;
+}
+
+function fmtKrw(n) {
+  const v = Math.round(Number(n) || 0);
+  return "₩" + v.toLocaleString("ko-KR");
+}
+
+function dayLabel(d) {
+  return (d.getMonth() + 1) + "/" + d.getDate();
+}
+
+function normalizeRev(raw) {
+  const src = (raw && typeof raw === "object" && !Array.isArray(raw)) ? raw : {};
+  const num = (x) => { const n = Number(x); return Number.isFinite(n) ? n : 0; };
+  const hist = Array.isArray(src.history) ? src.history.slice(-7) : [];
+  let items = hist.map(h => {
+    if (h && typeof h === "object") {
+      return { label: String(h.label || h.date || h.d || ""), value: num(h.value !== undefined ? h.value : h.v) };
+    }
+    return { label: "", value: num(h) };
+  });
+  while (items.length < 7) items.unshift({ label: "", value: 0 });
+  const today = new Date();
+  const n = items.length;
+  items = items.map((it, i) => {
+    if (it.label) return it;
+    const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (n - 1 - i));
+    return { label: dayLabel(d), value: it.value };
+  });
+  return { total: num(src.total_krw), today: num(src.today_krw), items };
+}
+
+function renderRevenue(raw) {
+  const d = normalizeRev(raw);
+  const pill = document.getElementById("rev-pill");
+  const totalEl = document.getElementById("rev-total");
+  const todayEl = document.getElementById("rev-today");
+  if (!pill || !totalEl || !todayEl) return;
+
+  totalEl.textContent = "누적 " + fmtKrw(d.total);
+  todayEl.textContent = "오늘 +" + fmtKrw(d.today);
+  pill.classList.toggle("earned", d.today > 0);
+  const block = document.getElementById("rev-block");
+  if (block) block.classList.toggle("is-empty", d.items.every(it => Math.abs(it.value) === 0));
+
+  const chart = document.getElementById("rev-chart");
+  if (chart) {
+    const W = 140, H = 30, base = H - 4, top = 3;
+    const count = d.items.length || 7;
+    const max = Math.max(1, ...d.items.map(x => Math.abs(x.value)));
+    const slot = W / count;
+    const bw = Math.max(5, Math.min(13, slot * 0.5));
+    const empty = d.items.every(it => Math.abs(it.value) === 0);
+    const parts = empty
+      ? [`<line x1="2" y1="${base + 0.5}" x2="${W - 2}" y2="${base + 0.5}" stroke="#22303f" stroke-width="1" stroke-dasharray="3 3" />`]
+      : [`<line x1="0" y1="${base + 0.5}" x2="${W}" y2="${base + 0.5}" stroke="#1e293b" stroke-width="1" />`];
+    if (!empty) {
+      for (let i = 1; i < count; i++) parts.push(`<line x1="${(slot * i).toFixed(1)}" y1="${top}" x2="${(slot * i).toFixed(1)}" y2="${base}" stroke="#141e29" stroke-width="1" />`);
+    }
+    if (!empty) d.items.forEach((it, i) => {
+      const cx = slot * i + slot / 2;
+      const v = Math.abs(it.value);
+      const h = v > 0 ? Math.max(3, (v / max) * (base - top)) : 6;
+      const y = base - h;
+      const col = v > 0 ? (i === count - 1 ? "#5eead4" : "#4ade80") : "#33475c";
+      parts.push(`<rect x="${(cx - bw / 2).toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="1.5" fill="${col}"><title>${esc(it.label)} ${fmtKrw(it.value)}</title></rect>`);
+    });
+    chart.innerHTML = parts.join("");
+    chart.setAttribute("aria-label", "최근 7일 수익 " + d.items.map(i => i.label + " " + fmtKrw(i.value)).join(", "));
+  }
+
+  const labels = document.getElementById("rev-labels");
+  if (labels) labels.innerHTML = d.items.map(it => `<span>${esc(it.label)}</span>`).join("");
 }
 
 /* ---------------- 전광판 ---------------- */
 function tickerFor(state, text) {
   if (state === "alert") return "🔴 " + String(text).replace(/^🔴\s*/, "");
   return text;
+}
+
+/* 전광판 글자 폭 어림값 (한글·이모지는 넓게) */
+function estWidth(text) {
+  let w = 0;
+  for (const ch of String(text)) w += /[\u1100-\u11FF\u2E80-\u9FFF\uAC00-\uD7AF]/.test(ch) ? 10 : 6.2;
+  return Math.max(60, w + 34);
 }
 
 function setBoardText(id, text, updated, state) {
@@ -859,8 +1104,8 @@ function setBoardText(id, text, updated, state) {
       track.innerHTML = `<span class="led-text led-static">${esc(text)}</span>`;
       track.style.animation = "none";
     } else {
-      const vw = (vp && vp.clientWidth) || 200;
-      const oneW = Math.max(70, text.length * 7.6 + 48);
+      const vw = (vp && vp.clientWidth) || 160;
+      const oneW = estWidth(text);
       const copies = Math.max(1, Math.ceil(vw / oneW));
       const group = Array.from({ length: copies }, () =>
         `<span class="led-text">${esc(text)}</span>`).join("");
@@ -936,6 +1181,8 @@ function applyStatus(data) {
   });
 
   applyRoam();
+  // 수익 전광판·그래프 갱신 (status.json의 revenue)
+  renderRevenue(src.revenue);
   updatePill();
 }
 
