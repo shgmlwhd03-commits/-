@@ -461,9 +461,18 @@
     text-shadow: 0 0 6px rgba(94, 234, 212, 0.8);
   }
 
-  /* ■ 대기: 전광판은 어둡게, 글자만 은은하게 */
-  .room.idle .led-text { color: #94a3b8; }
-  .room.idle .led-time { color: #64748b; }
+  /* ■ 대기: 전광판은 정지 화면(스크롤 없음), 글자만 은은하게 */
+  .room.idle .led-track { display: block; width: 100%; animation: none !important; }
+  .room.idle .led-text { color: #aebccb; }
+  .room.idle .led-time { color: #7b8a9c; }
+  .led-static {
+    display: block;
+    width: 100%;
+    padding-right: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
   /* 🔴 경보 */
   .room.alert .led-board {
@@ -740,7 +749,7 @@ function render() {
     </div>
   `).join("");
   // 전광판 기본 문구 먼저 표시 (status.json 오기 전에도 꽉 차 보이게)
-  rooms.forEach(r => setBoardText(r.id, tickerFor(r.state, r.ticker), r.updated));
+  rooms.forEach(r => setBoardText(r.id, tickerFor(r.state, r.ticker), r.updated, r.state));
   applyRoam();
 }
 
@@ -750,24 +759,32 @@ function tickerFor(state, text) {
   return text;
 }
 
-function setBoardText(id, text, updated) {
+function setBoardText(id, text, updated, state) {
   const track = document.getElementById("track-" + id);
   const vp = document.getElementById("vp-" + id);
   if (!track) return;
-  if (track.dataset.text !== text) {
+  const key = (state || "") + "|" + text;
+  if (track.dataset.key !== key) {
+    track.dataset.key = key;
     track.dataset.text = text;
-    const vw = (vp && vp.clientWidth) || 200;
-    const oneW = Math.max(70, text.length * 7.6 + 48);
-    const copies = Math.max(1, Math.ceil(vw / oneW));
-    const group = Array.from({ length: copies }, () =>
-      `<span class="led-text">${esc(text)}</span>`).join("");
-    track.innerHTML =
-      `<span class="led-group">${group}</span><span class="led-group" aria-hidden="true">${group}</span>`;
-    const groupW = copies * oneW;
-    const dur = Math.max(9, Math.min(34, groupW / 46));
-    track.style.animation = "none";
-    void track.offsetWidth;
-    track.style.animation = "ledScroll " + dur.toFixed(1) + "s linear infinite";
+    if (state === "idle") {
+      // 대기 중에는 흐르지 않는 고정 표시
+      track.innerHTML = `<span class="led-text led-static">${esc(text)}</span>`;
+      track.style.animation = "none";
+    } else {
+      const vw = (vp && vp.clientWidth) || 200;
+      const oneW = Math.max(70, text.length * 7.6 + 48);
+      const copies = Math.max(1, Math.ceil(vw / oneW));
+      const group = Array.from({ length: copies }, () =>
+        `<span class="led-text">${esc(text)}</span>`).join("");
+      track.innerHTML =
+        `<span class="led-group">${group}</span><span class="led-group" aria-hidden="true">${group}</span>`;
+      const groupW = copies * oneW;
+      const dur = Math.max(9, Math.min(34, groupW / 46));
+      track.style.animation = "none";
+      void track.offsetWidth;
+      track.style.animation = "ledScroll " + dur.toFixed(1) + "s linear infinite";
+    }
   }
   if (updated !== undefined) {
     const t = document.getElementById("time-" + id);
@@ -812,7 +829,7 @@ function applyStatus(data) {
 
     const track = document.getElementById("track-" + r.id);
     const before = track ? track.dataset.text : undefined;
-    setBoardText(r.id, ticker, updated);
+    setBoardText(r.id, ticker, updated, state);
 
     const el = document.getElementById("room-" + r.id);
     if (!el) return;
