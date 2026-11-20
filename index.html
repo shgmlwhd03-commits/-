@@ -2665,11 +2665,12 @@
 
     <div class="csec">
       <div class="csec-h">🛡️ 핵심 리스크 · 운영 수칙</div>
-      <ul class="rules">
+      <ul class="rules" id="shop-rules">
         <li><b>초기 0원 무재고</b> — 재고·사입 선결제 금지. 주문 확인 후 도매처에 발주하고 차액만 남깁니다.</li>
         <li><b>규격·반품 방지</b> — 두께·길이·중량은 공급사 확인값만 표기. 재단·부착 후 반품 제한은 구매 전에 고지.</li>
         <li><b>정품·KC 확인</b> — KC·안전확인 대상 여부를 공급사에 확인. 생활화학제품(곰팡이·결로 스프레이)은 취급하지 않습니다.</li>
         <li><b>표시광고</b> — 타사·다이소 비교나 "100% 차단" 같은 결과 보장 표현 금지. 이미지·문구는 직접 촬영·작성.</li>
+        <li><b>권리·수익성</b> — 도매·제조사 연동 및 AI 소싱·상세페이지 가공 시 저작권·상표권 리스크와 실제 수익성 검증을 최우선.</li>
         <li><b>개인정보</b> — 공개 페이지에 실명·연락처·계정·주소를 쓰지 않고, 명의는 "개인 간이과세자" 같은 역할명으로만 표기.</li>
       </ul>
     </div>
@@ -3944,6 +3945,15 @@ function shopData(raw) {
     orders: { fresh: num(ob["new"], 0), toPlace: num(ob.to_place, 0), shipped: num(ob.shipped, 0) },
     sku: { reg: num(sk.registered, 0), plan: num(sk.planned, 3) },
     sales: { rev: num(sa.revenue_krw, 0), profit: num(sa.profit_krw, 0) },
+    principles: (Array.isArray(src.principles) ? src.principles : []).map(v => {
+      if (typeof v === "string" && v.trim()) {
+        const t = v.trim(), k = t.indexOf(" — ");
+        return k > 0 ? { title: t.slice(0, k), text: t.slice(k + 3) } : { title: "", text: t };
+      }
+      if (v && typeof v === "object" && typeof v.text === "string" && v.text.trim())
+        return { title: (typeof v.title === "string") ? v.title.trim() : "", text: v.text.trim() };
+      return null;
+    }).filter(Boolean),
     pipeline,
     threads,
     thread: threads[0]
@@ -3996,6 +4006,13 @@ function renderShop(raw) {
         </span>
         <span class="cmargin"><b>+${fmtKrw(it.margin)}</b><i>순익 ${it.rate}</i></span>
       </div>`).join("");
+  }
+
+  // 운영 수칙은 status.json(commerce.principles)을 우선 쓰고, 없으면 마크업 기본값을 그대로 둔다.
+  const rules = document.getElementById("shop-rules");
+  if (rules && d.principles.length) {
+    rules.innerHTML = d.principles.map(p =>
+      `<li>${p.title ? `<b>${esc(p.title)}</b> — ` : ""}${esc(p.text)}</li>`).join("");
   }
 
   const thEl = document.getElementById("thread");
