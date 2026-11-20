@@ -1889,6 +1889,14 @@
   .cmargin b { display: block; font-size: 9.4px; font-weight: 900; color: #6ee7b7; font-variant-numeric: tabular-nums; }
   .cmargin i { display: block; font-style: normal; font-size: 6.8px; font-weight: 800; color: #8aa0b8; }
 
+  /* 아이템 재선정(3사 검색량 1~3위 기준) 상태 패널 */
+  .crepick { display: flex; flex-direction: column; gap: 3px; padding: 5px 6px; border-radius: 6px; background: rgba(40, 28, 8, 0.5); border: 1px solid rgba(251, 191, 36, 0.55); }
+  .crepick-h { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; font-size: 8.6px; font-weight: 900; color: #fef3c7; word-break: keep-all; }
+  .crepick-tag { flex: none; font-size: 6.6px; font-weight: 900; padding: 0 4px; border-radius: 999px; border: 1px solid #fbbf24; color: #fef3c7; line-height: 1.5; }
+  .crepick-t { font-size: 7.5px; line-height: 1.5; color: #e3d3ae; word-break: keep-all; }
+  .crepick-t b { color: #fde68a; font-weight: 900; }
+  .crepick-empty { font-size: 7px; color: #9a8a63; word-break: keep-all; }
+
   .rules { list-style: none; display: flex; flex-direction: column; gap: 2px; }
   .rules li { position: relative; padding-left: 8px; font-size: 7.7px; line-height: 1.5; color: #b6c7db; word-break: keep-all; }
   .rules li::before { content: "·"; position: absolute; left: 2px; top: 0; color: #38bdf8; font-weight: 900; }
@@ -2336,6 +2344,10 @@
     .ckey { font-size: 7.5px; }
     .cmargin b { font-size: 10.5px; }
     .cmargin i { font-size: 7.5px; }
+    .crepick-h { font-size: 10px; }
+    .crepick-tag { font-size: 7.5px; }
+    .crepick-t { font-size: 8.6px; }
+    .crepick-empty { font-size: 8px; }
     .rules li { font-size: 8.6px; }
     .thread a { font-size: 10px; }
     .thread .tstat { font-size: 7.5px; }
@@ -2648,7 +2660,7 @@
     <div class="cshop-head">
       <span class="cshop-title">🛍️ 위탁판매실</span>
       <span class="cstat idle" id="cshop-state">IDLE</span>
-      <span class="cshop-sub">무재고 위탁 · 겨울 3종</span>
+      <span class="cshop-sub">무재고 위탁 · 3사 검색량 1~3위</span>
       <span class="cshop-time" id="cshop-time" title="status.json 마지막 갱신">--:--</span>
     </div>
 
@@ -2660,13 +2672,28 @@
     </div>
 
     <div class="csec">
-      <div class="csec-h">❄️ 겨울 3종 라인업 <em>가정치 · 아부지워커 실측 전</em></div>
+      <div class="csec-h">🔎 소싱·검증 기준 <em>생활·계절·차량 잡화 · 위탁 가능 카테고리</em></div>
+      <ul class="rules">
+        <li><b>3사 검색량 평균 1~3위</b> — 네이버(쇼핑·데이터랩)·구글·쿠팡 3사 검색량을 평균 내 상위 1~3위에 함께 오른 품목만 소싱 후보로 올립니다.</li>
+        <li><b>적용 범위</b> — 생활·계절·차량 잡화 등 위탁 가능 카테고리 안에서만. 대기업 브랜드·초저가 생필품은 마진이 남지 않아 제외합니다.</li>
+        <li><b>공동 검증</b> — 후보는 유효성(수요·계절성)과 상품성(공급가·배송·반품·KC)을 실측한 뒤 공동 검증으로 최종 확정합니다.</li>
+        <li><b>국내 위탁처 우선</b> — 당분간 국내 위탁처(도매매·오너클랜 등)만 사용합니다. 알리·테무 해외직구와 제조사 직접 접촉은 추후 사입 단계로 마룹니다.</li>
+        <li><b>실시간 선정·순차 교체</b> — 품목을 고정하지 않고 매번 3사 검색량을 다시 조회해 선정하며, 판매 부진 품목부터 순차 교체합니다.</li>
+      </ul>
+    </div>
+
+    <div class="csec">
+      <div class="csec-h">🔄 아이템 재선정 <em>겨울 단열 3종 → 3사 검색량 1~3위 기준</em></div>
       <div class="lineup" id="lineup"></div>
     </div>
 
     <div class="csec">
       <div class="csec-h">🛡️ 핵심 리스크 · 운영 수칙</div>
       <ul class="rules" id="shop-rules">
+        <li><b>선정 기준 · 3사 검색량 1~3위</b> — 네이버(쇼핑·데이터랩)·구글·쿠팡 3사 검색량을 평균 내 상위 1~3위에 함께 오른 품목만 소싱 후보로 올립니다. 생활·계절·차량 잡화 등 위탁 가능 카테고리 안에서만 적용하고, 대기업 브랜드·초저가 생필품은 제외합니다.</li>
+        <li><b>공동 검증</b> — 후보는 유효성(수요·계절성)과 상품성(공급가·배송·반품·KC)을 실측한 뒤 공동 검증으로 최종 확정합니다.</li>
+        <li><b>국내 위탁처 우선</b> — 당분간 국내 위탁처(도매매·오너클랜 등)만 사용하고, 알리·테무 해외직구·제조사 직접 접촉은 추후 사입 단계로 마룹니다.</li>
+        <li><b>실시간 선정·순차 교체</b> — 품목을 고정하지 않고 매번 3사 검색량을 실시간 조회해 선정하며, 판매 부진 품목부터 순차 교체합니다.</li>
         <li><b>초기 0원 무재고</b> — 재고·사입 선결제 금지. 주문 확인 후 도매처에 발주하고 차액만 남깁니다.</li>
         <li><b>규격·반품 방지</b> — 두께·길이·중량은 공급사 확인값만 표기. 재단·부착 후 반품 제한은 구매 전에 고지.</li>
         <li><b>정품·KC 확인</b> — KC·안전확인 대상 여부를 공급사에 확인. 생활화학제품(곰팡이·결로 스프레이)은 취급하지 않습니다.</li>
@@ -2766,10 +2793,10 @@ const rooms = [
   {
     id: "commerce", floor: "f5", zone: "direct", tag: "해병이",
     title: "🛍️ 위탁판매·스토어팀", worker: "👩‍💼", name: "서스토어 대리",
-    say: "개인 판매자 기준으로 준비 중!", foot: "개인 판매자 기준 · 겨울 3종 · 주문·발주·CS",
+    say: "3사 검색량으로 아이템 재선정 중!", foot: "개인 판매자 기준 · 3사 1~3위 재선정 · 국내 위탁처",
     issue: "정산계좌 등록은 직접 진행!",
-    guide: "사업자등록(간이과세자 525101 · 자택(자가))은 추후로 미루고, 먼저 개인 판매자 기준으로 준비합니다(① 판매 자격·수수료·정산 구조 확인 → ② 스마트스토어 개설·구매안전서비스 이용확인증 → ③ 사업자등록·통신판매업 신고는 추후). 정산 계좌는 수박이 이사 본인 명의 카카오뱅크 계좌로 확정됐고, 센터 등록과 금융 인증은 오너/수박이가 직접 합니다. 위탁판매실 현황판의 [지시 복사]를 채팅에 붙여넣으면 바로 진행합니다.",
-    state: "working", ticker: "개인 판매자 기준 사전 준비 · 정산 계좌는 수박이 이사(본인) 명의 카카오뱅크 확정 · 사업자등록(525101)은 추후 진행", updated: "11:40"
+    guide: "사업자등록(간이과세자 525101 · 자택(자가))은 추후로 미루고, 먼저 개인 판매자 기준으로 준비합니다(① 판매 자격·수수료·정산 구조 확인 → ② 스마트스토어 개설·구매안전서비스 이용확인증 → ③ 사업자등록·통신판매업 신고는 추후). 정산 계좌는 수박이 이사 본인 명의 카카오뱅크 계좌로 확정됐고, 센터 등록과 금융 인증은 오너/수박이가 직접 합니다. 위탁 아이템은 겨울 단열 3종 대신 네이버(쇼핑·데이터랩)·구글·쿠팡 3사 검색량 평균 상위 1~3위 교집합 기준으로 재선정·마진 실측 중이며, 국내 위탁처 중심으로 운영하고 판매 부진 품목부터 순차 교체합니다. 위탁판매실 현황판의 [지시 복사]를 채팅에 붙여넣으면 바로 진행합니다.",
+    state: "working", ticker: "아이템 재선정(3사 검색량 1~3위) · 국내 위탁처 중심 · 정산 계좌는 수박이 이사(본인) 명의 카카오뱅크 확정 · 사업자등록(525101)은 추후 진행", updated: "11:50"
   },
   {
     id: "grant", floor: "f4", zone: "direct", tag: "해병이",
@@ -3889,12 +3916,12 @@ const SHOP_STEPS = [
     ask: "[위탁판매 3단계 · 사업자등록과 통신판매업 신고 — 추후] 개인사업자(간이과세자 525101 · 전자상거래 소매업 · 자택(자가)) 신규 등록을 추후 진행할 때를 대비해 준비 사항만 정리해 주세요. ① 개인사업자 등록 없이 판매하다 등록이 필요해지는 시점·기준(매출·정산·세금계산서) ② 세무사 대행 시 서류·비용·기간과 홈택스 직접 신청의 차이 ③ 자가 사업장이라 임대차 특약 확인이 불필요한지 ④ 정부24 통신판매업 신고 대상과 면제 조건. 실제 주소·주민번호는 채팅에 쓰지 말아 주세요."
   },
   {
-    key: "wholesale", name: "도매처 연동 (위탁)", note: "도매매·오너클랜 · 무재고 공급",
-    ask: "[위탁판매 4단계 · 도매처] 도매매·오너클랜 가입 조건과 수수료, 위탁(공급사 배송) 상품을 고르는 기준을 정리하고, 겨울 3종(문풍지·에어캡·결로 테이프)에 맞는 실제 등록 가능한 상품 후보와 공급가·배송비·재고 상태를 표로 확인해 주세요."
+    key: "wholesale", name: "도매처 연동 (국내 위탁)", note: "국내 위탁처(도매매·오너클랜) · 3사 1~3위 후보 · 무재고 공급",
+    ask: "[위탁판매 4단계 · 국내 위탁처] 당분간 국내 위탁처(도매매·오너클랜 등) 중심으로만 진행합니다 — 알리·테무 해외직구와 제조사 직접 접촉은 추후 사입 단계로 미룹니다. 국내 위탁처 가입 조건과 수수료, 위탁(공급사 배송) 상품을 고르는 기준을 정리하고, 네이버(쇼핑·데이터랩)·구글·쿠팡 3사 검색량 평균 상위 1~3위 교집합 후보(생활·계절·차량 잡화 등 위탁 가능 카테고리 내 · 대기업 브랜드·초저가 생필품 제외)로 실제 등록 가능한 상품과 공급가·배송비·재고 상태를 표로 확인해 주세요. 매번 3사 검색량을 다시 조회해 후보를 갱신해 주세요."
   },
   {
-    key: "launch", name: "겨울 3종 등록·첫 주문 CS", note: "상품 등록 · 발주·송장·CS 가동",
-    ask: "[위탁판매 5단계 · 등록과 CS] 겨울 3종(문풍지 세트·에어캡 세트·결로 물흡수 테이프)을 등록 초안팩 기준으로 준비해 주세요. 상품명·카테고리·상세페이지·상품정보제공고시 값을 정리하고, 주문 확인 → 도매처 발주 → 송장 입력 → 구매확정 정산까지의 절차와 CS 답변 3종을 체크리스트로 만들어 주세요."
+    key: "launch", name: "재선정 3종 등록·첫 주문 CS", note: "상품 등록 · 발주·송장·CS · 판매 부진 품목 순차 교체",
+    ask: "[위탁판매 5단계 · 등록과 CS] 3사 검색량 1~3위 교집합으로 재선정한 후보를 등록 초안 기준으로 준비해 주세요. 상품명·카테고리·상세페이지·상품정보제공고시 값을 정리하고, 주문 확인 → 도매처 발주 → 송장 입력 → 구매확정 정산까지의 절차와 CS 답변 3종을 체크리스트로 만들어 주세요. 판매 부진 품목은 순차 교체할 수 있게 판매·조회 지표도 함께 봐 주세요."
   }
 ];
 
@@ -3953,6 +3980,27 @@ function shopData(raw) {
     updated: (typeof src.updated === "string" && src.updated.trim()) ? src.updated.trim() : "--:--",
     orders: { fresh: num(ob["new"], 0), toPlace: num(ob.to_place, 0), shipped: num(ob.shipped, 0) },
     sku: { reg: num(sk.registered, 0), plan: num(sk.planned, 3) },
+    sourcing: (() => {
+      const so = obj(src.sourcing);
+      const cands = (Array.isArray(so.candidates) ? so.candidates : [])
+        .filter(c => c && typeof c === "object" && typeof c.name === "string" && c.name.trim())
+        .map(c => ({
+          name: c.name.trim(),
+          cat: (typeof c.cat === "string") ? c.cat.trim() : "",
+          note: (typeof c.note === "string") ? c.note.trim() : "",
+          margin: (typeof c.margin === "string") ? c.margin.trim() : "",
+          rate: (typeof c.rate === "string") ? c.rate.trim() : ""
+        }));
+      return {
+        status: (so.status === "confirmed") ? "confirmed" : "repick",
+        criteria: (typeof so.criteria === "string" && so.criteria.trim()) ? so.criteria.trim() : "네이버(쇼핑·데이터랩)·구글·쿠팡 3사 검색량 평균 상위 1~3위 교집합",
+        scope: (typeof so.scope === "string" && so.scope.trim()) ? so.scope.trim() : "생활·계절·차량 잡화 등 위탁 가능 카테고리 내 · 대기업 브랜드·초저가 생필품 제외",
+        channel: (typeof so.channel === "string" && so.channel.trim()) ? so.channel.trim() : "국내 위탁처(도매매·오너클랜 등) 중심 · 알리·테무 해외직구·제조사 직접 접촉은 추후 사입 단계로 보류",
+        loop: (typeof so.loop === "string" && so.loop.trim()) ? so.loop.trim() : "품목 고정 없이 매 선정마다 3사 검색량 실시간 조회 → 상위 1~3위 교집합 후보 → 마진 실측 → 등록, 판매 부진 품목부터 순차 교체",
+        note: (typeof so.note === "string" && so.note.trim()) ? so.note.trim() : "3사 검색량 기준으로 후보 재선정·마진 실측 진행 중",
+        candidates: cands
+      };
+    })(),
     sales: { rev: num(sa.revenue_krw, 0), profit: num(sa.profit_krw, 0) },
     principles: (Array.isArray(src.principles) ? src.principles : []).map(v => {
       if (typeof v === "string" && v.trim()) {
@@ -4003,9 +4051,15 @@ function renderShop(raw) {
       </li>`).join("");
   }
 
+  // 라인업은 3사 검색량 1~3위 기준으로 재선정 중(sourcing.status=repick)이면 확정 후보를 보여 주지 않는다.
   const lineup = document.getElementById("lineup");
   if (lineup) {
-    lineup.innerHTML = SHOP_LINEUP.map(it => `
+    const sc = d.sourcing;
+    if (sc.status === "confirmed" && !sc.candidates.length) {
+      if (!SHOP_LINEUP.length) {
+        lineup.innerHTML = `<div class="crepick"><div class="crepick-h"><span class="crepick-tag">확정</span>${esc(sc.criteria)}</div><div class="crepick-empty">확정 후보 없음</div></div>`;
+      } else {
+        lineup.innerHTML = SHOP_LINEUP.map(it => `
       <div class="citem n${it.no}">
         <span class="cno">${it.no}</span>
         <span class="cbody">
@@ -4015,6 +4069,27 @@ function renderShop(raw) {
         </span>
         <span class="cmargin"><b>+${fmtKrw(it.margin)}</b><i>순익 ${it.rate}</i></span>
       </div>`).join("");
+      }
+    } else {
+      const rows = sc.candidates.map((it, i) => `
+      <div class="citem">
+        <span class="cno">${i + 1}</span>
+        <span class="cbody">
+          <span class="cname">${esc(it.name)}</span>
+          <span class="ckey">${esc([it.cat, it.note].filter(Boolean).join(" · "))}</span>
+        </span>
+        <span class="cmargin"><b>${esc(it.margin || "—")}</b><i>${esc(it.rate || "실측 전")}</i></span>
+      </div>`).join("");
+      lineup.innerHTML = `
+      <div class="crepick">
+        <div class="crepick-h"><span class="crepick-tag">${sc.status === "confirmed" ? "확정" : "재선정 중"}</span>${esc(sc.criteria)}</div>
+        <div class="crepick-t"><b>적용 범위</b> — ${esc(sc.scope)}</div>
+        <div class="crepick-t"><b>위탁처</b> — ${esc(sc.channel)}</div>
+        <div class="crepick-t"><b>운영 루프</b> — ${esc(sc.loop)}</div>
+        <div class="crepick-t"><b>진행</b> — ${esc(sc.note)}</div>
+        ${sc.candidates.length ? "" : `<div class="crepick-empty">${sc.status === "confirmed" ? "확정 후보 없음" : "후보 0건 · 마진 실측 결과가 나오면 이 자리에 후보와 순익을 표시합니다"}</div>`}
+      </div>${rows}`;
+    }
   }
 
   // 운영 수칙은 status.json(commerce.principles)을 우선 쓰고, 없으면 마크업 기본값을 그대로 둔다.
