@@ -2175,8 +2175,9 @@
     .fname { font-size: 11px; }
     .floor-note { font-size: 9px; }
     .rooms { gap: 6px; }
-    .rooms.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .rooms.three .room:nth-child(3) { grid-column: auto; }
+    /* 3개 방 층은 좁은 화면에서도 2+1로 놓아 카드 글씨가 뭉개지지 않게 한다 */
+    .rooms.three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .rooms.three .room:nth-child(3) { grid-column: 1 / -1; }
     .room { padding: 6px 8px 5px; gap: 3px; border-radius: 10px; }
     .room-title { font-size: 11px; }
     .room-tag { font-size: 8.5px; padding: 0 5px; }
