@@ -2817,10 +2817,10 @@ const rooms = [
   {
     id: "prize", floor: "f4", zone: "direct", tag: "해병이",
     title: "🎯 경품·이벤트팀", worker: "🧙", name: "최응모 사원",
-    say: "무료 경품 응모 중~", foot: "매일 15:00 · 일반 무료 경품",
+    say: "고액 공식 경품까지 훑는 중~", foot: "매일 15:00 · 무료 + 고액 공식 경품",
     issue: "본인인증 팝업 떴어요!",
-    guide: "본인인증 팝업을 닫아 주세요. 닫은 뒤 다시 응모를 진행합니다.",
-    state: "idle", ticker: "일반 무료 경품 3건 스캔 완료 · 매일 15:00", updated: "22:25"
+    guide: "항공권·자동차·대형가전·숙박/여행권 등 고액 공식 경품까지 탐색합니다. 대기업·공공기관 공식 경품만, 간단한 기본정보만 요구 시 1만 원 이상·추가 정보나 절차 요구 시 3만 원 이상, 금융권 제외, 선택 마케팅 동의는 모두 뺀 최소 필수 정보로만 응모합니다. 개인정보 입력·본인인증이 필요한 건은 입력 전에 먼저 알려 주세요.",
+    state: "idle", ticker: "탐색 범위 확대 — 항공권·자동차·대형가전·숙박/여행권 등 고액 공식 경품까지 · 1만+/3만+ 기준 유지 · 매일 15:00", updated: "11:56"
   },
   {
     id: "tistory", floor: "f3", zone: "partner", tag: "투덜이",
@@ -3707,7 +3707,7 @@ const ROSTER_DEFAULT = {
   note: "역할 별칭으로만 표기 · status.json 동기화",
   rule: "큰 이미지·로고는 외부 AI(제미나이·클로드·챗GPT) 제작본 활용 · 불필요한 핑퐁 축소",
   items: [
-    { id: "abu", name: "아부지워커", role: "실측 소싱·마진·리스크 — 겨울 단열 3종 틈새 규격 소싱", state: "wait", chip: "연결 대기" },
+    { id: "abu", name: "아부지워커", role: "실측 소싱·마진·리스크 — 3사 검색량 1~3위 교집합 후보 마진 실측", state: "wait", chip: "연결 대기" },
     { id: "mom", name: "엄마워커", role: "상세페이지·생활 홍보·CS·장부", state: "wait", chip: "연결 대기" },
     { id: "kkasil", name: "수박이 이사", role: "직속 위탁판매·스마트스토어 실행 총괄", state: "on", chip: "가동" },
     { id: "ceos", name: "투덜이·해병이 비서", role: "총괄·전담 채널·예비 서포트(Failover)", state: "on", chip: "가동" }
@@ -3926,6 +3926,8 @@ const SHOP_STEPS = [
 ];
 
 // 판매가·공급가(가정 60%)·건당 순익은 등록 초안팩·로드맵에서 확인한 값.
+// 주의: 아래 겨울 단열 3종 목록은 3사 검색량 기준 재선정으로 보류된 기존 후보입니다.
+// status.json commerce.sourcing.status가 "confirmed"가 아니면 화면에는 재선정 상태만 표시됩니다.
 const SHOP_LINEUP = [
   { no: 1, name: "문풍지·풍지판 세트", price: 24900, supply: 14940, margin: 4900, rate: "19.8%", cat: "생활잡화 > 문풍지", keys: ["문풍지", "풍지판", "창틈막이", "외풍차단"] },
   { no: 2, name: "에어캡·단열필름 세트", price: 29900, supply: 17940, margin: 6200, rate: "20.7%", cat: "생활잡화 > 단열시트", keys: ["창문단열", "에어캡", "뽁뽁이", "단열필름"] },
