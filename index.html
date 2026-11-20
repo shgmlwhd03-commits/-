@@ -2725,7 +2725,7 @@ const rooms = [
   {
     id: "ceo_tudeori", floor: "f6", zone: "partner", tag: "투덜이", ceo: true,
     title: "👑 투덜이 대표", worker: "😤", name: "👑 투덜이 대표",
-    say: "4개 부서 + 채널 2개 가동 중!", foot: "총괄 지휘 · 투덜이 4개 부서",
+    say: "5개 부서 + 채널 2개 가동 중!", foot: "총괄 지휘 · 투덜이 5개 부서",
     issue: "크레딧 확인이 필요해요!",
     guide: "투덜이 피클 크레딧 상태를 확인해 주세요. 04:00 충전으로 정상 복귀했습니다.",
     state: "working", ticker: "ONLINE · 04:00 충전 복귀 · 채널 2개 가동", updated: "--:--"
@@ -2809,6 +2809,14 @@ const rooms = [
     issue: "투덜이 피클 계정 확인이 필요해요!",
     guide: "투덜이 피클에 카페·블로그 계정 상태를 확인 요청해 주세요.",
     state: "idle", ticker: "EOKC 회칙 18조 초안 + 블로그 쇼핑커넥트 가동", updated: "22:50"
+  },
+  {
+    id: "blog", floor: "f3", zone: "partner", tag: "투덜이",
+    title: "📝 투덜이 블로그·콘텐츠팀", worker: "📝", name: "체험단 매니저",
+    say: "체험단 신청서 쓰는 중!", foot: "반납 없는 제품 체험단 · 신청·작성·마감 전담",
+    issue: "투덜이 피클 확인이 필요해요!",
+    guide: "반납 없는 제품 체험단(리뷰노트·레뷰 등)은 투덜이 측 전담입니다. 배송지·연락처 입력과 최종 신청은 개별 승인 후 진행합니다.",
+    state: "working", ticker: "반납 없는 제품 체험단(리뷰노트·레뷰 등) 신청·작성·마감 전담 · 캠페인 탐색 착수", updated: "11:15"
   },
   {
     id: "public_quiz", floor: "f2", zone: "partner", tag: "투덜이",
@@ -3616,7 +3624,7 @@ const BACKUP_FALLBACK = {
   note: "부모님 폰 직접 접근 금지 · 자금 실행은 오너",
   rule: "1차가 오프·크레딧 소진·연결 지연이면 2차가 이어받고, 3명 이상 동시에 빠지면 오너 승인 대기로 전환한다.",
   members: [
-    { name: "투덜이 비서", part: "카페·B2B·티스토리", state: "on", backup1: "해병이 비서", backup2: "수박이" },
+    { name: "투덜이 비서", part: "카페·B2B·티스토리·체험단", state: "on", backup1: "해병이 비서", backup2: "수박이" },
     { name: "해병이 비서", part: "블로그·자산·총괄", state: "on", backup1: "투덜이 비서", backup2: "수박이" },
     { name: "아부지워커", part: "실측 소싱·마진", state: "wait", backup1: "수박이", backup2: "해병이 비서" },
     { name: "엄마워커", part: "상세페이지·CS·장부", state: "wait", backup1: "수박이", backup2: "해병이 비서" },
