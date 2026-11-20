@@ -71,19 +71,13 @@
     ],
     "sites": [
       { "label": "데일리 머니리포트", "url": "https://daily-money-note.tistory.com" },
-      { "label": "투덜이 티스토리", "url": "https://tudeori.tistory.com" },
-      { "label": "캐딜락 코리아 클럽", "url": "https://cafe.naver.com/11124000" }
+      { "label": "투덜이 티스토리", "url": "https://tudeori.tistory.com" }
     ]
   },
   "signals": {
     "updated": "09:30",
     "note": "🔵 파란불=오너가 꼭 알아야 하는 보고·외부 발송·게시·계약 전 일반 승인 대기 · 🔴 빨간불=자금·계좌·이체·결제·금융 인증(오너 직접 실행, AI 임의 실행 금지) · 🏭 큐맥스 사업지원부는 별도 승인 대기 없이 지시 시 가동",
     "blue": [
-      {
-        "room": "cafe",
-        "title": "캐딜락 코리아 클럽 댓글 4건·게시글 1편 초안",
-        "detail": "등업 기준 확인 완료 · 발송 전 승인 대기"
-      },
       {
         "room": "commerce",
         "title": "위탁판매 1단계 세무·사업자 형태 결정",
@@ -108,14 +102,6 @@
         "room": "commerce",
         "title": "스마트스토어 정산 계좌 개설",
         "detail": "사업용 계좌·정산 정보 · 오너 직접"
-      },
-      {
-        "lane": "blue",
-        "room": "cafe",
-        "title": "캐딜락 코리아 클럽 댓글 4건·게시글 1편 초안",
-        "detail": "등업 기준 확인 완료 · 발송 전 승인 대기",
-        "url": "https://cafe.naver.com/11124000",
-        "url_label": "카페 열기"
       },
       {
         "lane": "blue",
@@ -324,15 +310,14 @@
       ],
       "depts": [
         { "id": "tistory", "name": "투덜이 티스토리팀" },
-        { "id": "cafe", "name": "EOKC·캐딜락 카페팀" },
+        { "id": "cafe", "name": "EOKC 카페팀" },
         { "id": "public_quiz", "name": "공공퀴즈·대응·B2B팀" },
         { "id": "cumex", "name": "큐맥스 사업지원부" }
       ],
       "links": [
         { "label": "스레드 @tudeori.carlife", "url": "https://www.threads.com/@tudeori.carlife" },
         { "label": "스레드 @daily.moneynote", "url": "https://www.threads.com/@daily.moneynote" },
-        { "label": "투덜이 티스토리", "url": "https://tudeori.tistory.com" },
-        { "label": "캐딜락 코리아 클럽", "url": "https://cafe.naver.com/11124000" }
+        { "label": "투덜이 티스토리", "url": "https://tudeori.tistory.com" }
       ],
       "copy": "[투덜이 대표실] 4개 부서(티스토리·카페·공공퀴즈/B2B·큐맥스 사업지원) 진행 상황과 애드센스 심사 상태를 보고해 주세요. 큐맥스 사업지원부는 별도 승인 대기 없이 지시하면 바로 움직이고, 외부 발송·통화가 필요할 때만 먼저 알려 주세요."
     },
@@ -528,10 +513,9 @@
         { "time": "매일", "task": "카페 공지·회칙 정리 · 유입 점검" }
       ],
       "links": [
-        { "label": "캐딜락 코리아 클럽", "url": "https://cafe.naver.com/11124000" },
         { "label": "스레드 @tudeori.carlife", "url": "https://www.threads.com/@tudeori.carlife" }
       ],
-      "copy": "[카페팀] 이번 주 카페 공지와 회칙 정리 진행 상황, @tudeori.carlife에서 카페로 들어오는 유입 상태를 보고해 주세요."
+      "copy": "[카페팀] 이번 주 EOKC 카페 공지와 회칙 정리 진행 상황, @tudeori.carlife에서 카페로 들어오는 유입 상태를 보고해 주세요."
     },
     "public_quiz": {
       "now": [
