@@ -926,6 +926,21 @@
   .room.ceo .room-open { border-color: rgba(251, 191, 36, 0.55); }
   .room.ceo.partner .room-open { border-color: rgba(167, 139, 250, 0.6); background: rgba(46, 16, 101, 0.6); color: #ede9fe; }
 
+  /* 6F 이사 자리: 대표 두 명 바로 옆 · 위탁판매·스마트스토어 실행 총괄 */
+  .room.director {
+    border-color: rgba(74, 222, 128, 0.45);
+    background: linear-gradient(180deg, rgba(6, 40, 24, 0.55), rgba(7, 13, 24, 0.6));
+  }
+  .room.director .room-title { color: #bbf7d0; }
+  .room.director .room-open { border-color: rgba(74, 222, 128, 0.55); }
+  .room.director .nametag {
+    border-color: rgba(74, 222, 128, 0.55);
+    background: rgba(6, 46, 26, 0.85);
+    color: #bbf7d0;
+  }
+  .room.director .room-stage { padding-top: 12px; justify-content: center; gap: 14px; }
+  .room.director .desk { width: 34px; }
+
   .pent-bar {
     position: relative;
     z-index: 1;
@@ -1960,12 +1975,13 @@
   .rm-sched li span { min-width: 0; word-break: keep-all; }
   .rm-links { display: flex; flex-wrap: wrap; gap: 3px; }
   .rm-links a { font-size: 6.8px; font-weight: 900; color: #bae6fd; text-decoration: none; border: 1px solid rgba(56, 189, 248, 0.5); background: rgba(8, 47, 73, 0.5); border-radius: 5px; padding: 0 5px; line-height: 1.7; }
-  .rm-foot { display: flex; gap: 4px; padding: 5px 7px 7px; border-top: 1px solid rgba(125, 211, 252, 0.14); }
+  .rm-foot { display: flex; flex-wrap: wrap; gap: 4px; padding: 5px 7px 7px; border-top: 1px solid rgba(125, 211, 252, 0.14); }
   .rm-btn {
     -webkit-appearance: none;
     appearance: none;
     font-family: inherit;
     flex: 1 1 auto;
+    min-width: 0;
     font-size: 8px;
     font-weight: 900;
     padding: 4px 6px;
@@ -1976,6 +1992,8 @@
     cursor: pointer;
     touch-action: manipulation;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .rm-btn.primary { border-color: #38bdf8; background: rgba(8, 47, 73, 0.8); color: #bae6fd; }
   .rm-btn.primary.ok { border-color: #4ade80; background: rgba(6, 45, 28, 0.85); color: #bbf7d0; }
@@ -2347,6 +2365,7 @@
     .rm-credit { font-size: 9.4px; padding: 3px 7px; margin-bottom: 6px; }
     .rm-foot { padding: 7px 12px 10px; gap: 6px; }
     .rm-btn { font-size: 10px; padding: 6px 9px; }
+    .rm-btn.shop { flex: 1 1 100%; }
   }
 
   /* ============================================================
@@ -2677,6 +2696,7 @@
     <div class="rm-foot">
       <button class="rm-btn primary" type="button" id="rm-copy" onclick="copyReport()">📋 보고 내용 복사</button>
       <button class="rm-btn shop" type="button" id="rm-shop" onclick="openShopFromReport()" hidden>🛍️ 위탁판매실 바로 보기</button>
+      <button class="rm-btn shop" type="button" id="rm-ledger" onclick="openLedgerFromReport()" hidden>📊 스마트스토어 통합 장부 열기</button>
     </div>
   </div>
 </div>
@@ -2684,7 +2704,7 @@
 <script>
 /* ================= 설정 ================= */
 const FLOORS = [
-  { id: "f6", num: "6F", name: "펜트하우스 · 👑 2인 대표실", tone: "pent" },
+  { id: "f6", num: "6F", name: "펜트하우스 · 👑 2인 대표실 + 🍉 이사", tone: "pent" },
   { id: "f5", num: "5F", name: "해병이 · 수익·스토어층", tone: "cyan" },
   { id: "f4", num: "4F", name: "해병이 · 혜택·딜층", tone: "cyan" },
   { id: "f3", num: "3F", name: "투덜이 · 블로그·카페층", tone: "purple" },
@@ -2708,6 +2728,14 @@ const rooms = [
     issue: "크레딧 확인이 필요해요!",
     guide: "투덜이 피클 크레딧 상태를 확인해 주세요. 04:00 충전으로 정상 복귀했습니다.",
     state: "working", ticker: "ONLINE · 04:00 충전 복귀 · 채널 2개 가동", updated: "--:--"
+  },
+  {
+    id: "director_subaki", floor: "f6", zone: "direct", tag: "해병이", director: true,
+    title: "🍉 수박이 이사", worker: "🍉", name: "🍉 수박이 이사",
+    say: "위탁판매·스토어 바로 체크!", foot: "대표 직속 · 위탁판매·스마트스토어 실행 총괄",
+    issue: "대표 지시 확인이 필요해요!",
+    guide: "수박이 이사에게 위탁판매·스토어 실행 지시를 내려 주세요. 장부·위탁판매실은 보고 창에서 바로 열립니다.",
+    state: "working", ticker: "대표 직속 · 위탁판매·스마트스토어 실행 총괄 · 장부 바로 체크 가동", updated: "--:--"
   },
   {
     id: "naver", floor: "f5", zone: "direct", tag: "해병이",
@@ -2850,17 +2878,18 @@ function roomHTML(r, i) {
   const partner = r.zone === "partner";
   const shop = r.id === "commerce";
   const ceo = r.ceo === true;
+  const director = r.director === true;
   const stage = `<div class="room-stage">${workerHTML(r)}${LAPTOP}</div>`;
 
   return `
-      <div class="room ${r.state}${partner ? " partner" : ""}${ceo ? " ceo" : ""} link" id="room-${r.id}"
+      <div class="room ${r.state}${partner ? " partner" : ""}${ceo ? " ceo" : ""}${director ? " director" : ""} link" id="room-${r.id}"
            style="--wd:${(i * 0.23).toFixed(2)}s;--ic:${(-(0.9 * i + i * i * 0.17)).toFixed(2)}s"
            onclick="roomTap(event, this, '${r.id}')" title="눌러서 업무 보고 열기">
         <div class="room-head">
           <span class="room-title">${esc(r.title)}</span>
           <span class="room-lanes" id="lanes-${r.id}" aria-hidden="true"></span>
           <span class="room-tag${partner ? " partner" : ""}" title="${partner ? "투덜이 피클이 전담 운영하는 방" : "해병이 피클이 직접 운영하는 방"}">${r.tag}</span>
-          <span class="room-open">${shop ? "현황판▸" : ceo ? "총괄▸" : "보고"}</span>
+          <span class="room-open">${shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : "보고"}</span>
           <span class="status-dot" aria-hidden="true"></span>
         </div>
         ${stage}
@@ -3643,7 +3672,7 @@ const ROSTER_DEFAULT = {
   items: [
     { id: "abu", name: "아부지워커", role: "실측 소싱·마진·리스크 — 겨울 단열 3종 틈새 규격 소싱", state: "wait", chip: "연결 대기" },
     { id: "mom", name: "엄마워커", role: "상세페이지·생활 홍보·CS·장부", state: "wait", chip: "연결 대기" },
-    { id: "kkasil", name: "수박이", role: "최종 실행·피드백·오프 백업", state: "on", chip: "가동" },
+    { id: "kkasil", name: "수박이 이사", role: "직속 위탁판매·스마트스토어 실행 총괄", state: "on", chip: "가동" },
     { id: "ceos", name: "투덜이·해병이 비서", role: "총괄·전담 채널·예비 서포트(Failover)", state: "on", chip: "가동" }
   ],
   channels: [
@@ -4112,7 +4141,9 @@ function openReport(id) {
   }
 
   const shopBtn = document.getElementById("rm-shop");
-  if (shopBtn) shopBtn.hidden = (id !== "commerce");
+  if (shopBtn) shopBtn.hidden = (id !== "commerce" && id !== "director_subaki");
+  const ledgerBtn = document.getElementById("rm-ledger");
+  if (ledgerBtn) ledgerBtn.hidden = (id !== "director_subaki");
   const copyBtn = document.getElementById("rm-copy");
   if (copyBtn) { copyBtn.classList.remove("ok"); }  // 문구는 copyText가 원래대로 되돌린다
   const modal = document.getElementById("report-modal");
@@ -4162,6 +4193,13 @@ function copyReport() {
 function openShopFromReport() {
   closeReport();
   setView("shop");
+}
+
+/* 위탁판매·스마트스토어 통합 장부(구글 시트) — 링크를 아는 사람만 열람 요청, 내용은 권한으로 보호 */
+const LEDGER_URL = "https://docs.google.com/spreadsheets/d/1yfZO4rKGpmItjV92Zq5IFLIWk6V56buyF2xrEK0hRD4/edit";
+
+function openLedgerFromReport() {
+  window.open(LEDGER_URL, "_blank", "noopener");
 }
 
 /* 방 클릭: 업무 보고만 연다 (상태 변경 없음) */
