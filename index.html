@@ -2728,10 +2728,10 @@ const rooms = [
   {
     id: "invest_sp500", floor: "f5", zone: "direct", tag: "해병이",
     title: "📈 미국 S&P500 적립투자부", worker: "📈", name: "오적립 주임",
-    say: "ISA 개설 4단계 안내 중!", foot: "매주 월요일 1주씩 · 월 약 10만 원 적립",
-    issue: "계좌 개설·첫 매수는 오너 직접!",
-    guide: "계좌 개설·인증·첫 매수는 오너가 직접 입력합니다. 4단계 화면 순서만 안내합니다.",
-    state: "idle", ticker: "카카오페이증권 중개형 ISA + TIGER 미국S&P500(360750) · 매주 월요일 1주씩(월 약 10만 원) · 계좌 개설 4단계 안내 중", updated: "09:24"
+    say: "첫 1주 매수 완료! 월요일 적립 대기", foot: "매주 월요일 1주씩 · 월 약 10만 원 적립",
+    issue: "월요일 적립 매수는 오너 직접!",
+    guide: "매주 월요일 1주 매수는 오너가 직접 진행합니다. 부서는 보유 수량·평단·수익률·배당 기록과 다음 매수 수량 점검을 맡습니다.",
+    state: "working", ticker: "11/20 중개형 ISA 첫 1주 매수 완료 · 매주 월요일 1주씩 적립 (다음: 월요일)", updated: "09:30"
   },
   {
     id: "commerce", floor: "f5", zone: "direct", tag: "해병이",
@@ -3246,11 +3246,9 @@ const SIGNAL_FALLBACK = {
   updated: "--:--",
   blue: [
     { room: "cafe", title: "카페 댓글·게시글 초안 발송 전 승인", detail: "규칙 확인 완료 · 초안 대기" },
-    { room: "invest_sp500", title: "ISA 계좌 개설 4단계 진행 확인", detail: "카카오페이증권 중개형 ISA · 매주 월요일 1주씩 · 인증·계좌정보는 오너가 직접 입력" },
     { room: "commerce", title: "위탁판매 1단계 세무·사업자 형태 결정", detail: "개인 간이과세자 vs 가족법인 영향 확인" }
   ],
   red: [
-    { room: "invest_sp500", title: "계좌 개설·자동이체·첫 매수", detail: "중개형 ISA · 매주 월요일 1주씩(월 약 10만 원) · 개설·첫 매수 완료 전까지 유지 (오너 직접)" },
     { room: "commerce", title: "스마트스토어 정산 계좌 개설", detail: "사업용 계좌·정산 정보 · 오너 직접 실행" }
   ]
 };
