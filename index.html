@@ -3333,8 +3333,8 @@ function floorHTML(f) {
     ? `<div class="pent-bar" aria-label="수익 전광판">
          <div class="pent-bar-top">${revHTML()}</div>
          <div class="credit">
-           <span class="cred" id="cred-hb">🔵 해병이: 정상 가동</span>
-           <span class="cred td" id="cred-td">🟣 투덜이: 정상 가동</span>
+           <span class="cred" id="cred-hb">🔵 해병이: 가동 미확인</span>
+           <span class="cred td" id="cred-td">🟣 투덜이: 가동 미확인</span>
          </div>
        </div>
        <div class="pent-roster" id="pent-roster" aria-label="6F 분장표"></div>`
@@ -3591,8 +3591,8 @@ function renderCredit(raw) {
   const c = (raw && typeof raw === "object" && !Array.isArray(raw)) ? raw : {};
   const hb = document.getElementById("cred-hb");
   const td = document.getElementById("cred-td");
-  if (hb) hb.textContent = "🔵 해병이: " + (c.haebyeongi || "정상 가동");
-  if (td) td.textContent = "🟣 투덜이: " + (c.partner || "정상 가동");
+  if (hb) hb.textContent = "🔵 해병이: " + (c.haebyeongi || "가동 미확인");
+  if (td) td.textContent = "🟣 투덜이: " + (c.partner || "가동 미확인");
 }
 
 /* ================= 🚦 신호등 (🔵 일반 확인·승인 / 🔴 자금·결제) =================
@@ -4025,8 +4025,8 @@ const ROSTER_DEFAULT = {
   note: "역할 별칭으로만 표기 · status.json 동기화",
   rule: "큰 이미지·로고는 외부 AI(제미나이·클로드·챗GPT) 제작본 활용 · 불필요한 핑퐁 축소",
   items: [
-    { id: "td", name: "투덜이 부장", role: "투덜이 측 업무 운영 및 인수인계", state: "on", chip: "가동" },
-    { id: "hb", name: "해병이 부장", role: "해병이 측 업무 운영 및 인수인계", state: "on", chip: "가동" }
+    { id: "td", name: "투덜이 부장", role: "투덜이 측 업무 운영 및 인수인계", state: "wait", chip: "가동 미확인" },
+    { id: "hb", name: "해병이 부장", role: "해병이 측 업무 운영 및 인수인계", state: "wait", chip: "가동 미확인" }
   ],
   channels: [
     { owner: "해병이", handle: "@daily.moneynote", url: "https://www.threads.com/@daily.moneynote", topic: "돈·세금·생활경제" },
@@ -5066,7 +5066,7 @@ function placeHomeQuiet(k) {
   el.classList.add("resting");
 }
 
-const CEO_LINES = ["두 부장 협업 보고!", "수익 보고 받는 중", "역할 분담 정상 가동!", "☕ 커피 향 좋은데?"];
+const CEO_LINES = ["두 부장 협업 보고!", "수익 보고 받는 중", "역할 분담 확인 중!", "☕ 커피 향 좋은데?"];
 const HANDOFF_LINES = ["🤝 업데이트 전달!", "💬 브리핑 공유!", "🤝 수익 자료 전달", "💬 진행 상황 공유!"];
 const KARAOKE_LINES = ["🎤 18번 불러볼까?", "🎶 박수 준비 완료!", "🎤 한 곡만 부르고 갈게"];
 
