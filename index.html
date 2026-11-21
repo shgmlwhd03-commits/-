@@ -1674,6 +1674,14 @@
     68% { transform: translate(-3px, -1px) rotate(-1deg); }
   }
 
+
+  /* 연출 대화 자막 (음성 없음 · 실제 업무 보고와 구분) */
+  #scene-sub { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 60; max-width: min(92vw, 520px); pointer-events: none; opacity: 0; transition: opacity .25s ease; text-align: center; }
+  #scene-sub.show { opacity: 1; }
+  #scene-sub .ss-tag { display: inline-block; font-size: 10px; font-weight: 800; color: #cbd5e1; background: rgba(15,23,42,.85); border-radius: 6px 6px 0 0; padding: 1px 8px; letter-spacing: .02em; }
+  #scene-sub .ss-line { display: block; background: rgba(0,0,0,.78); color: #fff; font-size: 14px; font-weight: 700; line-height: 1.4; padding: 6px 14px; border-radius: 8px; word-break: keep-all; }
+  #scene-sub .ss-who { color: #fcd34d; margin-right: 6px; }
+
   /* 캐릭터 말풍선 (대화) */
   .lob-walker {
     position: absolute;
@@ -5163,8 +5171,34 @@ function castHome(k, dur) {
   }, d * 1000 + 160);
 }
 
+/* 연출 대화 자막: 소리 없이 글자로만. 실제 업무 보고(상태판)와 구분해 '연출' 표시 */
+let _subTimer = null;
+function sceneSub(who, text) {
+  if (!text) return;
+  let el = document.getElementById("scene-sub");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "scene-sub";
+    el.setAttribute("role", "status");
+    el.setAttribute("aria-live", "polite");
+    el.innerHTML = '<span class="ss-tag">🎬 연출 대화 · 업무 보고 아님</span><span class="ss-line"><span class="ss-who"></span><span class="ss-txt"></span></span>';
+    document.body.appendChild(el);
+  }
+  el.querySelector(".ss-who").textContent = who ? who + ":" : "";
+  el.querySelector(".ss-txt").textContent = text;
+  el.classList.add("show");
+  clearTimeout(_subTimer);
+  _subTimer = setTimeout(() => el.classList.remove("show"), 3200);
+}
+const SUB_NAME = { hb: "해병이 부장", td: "투덜이 부장" };
+function subNameOfRoom(id) {
+  const r = rooms.find(x => x.id === id);
+  return r ? (r.name || r.tag || id) : id;
+}
+
 function castSay(k, text) {
   if (!active(k)) return;
+  if (text) sceneSub(SUB_NAME[k] || k, text);
   const s = venSayEl(k);
   if (s && text) s.textContent = text;
   const el = venEl(k);
@@ -5230,6 +5264,7 @@ function ceoSay(text, only) {
     const s = document.getElementById("say-" + id);
     if (s && text) s.textContent = text;
   });
+  if (text) sceneSub(only ? subNameOfRoom(only) : "대표실", text);
 }
 function ceoRestore() {
   ["ceo_haebyeong", "ceo_tudeori"].forEach(id => {
@@ -5628,6 +5663,7 @@ async function roomTalk(floor) {
       const s = document.getElementById("say-" + id);
       if (!el || !el.classList.contains("idle") || !s) break;
       s.textContent = text;
+      sceneSub(subNameOfRoom(id), text);
       SFX.chat(floor);
       await sleep(1800);
     }
@@ -6115,4 +6151,5 @@ startStaffLife();
 </script>
 </body>
  </html>
+
 
