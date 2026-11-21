@@ -2025,6 +2025,25 @@
   .chief-tools { padding: 2px 8px 7px; }
   .chief-report { border: 1px solid #b89b42; border-radius: 6px; background: #292412; color: #fef3c7; font: inherit; font-size: 11px; padding: 7px 10px; cursor: pointer; touch-action: manipulation; }
   .chief-report:focus-visible { outline: 2px solid #fef3c7; outline-offset: 2px; }
+  #chief-cnt[hidden], #chief-say[hidden] { display: none; }
+  .chief-short-note { margin: 2px 10px 8px; color: #e2e8f0; font-size: 11px; line-height: 1.5; }
+  .chief-details { margin: 0 10px 8px; font-size: 11px; color: #cbd5e1; }
+  .chief-details > summary, .cr-detail > summary { cursor: pointer; padding: 5px 0; }
+  #chief .chief-t b { font-size: 13px; }
+  #chief .chief-caret { margin-left: auto; }
+  #chief .chief-row { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 3px 10px; padding: 10px; cursor: default; }
+  .cr-main b { display: block; color: #e8eef8; font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
+  .cr-review { margin: 4px 0 0; font-size: 11px; color: #a8b5c6; }
+  #chief .cr-act { flex-wrap: wrap; align-self: center; }
+  #chief .cr-act button { font-size: 11px; padding: 7px 10px; min-height: 34px; }
+  .cr-detail { grid-column: 1 / -1; font-size: 11px; color: #9eb1c8; }
+  .cr-detail p { line-height: 1.6; margin: 4px 0 8px; }
+  .cr-detail button, .cr-detail a { font-size: 11px; }
+  @media (max-width: 520px) {
+    #chief .chief-row { grid-template-columns: minmax(0,1fr); }
+    #chief .cr-act { justify-self: start; gap: 7px; margin: 4px 0; }
+    #chief .cr-act button { min-width: 62px; min-height: 38px; }
+  }
   .chief-ava { flex: none; font-size: 13px; line-height: 1; filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.55)); }
   .chief-t { display: flex; flex-direction: column; min-width: 0; }
   .chief-t b { font-size: 8.8px; font-weight: 900; color: #fde68a; }
@@ -2816,17 +2835,20 @@
   </div>
 
   <!-- 💼 총괄(총괄 보고 · 긴급 처리): 두 부장 미결·대기 통합 · 🔴 → 🔵 → 일반 대기 자동 정렬 -->
-  <section class="chief" id="chief" aria-label="총괄 총괄 보고">
+  <section class="chief" id="chief" aria-label="총괄 검토·대표 결재">
     <button class="chief-head" id="chief-head" type="button" onclick="toggleChief()" aria-expanded="true" aria-controls="chief-body">
       <span class="chief-ava" aria-hidden="true">💼</span>
-      <span class="chief-t"><b>💼 총괄 · 검토·결재 목록</b><i>팩트검토 상태 미확인 · 로컬 선택은 미접수</i></span>
-      <span class="chief-cnt" id="chief-cnt"></span>
+      <span class="chief-t"><b>💼 총괄 · 검토·결재 목록</b></span>
+      <span hidden class="chief-cnt" id="chief-cnt"></span>
       <span class="chief-caret" id="chief-caret">▾</span>
     </button>
+    <p class="chief-short-note">실제 전달은 미연결입니다. 버튼은 문구 복사·로컬 저장만 하며 미접수 상태입니다.</p>
+    <details class="chief-details"><summary>절차·전체 보고 보기</summary>
     <p class="chief-route" id="chief-route"><b>결재 흐름</b> 부장 작성 → 총괄 팩트검토 → 대표님 결재<br><small>불허: 해당 안 진행 중단 · 삭제 범위 확정 전 원기록 보존<br>재심의: 부장 보완 → 총괄 팩트 재검토 → 대표님 재상신<br>승인 후: 실행 결과 별도 보고<br>현재는 전달·접수와 단계별 검토가 연결되지 않았습니다. 검토·승인·실행·완료는 별개입니다. 기존 안건은 팩트검토 완료 근거가 없어 대표 결재 단계인지 미확인입니다.</small></p>
     <div class="chief-tools"><button class="chief-report" id="chief-report" type="button" onclick="openReport('instinct')">💼 총괄 종합 보고 · 담당 부서 보기</button></div>
-    <div class="chief-say" id="chief-say">두 부장 미결·대기 건을 모으는 중…</div>
+    <div hidden class="chief-say" id="chief-say">두 부장 미결·대기 건을 모으는 중…</div>
     <p class="chief-receipt-note" id="chief-receipt-note"><strong>승인·불허·재심의 버튼은 문구 복사와 이 브라우저의 선택 저장만 합니다.</strong><br>복사한 문구를 Slack #피클지시에 직접 보내야 접수됩니다. 전달 전에는 목록과 신호를 유지하며, 실제 완료로 처리하지 않습니다. 재심의 10분 검토 기준은 채널 도착 시각부터입니다.</p>
+    </details>
     <div class="chief-body" id="chief-body"></div>
   </section>
 
@@ -3928,15 +3950,15 @@ function renderChief(raw) {
       : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="${it.lane === "red" ? "승인 — 실행은 오너가 직접" : "승인하고 진행"}">승인</button>` +
         `<button class="cr-no" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="보류하고 재검토">불허</button>` +
         `<button class="cr-re" type="button" onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 문구 복사 · Slack 채팅에 보내야 접수 · 신호 유지">재심의</button>`;
-    return `<div class="chief-row ${it.lane}${redRead ? " read" : ""}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" role="button" tabindex="0" data-room="${esc(it.room)}"
-        title="${esc(it.title + (rm ? " · " + rm : "") + " · 누르면 부서 보고 열기")}"
-        onclick="chiefClick(event, '${esc(it.room)}')"
-        onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();chiefClick(event,'${esc(it.room)}');}">
-        <span class="cr-lane" aria-hidden="true">${redRead ? "⚪" : CHIEF_ICON[it.lane]}</span>
-        <span class="cr-tx"><b>${esc(it.title)}</b>${rm ? `<span class="cr-rm">${esc(rm)}</span>` : ""}${it.detail ? `<i>${esc(it.detail)}</i>` : ""}</span>
-        ${it.room ? `<button class="cr-go" type="button" onclick="event.stopPropagation();openReport('${esc(it.room)}')">보고 ›</button>` : ""}
-        ${it.url ? `<a class="cr-url" href="${esc(it.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ ${esc(it.urlLabel)}</a>` : ""}
-        <span class="cr-act">${ack}${act}</span>
+    return `<div class="chief-row ${it.lane}${redRead ? " read" : ""}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" data-room="${esc(it.room)}">
+        <div class="cr-main"><b>${esc(it.title)}</b><p class="cr-review">총괄 팩트검토: 미확인</p></div>
+        <span class="cr-act">${act}</span>
+        <details class="cr-detail"><summary>상세 보기${rm ? " · " + esc(rm) : ""}</summary>
+          ${it.detail ? `<p>${esc(it.detail)}</p>` : ""}
+          ${it.room ? `<button class="cr-go" type="button" onclick="openReport('${esc(it.room)}')">원보고 보기 ›</button>` : ""}
+          ${it.url ? `<a class="cr-url" href="${esc(it.url)}" target="_blank" rel="noopener">↗ ${esc(it.urlLabel)}</a>` : ""}
+          ${ack}
+        </details>
       </div>`;
   }).join("") : `<div class="chief-row wait"><span class="cr-lane">✅</span><span class="cr-tx"><b>지금 대기 중인 건이 없습니다</b></span></div>`;
   applyChiefState();
