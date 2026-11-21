@@ -2069,21 +2069,24 @@
     background: rgba(15, 23, 42, 0.9); color: #e2e8f0; text-decoration: none; white-space: nowrap;
   }
   .cr-act { display: flex; flex: none; align-self: center; gap: 3px; }
-  .cr-ok, .cr-no, .cr-undo, .cr-cp {
+  .cr-ok, .cr-no, .cr-re, .cr-undo, .cr-cp {
     font-family: inherit; font-size: 6.4px; font-weight: 900; padding: 1px 6px; border-radius: 999px;
     cursor: pointer; white-space: nowrap; touch-action: manipulation;
   }
   .cr-ok { border: 1px solid rgba(74, 222, 128, 0.6); background: rgba(6, 45, 28, 0.85); color: #bbf7d0; }
   .cr-no { border: 1px solid rgba(248, 113, 113, 0.55); background: rgba(45, 10, 10, 0.85); color: #fecaca; }
+  .cr-re { border: 1px solid rgba(250, 204, 21, 0.55); background: rgba(56, 43, 4, 0.85); color: #fef08a; }
   .cr-undo { border: 1px solid #475569; background: rgba(15, 23, 42, 0.9); color: #cbd5e1; }
   .cr-cp { border: 1px solid rgba(56, 189, 248, 0.55); background: rgba(8, 47, 73, 0.8); color: #bae6fd; }
   .cr-dec { flex: none; align-self: center; font-size: 6.6px; font-weight: 900; padding: 1px 6px; border-radius: 999px; white-space: nowrap; }
   .cr-dec.ok { border: 1px solid rgba(74, 222, 128, 0.65); background: rgba(6, 45, 28, 0.9); color: #bbf7d0; }
   .cr-dec.no { border: 1px solid rgba(148, 163, 184, 0.65); background: rgba(30, 41, 59, 0.92); color: #e2e8f0; }
+  .cr-dec.re { border: 1px solid rgba(250, 204, 21, 0.65); background: rgba(56, 43, 4, 0.92); color: #fef08a; }
   .cr-clr { flex: none; align-self: center; font-size: 6.2px; font-weight: 900; padding: 1px 5px; border-radius: 999px; border: 1px dashed rgba(148, 163, 184, 0.5); color: #94a3b8; white-space: nowrap; }
   .chief-row.decided { flex-wrap: wrap; }
   .chief-row.decided.ok { border-color: rgba(74, 222, 128, 0.55); background: rgba(6, 45, 28, 0.62); }
   .chief-row.decided.no { border-color: rgba(148, 163, 184, 0.55); background: rgba(30, 30, 34, 0.7); }
+  .chief-row.decided.re { border-color: rgba(250, 204, 21, 0.55); background: rgba(56, 43, 4, 0.62); }
   .chief-row.decided .cr-tx b { color: #cbd5e1; }
   .cr-go { cursor: pointer; }
   .chief-row.red .cr-go { border-color: rgba(248, 113, 113, 0.6); color: #fecaca; }
@@ -2535,7 +2538,7 @@
     .cr-tx b { font-size: 9.4px; }
     .cr-tx .cr-rm, .cr-tx i { font-size: 8px; }
     .cr-go, .cr-url { font-size: 8.2px; padding: 2px 8px; }
-    .cr-ok, .cr-no, .cr-undo, .cr-cp { font-size: 8px; padding: 2px 8px; }
+    .cr-ok, .cr-no, .cr-re, .cr-undo, .cr-cp { font-size: 8px; padding: 2px 8px; }
     .cr-dec { font-size: 8.2px; padding: 2px 8px; }
     .cr-clr { font-size: 7.4px; padding: 2px 6px; }
     .sig { padding: 3px 9px; gap: 5px; }
@@ -3391,15 +3394,16 @@ function signalKey(lane, it) {
   return lane + "|" + (it.room || "") + "|" + String(it.title || "").trim();
 }
 
-/* 그 신호가 이미 결정(승인·불허)되어 신호등에서 내려갔는지 */
+/* 그 신호가 이미 결정(승인·불허)되어 신호등에서 내려갔는지 — 재심의(re)는 결론 전이라 불을 켠 채로 둔다 */
 function signalCleared(lane, it, base, dec) {
-  if (dec[signalKey(lane, it)]) return true;
+  const direct = dec[signalKey(lane, it)];
+  if (direct && direct.s !== "re") return true;
   // 제목이 조금 달라 열쇠가 안 맞아도, 그 방·그 레인에 신호 1건 + 총괄 결정 1건이면 같은 건으로 본다
   const room = it.room || "";
   if (!room) return false;
   if ((base[lane] || []).filter(x => (x.room || "") === room).length !== 1) return false;
   const items = (CHIEF && Array.isArray(CHIEF.items)) ? CHIEF.items : [];
-  return items.filter(x => x.lane === lane && (x.room || "") === room && dec[x.id]).length === 1;
+  return items.filter(x => x.lane === lane && (x.room || "") === room && dec[x.id] && dec[x.id].s !== "re").length === 1;
 }
 
 function signalsView(base, dec) {
@@ -3549,7 +3553,7 @@ function chiefClick(e, room) {
   if (room) openReport(room);
 }
 
-/* 승인·불허 결정: 정적 페이지라 localStorage에 남기고, 동시에 비서에게 붙여넣을 문구를 복사한다. */
+/* 승인·불허·재심의 결정: 정적 페이지라 localStorage에 남기고, 동시에 비서에게 붙여넣을 문구를 복사한다. */
 let CHIEF_DEC = null;
 
 function chiefDecisions() {
@@ -3575,12 +3579,15 @@ function chiefPhrase(it, state) {
   const rr = rooms.find(r => r.id === it.room);
   const who = rr ? " · " + rr.tag : "";
   const where = rr ? " (" + rr.title + ")" : "";
-  const head = (state === "ok" ? "[총괄 승인" : "[총괄 불허") + who + "] ";
+  const head = (state === "ok" ? "[총괄 승인" : state === "re" ? "[총괄 재심의" : "[총괄 불허") + who + "] ";
   const nm = it.title + where;
   if (state === "ok") {
     return it.lane === "red"
       ? head + nm + " — 오너 직접 실행 건입니다. 실행은 오너가 직접 하고, 비서는 안내·기록만 해 주세요."
       : head + nm + " — 승인했습니다. 그대로 진행해 주세요.";
+  }
+  if (state === "re") {
+    return head + nm + " — 재심의합니다. 근거·대안·비용·일정을 보완해서 다시 상신해 주세요. 결론이 날 때까지 신호는 켜 둡니다.";
   }
   return it.lane === "red"
     ? head + nm + " — 보류합니다. 자금·인증 건이니 대안·비용·일정을 정리한 재검토안을 다시 보고해 주세요."
@@ -3632,10 +3639,10 @@ function renderChief(raw) {
   if (!body) return;
   const dec = chiefDecisions();
   const allItems = CHIEF.items;
-  let okN = 0, noN = 0;
+  let okN = 0, noN = 0, reN = 0;
   allItems.forEach(it => {
     const d = dec[it.id];
-    if (d) { if (d.s === "ok") okN += 1; else noN += 1; }
+    if (d) { if (d.s === "ok") okN += 1; else if (d.s === "re") reN += 1; else noN += 1; }
   });
   // An approved item is complete for this approvals panel: keep its decision in localStorage, but remove it from the active list.
   const items = allItems.filter(it => !(dec[it.id] && dec[it.id].s === "ok"));
@@ -3644,7 +3651,7 @@ function renderChief(raw) {
   const cnt = document.getElementById("chief-cnt");
   if (cnt) cnt.innerHTML = `<span class="cc-red">🔴 ${n.red}</span><span class="cc-blue">🔵 ${n.blue}</span><span class="cc-wait">⏳ ${n.wait}</span>`;
   const say = document.getElementById("chief-say");
-  const tail = (okN || noN) ? ` · 결정 ✅ ${okN} ⛔ ${noN}` : "";
+  const tail = (okN || noN || reN) ? ` · 결정 ✅ ${okN} ⛔ ${noN} 🔁 ${reN}` : "";
   const pendingAll = n.red + n.blue + n.wait;
   if (say) {
     say.textContent = !pendingAll
@@ -3654,8 +3661,8 @@ function renderChief(raw) {
        : (n.red
         ? `🔴 자금·인증 ${n.red}건 최우선 — 오너가 직접 처리해 주세요 (AI 실행 금지) · 🔵 ${n.blue} · ⏳ ${n.wait}`
         : n.blue
-          ? `🔵 승인·확인 ${n.blue}건 · ⏳ 대기 ${n.wait}건 — [승인]/[불허]를 누르면 비서용 문구가 복사되고 그 건의 불이 꺼집니다`
-          : `남은 대기 ${n.wait}건 — [승인]/[불허]를 누르면 비서용 문구가 복사됩니다`) + (okN ? ` · 승인 완료 ${okN}건은 목록에서 숨김` : "") + tail;
+          ? `🔵 승인·확인 ${n.blue}건 · ⏳ 대기 ${n.wait}건 — [승인]/[불허]/[재심의]를 누르면 비서용 문구가 복사되고, 승인·불허는 그 건의 불이 꺼집니다`
+          : `남은 대기 ${n.wait}건 — [승인]/[불허]/[재심의]를 누르면 비서용 문구가 복사됩니다`) + (okN ? ` · 승인 완료 ${okN}건은 목록에서 숨김` : "") + tail;
   }
   body.innerHTML = items.length ? items.map((it, idx) => {
     const sourceIdx = allItems.indexOf(it);
@@ -3663,13 +3670,14 @@ function renderChief(raw) {
     const rm = rr ? rr.title : "";
     const d = dec[it.id];
     const act = d
-      ? `<span class="cr-dec ${d.s === "ok" ? "ok" : "no"}">${d.s === "ok" ? "✅ 승인(진행)" : "⛔ 불허(재검토)"}</span>` +
-        (it.lane === "wait" ? "" : `<span class="cr-clr" title="신호등·방 불빛에서 내려갔습니다">불 꺼짐</span>`) +
+      ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${d.s === "ok" ? "✅ 승인(진행)" : d.s === "re" ? "🔁 재심의(보완 후 재상신)" : "⛔ 불허(재검토)"}</span>` +
+        (it.lane === "wait" ? "" : d.s === "re" ? `<span class="cr-clr" title="재심의 중이라 신호등·방 불빛은 켜진 상태로 유지됩니다">불 유지</span>` : `<span class="cr-clr" title="신호등·방 불빛에서 내려갔습니다">불 꺼짐</span>`) +
         `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${sourceIdx})" title="비서에게 붙여넣을 문구 복사">📋 문구</button>` +
         `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${sourceIdx})" title="결정 되돌리기">↺</button>`
       : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="${it.lane === "red" ? "승인 — 실행은 오너가 직접" : "승인하고 진행"}">승인</button>` +
-        `<button class="cr-no" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="보류하고 재검토">불허</button>`;
-    return `<div class="chief-row ${it.lane}${d ? " decided " + (d.s === "ok" ? "ok" : "no") : ""}" role="button" tabindex="0" data-room="${esc(it.room)}"
+        `<button class="cr-no" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="보류하고 재검토">불허</button>` +
+        `<button class="cr-re" type="button" onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 — 보완해서 다시 상신, 신호는 유지">재심의</button>`;
+    return `<div class="chief-row ${it.lane}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" role="button" tabindex="0" data-room="${esc(it.room)}"
         title="${esc(it.title + (rm ? " · " + rm : "") + " · 누르면 부서 보고 열기")}"
         onclick="chiefClick(event, '${esc(it.room)}')"
         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();chiefClick(event,'${esc(it.room)}');}">
@@ -5812,3 +5820,4 @@ startStaffLife();
 </script>
 </body>
  </html>
+
