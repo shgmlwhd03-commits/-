@@ -2739,6 +2739,14 @@
   .room.working .worker { animation: none; }
   .room.working .avatar { animation: none; }
   .room.working .avatar { filter: drop-shadow(0 3px 3px rgba(0,0,0,.45)); }
+
+  /* 연출 대화 자막 띠 + 말하는 캐릭터 표시 */
+  #voice-band { position: fixed; left: 50%; bottom: 10px; transform: translateX(-50%); z-index: 60; max-width: min(92vw, 560px); width: max-content; background: rgba(12,16,32,.92); border: 1px solid rgba(250,204,21,.55); border-radius: 12px; padding: 5px 12px; box-shadow: 0 4px 14px rgba(0,0,0,.5); text-align: center; pointer-events: none; }
+  #voice-band[hidden] { display: none; }
+  #voice-band .vb-tag { display: block; font-size: 9px; font-weight: 800; color: #fde68a; margin-bottom: 1px; }
+  #voice-band .vb-line { display: block; font-size: 12px; font-weight: 700; color: #fff; line-height: 1.35; }
+  .room.voice-talk .avatar { animation: voiceBounce .45s ease-in-out infinite; }
+  @keyframes voiceBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
 </style>
 </head>
 <body>
@@ -2804,6 +2812,8 @@
     <div class="top-btns">
       <button class="btn btn-red" onclick="testAlert()">🔵 확인요청 테스트</button>
       <button class="btn btn-snd" id="snd-btn" onclick="toggleSound()" aria-pressed="false">🔇 전체 소리</button>
+      <button class="btn btn-snd" id="voice-btn" onclick="toggleVoice()" aria-pressed="false">🔇 말소리 OFF</button>
+      <button class="btn btn-snd" id="bgm-btn" onclick="toggleBgm()" aria-pressed="false">🔇 BGM OFF</button>
       <button class="btn" onclick="clearAll()">✅ 전체 복구</button>
     </div>
   </div>
@@ -6112,6 +6122,253 @@ scheduleLobby(1600);
 roomTalkLoop();
 soloLoop();
 startStaffLife();
+
+/* ================= 말소리(TTS) + 잔잔한 BGM (각각 켜기/끄기) =================
+   캐릭터 말풍선 글을 삐삑 소리 대신 실제 음성(한국어)으로 읽고, 외부 파일 없이 잔잔한 BGM을 합성한다.
+   전체 소리(마스터)·층별 소리 핀은 그대로 유지: 마스터가 꺼지면 말소리·BGM도 꺼진다. */
+(function () {
+  const K_VOICE = "liveoffice_voice", K_BGM = "liveoffice_bgm";
+  function pref(k) { try { return localStorage.getItem(k) !== "0"; } catch (e) { return true; } }
+  function save(k, v) { try { localStorage.setItem(k, v ? "1" : "0"); } catch (e) {} }
+  const ST = { voice: pref(K_VOICE), bgm: pref(K_BGM) };
+
+  /* 캐릭터 삐삑 소리(말풍선 채팅음, 키보드 클릭음)는 말소리로 대체 */
+  SFX.chat = function () {};
+  SFX.click = function () {};
+
+  /* ---------- 말소리: 캐릭터끼리 나누는 연출 대화(업무 논의 + 잡담) ----------
+     자막을 읽는 게 아니라, 캐릭터 둘이 한국어로 주고받는 짧은 대화를 음성으로 들려준다.
+     대사는 모두 일반적인 연출용이며 실제 업무 보고·실적이 아니다(숫자·성과·프로젝트 이름 없음).
+     대화하는 동안 화면 아래에 "연출 대화" 자막 띠를 띄워 실제 보고와 구분한다. */
+  const hasTTS = ("speechSynthesis" in window) && ("SpeechSynthesisUtterance" in window);
+  let koVoices = [];
+  function loadVoices() {
+    if (!hasTTS) return;
+    try { koVoices = speechSynthesis.getVoices().filter(v => /^ko/i.test(v.lang)); } catch (e) {}
+  }
+  if (hasTTS) { loadVoices(); try { speechSynthesis.addEventListener("voiceschanged", loadVoices); } catch (e) {} }
+  function hash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
+  function voiceLive() { return SFX.enabled && ST.voice && hasTTS; }
+
+  const WORK_TALK = [
+    [["이번 주 우선순위, 같이 한번 정리해 볼까요?", "좋아요. 급한 것부터 순서대로 봐요."],
+     ["이 부분은 어떻게 하는 게 좋을까요?", "일단 의견부터 모아 보고 같이 정해요."],
+     ["그럼 그렇게 진행해 봐요.", "네, 중간에 막히면 바로 말씀드릴게요."]],
+    [["혹시 도와드릴 일 있어요?", "고마워요. 확인할 게 하나 있는데 같이 봐 줄래요?"],
+     ["물론이죠. 같이 보면 금방 끝나요.", "역시 팀워크가 최고예요."]],
+    [["다음 단계는 어떻게 하면 좋을까요?", "차근차근 하나씩 점검하면서 가요."],
+     ["좋아요. 놓치는 게 없게 한 번 더 확인해요.", "네, 꼼꼼하게 챙겨 볼게요."]],
+    [["오늘 회의 전에 생각 좀 맞춰 볼까요?", "좋죠. 핵심만 짧게 얘기해 봐요."],
+     ["저는 일단 방향을 먼저 잡고 싶어요.", "저도요. 그다음에 세부를 채워요."]]
+  ];
+  const CHAT_TALK = [
+    [["커피 한잔 할래요?", "좋아요! 오늘은 따뜻한 걸로 마시고 싶네요."],
+     ["여기 커피 향이 참 좋죠?", "맞아요. 잠깐 쉬니까 기분이 좋아지네요."]],
+    [["오늘 점심 뭐 먹을까요?", "저는 따끈한 국물 요리가 당기는데요."],
+     ["좋아요, 그럼 같이 가요!", "맛있는 데 찾아봐야겠어요."]],
+    [["창밖 좀 보세요, 하늘이 참 맑아요.", "정말요. 잠깐 바람 쐬고 싶네요."],
+     ["주말에는 뭐 하세요?", "푹 쉬면서 산책이나 하려고요."]],
+    [["요즘 어때요, 피곤하지 않아요?", "조금요. 그래도 같이 일하니까 힘이 나요."],
+     ["우리 팀 분위기 좋은 것 같아요.", "맞아요. 다들 서로 도와주니까요."]]
+  ];
+  let speaking = false, timer2 = null;
+  function roomList() { return (typeof rooms !== "undefined" && Array.isArray(rooms)) ? rooms : []; }
+  function nameOf(id) {
+    const n = document.querySelector("#room-" + id + " .nametag");
+    return n ? n.textContent.replace(/[\u{1F000}-\u{1FFFF}\u2600-\u27BF\uFE0F]/gu, "").trim() : id;
+  }
+  function floorOk(r) { return !r.floor || FLOOR_SOUND[String(r.floor).toLowerCase()] !== false; }
+  function bandEl() {
+    let el = document.getElementById("voice-band");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "voice-band"; el.hidden = true;
+      el.innerHTML = '<span class="vb-tag">🎭 연출 대화 · 실제 업무 보고 아님</span><span class="vb-line"></span>';
+      document.body.appendChild(el);
+    }
+    return el;
+  }
+  function showLine(who, line) {
+    const el = bandEl();
+    el.querySelector(".vb-line").textContent = who + ": " + line;
+    el.hidden = false;
+  }
+  function hideBand() { const el = document.getElementById("voice-band"); if (el) el.hidden = true; }
+  function mark(id, on) {
+    const el = document.getElementById("room-" + id);
+    if (el) el.classList.toggle("voice-talk", on);
+  }
+  function say(text, roomId) {
+    return new Promise(res => {
+      if (!voiceLive()) return res(false);
+      let done = false;
+      const fin = () => { if (!done) { done = true; res(true); } };
+      try {
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = "ko-KR";
+        const h = hash(roomId);
+        if (koVoices.length) u.voice = koVoices[h % koVoices.length];
+        u.pitch = 0.9 + (h % 7) * 0.1;      // 캐릭터마다 목소리 높낮이가 다르다
+        u.rate = 1.0;
+        u.volume = 0.9;
+        u.onend = fin; u.onerror = fin;
+        speechSynthesis.speak(u);
+        setTimeout(fin, 9000 + text.length * 120);
+      } catch (e) { fin(); }
+    });
+  }
+  async function scene() {
+    if (speaking || !voiceLive() || document.hidden) return;
+    const list = roomList().filter(r => floorOk(r));
+    if (list.length < 2) return;
+    speaking = true;
+    try {
+      const a = list[Math.floor(Math.random() * list.length)];
+      const pool = list.filter(r => r.id !== a.id);
+      const same = pool.filter(r => r.floor === a.floor);
+      const cand = (same.length && Math.random() < 0.7) ? same : pool;
+      const b = cand[Math.floor(Math.random() * cand.length)];
+      const ea = document.getElementById("room-" + a.id), eb = document.getElementById("room-" + b.id);
+      const anyWorking = (ea && ea.classList.contains("working")) || (eb && eb.classList.contains("working"));
+      const set = anyWorking && Math.random() < 0.7 ? WORK_TALK : CHAT_TALK;
+      const convo = set[Math.floor(Math.random() * set.length)];
+      const names = [nameOf(a.id), nameOf(b.id)], ids = [a.id, b.id];
+      for (let i = 0; i < convo.length; i++) {
+        for (let k = 0; k < 2; k++) {
+          if (!voiceLive()) throw 0;
+          showLine(names[k], convo[i][k]);
+          mark(ids[k], true);
+          const ok = await say(convo[i][k], ids[k]);
+          mark(ids[k], false);
+          if (!ok) throw 0;
+        }
+      }
+    } catch (e) {}
+    mark(roomList().map(r => r.id)[0], false);
+    document.querySelectorAll(".voice-talk").forEach(el => el.classList.remove("voice-talk"));
+    hideBand();
+    speaking = false;
+  }
+  function stopVoice() {
+    try { speechSynthesis.cancel(); } catch (e) {}
+    document.querySelectorAll(".voice-talk").forEach(el => el.classList.remove("voice-talk"));
+    hideBand();
+  }
+  // 15~30초에 한 번씩 새 대화
+  function loopScene() {
+    timer2 = setTimeout(async () => { await scene(); loopScene(); }, 15000 + Math.random() * 15000);
+  }
+  loopScene();
+  window.__voiceScene = scene;   // 확인용
+
+  /* ---------- 잔잔한 BGM (Web Audio 합성, 외부 파일 없음) ---------- */
+  let bctx = null, bmaster = null, timer = null, started = false;
+  const CHORDS = [
+    [130.81, 164.81, 196.00, 246.94],   // Cmaj7
+    [110.00, 130.81, 164.81, 196.00],   // Am7
+    [174.61, 220.00, 261.63, 329.63],   // Fmaj7
+    [146.83, 196.00, 246.94, 293.66]    // G6
+  ];
+  const BELLS = [523.25, 587.33, 659.25, 783.99, 880.00];
+  let ci = 0;
+  function bgmEnsure() {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return false;
+    if (!bctx) {
+      try {
+        bctx = new AC();
+        bmaster = bctx.createGain(); bmaster.gain.value = 0.0001;
+        const lp = bctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 1400;
+        const dl = bctx.createDelay(1.0); dl.delayTime.value = 0.42;
+        const fb = bctx.createGain(); fb.gain.value = 0.33;
+        const wet = bctx.createGain(); wet.gain.value = 0.45;
+        bmaster.connect(lp); lp.connect(bctx.destination);
+        lp.connect(dl); dl.connect(fb); fb.connect(dl); dl.connect(wet); wet.connect(bctx.destination);
+      } catch (e) { bctx = null; return false; }
+    }
+    if (bctx.state === "suspended") { try { bctx.resume(); } catch (e) {} }
+    return true;
+  }
+  function note(freq, t0, dur, gain, type, attack) {
+    const o = bctx.createOscillator(), g = bctx.createGain();
+    o.type = type; o.frequency.value = freq;
+    o.detune.value = (Math.random() - 0.5) * 8;
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.linearRampToValueAtTime(gain, t0 + attack);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(bmaster);
+    o.start(t0); o.stop(t0 + dur + 0.1);
+  }
+  function bar() {
+    if (!bctx || bctx.state !== "running") return;
+    const t0 = bctx.currentTime + 0.1, len = 8;
+    CHORDS[ci % CHORDS.length].forEach((f, i) => {
+      note(f, t0 + i * 0.12, len + 2.5, 0.05, "sine", 2.6);
+      if (i < 2) note(f * 2, t0 + i * 0.12, len + 2, 0.012, "triangle", 3);
+    });
+    const n = 2 + Math.floor(Math.random() * 2);
+    for (let k = 0; k < n; k++) {
+      const f = BELLS[Math.floor(Math.random() * BELLS.length)];
+      note(f, t0 + 1 + Math.random() * (len - 2), 2.8, 0.022, "sine", 0.02);
+    }
+    ci++;
+  }
+  function bgmLive() { return SFX.enabled && ST.bgm; }
+  function bgmSync() {
+    if (bgmLive() && !document.hidden) {
+      if (!bgmEnsure()) return;
+      bmaster.gain.cancelScheduledValues(bctx.currentTime);
+      bmaster.gain.setTargetAtTime(0.9, bctx.currentTime, 1.5);   // 부드럽게 페이드 인
+      if (!timer) { bar(); timer = setInterval(bar, 8000); }
+    } else if (bctx) {
+      if (timer) { clearInterval(timer); timer = null; }
+      bmaster.gain.cancelScheduledValues(bctx.currentTime);
+      bmaster.gain.setTargetAtTime(0.0001, bctx.currentTime, 0.25);   // 페이드 아웃 후 정지
+      setTimeout(() => { if (!bgmLive() || document.hidden) { try { bctx.suspend(); } catch (e) {} } }, 900);
+    }
+  }
+  document.addEventListener("visibilitychange", bgmSync);
+  // 저장된 "전체 소리 ON" 상태로 열렸을 때: 첫 탭 뒤에 BGM 시작
+  const kick = () => { document.removeEventListener("click", kick, true); document.removeEventListener("touchend", kick, true); setTimeout(bgmSync, 50); };
+  document.addEventListener("click", kick, true); document.addEventListener("touchend", kick, true);
+
+  /* ---------- 버튼 ---------- */
+  function paintMine() {
+    const v = document.getElementById("voice-btn"), b = document.getElementById("bgm-btn");
+    const vl = voiceLive(), bl = bgmLive();
+    if (v) { v.textContent = (vl ? "🗣️ 말소리 ON" : "🔇 말소리 OFF"); v.classList.toggle("on", vl); v.setAttribute("aria-pressed", vl ? "true" : "false"); }
+    if (b) { b.textContent = (bl ? "🎵 BGM ON" : "🔇 BGM OFF"); b.classList.toggle("on", bl); b.setAttribute("aria-pressed", bl ? "true" : "false"); }
+  }
+  function masterOn() {   // 마스터가 꺼져 있으면 함께 켠다(층 핀과 같은 방식)
+    if (SFX.enabled) return true;
+    Object.keys(FLOOR_SOUND).forEach(k => { FLOOR_SOUND[k] = true; });
+    if (!SFX.unlock()) { Object.keys(FLOOR_SOUND).forEach(k => { FLOOR_SOUND[k] = false; }); return false; }
+    return true;
+  }
+  let tapAt = 0;
+  function once() { const n = Date.now(); if (n - tapAt < 320) return false; tapAt = n; return true; }
+  window.toggleVoice = function () {
+    if (!once()) return;
+    if (!SFX.enabled) { ST.voice = true; save(K_VOICE, true); masterOn(); setTimeout(() => { if (!speaking) scene(); }, 400); }
+    else { ST.voice = !ST.voice; save(K_VOICE, ST.voice); if (!ST.voice) stopVoice(); else setTimeout(() => { if (!speaking) scene(); }, 400); }
+    paintSoundUI(); bgmSync();
+  };
+  window.toggleBgm = function () {
+    if (!once()) return;
+    if (!SFX.enabled) { ST.bgm = true; save(K_BGM, true); masterOn(); }
+    else { ST.bgm = !ST.bgm; save(K_BGM, ST.bgm); }
+    paintSoundUI(); bgmSync();
+  };
+  // 기존 전체 소리/층 핀 동작에 말소리·BGM 상태를 연결
+  const _paint = window.paintSoundUI;
+  window.paintSoundUI = function () { _paint(); paintMine(); };
+  const _tm = window.toggleSound;
+  window.toggleSound = function () { _tm(); if (!SFX.enabled) stopVoice(); bgmSync(); paintMine(); };
+  const _tf = window.toggleFloorSound;
+  window.toggleFloorSound = function (f) { _tf(f); bgmSync(); paintMine(); };
+  paintMine();
+})();
+
 </script>
 </body>
  </html>
