@@ -2773,6 +2773,14 @@
     .chief-row.red .red-ack { min-height:40px; min-width:58px; }
   }
 
+
+  .report-scope-note { margin:10px 0; padding:10px; border:1px solid #405773; border-radius:8px; color:#cad8ea; font-size:12px; line-height:1.7; }
+  .report-scope-actions { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .report-scope-actions button { border:1px solid #38bdf8; border-radius:7px; color:#bae6fd; background:#10293c; min-height:36px; padding:7px 10px; font-family:inherit; cursor:pointer; }
+  .report-source-details { margin:12px 0; padding:10px; border:1px solid #475569; border-radius:8px; }
+  .report-source-details summary { cursor:pointer; color:#cbd5e1; font-size:12px; font-weight:800; min-height:30px; }
+  .report-source-details>p { color:#94a3b8; font-size:11px; line-height:1.6; }
+
 </style>
 </head>
 <body>
@@ -3677,9 +3685,9 @@ function laneOf(id) {
   if (laneCount(id, "blue") > 0) return "blue";
   return "";
 }
-function roomSignals(id, all) {
+function roomSignals(id, all, scopeIds = []) {
   const source = signalsView(SIGNALS_BASE, chiefDecisions(), true);
-  const pick = (lane) => (source[lane] || []).filter(it => all ? true : it.room === id);
+  const pick = (lane) => (source[lane] || []).filter(it => all ? true : it.room === id || scopeIds.includes(it.room));
   return { blue: pick("blue"), red: pick("red") };
 }
 
@@ -4549,15 +4557,20 @@ function reportData(id) {
   const summary = (typeof base.summary === "string" && base.summary.trim()) ? base.summary.trim() : "";
   const credit = (typeof base.credit === "string" && base.credit.trim()) ? base.credit.trim() : "";
   const now = arr(base.now);
-  const roster = (r.ceo === true && ROSTER) ? ROSTER : null;
-  const signals = roomSignals(id, r.ceo === true);
-  const backup = (r.ceo === true) ? BACKUP : null;
+  // Reporting scope follows the source's explicit department links, never ceo styling.
+  const coordinator = id === "instinct";
+  const manager = ["ceo_haebyeong", "ceo_tudeori"].includes(id);
+  const overview = coordinator || manager || id === "owner";
+  const roster = coordinator ? ROSTER : null;
+  const signals = id === "owner" ? {red:[],blue:[]} : roomSignals(id, coordinator, depts.map(x => x.id));
+  const backup = coordinator ? BACKUP : null;
   return {
     id,
     title: r.title || id,
     tag: r.tag || "해병이",
     partner: r.zone === "partner",
     ceo: r.ceo === true,
+    coordinator, manager, overview,
     summary,
     credit,
     depts,
@@ -4623,6 +4636,7 @@ function renderStockPanel() {
 }
 
 function openReport(id) {
+  const sourceOpen = REPORT_ID === id && !!document.getElementById("report-source-details")?.open;
   const d = reportData(id);
   REPORT_ID = id;
   const t = document.getElementById("rm-title");
@@ -4634,7 +4648,7 @@ function openReport(id) {
 
   const list = (items) => items.map(x => `<li>${esc(x)}</li>`).join("");
   const roomTitle = (rid) => { const rr = rooms.find(x => x.id === rid); return rr ? rr.title : rid; };
-  const sigRow = (x, lane) => `<div class="rm-sig ${lane}${lane === "red" && !redGroupUnread(x) ? " read" : ""}"><span class="rs-lane">${lane === "red" ? (redGroupUnread(x) ? "🔴" : "⚪") : "🔵"}</span><span class="rs-tx"><b>${esc(x.title)}</b>${x.detail ? `<i>${esc(x.detail)}</i>` : ""}</span>${lane === "red" && !redGroupUnread(x) ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : ""}${d.ceo && x.room ? `<span class="rs-rm">${esc(roomTitle(x.room))}</span>` : ""}</div>`;
+  const sigRow = (x, lane) => `<div class="rm-sig ${lane}${lane === "red" && !redGroupUnread(x) ? " read" : ""}"><span class="rs-lane">${lane === "red" ? (redGroupUnread(x) ? "🔴" : "⚪") : "🔵"}</span><span class="rs-tx"><b>${esc(x.title)}</b>${x.detail ? `<i>${esc(x.detail)}</i>` : ""}</span>${lane === "red" && !redGroupUnread(x) ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : ""}${d.overview && x.room ? `<span class="rs-rm">${esc(roomTitle(x.room))}</span>` : ""}</div>`;
   const body = document.getElementById("rm-body");
   if (body) {
     body.innerHTML = [
@@ -4642,6 +4656,7 @@ function openReport(id) {
       d.id === "invest_sp500" ? renderStockPanel() : "",
       d.summary ? `<div class="rm-sum"><span>👑</span><span>${esc(d.summary)}</span></div>` : "",
       d.ticker ? `<div class="rm-live"><span class="rm-live-h">📺 전광판</span><span class="rm-live-t">${esc(d.ticker)}</span><span class="rm-live-u">${esc(d.updated)}</span></div>` : "",
+      d.overview ? `<div class="report-scope-note">${d.coordinator ? "종합·결정 대기와 담당 보고 바로가기입니다. 개별 업무 상세는 담당 보고에서 확인하세요." : d.manager ? "이 부장이 맡은 부서의 신호와 보고만 모았습니다. 다른 부서 신호·공통 역할표는 총괄에서 확인하세요." : "대표님 결정 사항은 총괄 패널에서, 개별 업무 상세는 각 담당 보고에서 확인하세요."}<div class="report-scope-actions">${d.coordinator || id === "owner" ? `<button type="button" onclick="openChiefFromReport()">결정 대기 목록 보기</button>` : ""}${!d.coordinator ? `<button type="button" onclick="openReport('instinct')">총괄 종합 보고</button>` : ""}</div></div>` : "",
       d.credit ? `<div class="rm-credit"><span>⚡ 크레딧</span><span>${esc(d.credit)}</span></div>` : "",
       (d.signals.red.length || d.signals.blue.length) ? `<div class="rm-sec"><div class="rm-h">🚦 미결 신호 · 🔵 ${d.signals.blue.length} · 빨간 알림 ${d.signals.red.filter(redGroupUnread).length} / 미결 ${d.signals.red.length}</div>${d.signals.red.length ? `<div class="rm-sig-note">🔴 자금·계좌·이체·결제는 AI가 실행하지 않습니다. 오너가 직접 처리해 주세요.</div>` : ""}<div class="rm-sigs">${d.signals.red.map(x => sigRow(x, "red")).join("")}${d.signals.blue.map(x => sigRow(x, "blue")).join("")}</div></div>` : "",
       d.depts.length ? `<div class="rm-sec"><div class="rm-h">🏢 담당 부서 현황 · ${d.depts.length}개<em class="rm-hint">칩을 누르면 해당 부서 보고로 이동</em></div><div class="rm-depts">${d.depts.map(x => (x.id && rooms.some(r => r.id === x.id))
@@ -4649,9 +4664,11 @@ function openReport(id) {
         : `<span class="rm-dept ${x.state}" title="${esc(REPORT_STATE_TXT[x.state])}"><i></i>${esc(x.name)}</span>`).join("")}</div></div>` : "",
       d.roster ? `<div class="rm-sec"><div class="rm-h">🧩 6F 분장표 · ${d.roster.items.length}파트</div><div class="rm-roster">${d.roster.items.map(it => `<div class="rm-r ${it.state}"><b>${esc(it.name)}</b><span>${esc(it.role)}</span><em>${esc(it.chip)}</em></div>`).join("")}</div></div>` : "",
       d.backup ? `<div class="rm-sec"><div class="rm-h">🛟 비상 업무 백업 매트릭스 · ${d.backup.members.length}인</div><div class="rm-bk">${d.backup.members.map(m => `<div class="rm-bk-row"><b>${esc(m.name)}</b><span>1차 · ${esc(m.backup1)}</span><span>2차 · ${esc(m.backup2)}</span></div>`).join("")}</div><div class="rm-sig-note">${esc(d.backup.rule)}</div></div>` : "",
+      d.overview ? `<details id="report-source-details" class="report-source-details"${sourceOpen ? " open" : ""}><summary>이 창의 기존 보고 원문 보기</summary><p>이 영역은 원자료를 그대로 보존합니다. 담당별 원보고와 같은 내용이 남아 있을 수 있습니다.</p>` : "",
       `<div class="rm-sec"><div class="rm-h">📌 지금 진행 중</div><ul class="rm-list">${list(d.now)}</ul></div>`,
       d.done.length ? `<div class="rm-sec"><div class="rm-h">✅ 완료 보고 · 24시간 이내/완료시각 미상</div><ul class="rm-list done">${list(d.done)}</ul></div>` : "",
       d.next.length ? `<div class="rm-sec"><div class="rm-h">⏰ 다음 예정 · 스케줄</div><ul class="rm-sched">${d.next.map(n => `<li><b>${esc(n.time)}</b><span>${esc(n.task)}</span></li>`).join("")}</ul></div>` : "",
+      d.overview ? `</details>` : "",
       d.links.length ? `<div class="rm-sec"><div class="rm-h">🔗 바로가기<em class="rm-hint">새 창으로 열립니다</em></div><div class="rm-links">${d.links.map(l => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</div></div>` : ""
     ].join("");
     body.scrollTop = 0;
@@ -4678,6 +4695,14 @@ function closeReport() {
   modal.classList.remove("show");
   modal.hidden = true;
   REPORT_ID = null;
+}
+
+function openChiefFromReport() {
+  closeReport();
+  setView("bldg");
+  CHIEF_OPEN = true;
+  applyChiefState();
+  document.getElementById("chief").scrollIntoView({block:"start",behavior:"smooth"});
 }
 
 function openShopFromReport() {
