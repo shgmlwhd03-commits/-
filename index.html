@@ -2797,6 +2797,28 @@
     #room-front_desk .room-stage { left: 19%; bottom: 28px; }
     #room-front_desk .speech { max-width: 86px; font-size: 8px; }
   }
+
+/* 경품 진행 기록: 후보·응모 보고·당첨 결과를 분리한다. */
+.prize-progress { border:1px solid #52619a; background:#111b33; border-radius:10px; padding:14px; margin:4px 0 14px; color:#e3e9ff; }
+.prize-progress h3 { margin:0 0 8px; color:#c4b5fd; font-size:15px; }
+.prize-progress p { font-size:12px; line-height:1.65; margin:6px 0; overflow-wrap:anywhere; }
+.prize-progress .pp-note { color:#b2c2dd; }
+.pp-stats { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0; }
+.pp-stats span { padding:6px 8px; background:#243350; border-radius:6px; font-size:12px; }
+.pp-group { margin-top:16px; }
+.pp-group h4 { margin:0; font-size:13px; color:#f1db94; }
+.pp-items { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; margin-top:8px; }
+.pp-item { min-width:0; border:1px solid #34445f; border-radius:8px; padding:10px; background:#18243a; }
+.pp-item h5 { margin:0 0 6px; font-size:13px; line-height:1.5; }
+.pp-stage { display:inline-block; font-size:11px; background:#3c3459; color:#e0d3ff; padding:3px 6px; border-radius:4px; margin-bottom:6px; }
+.pp-item dl { margin:0; font-size:11px; line-height:1.6; }
+.pp-item dt { color:#91a6c6; margin-top:5px; }
+.pp-item dd { margin:0; overflow-wrap:anywhere; }
+.pp-source { border-top:1px solid #34445f; padding-top:6px; color:#9daec8; font-size:10px!important; }
+#room-prize .avatar,#room-blog .avatar,#room-public_quiz .avatar { cursor:pointer; }
+#room-prize .avatar:focus-visible,#room-blog .avatar:focus-visible,#room-public_quiz .avatar:focus-visible { outline:2px solid #c4b5fd; outline-offset:5px; }
+@media(max-width:600px){ .pp-items{grid-template-columns:1fr;} .prize-progress{padding:11px;} }
+
 </style>
 </head>
 <body>
@@ -3214,7 +3236,7 @@ function workerHTML(r) {
       <div class="worker">
         <div class="speech" id="say-${r.id}">${esc(r.say)}</div>
         <div class="badge-alert">!</div>
-        <div class="avatar"${r.id === "invest_sp500" ? 'role="button" tabindex="0" aria-label="주식 그래프와 손익 보기" title="클릭하면 주식 그래프와 손익 보기" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();event.stopPropagation();openReport(\'invest_sp500\')}"' : ""}>${r.worker}</div>
+        <div class="avatar"${["prize","blog","public_quiz"].includes(r.id) ? `role="button" tabindex="0" aria-label="${esc(r.name)} · 응모 진행결과 보기" title="캐릭터를 누르면 응모 진행결과 보기" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();openReport('${r.id}')}"` : r.id === "invest_sp500" ? 'role="button" tabindex="0" aria-label="주식 그래프와 손익 보기" title="클릭하면 주식 그래프와 손익 보기" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();event.stopPropagation();openReport(\'invest_sp500\')}"' : ""}>${r.worker}</div>
         <div class="nametag">${esc(r.name)}</div>
         <span class="life-icons" aria-hidden="true"><i>💻</i><i>📝</i><i>🔍</i><i>📊</i></span>
       </div>`;
@@ -3239,7 +3261,7 @@ function roomHTML(r, i) {
           <span class="room-title">${esc(r.title)}</span>
           <span class="room-lanes" id="lanes-${r.id}" aria-hidden="true"></span>
           <span class="room-tag${partner ? " partner" : instinct ? " instinct" : concierge ? " desk" : ""}" title="${instinct ? "Instinct 총괄이 지휘하는 방" : concierge ? "대표님 직속 컨시어지 · 안내데스크" : director ? "총괄 직속 위탁판매 총괄 · 실행 담당(사람)" : partner ? "투덜이 부장이 전담 운영하는 방" : "해병이 부장이 직접 운영하는 방"}">${r.tag}</span>
-          <span class="room-open">${shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : "보고"}</span>
+          <span class="room-open">${r.id === "prize" ? "응모결과▸" : shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : "보고"}</span>
           <span class="status-dot" aria-hidden="true"></span>
         </div>
         ${stage}
@@ -4561,6 +4583,38 @@ function reportData(id) {
   };
 }
 
+
+let PRIZE_PROGRESS = null;
+let PRIZE_PROGRESS_ERROR = false;
+async function loadPrizeProgress() {
+  try {
+    const response = await fetch("prize-progress.json", {cache:"no-store"});
+    if (!response.ok) throw new Error("prize records unavailable");
+    const data = await response.json();
+    if (!data || !Array.isArray(data.groups)) throw new Error("invalid prize records");
+    PRIZE_PROGRESS = data;
+    PRIZE_PROGRESS_ERROR = false;
+  } catch (e) { PRIZE_PROGRESS_ERROR = true; }
+  if (["prize","blog","public_quiz"].includes(REPORT_ID)) openReport(REPORT_ID);
+}
+function renderPrizePanel(id) {
+  const data = PRIZE_PROGRESS;
+  if (!data) return `<section class="prize-progress"><h3>🎯 응모 진행결과</h3><p>${PRIZE_PROGRESS_ERROR ? "진행 기록을 불러오지 못했습니다. 응모·당첨 여부는 미확인입니다. 페이지를 새로 열어 주세요." : "진행 기록을 불러오는 중입니다."}</p></section>`;
+  const groups = data.groups.filter(g => id === "prize" || (id === "blog" && g.id === "review") || (id === "public_quiz" && g.id === "quiz"));
+  const row = (label,value) => `<dt>${esc(label)}</dt><dd>${esc(value || "미확인")}</dd>`;
+  const item = i => {
+    let announcement = i.announcement || "미확인";
+    if (/^\d{4}-\d{2}-\d{2}$/.test(announcement)) {
+      const past = Date.now() >= new Date(announcement + "T00:00:00+09:00").getTime();
+      announcement += past ? " · 발표일 도래/경과, 결과 확인 필요" : " 예정(기존 보고)";
+    }
+    return `<article class="pp-item"><h5>${esc(i.title)}</h5><span class="pp-stage">${esc(i.stage)}</span><dl>${row("응모",i.entry)}${row("발표",announcement)}${row("결과",i.result)}${row("다음 할 일",i.next)}</dl>${i.detail ? `<p class="pp-note">${esc(i.detail)}</p>` : ""}<p class="pp-source">근거: ${esc(i.source || "원자료 미확인")}</p></article>`;
+  };
+  const date = new Date(data.as_of);
+  const stamp = Number.isNaN(date.getTime()) ? "기준시각 미확인" : date.toLocaleString("ko-KR",{timeZone:"Asia/Seoul",hour12:false});
+  return `<section class="prize-progress" aria-label="응모 진행결과"><h3>🎯 응모 진행결과</h3><p class="pp-note">기록 정리: ${esc(stamp)} KST<br>${esc(data.notice)}</p><div class="pp-stats"><span>응모 상태 ≠ 당첨 결과</span><span>이 기록에서 당첨 확인 없음</span></div>${groups.map(g=>`<section class="pp-group"><h4>${esc(g.title)}</h4><p class="pp-note">${esc(g.note || "")}</p><div class="pp-items">${(Array.isArray(g.items)?g.items:[]).map(item).join("")}</div></section>`).join("")}<p class="pp-note">이 창은 조회 전용입니다. 클릭해도 응모·승인·계정 사용이나 업무 상태 변경은 일어나지 않습니다.</p></section>`;
+}
+
 function renderStockPanel() {
   const d = (STATUS && STATUS.invest_sp500 && STATUS.invest_sp500.chart) || null;
   if (!d) return `<section class="stock-panel"><h3>📈 주식 손익</h3><p>주식 기록 데이터가 없습니다.</p></section>`;
@@ -4591,6 +4645,7 @@ function openReport(id) {
   const body = document.getElementById("rm-body");
   if (body) {
     body.innerHTML = [
+      ["prize","blog","public_quiz"].includes(d.id) ? renderPrizePanel(d.id) : "",
       d.id === "invest_sp500" ? renderStockPanel() : "",
       d.summary ? `<div class="rm-sum"><span>👑</span><span>${esc(d.summary)}</span></div>` : "",
       d.ticker ? `<div class="rm-live"><span class="rm-live-h">📺 전광판</span><span class="rm-live-t">${esc(d.ticker)}</span><span class="rm-live-u">${esc(d.updated)}</span></div>` : "",
@@ -6177,6 +6232,7 @@ paintSoundUI();
 paintClock();
 setInterval(paintClock, 1000);
 loadStatus();
+loadPrizeProgress();
 setInterval(loadStatus, 60000);
 /* 화면 전환: 주소(?view=shop) → 저장된 선택 → 기본 전체 빌딩 */
 (function initView() {
