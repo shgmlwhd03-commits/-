@@ -2747,6 +2747,54 @@
   .room.working .worker { animation: none; }
   .room.working .avatar { animation: none; }
   .room.working .avatar { filter: drop-shadow(0 3px 3px rgba(0,0,0,.45)); }
+
+  /* 안내데스크를 1층 로비 장면에 통합. 방 ID와 상태·보고·지시 동작은 유지한다. */
+  #floor-f1 .lobby { min-height: 190px; overflow: hidden; }
+  #floor-f1 .rooms.desk-rooms {
+    position: static; display: block; padding: 0; background: none; box-shadow: none;
+    min-height: 0; aspect-ratio: auto;
+  }
+  #room-front_desk {
+    position: absolute; inset: 0; padding: 0; min-height: 0;
+    pointer-events: none; z-index: 5;
+  }
+  #room-front_desk .room-head {
+    position: absolute; top: 6px; left: 8px; max-width: calc(100% - 180px);
+    pointer-events: auto; cursor: pointer;
+  }
+  #room-front_desk .room-title { font-size: 9px; }
+  #room-front_desk .room-stage {
+    position: absolute; left: 20%; bottom: 27px; width: 76px; height: 112px;
+    min-height: 0; margin: 0; padding: 0; transform: translateX(-50%);
+    pointer-events: auto; cursor: pointer;
+  }
+  #room-front_desk .avatar { width: 40px; height: 74px; }
+  #room-front_desk .speech { max-width: 118px; }
+  #room-front_desk .led-board {
+    position: absolute; bottom: 0; left: 0; right: 0; margin: 0 5px 3px;
+    pointer-events: auto; cursor: pointer;
+  }
+  #room-front_desk .desk-direct {
+    position: absolute; top: 6px; right: 8px; margin: 0; width: 148px;
+    pointer-events: auto;
+  }
+  #room-front_desk .desk-direct-btn { min-height: 25px; font-size: 9px; }
+  #room-front_desk .room-foot { display: none; }
+  #room-front_desk .alert-box {
+    position: absolute; right: 8px; bottom: 27px; width: min(55%, 360px);
+    background: rgba(18,22,44,.96); pointer-events: auto;
+  }
+  #floor-f1 .lob-walker { bottom: 27px; }
+  @media (max-width: 560px) {
+    #floor-f1 .lobby { min-height: 220px; background-position: 40% center; }
+    #room-front_desk .room-head { max-width: calc(100% - 132px); left: 4px; gap: 2px; }
+    #room-front_desk .room-title { font-size: 8px; }
+    #room-front_desk .room-tag { font-size: 7px; }
+    #room-front_desk .desk-direct { right: 4px; width: 120px; }
+    #room-front_desk .desk-direct-btn { font-size: 8px; min-height: 28px; }
+    #room-front_desk .room-stage { left: 19%; bottom: 28px; }
+    #room-front_desk .speech { max-width: 86px; font-size: 8px; }
+  }
 </style>
 </head>
 <body>
@@ -3250,13 +3298,6 @@ function lobbyHTML() {
           <span class="w-who">투덜이 팀장</span>
           <span class="w-item" aria-hidden="true">📊</span>
         </div>
-        <!-- 안내데스크 벨이: 대표 직속 컨시어지. 리셉션 옆에 상주한다. -->
-        <div class="lob-walker desk resting talking" id="lob-bell" style="left:20%">
-          <span class="w-say" id="lob-bell-say">어서 오세요! 🔔</span>
-          <span class="w-body">🛎️</span>
-          <span class="w-who">벨이</span>
-          <span class="w-item" aria-hidden="true">🗓️</span>
-        </div>
         <!-- 쉬는(대기) 부서 사원만 탕비실에 들른다. 업무 중(WORK) 부서 사원은 나오지 않는다. -->
         <div class="lob-walker staff resting hidden" id="lob-hc" style="left:20%">
           <span class="w-say" id="lob-hc-say">☕ 잠깐 커피 한잔</span>
@@ -3271,9 +3312,9 @@ function lobbyHTML() {
           <span class="w-who">쉬는 사원</span>
           <span class="w-item" aria-hidden="true">☕</span>
         </div>
-      </div>
-      <div class="rooms one desk-rooms">
-        ${rooms.filter(r => r.floor === "f1").map((r, i) => roomHTML(r, i)).join("")}
+        <div class="rooms one desk-rooms">
+          ${rooms.filter(r => r.floor === "f1").map((r, i) => roomHTML(r, i)).join("")}
+        </div>
       </div>
     </section>`;
 }
