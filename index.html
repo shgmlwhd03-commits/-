@@ -375,6 +375,7 @@
     color: #ede9fe;
   }
   .room-tag.instinct { border-color: #34d399; color: #d1fae5; }
+  .room-tag.desk { border-color: #fbbf24; background: rgba(120, 53, 15, 0.62); color: #fef3c7; }
   .status-dot {
     flex: none;
     width: 7px;
@@ -2815,6 +2816,14 @@ const rooms = [
     state: "working", ticker: "총괄 직속 · 위탁판매 총괄 담당 · 실행 담당(사람) · 보류 기간 2축 운영 — ① 위탁판매·사업자 준비(세무·계좌·실무 대기) + ② 저크레딧 수익 보조(1일 1회 이하 · 살림·주방 배송 체험단·고액 공식 경품) · 난방텐트 2건 철회·공개 도매가 0.70 기준 통과 0건 → 위탁 보류", updated: "--:--"
   },
   {
+    id: "front_desk", floor: "f1", zone: "desk", tag: "대표 직속", concierge: true,
+    title: "🛎️ 안내데스크 · 대표 직속 컨시어지", worker: "🛎️", name: "벨이",
+    say: "어서 오세요! 안내 준비 완료 🔔", foot: "대표 직속 컨시어지 · 요청 대기 중",
+    issue: "안내 요청은 총괄 채팅으로!",
+    guide: "안내데스크(벨이)는 대표님 직속 컨시어지입니다. 캘린더 연동을 마쳤고, 일정 확인·안내가 필요하면 총괄 채팅에 남겨 주세요.",
+    state: "idle", ticker: "캘린더 연동 완료 · 오늘/내일 일정 없음 확인 · 요청 대기 중", updated: "12:00"
+  },
+  {
     id: "naver", floor: "f5", zone: "direct", tag: "해병이",
     title: "✍️ 네이버 블로그팀", worker: "🧑‍💻", name: "박작가 과장",
     say: "트렌드 초안 쓰는 중…", foot: "매일 09:00 · 트렌드·수익형 발행",
@@ -2969,6 +2978,7 @@ function roomHTML(r, i) {
   const shop = r.id === "commerce";
   const ceo = r.ceo === true;
   const director = r.director === true;
+  const concierge = r.concierge === true;
   const stage = `<div class="room-stage">${workerHTML(r)}${LAPTOP}</div>`;
 
   return `
@@ -2978,7 +2988,7 @@ function roomHTML(r, i) {
         <div class="room-head">
           <span class="room-title">${esc(r.title)}</span>
           <span class="room-lanes" id="lanes-${r.id}" aria-hidden="true"></span>
-          <span class="room-tag${partner ? " partner" : instinct ? " instinct" : ""}" title="${instinct ? "Instinct 총괄이 지휘하는 방" : director ? "총괄 직속 위탁판매 총괄 · 실행 담당(사람)" : partner ? "투덜이 부장이 전담 운영하는 방" : "해병이 부장이 직접 운영하는 방"}">${r.tag}</span>
+          <span class="room-tag${partner ? " partner" : instinct ? " instinct" : concierge ? " desk" : ""}" title="${instinct ? "Instinct 총괄이 지휘하는 방" : concierge ? "대표님 직속 컨시어지 · 안내데스크" : director ? "총괄 직속 위탁판매 총괄 · 실행 담당(사람)" : partner ? "투덜이 부장이 전담 운영하는 방" : "해병이 부장이 직접 운영하는 방"}">${r.tag}</span>
           <span class="room-open">${shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : "보고"}</span>
           <span class="status-dot" aria-hidden="true"></span>
         </div>
@@ -3005,7 +3015,7 @@ function lobbyHTML() {
     <section class="floor tone-lobby" id="floor-f1">
       <div class="floor-head">
         <span class="fnum">1F</span>
-        <span class="fname">로비 · 리셉션 · ☕ 탕비실</span>
+        <span class="fname">로비 · 🛎️ 안내데스크 · ☕ 탕비실</span>
         <button class="snd-pill" id="snd-f1" onclick="toggleFloorSound('f1')" title="1F 소리 켜기/끄기" aria-label="1F 소리">🔇</button>
         <span class="lobby-pill" id="summary-pill">상태 확인 중</span>
       </div>
@@ -3040,6 +3050,13 @@ function lobbyHTML() {
           <span class="w-who">투덜이 팀장</span>
           <span class="w-item" aria-hidden="true">📊</span>
         </div>
+        <!-- 안내데스크 벨이: 대표 직속 컨시어지. 리셉션 옆에 상주한다. -->
+        <div class="lob-walker desk resting" id="lob-bell" style="left:48%">
+          <span class="w-say" id="lob-bell-say">어서 오세요! 🔔</span>
+          <span class="w-body">🛎️</span>
+          <span class="w-who">벨이</span>
+          <span class="w-item" aria-hidden="true">🗓️</span>
+        </div>
         <!-- 쉬는(대기) 부서 사원만 탕비실에 들른다. 업무 중(WORK) 부서 사원은 나오지 않는다. -->
         <div class="lob-walker staff resting hidden" id="lob-hc" style="left:20%">
           <span class="w-say" id="lob-hc-say">☕ 잠깐 커피 한잔</span>
@@ -3054,6 +3071,9 @@ function lobbyHTML() {
           <span class="w-who">쉬는 사원</span>
           <span class="w-item" aria-hidden="true">☕</span>
         </div>
+      </div>
+      <div class="rooms one desk-rooms">
+        ${rooms.filter(r => r.floor === "f1").map((r, i) => roomHTML(r, i)).join("")}
       </div>
     </section>`;
 }
