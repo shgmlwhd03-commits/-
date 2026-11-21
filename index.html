@@ -2830,6 +2830,10 @@
   #archive-list{max-height:60vh;overflow:auto;display:grid;gap:10px}.archive-card{background:#182d43;border:1px solid #38546e;border-radius:8px;padding:12px;overflow-wrap:anywhere}.archive-card>b,.archive-card>span,.archive-card small{display:block}.archive-card>span{color:#bcd5ec;font-size:12px;margin:6px 0}.archive-card small{color:#a9bfd5;font-size:12px}.archive-card p{margin:8px 0}.archive-card summary{cursor:pointer}.archive-empty{padding:12px;color:#b7c9dc}#archive-error{color:#fbbf24}
   @media(max-width:600px){.archive-controls{display:grid;grid-template-columns:1fr}.task-archive{margin:8px 0}.task-archive summary small{display:block;margin-left:0}}
 
+
+  .room[role="button"]:focus-visible { outline:3px solid #facc15; outline-offset:-3px; }
+  .rm-close { width:44px !important; height:44px !important; flex-shrink:0; }
+  .sync-note { white-space:normal; }
 </style>
 </head>
 <body>
@@ -2903,7 +2907,7 @@
   <section class="chief" id="chief" aria-label="총괄 총괄 보고">
     <button class="chief-head" id="chief-head" type="button" onclick="toggleChief()" aria-expanded="true" aria-controls="chief-body">
       <span class="chief-ava" aria-hidden="true">💼</span>
-      <span class="chief-t"><b>💼 총괄 · 결재·보고</b><i>승인 대기 · 로컬 선택은 미접수</i></span>
+      <span class="chief-t"><b>💼 총괄 · 결재·보고</b><i>결재 분류별 집계 · 로컬 선택은 미접수</i></span>
       <span class="chief-cnt" id="chief-cnt"></span>
       <span class="chief-caret" id="chief-caret">▾</span>
     </button>
@@ -3140,10 +3144,10 @@ const rooms = [
   {
     id: "invest_sp500", floor: "f5", zone: "direct", tag: "해병이",
     title: "📈 미국 S&P500 적립투자부", worker: "📈", name: "오적립 주임",
-    say: "첫 1주 매수 완료! 시세 체크 중", foot: "보유 1주 · 매수 ₩23,755 → 현재 ₩23,745 (-₩10 · -0.04%)",
+    say: "첫 1주 매수 기록 · 실시간 시세 아님", foot: "보유 1주 · 매수 ₩23,755 → 기록 시세 ₩23,745 (-₩10 · -0.04%)",
     issue: "월요일 적립 매수는 오너 직접!",
     guide: "매주 월요일 1주 매수는 오너가 직접 진행합니다. 부서는 보유 수량·평단·수익률·배당 기록과 다음 매수 수량 점검을 맡습니다.",
-    state: "working", ticker: "1주 보유(TIGER 미국S&P500 360750) · 매수 ₩23,755(실제 체결) → 현재 ₩23,745 (-₩10 · -0.04%) · 11/20 09:49 기준 · 매주 월요일 1주씩 적립(다음: 월요일)", updated: "09:49"
+    state: "working", ticker: "1주 보유(TIGER 미국S&P500 360750) · 매수 ₩23,755(실제 체결) → 기록 시세 ₩23,745 (-₩10 · -0.04%) · 11/20 09:49 기준 · 매주 월요일 1주씩 적립(다음: 월요일)", updated: "09:49"
   },
   {
     id: "commerce", floor: "f5", zone: "direct", tag: "해병이",
@@ -3180,7 +3184,7 @@ const rooms = [
   {
     id: "tistory", floor: "f3", zone: "partner", tag: "투덜이",
     title: "💵 투덜이 티스토리팀", worker: "🤵", name: "투덜이 팀장",
-    say: "17편 발행 완료! 심사 대기", foot: "매일 13:00 · 애드센스 심사 대기",
+    say: "발행 기록 확인 · 심사 대기", foot: "매일 13:00 · 애드센스 심사 대기",
     issue: "총괄 확인이 필요해요!",
     guide: "총괄에 티스토리·애드센스 상태를 확인 요청해 주세요.",
     state: "working", ticker: "17편 발행 완료 (tudeori.tistory.com/17) · 애드센스 심사 대기 · 매일 13:00", updated: "15:52"
@@ -3280,7 +3284,7 @@ function roomHTML(r, i) {
   const stage = `<div class="room-stage">${workerHTML(r)}${LAPTOP}</div>`;
 
   return `
-      <div class="room ${r.state}${partner ? " partner" : ""}${ceo ? " ceo" : ""}${director ? " director" : ""} link" id="room-${r.id}"
+      <div class="room ${r.state}${partner ? " partner" : ""}${ceo ? " ceo" : ""}${director ? " director" : ""} link" id="room-${r.id}" role="button" tabindex="0" aria-label="${esc(r.title)} 업무 보고 열기"
            style="--wd:${(i * 0.23).toFixed(2)}s;--ic:${(-(0.9 * i + i * i * 0.17)).toFixed(2)}s"
            onclick="roomTap(event, this, '${r.id}')" title="눌러서 업무 보고 열기">
         <div class="room-head">
@@ -3779,7 +3783,7 @@ function renderSignals(raw) {
     bBtn.classList.toggle("open", SIG_OPEN === "blue");
     bBtn.setAttribute("aria-expanded", SIG_OPEN === "blue" ? "true" : "false");
     const sub = bBtn.querySelector(".sig-sub");
-    if (sub) sub.textContent = SIGNALS.blue.length ? "일반 확인·승인" : "0 · 대기 없음";
+    if (sub) sub.textContent = SIGNALS.blue.length ? "부서 신호 · 보류 포함" : "0 · 대기 없음";
   }
   if (rBtn) {
     rBtn.classList.toggle("zero", SIGNALS.red.length === 0);
@@ -4012,7 +4016,7 @@ function renderChief(raw) {
   if (cnt) cnt.innerHTML = `<span class="cc-red">🔴 ${n.red}</span><span class="cc-blue">🔵 ${n.blue}</span><span class="cc-wait">⏳ ${n.wait}</span>`;
   const say = document.getElementById("chief-say");
   const localN = okN + noN + reN;
-  if (say) say.textContent = `접수·완료 확인 전 대기 🔴 ${n.red} · 🔵 ${n.blue} · ⏳ ${n.wait}` + (localN ? ` · 이 브라우저 선택 ${localN}건 (미접수)` : '') + ' · 버튼은 문구 복사만, Slack 전송 필요';
+  if (say) say.textContent = `결재 분류(쇼츠 보류는 ⏳) · 접수·완료 확인 전 대기 🔴 ${n.red} · 🔵 ${n.blue} · ⏳ ${n.wait}` + (localN ? ` · 이 브라우저 선택 ${localN}건 (미접수)` : '') + ' · 버튼은 문구 복사만, Slack 전송 필요';
   body.innerHTML = items.length ? items.map((it, idx) => {
     const sourceIdx = allItems.indexOf(it);
     const rr = rooms.find(r => r.id === it.room);
@@ -4206,6 +4210,35 @@ function renderRoster(raw) {
 let STATUS = null;
 let lastSync = "";
 let COLLAB_ACTIVE = false;
+function sourceStamp(value) {
+  const date = typeof value === "string" ? new Date(value) : null;
+  return date && Number.isFinite(date.getTime())
+    ? date.toLocaleString("ko-KR", {timeZone:"Asia/Seoul",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false}) + " KST"
+    : "시각 미상";
+}
+// Display-only corrections. Original source records and completion evidence stay unchanged.
+function prepareDisplayStatus(raw) {
+  const data = JSON.parse(JSON.stringify(raw));
+  const fix = value => {
+    if (typeof value === "string") return value.replaceAll("월요일(11/24)", "월요일(11/23)").replaceAll("현재 시세", "기록 시세").replaceAll("현재 ₩", "기록 시세 ₩");
+    if (Array.isArray(value)) return value.map(fix);
+    if (value && typeof value === "object") return Object.fromEntries(Object.entries(value).map(([key,v]) => [key, key === "done" ? v : fix(v)]));
+    return value;
+  };
+  const out = data;
+  if (out.invest_sp500) out.invest_sp500 = fix(out.invest_sp500);
+  if (out.reports?.invest_sp500) out.reports.invest_sp500 = fix(out.reports.invest_sp500);
+  // Bubble uses the same snapshot as the ticker instead of a hard-coded publication count.
+  const count = /^(\d+)편 발행 완료/.exec(out.tistory?.ticker || "");
+  if (count) {
+    const room = rooms.find(r => r.id === "tistory");
+    if (room) room.say = count[1] + "편 발행 보고 · 심사 대기";
+    if (out.chief?.items) out.chief.items.forEach(it => {
+      if (it.room === "tistory" && /애드센스 심사 대기/.test(it.title)) it.detail = out.tistory.ticker;
+    });
+  }
+  return out;
+}
 
 function hhmm() {
   const d = new Date();
@@ -4279,10 +4312,11 @@ async function loadStatus() {
     const res = await fetch("./status.json?t=" + Date.now(), { cache: "no-store" });
     if (!res.ok) throw new Error("HTTP " + res.status);
     const data = await res.json();
-    STATUS = data;            // 보고 모달이 최신 내용을 그릴 수 있도록 먼저 반영
-    applyStatus(data);
+    const displayData = prepareDisplayStatus(data);
+    STATUS = displayData;            // 보고 모달이 최신 내용을 그릴 수 있도록 먼저 반영
+    applyStatus(displayData);
     lastSync = hhmm();
-    setSyncNote(true, "● status.json 동기화 " + lastSync);
+    setSyncNote(true, "● 자료 수신 " + lastSync + " · 원자료 " + sourceStamp(data.updated));
   } catch (e) {
     if (!STATUS) {
       applyStatus(null);
@@ -6291,7 +6325,19 @@ setInterval(loadStatus, 60000);
   if (v === "shop") setView("shop");
   if (open && rooms.some(r => r.id === open)) openReport(open);
 })();
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeDeskDirect(); closeReport(); } });
+document.addEventListener("keydown", (e) => {
+  const room = e.target.closest?.('.room[role="button"]');
+  if (room && e.target === room && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); roomTap(e, room, room.id.replace("room-", "")); }
+  if (e.key === "Escape") { closeDeskDirect(); closeReport(); }
+  if (e.key === "Tab") {
+    const modal = [...document.querySelectorAll('.modal:not([hidden])')].at(-1);
+    if (!modal) return;
+    const focusable = [...modal.querySelectorAll('button,a[href],input,textarea,select,[tabindex="0"]')].filter(x => x.getClientRects().length && !x.disabled);
+    const first = focusable[0], last = focusable.at(-1);
+    if (e.shiftKey && (document.activeElement === first || !modal.contains(document.activeElement))) {e.preventDefault(); last?.focus();}
+    else if (!e.shiftKey && (document.activeElement === last || !modal.contains(document.activeElement))) {e.preventDefault(); first?.focus();}
+  }
+});
 window.addEventListener("resize", () => { buildTicks(); liftPark(); });
 // 다른 탭·창에서 승인·불허를 바꾸면 이 화면의 신호등·방 불빛도 같이 따라간다
 window.addEventListener("storage", (e) => {
