@@ -3051,12 +3051,12 @@
         <label class="rm-h" for="dd-input">대표여비서에게 할 지시</label>
         <textarea id="dd-input" class="dd-input" rows="4" placeholder="예: 내일 오전 일정 확인해서 알려줘" oninput="resetDeskStatus()"></textarea>
       </div>
-      <p class="dd-help" id="dd-action-help"><strong>전달실행하기는 지시 문구를 복사합니다.</strong> 그다음 Slack 열기를 눌러 붙여넣고 보내야 접수됩니다. 자동 전송·실행은 하지 않습니다.</p>
+      <p class="dd-help">① 지시 문구 복사 → ② Slack #피클지시 열기 → 붙여넣고 <strong>보내기</strong>를 눌러 주세요.</p>
       <p id="dd-status" role="status" aria-live="polite">아직 접수되지 않았습니다. 이 화면은 자동 전송하지 않습니다.</p>
       <textarea id="dd-preview" class="dd-input" readonly hidden aria-label="수동 복사용 지시 문구"></textarea>
     </div>
     <div class="rm-foot">
-      <button class="rm-btn primary" type="button" id="dd-send" onclick="confirmDeskDirect()" aria-describedby="dd-action-help">전달실행하기</button>
+      <button class="rm-btn primary" type="button" id="dd-send" onclick="confirmDeskDirect()">1. 지시 문구 복사</button>
       <a class="rm-btn shop" id="dd-slack" href="slack://channel?team=T0CKGQUDBPU&amp;id=C0CKQSNS7F0" onclick="deskSlackOpened()">2. Slack #피클지시 열기 ↗</a>
     </div>
   </div>
@@ -4782,7 +4782,7 @@ function closeDeskDirect() {
 }
 function deskSlackOpened() {
   document.getElementById("dd-input").blur();
-  document.getElementById("dd-status").textContent = "아직 미접수입니다. Slack 열기를 요청했지만 전송하지 않았습니다. #피클지시에 붙여넣고 보내 주세요. 앱이 열리지 않으면 Slack에서 #피클지시를 직접 찾아 주세요. 입력 내용은 이 창에 유지됩니다.";
+  document.getElementById("dd-status").textContent = "Slack 열기를 요청했습니다. #피클지시에 붙여넣고 보내야 접수됩니다. 앱이 열리지 않으면 Slack에서 #피클지시를 직접 찾아 주세요.";
 }
 async function confirmDeskDirect() {
   const input = document.getElementById("dd-input");
@@ -4803,7 +4803,7 @@ async function confirmDeskDirect() {
   }
   input.blur();
   status.textContent = copied
-    ? "지시 문구를 복사했습니다. 아직 미접수입니다. Slack 열기를 누르고 #피클지시에 붙여넣어 보내 주세요. 입력 내용은 이 창에 유지됩니다."
+    ? "지시 문구를 복사했습니다. 아직 미접수입니다. 2번을 눌러 Slack #피클지시에 붙여넣고 보내 주세요."
     : "자동 복사를 사용할 수 없습니다. 아래 지시 문구를 길게 눌러 복사한 뒤 Slack #피클지시에 붙여넣고 보내 주세요. 아직 미접수입니다.";
   preview.hidden = copied;
 }
