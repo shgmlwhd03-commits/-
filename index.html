@@ -375,7 +375,6 @@
     color: #ede9fe;
   }
   .room-tag.instinct { border-color: #34d399; color: #d1fae5; }
-  .room-tag.desk { border-color: #fbbf24; background: rgba(120, 53, 15, 0.62); color: #fef3c7; }
   .status-dot {
     flex: none;
     width: 7px;
@@ -812,21 +811,6 @@
     padding: 2px 4px;
   }
   .copy-toast.show { display: block; }
-
-  /* 대표여비서 직접 지시 버튼: 방 카드에 상시 표시 (경보 박스와 달리 상태와 무관) */
-  .desk-direct { margin-top: 3px; }
-  .desk-direct-btn {
-    width: 100%;
-    background: rgba(8, 47, 73, 0.8);
-    border: 1px solid #38bdf8;
-    color: #bae6fd;
-    border-radius: 4px;
-    padding: 2px 5px;
-    font-size: 6.8px;
-    font-weight: 800;
-    cursor: pointer;
-  }
-  .desk-direct-btn:active { transform: translateY(1px); }
 
   /* ================= 6F 펜트하우스: 수익 전광판 ================= */
   .pent { display: flex; flex-direction: column; gap: 3px; position: relative; z-index: 1; }
@@ -2056,23 +2040,6 @@
   .rm-btn.shop { flex: 0 0 auto; border-color: #fbbf24; background: rgba(60, 42, 8, 0.8); color: #fde68a; }
   .rm-btn[hidden] { display: none; }
 
-  /* 대표여비서 지시 입력창 */
-  .dd-input {
-    width: 100%;
-    box-sizing: border-box;
-    font-family: inherit;
-    font-size: 10px;
-    line-height: 1.45;
-    color: #e2e8f0;
-    background: #0f172a;
-    border: 1px solid #475569;
-    border-radius: 7px;
-    padding: 6px 8px;
-    resize: vertical;
-    min-height: 64px;
-  }
-  .dd-input:focus { outline: none; border-color: #38bdf8; }
-
   /* ===== 💼 총괄 · 결재·보고 · 긴급 처리 (최상단 통합 패널) =====
      두 부장(해병이·투덜이)의 미결·대기 건을 🔴 → 🔵 → 일반 대기 순으로 모아 보여 준다.
      개인정보 없음: 부서명·할 일·공개 사이트 주소만 담는다. */
@@ -2277,8 +2244,6 @@
     .room-foot { font-size: 8px; }
     .alert-guide { font-size: 9px; }
     .copy-btn, .resolve-btn { font-size: 9px; padding: 2px 7px; }
-    .desk-direct-btn { font-size: 9px; padding: 3px 7px; }
-    .dd-input { font-size: 12px; }
     .copy-toast { font-size: 8.5px; }
     .pent { gap: 5px; }
     .pent-top { padding-top: 24px; gap: 10px; }
@@ -2679,7 +2644,6 @@
   #room-tistory .avatar { background-image: url(assets/ch12.png); }
   #room-cafe .avatar { background-image: url(assets/ch13.png); }
   #room-blog .avatar { background-image: url(assets/ch14.png); }
-  #room-front_desk .avatar { background-image: url(assets/ch15.png); }
   #room-public_quiz .avatar { background-image: url(assets/ch16.png); }
   #room-cumex .avatar { background-image: url(assets/ch17.png); }
   #lob-hb .w-body { background-image: url(assets/ch2.png); }
@@ -2740,8 +2704,6 @@
   #room-cafe.working .avatar { background-image: url(assets/w13.png); width: 78px; height: 92px; }
   #room-blog.idle .avatar { background-image: url(assets/i14.png); }
   #room-blog.working .avatar { background-image: url(assets/w14.png); width: 78px; height: 92px; }
-  #room-front_desk.idle .avatar { background-image: url(assets/i15.png); }
-  #room-front_desk.working .avatar { background-image: url(assets/w15.png); width: 78px; height: 92px; }
   #room-public_quiz.idle .avatar { background-image: url(assets/i16.png); }
   #room-public_quiz.working .avatar { background-image: url(assets/w16.png); width: 78px; height: 92px; }
   #room-cumex.idle .avatar { background-image: url(assets/i17.png); }
@@ -2750,54 +2712,8 @@
   .room.working .avatar { animation: none; }
   .room.working .avatar { filter: drop-shadow(0 3px 3px rgba(0,0,0,.45)); }
 
-  /* 대표실 내부와 문 밖 비서 대기공간을 분리한다. */
-  .executive-entry { position:relative; height:224px; border-top:5px solid #8f7247; background:linear-gradient(180deg,#243044 0%,#344154 70%,#68513a 71%,#392d24 100%); overflow:hidden; }
-  .entry-label { position:absolute; left:12px; top:9px; color:#f5d79f; font-size:11px; font-weight:900; }
-  .executive-door { position:absolute; left:12%; top:50px; width:66px; height:132px; border:5px solid #ab8957; border-bottom:0; border-radius:3px 3px 0 0; background:linear-gradient(90deg,#392619,#69472d 48%,#402b1c); box-shadow:5px 4px 10px #1118,inset 0 0 0 3px #34251c; }
-  .executive-door::before { content:'대표실'; position:absolute; top:20px; left:8px; right:8px; text-align:center; background:#c6a76f; color:#302213; font-size:11px; padding:5px 0; border-radius:2px; font-weight:900; }
-  .executive-door::after { content:''; position:absolute; width:14px; height:4px; right:7px; top:76px; background:#e4c786; border-radius:2px; }
-  .entry-note { position:absolute; right:16px; top:49px; font-size:11px; line-height:1.7; color:#dce8f4; text-align:right; }
-  #room-front_desk { position:absolute; inset:0; padding:0; min-height:0; pointer-events:none; z-index:5; }
-  #room-front_desk .room-head { position:absolute; top:8px; left:39%; right:12px; pointer-events:auto; cursor:pointer; }
-  #room-front_desk .room-title { font-size:11px; }
-  #room-front_desk .room-stage { position:absolute; left:50%; bottom:38px; width:88px; height:132px; min-height:0; margin:0; padding:0; transform:translateX(-50%); pointer-events:auto; cursor:pointer; }
-  #room-front_desk .worker, #room-front_desk .avatar { animation:none!important; transform:none!important; }
-  #room-front_desk .avatar, #room-front_desk.working .avatar { width:44px; height:94px; background-image:url(assets/i15.png); }
-  #room-front_desk .speech { max-width:138px; }
-  #room-front_desk .led-board { position:absolute; bottom:0; left:0; right:0; margin:0 5px 4px; pointer-events:auto; cursor:pointer; }
-  #room-front_desk .desk-direct { position:absolute; bottom:39px; right:12px; margin:0; width:180px; pointer-events:auto; }
-  #room-front_desk .desk-direct-btn { min-height:40px; font-size:11px; }
-  #room-front_desk .room-foot { display:none; }
-  #room-front_desk .alert-box { position:absolute; right:8px; bottom:29px; width:min(55%,360px); background:#12162cf5; pointer-events:auto; }
   #floor-f1 .lobby { min-height:170px; overflow:hidden; }
   #floor-f1 .lob-walker { bottom:27px; }
-  #desk-direct-modal { z-index:120; align-items:center; padding:12px; height:var(--dd-height,100dvh); top:var(--dd-top,0px); bottom:auto; }
-  #desk-direct-modal[hidden] { display:none; }
-  #desk-direct-modal .modal-card { display:flex; flex-direction:column; width:100%; max-width:560px; max-height:calc(var(--dd-height,100dvh) - 24px); border-radius:14px; overflow:hidden; }
-  #desk-direct-modal .rm-head { flex:none; padding:12px; }
-  #desk-direct-modal .rm-title { font-size:15px; }
-  #desk-direct-modal .rm-body { flex:1 1 auto; min-height:0; overflow:auto; padding:12px; overscroll-behavior:contain; }
-  #desk-direct-modal .rm-h { font-size:13px; margin-bottom:8px; }
-  #desk-direct-modal .dd-input { font-size:16px; min-height:100px; max-height:180px; padding:10px; }
-  #desk-direct-modal .rm-foot { flex:none; display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:10px 12px max(12px,env(safe-area-inset-bottom)); background:#111c30; }
-  #desk-direct-modal .rm-btn { display:flex; align-items:center; justify-content:center; min-height:46px; font-size:12px; padding:9px 7px; text-decoration:none; white-space:normal; text-align:center; }
-  .dd-help { font-size:12px; line-height:1.7; color:#c3d2e8; margin:8px 0; }
-  #dd-status { font-size:12px; line-height:1.7; color:#fde68a; padding:9px; border:1px solid #6b5c32; border-radius:7px; background:#282411; }
-  #dd-preview { min-height:72px!important; margin-top:8px; font-size:13px!important; }
-  @media(max-width:560px) {
-    .executive-entry { height:244px; }
-    .entry-label { font-size:10px; width:30%; line-height:1.5; }
-    .executive-door::before { font-size:9px; white-space:nowrap; }
-    .executive-door { left:7%; top:57px; width:56px; height:141px; }
-    .entry-note { right:10px; top:55px; font-size:10px; }
-    #room-front_desk .room-head { left:35%; right:8px; top:8px; }
-    #room-front_desk .room-title { font-size:10px; }
-    #room-front_desk .room-stage { left:53%; bottom:63px; }
-    #room-front_desk .desk-direct { right:8px; bottom:27px; width:62%; }
-    #room-front_desk .desk-direct-btn { min-height:35px; font-size:11px; }
-    #room-front_desk .speech { max-width:103px; font-size:9px; }
-    #desk-direct-modal .rm-tag { display:none; }
-  }
 
 /* 경품 진행 기록: 후보·응모 보고·당첨 결과를 분리한다. */
 .prize-progress { border:1px solid #52619a; background:#111b33; border-radius:10px; padding:14px; margin:4px 0 14px; color:#e3e9ff; }
@@ -3033,31 +2949,6 @@
       <button class="rm-btn primary" type="button" id="rm-copy" onclick="copyReport()">📋 보고 내용 복사</button>
       <button class="rm-btn shop" type="button" id="rm-shop" onclick="openShopFromReport()" hidden>🛍️ 위탁판매실 바로 보기</button>
       <button class="rm-btn shop" type="button" id="rm-ledger" onclick="openLedgerFromReport()" hidden>📊 스마트스토어 통합 장부 열기</button>
-      <button class="rm-btn shop" type="button" id="rm-desk" onclick="openDeskDirect(event)" hidden>📮 대표여비서에 지시하기</button>
-    </div>
-  </div>
-</div>
-
-<!-- 대표여비서 지시 입력 모달: 자유 문구를 적으면 비서에게 붙여넣을 문구가 복사된다 -->
-<div class="modal" id="desk-direct-modal" hidden onclick="if(event.target===this) closeDeskDirect()">
-  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="dd-title">
-    <div class="rm-head">
-      <span class="rm-title" id="dd-title">🛎️ 대표여비서에 지시하기</span>
-      <span class="rm-tag">대표 직속</span>
-      <button class="rm-close" type="button" id="dd-close" onclick="closeDeskDirect()" aria-label="지시 입력 닫기">✕</button>
-    </div>
-    <div class="rm-body">
-      <div class="rm-sec">
-        <label class="rm-h" for="dd-input">대표여비서에게 할 지시</label>
-        <textarea id="dd-input" class="dd-input" rows="4" placeholder="예: 내일 오전 일정 확인해서 알려줘" oninput="resetDeskStatus()"></textarea>
-      </div>
-      <p class="dd-help">① 지시 문구 복사 → ② Slack #피클지시 열기 → 붙여넣고 <strong>보내기</strong>를 눌러 주세요.</p>
-      <p id="dd-status" role="status" aria-live="polite">아직 접수되지 않았습니다. 이 화면은 자동 전송하지 않습니다.</p>
-      <textarea id="dd-preview" class="dd-input" readonly hidden aria-label="수동 복사용 지시 문구"></textarea>
-    </div>
-    <div class="rm-foot">
-      <button class="rm-btn primary" type="button" id="dd-send" onclick="confirmDeskDirect()">1. 지시 문구 복사</button>
-      <a class="rm-btn shop" id="dd-slack" href="slack://channel?team=T0CKGQUDBPU&amp;id=C0CKQSNS7F0" onclick="deskSlackOpened()">2. Slack #피클지시 열기 ↗</a>
     </div>
   </div>
 </div>
@@ -3117,14 +3008,6 @@ const rooms = [
     issue: "총괄 지시 확인이 필요해요!",
     guide: "수박이 이사는 총괄(Instinct) 직속 위탁판매 총괄 담당이고, 실행은 실행 담당(사람)이 진행합니다. 보류 기간 동안 2축으로 움직입니다 — ① 위탁판매·사업자 준비(세무·계좌·실무 대기, 오너 확인 단계에서 멈춤) ② 저크레딧 수익 보조(1일 1회 이하, 투덜이 측과 겹치지 않는 살림·주방 배송 체험단과 고액 공식 경품). 확정 건만 최소 알림으로 전달합니다. 장부·위탁판매실은 보고 창에서 바로 열립니다.",
     state: "working", ticker: "총괄 직속 · 위탁판매 총괄 담당 · 실행 담당(사람) · 보류 기간 2축 운영 — ① 위탁판매·사업자 준비(세무·계좌·실무 대기) + ② 저크레딧 수익 보조(1일 1회 이하 · 살림·주방 배송 체험단·고액 공식 경품) · 난방텐트 2건 철회·공개 도매가 0.70 기준 통과 0건 → 위탁 보류", updated: "--:--"
-  },
-  {
-    id: "front_desk", floor: "f8", zone: "desk", tag: "대표 직속", concierge: true,
-    title: "👩‍💼 대표여비서", worker: "👩‍💼", name: "대표여비서 벨이",
-    say: "대표실 문 밖에서 대기 중이에요", foot: "대표실 문 밖 · 대표 직속 비서",
-    issue: "안내 요청은 총괄 채팅으로!",
-    guide: "대표여비서 벨이는 8F 대표실 문 밖을 지키는 대표님 직속 비서입니다. 캘린더 연동을 마쳤고, 일정 확인·안내가 필요하면 총괄 채팅에 남겨 주세요.",
-    state: "idle", ticker: "캘린더 연동 완료 · 오늘/내일 일정 없음 확인 · 요청 대기 중", updated: "12:00"
   },
   {
     id: "naver", floor: "f5", zone: "direct", tag: "해병이",
@@ -3267,7 +3150,7 @@ function workerHTML(r) {
       <div class="worker">
         <div class="speech" id="say-${r.id}">${esc(r.say)}</div>
         <div class="badge-alert">!</div>
-        <div class="avatar"${["prize","blog","public_quiz","front_desk"].includes(r.id) ? `role="button" tabindex="0" aria-label="${esc(r.name)} · ${r.concierge ? "업무 보고 보기" : "응모 진행결과 보기"}" title="캐릭터를 누르면 업무 보고 보기" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();openReport('${r.id}')}"` : r.id === "invest_sp500" ? 'role="button" tabindex="0" aria-label="주식 그래프와 손익 보기" title="클릭하면 주식 그래프와 손익 보기" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();event.stopPropagation();openReport(\'invest_sp500\')}"' : ""}>${r.worker}</div>
+        <div class="avatar"${["prize","blog","public_quiz"].includes(r.id) ? `role="button" tabindex="0" aria-label="${esc(r.name)} · 응모 진행결과 보기" title="캐릭터를 누르면 업무 보고 보기" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();openReport('${r.id}')}"` : r.id === "invest_sp500" ? 'role="button" tabindex="0" aria-label="주식 그래프와 손익 보기" title="클릭하면 주식 그래프와 손익 보기" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();event.stopPropagation();openReport(\'invest_sp500\')}"' : ""}>${r.worker}</div>
         <div class="nametag">${esc(r.name)}</div>
         <span class="life-icons" aria-hidden="true"><i>💻</i><i>📝</i><i>🔍</i><i>📊</i></span>
       </div>`;
@@ -3281,7 +3164,6 @@ function roomHTML(r, i) {
   const shop = r.id === "commerce";
   const ceo = r.ceo === true;
   const director = r.director === true;
-  const concierge = r.concierge === true;
   const stage = `<div class="room-stage">${workerHTML(r)}${LAPTOP}</div>`;
 
   return `
@@ -3291,7 +3173,7 @@ function roomHTML(r, i) {
         <div class="room-head">
           <span class="room-title">${esc(r.title)}</span>
           <span class="room-lanes" id="lanes-${r.id}" aria-hidden="true"></span>
-          <span class="room-tag${partner ? " partner" : instinct ? " instinct" : concierge ? " desk" : ""}" title="${instinct ? "Instinct 총괄이 지휘하는 방" : concierge ? "대표님 직속 컨시어지 · 대표여비서" : director ? "총괄 직속 위탁판매 총괄 · 실행 담당(사람)" : partner ? "투덜이 부장이 전담 운영하는 방" : "해병이 부장이 직접 운영하는 방"}">${r.tag}</span>
+          <span class="room-tag${partner ? " partner" : instinct ? " instinct" : ""}" title="${instinct ? "Instinct 총괄이 지휘하는 방" : director ? "총괄 직속 위탁판매 총괄 · 실행 담당(사람)" : partner ? "투덜이 부장이 전담 운영하는 방" : "해병이 부장이 직접 운영하는 방"}">${r.tag}</span>
           <span class="room-open">${r.id === "prize" ? "응모결과▸" : shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : "보고"}</span>
           <span class="status-dot" aria-hidden="true"></span>
         </div>
@@ -3302,7 +3184,6 @@ function roomHTML(r, i) {
           <span class="led-time" id="time-${r.id}" title="마지막 갱신">--:--</span>
         </div>
         <div class="room-foot"><span class="foot-txt" id="foot-${r.id}">${esc(r.foot)}</span></div>
-        ${concierge ? `<div class="desk-direct"><button class="desk-direct-btn" type="button" onclick="openDeskDirect(event)" title="벨이에게 보낼 지시를 적으면 비서에게 붙여넣을 문구가 복사됩니다">📮 대표여비서에 지시하기</button></div>` : ""}
         <div class="alert-box" id="alertbox-${r.id}">
           <div class="alert-guide" id="guide-${r.id}"><span class="guide-tag">해결</span>${esc(r.guide)}</div>
           <div class="alert-actions">
@@ -3433,7 +3314,7 @@ function basementHTML() {
 }
 
 function floorHTML(f) {
-  const list = rooms.filter(r => r.floor === f.id && !r.concierge);
+  const list = rooms.filter(r => r.floor === f.id);
   const cls = list.length === 1 ? "rooms one" : list.length >= 4 ? "rooms four" : list.length === 3 ? "rooms three" : "rooms";
   // 6F 대표실: 두 부장 아래에 수익 전광판 · 크레딧을 전폭으로 깔아 겹치지 않게 한다
   const pentBar = f.id === "f6"
@@ -3456,12 +3337,6 @@ function floorHTML(f) {
       <div class="${cls}">
         ${list.map((r, i) => roomHTML(r, i)).join("")}
       </div>
-      ${f.id === "f8" ? `<div class="executive-entry" aria-label="대표실 출입문 밖 비서 대기공간">
-        <span class="entry-label">🚪 대표실 출입문 · 문 밖 복도</span>
-        <div class="executive-door" role="img" aria-label="대표실 출입문"></div>
-        <span class="entry-note">대표실 안 ↑<br>비서 대기공간 · 문 밖</span>
-        ${rooms.filter(r => r.concierge).map((r,i) => roomHTML(r,i)).join("")}
-      </div>` : ""}
       ${pentBar}
     </section>`;
 }
@@ -4723,8 +4598,6 @@ function openReport(id) {
   if (shopBtn) shopBtn.hidden = (id !== "commerce" && id !== "director_subaki");
   const ledgerBtn = document.getElementById("rm-ledger");
   if (ledgerBtn) ledgerBtn.hidden = (id !== "director_subaki");
-  const deskBtn = document.getElementById("rm-desk");
-  if (deskBtn) deskBtn.hidden = (id !== "front_desk");
   const copyBtn = document.getElementById("rm-copy");
   if (copyBtn) { copyBtn.classList.remove("ok"); }  // 문구는 copyText가 원래대로 되돌린다
   const modal = document.getElementById("report-modal");
@@ -4742,70 +4615,6 @@ function closeReport() {
   modal.classList.remove("show");
   modal.hidden = true;
   REPORT_ID = null;
-}
-
-/* 대표여비서 직접 지시: 자유 문구 입력 → [대표여비서 지시] 문구 복사 → 슬랙 비서에게 붙여넣기
-   (정적 페이지라 서버 저장 없이 클립보드 복사만 한다 — 총괄 패널 승인·불허와 같은 패턴) */
-function fitDeskViewport() {
-  const modal = document.getElementById("desk-direct-modal");
-  if (!modal) return;
-  const v = window.visualViewport;
-  modal.style.setProperty("--dd-height", (v ? v.height : window.innerHeight) + "px");
-  modal.style.setProperty("--dd-top", (v ? v.offsetTop : 0) + "px");
-}
-if (window.visualViewport) {
-  window.visualViewport.addEventListener("resize", fitDeskViewport);
-  window.visualViewport.addEventListener("scroll", fitDeskViewport);
-}
-window.addEventListener("resize", fitDeskViewport);
-function resetDeskStatus() {
-  document.getElementById("dd-status").textContent = "아직 접수되지 않았습니다. 지시를 복사한 뒤 Slack에서 보내 주세요.";
-  document.getElementById("dd-preview").hidden = true;
-}
-function openDeskDirect(e) {
-  if (e) { e.stopPropagation(); e.preventDefault(); }
-  const modal = document.getElementById("desk-direct-modal");
-  if (!modal) return;
-  closeReport();
-  modal.hidden = false;
-  fitDeskViewport();
-  requestAnimationFrame(() => modal.classList.add("show"));
-  document.getElementById("dd-input").focus({preventScroll:true});
-  SFX.click("f8");
-}
-function closeDeskDirect() {
-  const modal = document.getElementById("desk-direct-modal");
-  if (!modal || modal.hidden) return;
-  document.getElementById("dd-input").blur();
-  modal.classList.remove("show");
-  modal.hidden = true;
-}
-function deskSlackOpened() {
-  document.getElementById("dd-input").blur();
-  document.getElementById("dd-status").textContent = "Slack 열기를 요청했습니다. #피클지시에 붙여넣고 보내야 접수됩니다. 앱이 열리지 않으면 Slack에서 #피클지시를 직접 찾아 주세요.";
-}
-async function confirmDeskDirect() {
-  const input = document.getElementById("dd-input");
-  const status = document.getElementById("dd-status");
-  const text = input.value.trim();
-  if (!text) {
-    status.textContent = "먼저 지시 내용을 입력해 주세요. 아직 접수되지 않았습니다.";
-    input.focus(); return;
-  }
-  const prepared = "[대표여비서 지시] " + text;
-  const preview = document.getElementById("dd-preview");
-  preview.value = prepared;
-  let copied = false;
-  try { await navigator.clipboard.writeText(prepared); copied = true; } catch (_) {
-    preview.hidden = false;
-    preview.focus(); preview.select(); preview.setSelectionRange(0, prepared.length);
-    try { copied = document.execCommand("copy"); } catch (_) {}
-  }
-  input.blur();
-  status.textContent = copied
-    ? "지시 문구를 복사했습니다. 아직 미접수입니다. 2번을 눌러 Slack #피클지시에 붙여넣고 보내 주세요."
-    : "자동 복사를 사용할 수 없습니다. 아래 지시 문구를 길게 눌러 복사한 뒤 Slack #피클지시에 붙여넣고 보내 주세요. 아직 미접수입니다.";
-  preview.hidden = copied;
 }
 
 function copyReport() {
@@ -5885,7 +5694,7 @@ function roomTalkLoop() {
    업무 중(WORK) · 승인 대기(alert) · 자리 비움(break) 부서 사원은 나오지 않는다. */
 function idleDeptRooms() {
   return rooms.filter(r => {
-    if (r.ceo || r.concierge) return false;
+    if (r.ceo) return false;
     const el = document.getElementById("room-" + r.id);
     return !!el && el.classList.contains("idle") && !el.classList.contains("break") && !el.classList.contains("alert") && !AWAY.has(r.id);
   });
@@ -6329,7 +6138,7 @@ setInterval(loadStatus, 60000);
 document.addEventListener("keydown", (e) => {
   const room = e.target.closest?.('.room[role="button"]');
   if (room && e.target === room && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); roomTap(e, room, room.id.replace("room-", "")); }
-  if (e.key === "Escape") { closeDeskDirect(); closeReport(); }
+  if (e.key === "Escape") { closeReport(); }
   if (e.key === "Tab") {
     const modal = [...document.querySelectorAll('.modal:not([hidden])')].at(-1);
     if (!modal) return;
