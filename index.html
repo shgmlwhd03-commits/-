@@ -206,7 +206,6 @@
     font-weight: 800;
     cursor: pointer;
   }
-  .btn-red { background: #7f1d1d; border-color: #ef4444; color: #fecaca; }
   .btn-snd { background: #16202f; border-color: #475569; color: #cbd5e1; }
   .btn-snd.on { background: #0c2d48; border-color: #38bdf8; color: #bae6fd; box-shadow: 0 0 8px rgba(56, 189, 248, 0.35); }
 
@@ -778,39 +777,6 @@
     padding: 0 3px;
     margin-right: 3px;
   }
-  .alert-actions { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-  .copy-btn {
-    background: #1f2937;
-    border: 1px solid #94a3b8;
-    color: #e2e8f0;
-    border-radius: 4px;
-    padding: 1px 5px;
-    font-size: 6.8px;
-    font-weight: 800;
-    cursor: pointer;
-  }
-  .resolve-btn {
-    background: #ef4444;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    padding: 1px 5px;
-    font-size: 6.8px;
-    font-weight: 800;
-    cursor: pointer;
-  }
-  .copy-toast {
-    display: none;
-    margin-top: 3px;
-    background: #052e16;
-    border: 1px solid #22c55e;
-    color: #86efac;
-    font-size: 6.4px;
-    font-weight: 800;
-    border-radius: 4px;
-    padding: 2px 4px;
-  }
-  .copy-toast.show { display: block; }
 
   /* ================= 6F 펜트하우스: 수익 전광판 ================= */
   .pent { display: flex; flex-direction: column; gap: 3px; position: relative; z-index: 1; }
@@ -2054,6 +2020,11 @@
     font-family: inherit; background: none; border: 0; cursor: pointer; color: #fef3c7; text-align: left;
     touch-action: manipulation;
   }
+  .chief-route { margin: 2px 8px 7px; color: #e2e8f0; font-size: 11px; line-height: 1.6; overflow-wrap: anywhere; }
+  .chief-route small { color: #cbd5e1; font-size: 10px; }
+  .chief-tools { padding: 2px 8px 7px; }
+  .chief-report { border: 1px solid #b89b42; border-radius: 6px; background: #292412; color: #fef3c7; font: inherit; font-size: 11px; padding: 7px 10px; cursor: pointer; touch-action: manipulation; }
+  .chief-report:focus-visible { outline: 2px solid #fef3c7; outline-offset: 2px; }
   .chief-ava { flex: none; font-size: 13px; line-height: 1; filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.55)); }
   .chief-t { display: flex; flex-direction: column; min-width: 0; }
   .chief-t b { font-size: 8.8px; font-weight: 900; color: #fde68a; }
@@ -2243,8 +2214,8 @@
     .led-time { font-size: 8px; padding: 0 5px; }
     .room-foot { font-size: 8px; }
     .alert-guide { font-size: 9px; }
-    .copy-btn, .resolve-btn { font-size: 9px; padding: 2px 7px; }
-    .copy-toast { font-size: 8.5px; }
+
+
     .pent { gap: 5px; }
     .pent-top { padding-top: 24px; gap: 10px; }
     .pent-bar { gap: 5px; padding: 5px 8px; margin-top: 6px; }
@@ -2490,7 +2461,7 @@
   .room.alert .alert-box { border-color: #0ea5e9; background: rgba(4, 32, 54, 0.8); }
   .room.alert .alert-guide { color: #bae6fd; }
   .room.alert .alert-guide .guide-tag { background: rgba(56, 189, 248, 0.24); border-color: rgba(56, 189, 248, 0.55); color: #e0f2fe; }
-  .room.alert .resolve-btn { background: #0ea5e9; }
+
 
   /* 🔴 자금 신호등은 빨간색 유지 (파란불보다 우선) */
   .room.alert.money { border-color: #ef4444; background: rgba(64, 12, 12, 0.66); box-shadow: 0 0 16px rgba(239, 68, 68, 0.5); }
@@ -2509,7 +2480,7 @@
   .room.alert.money .alert-box { border-color: #ef4444; background: rgba(69, 10, 10, 0.72); }
   .room.alert.money .alert-guide { color: #fecaca; }
   .room.alert.money .alert-guide .guide-tag { background: rgba(239, 68, 68, 0.28); border-color: rgba(239, 68, 68, 0.55); color: #fee2e2; }
-  .room.alert.money .resolve-btn { background: #ef4444; }
+
   .room.alert.money .laptop .lid { box-shadow: 0 0 8px rgba(239, 68, 68, 0.6); }
   .room.alert.money .laptop .lid::after { background: linear-gradient(160deg, #fecaca, #ef4444); box-shadow: 0 0 8px rgba(239, 68, 68, 0.9); }
 
@@ -2619,7 +2590,6 @@
   .rooms.desk-rooms .room { padding: 4px 8px; }
   .rooms.desk-rooms .room-stage { min-height: 96px; }
   #floor-f8 .rooms:not(.desk-rooms) { background-image: url(assets/floor_f8.jpg); aspect-ratio: 1400/369; min-height: 150px; }
-  #floor-fI .rooms:not(.desk-rooms) { background-image: url(assets/floor_fi.jpg); aspect-ratio: 1400/316; min-height: 150px; }
   #floor-f6 .rooms:not(.desk-rooms) { background-image: url(assets/floor_f6.jpg); aspect-ratio: 1400/280; min-height: 150px; }
   #floor-f5 .rooms:not(.desk-rooms) { background-image: url(assets/floor_f5.jpg); aspect-ratio: 1400/314; min-height: 150px; }
   #floor-f4 .rooms:not(.desk-rooms) { background-image: url(assets/floor_f4.jpg); aspect-ratio: 1400/310; min-height: 150px; }
@@ -2630,7 +2600,6 @@
   #floor-f1 .lobby { background-image: url(assets/floor_f1.jpg); }
   #floor-b1 .b1 { background-image: url(assets/floor_b1.jpg); }
   #room-owner .avatar { background-image: url(assets/ch0.png); }
-  #room-instinct .avatar { background-image: url(assets/ch1.png); }
   #room-ceo_haebyeong .avatar { background-image: url(assets/ch2.png); }
   #room-ceo_tudeori .avatar { background-image: url(assets/ch3.png); }
   #room-director_subaki .avatar { background-image: url(assets/ch4.png); }
@@ -2676,8 +2645,6 @@
   /* 상태별 포즈: WORK=책상에 앉아 작업, IDLE=자유 시간 포즈 (기존 working/idle 클래스 그대로 사용) */
   #room-owner.idle .avatar { background-image: url(assets/i0.png); }
   #room-owner.working .avatar { background-image: url(assets/w0.png); width: 78px; height: 92px; }
-  #room-instinct.idle .avatar { background-image: url(assets/i1.png); }
-  #room-instinct.working .avatar { background-image: url(assets/w1.png); width: 78px; height: 92px; }
   #room-ceo_haebyeong.idle .avatar { background-image: url(assets/i2.png); }
   #room-ceo_haebyeong.working .avatar { background-image: url(assets/w2.png); width: 78px; height: 92px; }
   #room-ceo_tudeori.idle .avatar { background-image: url(assets/i3.png); }
@@ -2844,9 +2811,7 @@
       <span class="sync-note" id="sync-note">status.json 동기화 중…</span>
     </div>
     <div class="top-btns">
-      <button class="btn btn-red" onclick="testAlert()">🔵 확인요청 테스트</button>
       <button class="btn btn-snd" id="snd-btn" onclick="toggleSound()" aria-pressed="false">🔇 전체 소리</button>
-      <button class="btn" onclick="clearAll()">✅ 전체 복구</button>
     </div>
   </div>
 
@@ -2858,6 +2823,8 @@
       <span class="chief-cnt" id="chief-cnt"></span>
       <span class="chief-caret" id="chief-caret">▾</span>
     </button>
+    <p class="chief-route" id="chief-route"><b>결재 흐름</b> 담당자 상신 → 담당 부장 검토 → 총괄 검토 → 대표님 최종 결재<br><small>반려·재심의: 담당자 보완 후 새 버전 상신 · 승인 후: 실행 결과 별도 보고<br>현재는 전달·접수와 단계별 검토가 연결되지 않았습니다. 검토·승인·실행·완료는 별개입니다. 위탁판매의 부장·수박이 이사 검토 순서는 확인 중입니다.</small></p>
+    <div class="chief-tools"><button class="chief-report" id="chief-report" type="button" onclick="openReport('instinct')">💼 총괄 종합 보고 · 담당 부서 보기</button></div>
     <div class="chief-say" id="chief-say">두 부장 미결·대기 건을 모으는 중…</div>
     <p class="chief-receipt-note" id="chief-receipt-note"><strong>승인·불허·재심의 버튼은 문구 복사와 이 브라우저의 선택 저장만 합니다.</strong><br>복사한 문구를 Slack #피클지시에 직접 보내야 접수됩니다. 전달 전에는 목록과 신호를 유지하며, 실제 완료로 처리하지 않습니다. 재심의 10분 검토 기준은 채널 도착 시각부터입니다.</p>
     <div class="chief-body" id="chief-body"></div>
@@ -2946,11 +2913,6 @@
     <div class="csec">
       <div class="csec-h">🛡️ 핵심 리스크 · 운영 수칙</div>
       <ul class="rules" id="shop-rules">
-        <li><b>선정 기준 · 3사 검색량 1~3위</b> — 네이버(쇼핑·데이터랩)·구글·쿠팡 3사 검색량을 평균 내 상위 1~3위에 함께 오른 품목만 소싱 후보로 올립니다. 생활·계절·차량 잡화 등 위탁 가능 카테고리 안에서만 적용하고, 대기업 브랜드·초저가 생필품은 제외합니다.</li>
-        <li><b>0.70 마진 기준</b> — 공급가(무료배송)가 인기 상품 실거래가의 0.70 이하여야 후보로 인정합니다. 비로그인 공개 도매 표시가는 소매 최저가와 겹쳐 11개 품목(30여 상품) 확인 결과 통과 0건이었습니다.</li>
-        <li><b>공동 검증</b> — 후보는 유효성(수요·계절성)과 상품성(공급가·배송·반품·KC)을 실측한 뒤 공동 검증으로 최종 확정합니다.</li>
-        <li><b>국내 위탁처 우선</b> — 당분간 국내 위탁처(도매매·오너클랜 등)만 사용하고, 알리·테무 해외직구·제조사 직접 접촉은 추후 사입 단계로 미룹니다.</li>
-        <li><b>실시간 선정·순차 교체</b> — 품목을 고정하지 않고 매번 3사 검색량을 실시간 조회해 선정하며, 판매 부진 품목부터 순차 교체합니다.</li>
         <li><b>초기 0원 무재고</b> — 재고·사입 선결제 금지. 주문 확인 후 도매처에 발주하고 차액만 남깁니다.</li>
         <li><b>규격·반품 방지</b> — 두께·길이·중량은 공급사 확인값만 표기. 재단·부착 후 반품 제한은 구매 전에 고지.</li>
         <li><b>정품·KC 확인</b> — KC·안전확인 대상 여부를 공급사에 확인. 생활화학제품(곰팡이·결로 스프레이)은 취급하지 않습니다.</li>
@@ -2992,7 +2954,6 @@
 /* ================= 설정 ================= */
 const FLOORS = [
   { id: "f8", num: "8F", name: "대표실 · 👑 대표님", tone: "pent" },
-  { id: "fI", num: "7F", name: "Instinct 총괄 층", tone: "instinct" },
  { id: "f6", num: "6F", name: "부장실 · 👑 부장 2명 + 🍉 수박이(위탁총괄)", tone: "pent" },
   { id: "f5", num: "5F", name: "해병이 · 수익·스토어층", tone: "cyan" },
   { id: "f4", num: "4F", name: "해병이 · 혜택·딜층", tone: "cyan" },
@@ -3012,7 +2973,7 @@ const rooms = [
     state: "working", ticker: "최종 승인권 · 보고 라인: 투덜이·해병이·수박이 → 총괄(Instinct) → 대표님", updated: "15:52"
   },
   {
-    id: "instinct", floor: "fI", zone: "instinct", tag: "Instinct",
+    id: "instinct", floor: null, zone: "instinct", tag: "Instinct",
     title: "💼 Instinct 총괄", worker: "💼", name: "💼 총괄",
     say: "총지휘 중 · 두 부장 보고 접수!", foot: "총지휘 · 보고 라인: 투덜이·해병이·수박이 → 총괄(Instinct) → 대표님",
     issue: "승인·확인 건을 모으는 중!",
@@ -3220,11 +3181,6 @@ function roomHTML(r, i) {
         <div class="room-foot"><span class="foot-txt" id="foot-${r.id}">${esc(r.foot)}</span></div>
         <div class="alert-box" id="alertbox-${r.id}">
           <div class="alert-guide" id="guide-${r.id}"><span class="guide-tag">해결</span>${esc(r.guide)}</div>
-          <div class="alert-actions">
-            <button class="copy-btn" onclick="copyIssue('${r.id}')">📋 해결 내용 복사</button>
-            <button class="resolve-btn" onclick="toggleRoom('${r.id}')">해결 완료</button>
-          </div>
-          <div class="copy-toast" id="toast-${r.id}">복사됨! 총괄 채팅에 붙여넣어 주세요</div>
         </div>
       </div>`;
 }
@@ -3692,9 +3648,6 @@ function roomSignals(id, all, scopeIds = []) {
 }
 
 /* 총괄 결정(승인·불허)과 신호등을 잇는 열쇠: 총괄 항목 id와 같은 규칙이다 */
-function signalKey(lane, it) {
-  return lane + "|" + (it.room || "") + "|" + String(it.title || "").trim();
-}
 
 /* 그 신호가 이미 결정(승인·불허)되어 신호등에서 내려갔는지 — 재심의(re)는 결론 전이라 불을 켠 채로 둔다 */
 function signalCleared(lane, it, base, dec) {
@@ -3787,7 +3740,7 @@ function toggleSig(lane) {
 
 /* ================= 💼 총괄 (총괄 보고 · 긴급 처리) =================
    두 부장(해병이·투덜이)의 미결·대기 건을 하나로 모아 🔴 자금·인증 → 🔵 승인·확인 → ⏳ 일반 대기
-   순으로 자동 정렬한다. 줄을 누르면 해당 부서 보고 모달(체크리스트·담당·해결 복사)이 열리고,
+   순으로 자동 정렬한다. 줄을 누르면 해당 부서 보고 모달(체크리스트·담당)이 열리고,
    공개 사이트가 있으면 바로가기 버튼도 제공한다. 개인정보 없음(부서명·할 일·공개 주소만). */
 const CHIEF_LANE = { red: 0, blue: 1, wait: 2 };
 const CHIEF_ICON = { red: "🔴", blue: "🔵", wait: "⏳" };
@@ -3858,7 +3811,7 @@ function chiefClick(e, room) {
   if (room) openReport(room);
 }
 
-/* 승인·불허·재심의 결정: 정적 페이지라 localStorage에 남기고, 동시에 비서에게 붙여넣을 문구를 복사한다. */
+/* 승인·불허·재심의 결정: 정적 페이지라 localStorage에 남기고, 동시에 Slack에 붙여넣을 문구를 복사한다. */
 let CHIEF_DEC = null;
 
 function chiefDecisions() {
@@ -3888,7 +3841,7 @@ function chiefPhrase(it, state) {
   const nm = it.title + where;
   if (state === "ok") {
     return it.lane === "red"
-      ? head + nm + " — 오너 직접 실행 건입니다. 실행은 오너가 직접 하고, 비서는 안내·기록만 해 주세요."
+      ? head + nm + " — 오너 직접 실행 건입니다. 실행은 오너가 직접 하고, 총괄은 안내·기록만 해 주세요."
       : head + nm + " — 승인했습니다. 그대로 진행해 주세요.";
   }
   if (state === "re") {
@@ -3970,7 +3923,7 @@ function renderChief(raw) {
     const act = d
       ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${d.s === "ok" ? "✅ 승인 선택 · 미접수" : d.s === "re" ? "🔁 재심의 선택 · 미접수" : "⛔ 불허 선택 · 미접수"}</span>` +
         (it.lane === "wait" ? "" : `<span class="cr-clr" title="실제 접수 확인 전이므로 신호와 대기 목록을 유지합니다">신호 유지</span>`) +
-        `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${sourceIdx})" title="비서에게 붙여넣을 문구 복사">📋 문구</button>` +
+        `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${sourceIdx})" title="Slack에 붙여넣을 문구 복사">📋 문구</button>` +
         `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${sourceIdx})" title="결정 되돌리기">↺</button>`
       : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="${it.lane === "red" ? "승인 — 실행은 오너가 직접" : "승인하고 진행"}">승인</button>` +
         `<button class="cr-no" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="보류하고 재검토">불허</button>` +
@@ -4535,9 +4488,10 @@ function reportData(id) {
   const base = (live && typeof live === "object" && !Array.isArray(live)) ? live : {};
   const arr = (v) => Array.isArray(v) ? v.filter(x => typeof x === "string" && x.trim()).map(x => x.trim()) : [];
   const el = document.getElementById("room-" + id);
-  let state = "idle";
-  if (el) state = el.classList.contains("alert") ? "alert" : el.classList.contains("working") ? "working" : "idle";
   const s = (STATUS && STATUS[id] && typeof STATUS[id] === "object") ? STATUS[id] : {};
+  const sourceState = s.status || r.state || "idle";
+  let state = ["working", "alert"].includes(sourceState) ? sourceState : "idle";
+  if (el) state = el.classList.contains("alert") ? "alert" : el.classList.contains("working") ? "working" : "idle";
   const next = Array.isArray(base.next)
     ? base.next.filter(n => n && typeof n === "object" && (n.task || n.time)).map(n => ({ time: String(n.time || ""), task: String(n.task || "") }))
     : [];
@@ -4584,8 +4538,7 @@ function reportData(id) {
     now: now.length ? now : [r.foot || "대기 중"],
     done: TaskArchive.visibleDone(base.done, id),
     next,
-    links,
-    copy: (typeof base.copy === "string" && base.copy.trim()) ? base.copy.trim() : "[업무 보고] " + (r.title || id) + " — 지금 상태와 다음 일정을 알려주세요."
+    links
   };
 }
 
@@ -4762,86 +4715,6 @@ function copyText(text, btn) {
 }
 
 /* ================= 수동 조작 ================= */
-function toggleRoom(id) {
-  const r = rooms.find(x => x.id === id);
-  const el = document.getElementById("room-" + id);
-  const say = document.getElementById("say-" + id);
-  const foot = document.getElementById("foot-" + id);
-  if (!r || !el) return;
-  if (el.classList.contains("alert")) {
-    const base = (r.state && r.state !== "alert") ? r.state : "idle";
-    setRoomState(id, base);
-    if (say) say.textContent = r.say;
-    if (foot) foot.textContent = r.foot;
-    const track = document.getElementById("track-" + id);
-    const raw = track ? String(track.dataset.text || "") : r.ticker;
-    setBoardText(id, tickerFor(base, raw, laneOf(id)), undefined, base);
-    const toast = document.getElementById("toast-" + id);
-    if (toast) toast.classList.remove("show");
-    SFX.resolve(r.floor);
-  } else {
-    setRoomState(id, "alert");
-    const lane = laneOf(id);
-    if (say) say.textContent = lane === "red" ? "자금 승인 필요! 🔴" : "확인 부탁드려요! 🔵";
-    if (foot) foot.textContent = (lane === "red" ? "🔴 " : "🔵 ") + r.issue;
-    SFX.alert(r.floor);
-  }
-  applyCorridor();
-  updatePill();
-}
-
-function copyIssue(id) {
-  const r = rooms.find(x => x.id === id);
-  if (!r) return;
-  const text = `[관제탑 해결] ${r.title}: ${r.issue}`;
-  const toast = document.getElementById("toast-" + id);
-  const showToast = () => {
-    if (!toast) return;
-    toast.classList.add("show");
-    clearTimeout(toast._t);
-    toast._t = setTimeout(() => toast.classList.remove("show"), 3600);
-  };
-  const fallback = () => {
-    try {
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.setAttribute("readonly", "");
-      ta.style.position = "fixed";
-      ta.style.top = "0";
-      ta.style.left = "0";
-      ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.select();
-      ta.setSelectionRange(0, text.length);
-      const ok = document.execCommand("copy");
-      document.body.removeChild(ta);
-      if (ok) showToast();
-      else window.prompt("아래 문구를 복사해 총괄 채팅에 붙여넣어 주세요", text);
-    } catch (e) {
-      window.prompt("아래 문구를 복사해 총괄 채팅에 붙여넣어 주세요", text);
-    }
-  };
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(text).then(showToast).catch(fallback);
-  } else {
-    fallback();
-  }
-}
-
-function testAlert() {
-  const candidates = rooms.filter(r => !r.ceo);
-  const pick = candidates[Math.floor(Math.random() * candidates.length)];
-  const el = document.getElementById("room-" + pick.id);
-  if (el && !el.classList.contains("alert")) toggleRoom(pick.id);
-}
-
-function clearAll() {
-  rooms.forEach(r => {
-    const el = document.getElementById("room-" + r.id);
-    if (el && el.classList.contains("alert")) toggleRoom(r.id);
-  });
-}
-
 function updatePill() {
   const pill = document.getElementById("summary-pill");
   if (!pill) return;
@@ -5309,15 +5182,6 @@ function hideHandoff() {
 }
 
 /* 캐릭터끼리 주고받는 대화 */
-async function talk(pairs, gap) {
-  for (let i = 0; i < pairs.length; i++) {
-    const who = pairs[i][0], text = pairs[i][1];
-    castSay(who, text);
-    SFX.chat(venFloor());
-    await sleep(gap || 1500);
-    castHush(who);
-  }
-}
 
 function ceoSay(text, only) {
   const ids = only ? [only] : ["ceo_haebyeong", "ceo_tudeori"];
