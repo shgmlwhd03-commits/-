@@ -2098,6 +2098,8 @@
   .cc-wait { color: #e2e8f0; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(148, 163, 184, 0.45); }
   .chief-caret { flex: none; font-size: 8px; color: #fbbf24; }
   .chief-say { padding: 0 8px 4px 26px; font-size: 6.8px; font-weight: 800; line-height: 1.35; color: #fcd34d; }
+  .chief-receipt-note { margin: 2px 8px 8px; padding: 8px 10px; border: 1px solid rgba(250, 204, 21, .45); border-radius: 6px; background: #201d10; color: #fef3c7; font-size: 11px; line-height: 1.55; overflow-wrap: anywhere; }
+  .chief-receipt-note strong { color: #fde68a; }
   .chief-body { display: flex; flex-direction: column; gap: 2px; padding: 0 5px 5px; }
   .chief-body[hidden] { display: none; }
   .chief-row {
@@ -2873,6 +2875,7 @@
       <span class="chief-caret" id="chief-caret">▾</span>
     </button>
     <div class="chief-say" id="chief-say">두 부장 미결·대기 건을 모으는 중…</div>
+    <p class="chief-receipt-note" id="chief-receipt-note"><strong>재심의 버튼만으로는 접수되지 않습니다.</strong><br>복사한 문구를 Slack #피클지시에 보내주세요. 10분 검토 기준은 채널에 도착한 시각부터입니다.</p>
     <div class="chief-body" id="chief-body"></div>
   </section>
 
@@ -3975,13 +3978,13 @@ function renderChief(raw) {
     const rm = rr ? rr.title : "";
     const d = dec[it.id];
     const act = d
-      ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${d.s === "ok" ? "✅ 승인(진행)" : d.s === "re" ? "🔁 재심의(보완 후 재상신)" : "⛔ 불허(재검토)"}</span>` +
+      ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${d.s === "ok" ? "✅ 승인(진행)" : d.s === "re" ? "🔁 재심의 선택 · 채팅 전송 필요" : "⛔ 불허(재검토)"}</span>` +
         (it.lane === "wait" ? "" : d.s === "re" ? `<span class="cr-clr" title="재심의 중이라 신호등·방 불빛은 켜진 상태로 유지됩니다">불 유지</span>` : `<span class="cr-clr" title="신호등·방 불빛에서 내려갔습니다">불 꺼짐</span>`) +
         `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${sourceIdx})" title="비서에게 붙여넣을 문구 복사">📋 문구</button>` +
         `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${sourceIdx})" title="결정 되돌리기">↺</button>`
       : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="${it.lane === "red" ? "승인 — 실행은 오너가 직접" : "승인하고 진행"}">승인</button>` +
         `<button class="cr-no" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="보류하고 재검토">불허</button>` +
-        `<button class="cr-re" type="button" onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 — 보완해서 다시 상신, 신호는 유지">재심의</button>`;
+        `<button class="cr-re" type="button" onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 문구 복사 · Slack 채팅에 보내야 접수 · 신호 유지">재심의</button>`;
     return `<div class="chief-row ${it.lane}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" role="button" tabindex="0" data-room="${esc(it.room)}"
         title="${esc(it.title + (rm ? " · " + rm : "") + " · 누르면 부서 보고 열기")}"
         onclick="chiefClick(event, '${esc(it.room)}')"
