@@ -6148,7 +6148,7 @@ startStaffLife();
   }
   if (hasTTS) { loadVoices(); try { speechSynthesis.addEventListener("voiceschanged", loadVoices); } catch (e) {} }
   function hash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
-  function voiceLive() { return SFX.enabled && ST.voice && hasTTS; }
+  function voiceLive() { return SFX.enabled && ST.voice; }
 
   const WORK_TALK = [
     [["이번 주 우선순위, 같이 한번 정리해 볼까요?", "좋아요. 급한 것부터 순서대로 봐요."],
@@ -6198,24 +6198,49 @@ startStaffLife();
     const el = document.getElementById("room-" + id);
     if (el) el.classList.toggle("voice-talk", on);
   }
-  function say(text, roomId) {
+  /* 대사 음성은 미리 녹음해 둔 한국어 음성 파일(assets/voice)을 재생한다 → 어느 폰에서나 같은 한국어 목소리.
+     파일이 안 열리면 기기 내장 한국어 TTS로 대신하고, 그것도 없으면 자막 띠만 보여 준다. */
+  const ALL_LINES = [WORK_TALK, CHAT_TALK].reduce((acc, S) => { S.forEach(c => c.forEach(t => t.forEach(l => acc.push(l)))); return acc; }, []);
+  const FEMALE = { instinct: 1, ceo_tudeori: 1, director_subaki: 1, haebyeongi_adsense: 1, commerce: 1, prize: 1, cafe: 1, front_desk: 1 };
+  let curAudio = null;
+  function playClip(text, roomId) {
     return new Promise(res => {
-      if (!voiceLive()) return res(false);
+      const idx = ALL_LINES.indexOf(text);
+      if (idx < 0) return res(false);
+      const g = FEMALE[roomId] ? "f" : "m";
+      const a = new Audio("assets/voice/v" + idx + "_" + g + ".mp3");
+      curAudio = a;
+      try { a.preservesPitch = false; a.playbackRate = 0.94 + (hash(roomId) % 8) * 0.02; } catch (e) {}
+      a.volume = 0.95;
+      let done = false;
+      const fin = ok => { if (!done) { done = true; res(ok); } };
+      a.onended = () => fin(true);
+      a.onerror = () => fin(false);
+      const p = a.play();
+      if (p && p.catch) p.catch(() => fin(false));
+      setTimeout(() => fin(true), 15000);
+    });
+  }
+  function ttsFallback(text, roomId) {
+    return new Promise(res => {
+      if (!hasTTS || !koVoices.length) return res(false);
       let done = false;
       const fin = () => { if (!done) { done = true; res(true); } };
       try {
         const u = new SpeechSynthesisUtterance(text);
-        u.lang = "ko-KR";
-        const h = hash(roomId);
-        if (koVoices.length) u.voice = koVoices[h % koVoices.length];
-        u.pitch = 0.9 + (h % 7) * 0.1;      // 캐릭터마다 목소리 높낮이가 다르다
-        u.rate = 1.0;
-        u.volume = 0.9;
+        u.lang = "ko-KR"; u.voice = koVoices[hash(roomId) % koVoices.length];
+        u.pitch = 0.9 + (hash(roomId) % 7) * 0.1; u.rate = 1.0; u.volume = 0.9;
         u.onend = fin; u.onerror = fin;
         speechSynthesis.speak(u);
         setTimeout(fin, 9000 + text.length * 120);
       } catch (e) { fin(); }
     });
+  }
+  async function say(text, roomId) {
+    if (!voiceLive()) return false;
+    if (await playClip(text, roomId)) return true;
+    if (!voiceLive()) return false;
+    return await ttsFallback(text, roomId);
   }
   async function scene() {
     if (speaking || !voiceLive() || document.hidden) return;
@@ -6251,6 +6276,7 @@ startStaffLife();
   }
   function stopVoice() {
     try { speechSynthesis.cancel(); } catch (e) {}
+    try { if (curAudio) { curAudio.pause(); curAudio = null; } } catch (e) {}
     document.querySelectorAll(".voice-talk").forEach(el => el.classList.remove("voice-talk"));
     hideBand();
   }
@@ -6303,23 +6329,24 @@ startStaffLife();
     if (!bctx || bctx.state !== "running") return;
     const t0 = bctx.currentTime + 0.1, len = 8;
     CHORDS[ci % CHORDS.length].forEach((f, i) => {
-      note(f, t0 + i * 0.12, len + 2.5, 0.05, "sine", 2.6);
-      if (i < 2) note(f * 2, t0 + i * 0.12, len + 2, 0.012, "triangle", 3);
+      note(f, t0 + i * 0.12, len + 2.5, 0.16, "sine", 2.6);
+      if (i < 2) note(f * 2, t0 + i * 0.12, len + 2, 0.03, "triangle", 3);
     });
     const n = 2 + Math.floor(Math.random() * 2);
     for (let k = 0; k < n; k++) {
       const f = BELLS[Math.floor(Math.random() * BELLS.length)];
-      note(f, t0 + 1 + Math.random() * (len - 2), 2.8, 0.022, "sine", 0.02);
+      note(f, t0 + 1 + Math.random() * (len - 2), 2.8, 0.07, "sine", 0.02);
     }
     ci++;
   }
+  window.__bgmDebug = function () { return JSON.stringify({ state: bctx && bctx.state, gain: bmaster && +bmaster.gain.value.toFixed(3), hidden: document.hidden, timer: !!timer, t: bctx && +bctx.currentTime.toFixed(1) }); };
   function bgmLive() { return SFX.enabled && ST.bgm; }
   function bgmSync() {
     if (bgmLive() && !document.hidden) {
       if (!bgmEnsure()) return;
       bmaster.gain.cancelScheduledValues(bctx.currentTime);
       bmaster.gain.setTargetAtTime(0.9, bctx.currentTime, 1.5);   // 부드럽게 페이드 인
-      if (!timer) { bar(); timer = setInterval(bar, 8000); }
+      if (!timer) { const go = () => bar(); if (bctx.state === "running") go(); else { try { bctx.resume().then(go, () => {}); } catch (e) {} } timer = setInterval(bar, 8000); }
     } else if (bctx) {
       if (timer) { clearInterval(timer); timer = null; }
       bmaster.gain.cancelScheduledValues(bctx.currentTime);
