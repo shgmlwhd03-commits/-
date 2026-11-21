@@ -27,7 +27,7 @@
     const out=[];
     Object.entries(status?.reports||{}).forEach(([room,report])=>(report.done||[]).forEach(value=>{const it=normalize(value,room,'reports.'+room+'.done');if(it)out.push(it);}));
     (status?.tasks||[]).forEach(value=>{const it=normalize(value,'','tasks');if(it)out.push(it);});
-    (status?.chief?.items||[]).forEach(value=>{if(completed(value)){const it=normalize(value,value.room,'chief.items');if(it)out.push(it);}});
+    (status?.chief?.items||[]).forEach(value=>{if(completed(value)||(value.id&&value.status)){const it=normalize(value,value.room,'chief.items');if(it)out.push(it);}});
     return out;
   }
   let saved=[], current=[], loadError=false, boundaryTimer=null;
