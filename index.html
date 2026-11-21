@@ -2698,6 +2698,47 @@
     .rooms.three .room:nth-child(3) { grid-column: 1 / -1; }
     .lobby, .b1 { background-size: cover; min-height: 150px; }
   }
+
+  /* 상태별 포즈: WORK=책상에 앉아 작업, IDLE=자유 시간 포즈 (기존 working/idle 클래스 그대로 사용) */
+  #room-owner.idle .avatar { background-image: url(assets/i0.png); }
+  #room-owner.working .avatar { background-image: url(assets/w0.png); width: 78px; height: 92px; }
+  #room-instinct.idle .avatar { background-image: url(assets/i1.png); }
+  #room-instinct.working .avatar { background-image: url(assets/w1.png); width: 78px; height: 92px; }
+  #room-ceo_haebyeong.idle .avatar { background-image: url(assets/i2.png); }
+  #room-ceo_haebyeong.working .avatar { background-image: url(assets/w2.png); width: 78px; height: 92px; }
+  #room-ceo_tudeori.idle .avatar { background-image: url(assets/i3.png); }
+  #room-ceo_tudeori.working .avatar { background-image: url(assets/w3.png); width: 78px; height: 92px; }
+  #room-director_subaki.idle .avatar { background-image: url(assets/i4.png); }
+  #room-director_subaki.working .avatar { background-image: url(assets/w4.png); width: 78px; height: 92px; }
+  #room-naver.idle .avatar { background-image: url(assets/i5.png); }
+  #room-naver.working .avatar { background-image: url(assets/w5.png); width: 78px; height: 92px; }
+  #room-haebyeongi_adsense.idle .avatar { background-image: url(assets/i6.png); }
+  #room-haebyeongi_adsense.working .avatar { background-image: url(assets/w6.png); width: 78px; height: 92px; }
+  #room-invest_sp500.idle .avatar { background-image: url(assets/i7.png); }
+  #room-invest_sp500.working .avatar { background-image: url(assets/w7.png); width: 78px; height: 92px; }
+  #room-commerce.idle .avatar { background-image: url(assets/i8.png); }
+  #room-commerce.working .avatar { background-image: url(assets/w8.png); width: 78px; height: 92px; }
+  #room-grant.idle .avatar { background-image: url(assets/i9.png); }
+  #room-grant.working .avatar { background-image: url(assets/w9.png); width: 78px; height: 92px; }
+  #room-deal.idle .avatar { background-image: url(assets/i10.png); }
+  #room-deal.working .avatar { background-image: url(assets/w10.png); width: 78px; height: 92px; }
+  #room-prize.idle .avatar { background-image: url(assets/i11.png); }
+  #room-prize.working .avatar { background-image: url(assets/w11.png); width: 78px; height: 92px; }
+  #room-tistory.idle .avatar { background-image: url(assets/i12.png); }
+  #room-tistory.working .avatar { background-image: url(assets/w12.png); width: 78px; height: 92px; }
+  #room-cafe.idle .avatar { background-image: url(assets/i13.png); }
+  #room-cafe.working .avatar { background-image: url(assets/w13.png); width: 78px; height: 92px; }
+  #room-blog.idle .avatar { background-image: url(assets/i14.png); }
+  #room-blog.working .avatar { background-image: url(assets/w14.png); width: 78px; height: 92px; }
+  #room-front_desk.idle .avatar { background-image: url(assets/i15.png); }
+  #room-front_desk.working .avatar { background-image: url(assets/w15.png); width: 78px; height: 92px; }
+  #room-public_quiz.idle .avatar { background-image: url(assets/i16.png); }
+  #room-public_quiz.working .avatar { background-image: url(assets/w16.png); width: 78px; height: 92px; }
+  #room-cumex.idle .avatar { background-image: url(assets/i17.png); }
+  #room-cumex.working .avatar { background-image: url(assets/w17.png); width: 78px; height: 92px; }
+  .room.working .worker { animation: none; }
+  .room.working .avatar { animation: none; }
+  .room.working .avatar { filter: drop-shadow(0 3px 3px rgba(0,0,0,.45)); }
 </style>
 </head>
 <body>
