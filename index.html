@@ -2751,6 +2751,28 @@
   .rm-close { width:44px !important; height:44px !important; flex-shrink:0; }
   .sync-note { display:block; white-space:normal; }
   @media(max-width:600px) { .sync-note { flex-basis:100%; width:100%; font-size:9px; line-height:1.5; } }
+
+  .sigbar { align-items:start; }
+  .sig-red-wrap { display:flex; gap:4px; min-width:0; }
+  .sig-red-wrap .sig { flex:1; }
+  .red-ack { flex:none; min-height:32px; padding:5px 10px; border:1px solid #94a3b8; border-radius:7px; background:#243247; color:#f1f5f9; font-family:inherit; font-size:11px; font-weight:700; line-height:1.3; cursor:pointer; }
+  .red-ack:disabled { opacity:.55; cursor:default; }
+  .red-ack:focus-visible { outline:2px solid #7dd3fc; outline-offset:2px; }
+  .red-read-note { grid-column:1/-1; margin:0; color:#b9c9df; font-size:10px; line-height:1.6; }
+  .rm-sig.red.read { border-color:#475569; background:#151e2b; }
+  .chief-row.red.read { border-color:#475569; background:#151e2b; }
+  .chief-cnt .cc-red.read { background:#263243; border-color:#64748b; color:#cbd5e1; }
+  .red-read-tag { font-size:10px; color:#cbd5e1; white-space:nowrap; }
+  #report-actions[hidden] { display:none; }
+  @media(max-width:560px) {
+    .sig-red-wrap { flex-wrap:wrap; }
+    .sig-red-wrap .sig { flex-basis:100%; }
+    .sig-red-wrap .red-ack { width:100%; min-height:40px; }
+    .chief-row.red { flex-wrap:wrap; }
+    .chief-row.red .cr-act { flex-wrap:wrap; gap:5px; }
+    .chief-row.red .red-ack { min-height:40px; min-width:58px; }
+  }
+
 </style>
 </head>
 <body>
@@ -2838,9 +2860,13 @@
     <button class="sig sig-blue" id="sig-blue" type="button" onclick="toggleSig('blue')" aria-expanded="false" title="꼭 알아야 하는 보고·외부 발송·게시·계약 전 승인 대기">
       <span class="sig-word">🔵 파란불</span><span class="sig-n" id="sig-blue-n">0</span><span class="sig-sub">일반 확인·승인</span>
     </button>
+    <div class="sig-red-wrap">
     <button class="sig sig-red" id="sig-red" type="button" onclick="toggleSig('red')" aria-expanded="false" title="자금·계좌·이체·결제·금융 인증 — AI 임의 실행 금지, 오너 직접">
       <span class="sig-word">🔴 빨간불</span><span class="sig-n" id="sig-red-n">0</span><span class="sig-sub">자금·결제 · 오너 직접</span>
     </button>
+      <button class="red-ack" id="red-ack-all" type="button" onclick="acknowledgeRed(event, 'all')" aria-describedby="red-read-note">확인</button>
+    </div>
+    <p id="red-read-note" class="red-read-note" role="status">확인 = 이 브라우저 읽음·알림 끄기. 승인·결제·업무 완료 아님.</p>
     <div class="sig-list" id="sig-list" hidden></div>
   </div>
 
@@ -2945,8 +2971,7 @@
       <button class="rm-close" type="button" id="rm-close" onclick="closeReport()" aria-label="업무 보고 닫기">✕</button>
     </div>
     <div class="rm-body" id="rm-body"></div>
-    <div class="rm-foot">
-      <button class="rm-btn primary" type="button" id="rm-copy" onclick="copyReport()">📋 보고 내용 복사</button>
+    <div class="rm-foot" id="report-actions">
       <button class="rm-btn shop" type="button" id="rm-shop" onclick="openShopFromReport()" hidden>🛍️ 위탁판매실 바로 보기</button>
       <button class="rm-btn shop" type="button" id="rm-ledger" onclick="openLedgerFromReport()" hidden>📊 스마트스토어 통합 장부 열기</button>
     </div>
@@ -2954,6 +2979,7 @@
 </div>
 
 <script src="task-archive.js"></script>
+<script src="red-read.js"></script>
 <script>
 /* ================= 설정 ================= */
 const FLOORS = [
@@ -3604,6 +3630,7 @@ function signalData(raw) {
   const list = (v) => Array.isArray(v) ? v.filter(x => x && typeof x === "object" && typeof x.title === "string" && x.title.trim()).map(x => ({
     room: (typeof x.room === "string") ? x.room.trim() : "",
     title: x.title.trim(),
+    ackVersion: RedRead.version(x),
     detail: (typeof x.detail === "string" && x.detail.trim()) ? x.detail.trim() : ""
   })) : [];
   return {
@@ -3617,6 +3644,30 @@ function signalData(raw) {
 let SIGNALS_BASE = signalData(null);   // status.json에서 온 원본 신호 (결정과 무관)
 let SIGNALS = SIGNALS_BASE;            // 로컬 선택과 무관한 대기 신호
 let SIG_OPEN = null;
+let redStorage;
+try { redStorage = window.localStorage; } catch (_) { redStorage = {getItem(){return null},setItem(){throw new Error('Storage unavailable')}}; }
+const RED_READ = RedRead.create(redStorage);
+function activeRedItems() {
+  return [...(SIGNALS_BASE.red || []), ...((CHIEF && CHIEF.items) || []).filter(x => x.lane === 'red')]
+    .filter(it => !signalCleared('red', it));
+}
+function redGroupUnread(it) {
+  return activeRedItems().some(x => RedRead.group(x) === RedRead.group(it) && !RED_READ.isRead(x));
+}
+function unreadRedItems() {
+  const byGroup = new Map();
+  activeRedItems().forEach(it => { if (!RED_READ.isRead(it)) byGroup.set(RedRead.group(it), it); });
+  return [...byGroup.values()];
+}
+function acknowledgeRed(e, source, idx) {
+  if (e) { e.stopPropagation(); e.preventDefault(); }
+  const it = source === 'chief' ? CHIEF.items[idx] : (SIGNALS.red || [])[idx];
+  const targets = source === 'all' ? activeRedItems() : it ? activeRedItems().filter(x => RedRead.group(x) === RedRead.group(it)) : [];
+  if (!targets.length) return;
+  RED_READ.mark(targets);
+  renderChief(); renderSignals(); refreshReport();
+}
+
 
 function laneCount(id, lane) {
   return (SIGNALS[lane] || []).filter(it => it.room === id).length;
@@ -3627,7 +3678,8 @@ function laneOf(id) {
   return "";
 }
 function roomSignals(id, all) {
-  const pick = (lane) => (SIGNALS[lane] || []).filter(it => all ? true : it.room === id);
+  const source = signalsView(SIGNALS_BASE, chiefDecisions(), true);
+  const pick = (lane) => (source[lane] || []).filter(it => all ? true : it.room === id);
   return { blue: pick("blue"), red: pick("red") };
 }
 
@@ -3642,9 +3694,9 @@ function signalCleared(lane, it, base, dec) {
   return !!(CHIEF && CHIEF.items.some(x => x.room === it.room && x.title === it.title && TaskArchive.bucket(x) === "archived"));
 }
 
-function signalsView(base, dec) {
+function signalsView(base, dec, includeRead = false) {
   const pick = (lane) => (base[lane] || []).filter(it => !signalCleared(lane, it, base, dec));
-  return { blue: pick("blue"), red: pick("red"), note: base.note, updated: base.updated };
+  return { blue: pick("blue"), red: includeRead ? pick("red") : unreadRedItems(), note: base.note, updated: base.updated };
 }
 
 function renderSignals(raw) {
@@ -3666,7 +3718,13 @@ function renderSignals(raw) {
     rBtn.classList.toggle("open", SIG_OPEN === "red");
     rBtn.setAttribute("aria-expanded", SIG_OPEN === "red" ? "true" : "false");
     const sub = rBtn.querySelector(".sig-sub");
-    if (sub) sub.textContent = SIGNALS.red.length ? "자금·결제 · 오너 직접" : "0 · 대기 없음";
+    if (sub) sub.textContent = SIGNALS.red.length ? "미확인 · 오너 직접" : "미확인 없음 · 업무 유지";
+    const word = rBtn.querySelector(".sig-word");
+    if (word) word.textContent = SIGNALS.red.length ? "🔴 빨간불" : "⚪ 빨간불 꺼짐";
+    const ack = document.getElementById("red-ack-all");
+    if (ack) { ack.disabled = !SIGNALS.red.length; ack.textContent = SIGNALS.red.length ? "확인" : "확인됨"; }
+    const note = document.getElementById("red-read-note");
+    if (note) note.textContent = RED_READ.saved ? "확인 = 이 브라우저 읽음·알림 끄기. 승인·결제·업무 완료 아님. 미결 업무는 보고에 남습니다." : "이 브라우저에서 알림을 껐습니다. 저장을 사용할 수 없어 새로고침하면 다시 켜질 수 있습니다. 승인·결제·완료 아님.";
   }
   rooms.forEach(r => {
     if (r.ceo) return;
@@ -3707,9 +3765,9 @@ function renderSigList() {
     : "🔵 파란불 · 꼭 확인해야 하는 보고·외부 발송·게시·계약 전 승인";
   box.hidden = false;
   box.innerHTML = `<div class="sig-lh ${SIG_OPEN}">${esc(head)}</div>` + (items.length
-    ? items.map(it => {
+    ? items.map((it, idx) => {
         const r = rooms.find(x => x.id === it.room);
-        return `<div class="sig-row ${SIG_OPEN}"><span class="sig-rm">${esc(r ? r.title : "공통")}</span><span class="sig-tx"><b>${esc(it.title)}</b>${it.detail ? `<i>${esc(it.detail)}</i>` : ""}</span>${r ? `<button class="sig-go" type="button" onclick="openReport('${esc(r.id)}')">열기</button>` : ""}</div>`;
+        return `<div class="sig-row ${SIG_OPEN}"><span class="sig-rm">${esc(r ? r.title : "공통")}</span><span class="sig-tx"><b>${esc(it.title)}</b>${it.detail ? `<i>${esc(it.detail)}</i>` : ""}</span>${SIG_OPEN === "red" ? `<button class="red-ack" type="button" onkeydown="event.stopPropagation()" onclick="acknowledgeRed(event, 'signal', ${idx})">확인</button>` : ""}${r ? `<button class="sig-go" type="button" onclick="openReport('${esc(r.id)}')">열기</button>` : ""}</div>`;
       }).join("")
     : `<div class="sig-row">지금 대기 중인 건이 없습니다.</div>`);
 }
@@ -3740,6 +3798,7 @@ function chiefData(raw) {
       title: it.title.trim(),
       detail: str(it.detail, ""),
       url: (typeof it.url === "string" && /^https?:\/\//.test(it.url)) ? it.url : "",
+      ackVersion: RedRead.version(it),
       status: str(it.status, ""),
       completed_at: str(it.completed_at, ""),
       urlLabel: str(it.url_label || it.urlLabel, "열기")
@@ -3889,7 +3948,7 @@ function renderChief(raw) {
   const n = { red: 0, blue: 0, wait: 0 };
   items.forEach(it => { n[it.lane] += 1; });
   const cnt = document.getElementById("chief-cnt");
-  if (cnt) cnt.innerHTML = `<span class="cc-red">🔴 ${n.red}</span><span class="cc-blue">🔵 ${n.blue}</span><span class="cc-wait">⏳ ${n.wait}</span>`;
+  if (cnt) cnt.innerHTML = `<span class="cc-red${unreadRedItems().length ? "" : " read"}">${unreadRedItems().length ? "🔴" : "⚪"} ${unreadRedItems().length}</span><span class="cc-blue">🔵 ${n.blue}</span><span class="cc-wait">⏳ ${n.wait}</span>`;
   const say = document.getElementById("chief-say");
   const localN = okN + noN + reN;
   if (say) say.textContent = `결재 분류(쇼츠 보류는 ⏳) · 접수·완료 확인 전 대기 🔴 ${n.red} · 🔵 ${n.blue} · ⏳ ${n.wait}` + (localN ? ` · 이 브라우저 선택 ${localN}건 (미접수)` : '') + ' · 버튼은 문구 복사만, Slack 전송 필요';
@@ -3898,6 +3957,8 @@ function renderChief(raw) {
     const rr = rooms.find(r => r.id === it.room);
     const rm = rr ? rr.title : "";
     const d = dec[it.id];
+    const redRead = it.lane === "red" && !redGroupUnread(it);
+    const ack = it.lane === "red" ? (redRead ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : `<button class="red-ack" type="button" onkeydown="event.stopPropagation()" onclick="acknowledgeRed(event, 'chief', ${sourceIdx})">확인</button>`) : "";
     const act = d
       ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${d.s === "ok" ? "✅ 승인 선택 · 미접수" : d.s === "re" ? "🔁 재심의 선택 · 미접수" : "⛔ 불허 선택 · 미접수"}</span>` +
         (it.lane === "wait" ? "" : `<span class="cr-clr" title="실제 접수 확인 전이므로 신호와 대기 목록을 유지합니다">신호 유지</span>`) +
@@ -3906,15 +3967,15 @@ function renderChief(raw) {
       : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="${it.lane === "red" ? "승인 — 실행은 오너가 직접" : "승인하고 진행"}">승인</button>` +
         `<button class="cr-no" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="보류하고 재검토">불허</button>` +
         `<button class="cr-re" type="button" onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 문구 복사 · Slack 채팅에 보내야 접수 · 신호 유지">재심의</button>`;
-    return `<div class="chief-row ${it.lane}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" role="button" tabindex="0" data-room="${esc(it.room)}"
+    return `<div class="chief-row ${it.lane}${redRead ? " read" : ""}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" role="button" tabindex="0" data-room="${esc(it.room)}"
         title="${esc(it.title + (rm ? " · " + rm : "") + " · 누르면 부서 보고 열기")}"
         onclick="chiefClick(event, '${esc(it.room)}')"
         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();chiefClick(event,'${esc(it.room)}');}">
-        <span class="cr-lane" aria-hidden="true">${CHIEF_ICON[it.lane]}</span>
+        <span class="cr-lane" aria-hidden="true">${redRead ? "⚪" : CHIEF_ICON[it.lane]}</span>
         <span class="cr-tx"><b>${esc(it.title)}</b>${rm ? `<span class="cr-rm">${esc(rm)}</span>` : ""}${it.detail ? `<i>${esc(it.detail)}</i>` : ""}</span>
         ${it.room ? `<button class="cr-go" type="button" onclick="event.stopPropagation();openReport('${esc(it.room)}')">보고 ›</button>` : ""}
         ${it.url ? `<a class="cr-url" href="${esc(it.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ ${esc(it.urlLabel)}</a>` : ""}
-        <span class="cr-act">${act}</span>
+        <span class="cr-act">${ack}${act}</span>
       </div>`;
   }).join("") : `<div class="chief-row wait"><span class="cr-lane">✅</span><span class="cr-tx"><b>지금 대기 중인 건이 없습니다</b></span></div>`;
   applyChiefState();
@@ -4135,7 +4196,9 @@ function applyStatus(data) {
   BACKUP = backupData(src.backup);
   SIGNALS_BASE = signalData(src.signals);   // 결정과 무관한 원본 신호를 먼저 반영
   TaskArchive.ingest(src);
-  renderChief(src.chief);                  // 총괄 항목(결정 열쇠)을 먼저 세운다
+  CHIEF = chiefData(src.chief);
+  RED_READ.reconcile(activeRedItems());
+  renderChief();                  // 총괄 항목(결정 열쇠)을 먼저 세운다
   renderSignals();                         // 결정된 건을 빼고 신호등·방 불빛을 다시 그린다
 
   rooms.forEach(r => {
@@ -4571,7 +4634,7 @@ function openReport(id) {
 
   const list = (items) => items.map(x => `<li>${esc(x)}</li>`).join("");
   const roomTitle = (rid) => { const rr = rooms.find(x => x.id === rid); return rr ? rr.title : rid; };
-  const sigRow = (x, lane) => `<div class="rm-sig ${lane}"><span class="rs-lane">${lane === "red" ? "🔴" : "🔵"}</span><span class="rs-tx"><b>${esc(x.title)}</b>${x.detail ? `<i>${esc(x.detail)}</i>` : ""}</span>${d.ceo && x.room ? `<span class="rs-rm">${esc(roomTitle(x.room))}</span>` : ""}</div>`;
+  const sigRow = (x, lane) => `<div class="rm-sig ${lane}${lane === "red" && !redGroupUnread(x) ? " read" : ""}"><span class="rs-lane">${lane === "red" ? (redGroupUnread(x) ? "🔴" : "⚪") : "🔵"}</span><span class="rs-tx"><b>${esc(x.title)}</b>${x.detail ? `<i>${esc(x.detail)}</i>` : ""}</span>${lane === "red" && !redGroupUnread(x) ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : ""}${d.ceo && x.room ? `<span class="rs-rm">${esc(roomTitle(x.room))}</span>` : ""}</div>`;
   const body = document.getElementById("rm-body");
   if (body) {
     body.innerHTML = [
@@ -4580,7 +4643,7 @@ function openReport(id) {
       d.summary ? `<div class="rm-sum"><span>👑</span><span>${esc(d.summary)}</span></div>` : "",
       d.ticker ? `<div class="rm-live"><span class="rm-live-h">📺 전광판</span><span class="rm-live-t">${esc(d.ticker)}</span><span class="rm-live-u">${esc(d.updated)}</span></div>` : "",
       d.credit ? `<div class="rm-credit"><span>⚡ 크레딧</span><span>${esc(d.credit)}</span></div>` : "",
-      (d.signals.red.length || d.signals.blue.length) ? `<div class="rm-sec"><div class="rm-h">🚦 승인 대기 신호 · 🔵 ${d.signals.blue.length} · 🔴 ${d.signals.red.length}</div>${d.signals.red.length ? `<div class="rm-sig-note">🔴 자금·계좌·이체·결제는 AI가 실행하지 않습니다. 오너가 직접 처리해 주세요.</div>` : ""}<div class="rm-sigs">${d.signals.red.map(x => sigRow(x, "red")).join("")}${d.signals.blue.map(x => sigRow(x, "blue")).join("")}</div></div>` : "",
+      (d.signals.red.length || d.signals.blue.length) ? `<div class="rm-sec"><div class="rm-h">🚦 미결 신호 · 🔵 ${d.signals.blue.length} · 빨간 알림 ${d.signals.red.filter(redGroupUnread).length} / 미결 ${d.signals.red.length}</div>${d.signals.red.length ? `<div class="rm-sig-note">🔴 자금·계좌·이체·결제는 AI가 실행하지 않습니다. 오너가 직접 처리해 주세요.</div>` : ""}<div class="rm-sigs">${d.signals.red.map(x => sigRow(x, "red")).join("")}${d.signals.blue.map(x => sigRow(x, "blue")).join("")}</div></div>` : "",
       d.depts.length ? `<div class="rm-sec"><div class="rm-h">🏢 담당 부서 현황 · ${d.depts.length}개<em class="rm-hint">칩을 누르면 해당 부서 보고로 이동</em></div><div class="rm-depts">${d.depts.map(x => (x.id && rooms.some(r => r.id === x.id))
         ? `<button type="button" class="rm-dept ${x.state}" title="${esc(x.name + " · " + REPORT_STATE_TXT[x.state] + " · 눌러서 부서 보고 열기")}" onclick="openReport('${esc(x.id)}')"><i></i>${esc(x.name)}<span class="rm-arw">›</span></button>`
         : `<span class="rm-dept ${x.state}" title="${esc(REPORT_STATE_TXT[x.state])}"><i></i>${esc(x.name)}</span>`).join("")}</div></div>` : "",
@@ -4596,10 +4659,10 @@ function openReport(id) {
 
   const shopBtn = document.getElementById("rm-shop");
   if (shopBtn) shopBtn.hidden = (id !== "commerce" && id !== "director_subaki");
+  const actions = document.getElementById("report-actions");
+  if (actions) actions.hidden = id !== "commerce" && id !== "director_subaki";
   const ledgerBtn = document.getElementById("rm-ledger");
   if (ledgerBtn) ledgerBtn.hidden = (id !== "director_subaki");
-  const copyBtn = document.getElementById("rm-copy");
-  if (copyBtn) { copyBtn.classList.remove("ok"); }  // 문구는 copyText가 원래대로 되돌린다
   const modal = document.getElementById("report-modal");
   if (modal) {
     modal.hidden = false;
@@ -4615,33 +4678,6 @@ function closeReport() {
   modal.classList.remove("show");
   modal.hidden = true;
   REPORT_ID = null;
-}
-
-function copyReport() {
-  if (!REPORT_ID) return;
-  const d = reportData(REPORT_ID);
-  const out = ["[업무 보고] " + d.title + " · " + d.tag + " · " + d.stateTxt];
-  if (d.summary) out.push("👑 " + d.summary);
-  if (d.ticker) out.push("전광판: " + d.ticker + (d.updated ? " (" + d.updated + ")" : ""));
-  if (d.credit) out.push("⚡ 크레딧: " + d.credit);
-  if (d.depts.length) out.push("", "🏢 담당 부서 현황", ...d.depts.map(x => " - " + x.name + " (" + REPORT_STATE_TXT[x.state] + ")"));
-  const sig = d.signals || { blue: [], red: [] };
-  if (sig.red.length || sig.blue.length) {
-    out.push("", "🚦 승인 대기 신호");
-    sig.red.forEach(x => out.push(" - 🔴 [자금·오너 직접] " + x.title + (x.detail ? " — " + x.detail : "")));
-    sig.blue.forEach(x => out.push(" - 🔵 [확인·승인] " + x.title + (x.detail ? " — " + x.detail : "")));
-  }
-  if (d.roster) out.push("", "🧩 6F 분장표", ...d.roster.items.map(x => " - " + x.name + " (" + x.chip + "): " + x.role));
-  if (d.backup) {
-    out.push("", "🛟 비상 업무 백업 매트릭스");
-    d.backup.members.forEach(m => out.push(" - " + m.name + " (" + m.part + ") → 1차 " + m.backup1 + " / 2차 " + m.backup2));
-    if (d.backup.rule) out.push("   · " + d.backup.rule);
-  }
-  if (d.now.length) out.push("", "▶ 지금 진행 중", ...d.now.map(t => " - " + t));
-  if (d.done.length) out.push("", "✔ 최근 완료 보고", ...d.done.map(t => " - " + t));
-  if (d.next.length) out.push("", "⏰ 다음 예정", ...d.next.map(n => " - " + (n.time ? n.time + " " : "") + n.task));
-  if (d.links.length) out.push("", "🔗 바로가기", ...d.links.map(l => " - " + l.label + ": " + l.url));
-  copyText(out.join("\n"), document.getElementById("rm-copy"));
 }
 
 function openShopFromReport() {
