@@ -1,0 +1,17 @@
+const assert = require('assert');
+const RedRead = require('./red-read.js');
+const raw = {};
+const storage = {getItem:key=>raw[key],setItem:(key,value)=>raw[key]=value};
+const item = {room:'commerce',title:'Example pending task',detail:'Original content',ackVersion:'one'};
+let receipts = RedRead.create(storage);
+assert(!receipts.isRead(item));
+assert(receipts.mark([item]));
+assert(receipts.isRead(item));
+assert(RedRead.create(storage).isRead(item));
+assert(!receipts.isRead({...item,detail:'Changed content'}));
+assert(!receipts.isRead({...item,ackVersion:'two'}));
+receipts.reconcile([]);
+assert(!receipts.isRead(item));
+assert.equal(RedRead.create({getItem(){throw Error()},setItem(){throw Error()}}).mark([item]),false);
+assert.equal(JSON.parse(RedRead.version({event_id:'new'}))[2],'new');
+console.log('PASS: read persistence; new content/occurrence; removal and reappearance; storage failure; event identity');
