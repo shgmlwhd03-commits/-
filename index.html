@@ -2833,7 +2833,8 @@
 
   .room[role="button"]:focus-visible { outline:3px solid #facc15; outline-offset:-3px; }
   .rm-close { width:44px !important; height:44px !important; flex-shrink:0; }
-  .sync-note { white-space:normal; }
+  .sync-note { display:block; white-space:normal; }
+  @media(max-width:600px) { .sync-note { flex-basis:100%; width:100%; font-size:9px; line-height:1.5; } }
 </style>
 </head>
 <body>
