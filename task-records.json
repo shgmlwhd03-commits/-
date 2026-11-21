@@ -702,5 +702,7 @@
       "source": "status.json reports.instinct.done",
       "id": "[\"instinct\",\"조직도 개편 반영 — 8F 대표님 · 7F Instinct 총괄 층 · 6F 부장 2명 + 수박이 이사(위탁 총괄)\"]"
     }
-  ]
+  ],
+  "history": [],
+  "last_processed_status_commit": "8dc3d8f1b989883fe7b468cd277be4a875bf51f6"
 }
