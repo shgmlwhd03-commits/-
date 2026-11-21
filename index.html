@@ -5188,7 +5188,7 @@ function sceneSub(who, text) {
   el.querySelector(".ss-txt").textContent = text;
   el.classList.add("show");
   clearTimeout(_subTimer);
-  _subTimer = setTimeout(() => el.classList.remove("show"), 3200);
+  _subTimer = setTimeout(() => el.classList.remove("show"), Math.max(3200, text.length * 160));
 }
 const SUB_NAME = { hb: "해병이 부장", td: "투덜이 부장" };
 function subNameOfRoom(id) {
@@ -5253,7 +5253,7 @@ async function talk(pairs, gap) {
     const who = pairs[i][0], text = pairs[i][1];
     castSay(who, text);
     SFX.chat(venFloor());
-    await sleep(gap || 1500);
+    await sleep(gap || Math.max(2400, text.length * 140));
     castHush(who);
   }
 }
