@@ -5,7 +5,11 @@
   function completed(it){return !!it && ['completed','closed','done'].includes(it.status);}
   function time(it){
     const value=it && it.completed_at;
-    if(typeof value!=='string'||!/^\d{4}-\d\d-\d\dT\d\d:\d\d(?::\d\d(?:\.\d+)?)?(?:Z|[+-]\d\d:\d\d)$/.test(value))return null;
+    const parts=typeof value==='string'&&/^(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d)(?::(\d\d)(?:\.\d+)?)?(Z|[+-](\d\d):(\d\d))$/.exec(value);
+    if(!parts)return null;
+    const [,year,month,day,hour,minute,second,zone,offsetHour,offsetMinute]=parts;
+    const y=Number(year),m=Number(month),d=Number(day);
+    if(y<1000||m<1||m>12||d<1||d>new Date(Date.UTC(y,m,0)).getUTCDate()||Number(hour)>23||Number(minute)>59||Number(second||0)>59||(zone!=='Z'&&(Number(offsetHour)>23||Number(offsetMinute)>59)))return null;
     const n=Date.parse(value);return Number.isFinite(n)?n:null;
   }
   function bucket(it,now=Date.now()){
