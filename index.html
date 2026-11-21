@@ -1675,11 +1675,11 @@
   }
 
 
-  /* 연출 대화 자막 (음성 없음 · 실제 업무 보고와 구분) */
-  #scene-sub { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 60; max-width: min(92vw, 520px); pointer-events: none; opacity: 0; transition: opacity .25s ease; text-align: center; }
-  #scene-sub.show { opacity: 1; }
-  #scene-sub .ss-tag { display: inline-block; font-size: 10px; font-weight: 800; color: #cbd5e1; background: rgba(15,23,42,.85); border-radius: 6px 6px 0 0; padding: 1px 8px; letter-spacing: .02em; }
-  #scene-sub .ss-line { display: block; background: rgba(0,0,0,.78); color: #fff; font-size: 14px; font-weight: 700; line-height: 1.4; padding: 6px 14px; border-radius: 8px; word-break: keep-all; }
+  /* 연출 대화 자막 (음성 없음 · 실제 업무 보고와 구분). 화면을 가리지 않도록 본문 흐름 안에 자리를 잡고 위쪽에 붙는다 */
+  #scene-sub { position: sticky; top: 0; z-index: 40; min-height: 46px; margin: 4px 0; padding: 4px 10px 5px; background: rgba(8,12,24,.94); border: 1px solid #1e2a44; border-radius: 10px; text-align: center; }
+  #scene-sub .ss-tag { display: block; font-size: 10px; font-weight: 800; color: #94a3b8; letter-spacing: .02em; }
+  #scene-sub .ss-line { display: block; min-height: 18px; color: #fff; font-size: 13px; font-weight: 700; line-height: 1.4; word-break: keep-all; opacity: 0; transition: opacity .2s ease; }
+  #scene-sub.show .ss-line { opacity: 1; }
   #scene-sub .ss-who { color: #fcd34d; margin-right: 6px; }
 
   /* 캐릭터 말풍선 (대화) */
@@ -2843,6 +2843,8 @@
     <button class="vtab on" id="vtab-bldg" type="button" role="tab" aria-selected="true" onclick="setView('bldg')">🏢 전체 빌딩</button>
     <button class="vtab shop" id="vtab-shop" type="button" role="tab" aria-selected="false" onclick="setView('shop')">🛍️ 위탁판매실 <span class="vtab-num hide" id="shop-badge">0</span></button>
   </nav>
+
+  <div id="scene-sub" role="status" aria-live="polite"><span class="ss-tag">🎬 연출 대화 자막 · 소리 없음 · 실제 업무 보고 아님</span><span class="ss-line" id="ss-line"></span></div>
 
   <div class="bldg-body" id="bldg-body">
     <div class="floors" id="floors"></div>
@@ -4821,7 +4823,12 @@ function updatePill() {
 }
 
 /* ================= 유리 엘리베이터 ================= */
-const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+const sleep = (ms) => new Promise(r => {
+  /* 자막이 떠 있는 동안은 읽을 시간만큼 장면 전환을 늦춘다 */
+  const left = (typeof _subUntil === "number" ? _subUntil : 0) - Date.now();
+  if (ms >= 900 && left > ms) ms = left + 250;
+  setTimeout(r, ms);
+});
 const pickLine = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
@@ -5171,29 +5178,34 @@ function castHome(k, dur) {
   }, d * 1000 + 160);
 }
 
-/* 연출 대화 자막: 소리 없이 글자로만. 실제 업무 보고(상태판)와 구분해 '연출' 표시 */
-let _subTimer = null;
+/* 연출 대화 자막: 소리 없이 글자로만. 실제 업무 보고(상태판)와 구분되는 '연출' 자리 */
+let _subTimer = null, _subUntil = 0, _subLast = 0, _subLines = [];
 function sceneSub(who, text) {
   if (!text) return;
-  let el = document.getElementById("scene-sub");
-  if (!el) {
-    el = document.createElement("div");
-    el.id = "scene-sub";
-    el.setAttribute("role", "status");
-    el.setAttribute("aria-live", "polite");
-    el.innerHTML = '<span class="ss-tag">🎬 연출 대화 · 업무 보고 아님</span><span class="ss-line"><span class="ss-who"></span><span class="ss-txt"></span></span>';
-    document.body.appendChild(el);
-  }
-  el.querySelector(".ss-who").textContent = who ? who + ":" : "";
-  el.querySelector(".ss-txt").textContent = text;
+  const el = document.getElementById("scene-sub");
+  const line = document.getElementById("ss-line");
+  if (!el || !line) return;
+  const now = Date.now();
+  if (now - _subLast < 400 && el.classList.contains("show")) _subLines.push([who, text]);
+  else _subLines = [[who, text]];
+  _subLast = now;
+  line.textContent = "";
+  _subLines.forEach((p, n) => {
+    if (n) line.appendChild(document.createElement("br"));
+    const w = document.createElement("span"); w.className = "ss-who"; w.textContent = p[0] ? p[0] + ":" : "";
+    line.appendChild(w); line.appendChild(document.createTextNode(p[1]));
+  });
+  const dur = Math.max(3200, _subLines.reduce((a, p) => a + p[1].length * 160, 0));
+  _subUntil = now + dur;
   el.classList.add("show");
   clearTimeout(_subTimer);
-  _subTimer = setTimeout(() => el.classList.remove("show"), Math.max(3200, text.length * 160));
+  _subTimer = setTimeout(() => el.classList.remove("show"), dur);
 }
-const SUB_NAME = { hb: "해병이 부장", td: "투덜이 부장" };
+const SUB_NAME = { hb: "해병이", td: "투덜이" };
 function subNameOfRoom(id) {
   const r = rooms.find(x => x.id === id);
-  return r ? (r.name || r.tag || id) : id;
+  if (r && r.ceo) return (r.tag || "") + " 부장";
+  return r ? (r.tag || r.name || id) : id;
 }
 
 function castSay(k, text) {
@@ -5253,7 +5265,7 @@ async function talk(pairs, gap) {
     const who = pairs[i][0], text = pairs[i][1];
     castSay(who, text);
     SFX.chat(venFloor());
-    await sleep(gap || Math.max(2400, text.length * 140));
+    await sleep(gap || 1500);
     castHush(who);
   }
 }
@@ -5277,7 +5289,7 @@ function ceoRestore() {
 /* ---- 1F 에서 6F 대표실 보고 ---- */
 async function sceneRide() {
   castItem("hb", "📨"); castItem("td", "📊");
-  castSay("hb", "대표실에 보고하고 올게!");
+  castSay("hb", "부장님들께 같이 확인받고 올게!");
   castCarry("hb", true); castCarry("td", true);
   castTo("hb", 82, 1.7);
   castTo("td", 87, 1.7);
@@ -5288,9 +5300,9 @@ async function sceneRide() {
   liftGo("f6", 1.9);
   await sleep(2000);
   SFX.ding("f6", "up");
-  liftSay(true, "오늘 발행 완료 보고합니다!");
-  ceoSay("수고했어, 내일도 화이팅 👑", "ceo_haebyeong");
-  ceoSay("보고 잘 받았어 😤", "ceo_tudeori");
+  liftSay(true, "부장님들께 올라가는 중");
+  ceoSay("어서 와, 같이 우선순위부터 보자 👑", "ceo_haebyeong");
+  ceoSay("그래, 확인할 것부터 하나씩 얘기해 보자 😤", "ceo_tudeori");
   SFX.chat("f6");
   await sleep(1700);
   ceoRestore();
@@ -5450,7 +5462,7 @@ async function scenePantry() {
     await sleep(1200);
     hideHandoff();
     castHush("hb");
-    castSay("hb", "👑 대표실에 커피 들고 보고!");
+    castSay("hb", "👑 부장님들께 커피 갖다 드리고 올게!");
     castTo("hb", 82, 1.5);
     castTo("td", 87, 1.5);
     await sleep(1600);
@@ -5500,12 +5512,12 @@ async function sceneBasement() {
 /* ---- 1F 짧은 대화 · 산책 · 협업 ---- */
 async function sceneMeet() {
   castItem("hb", "📨");
-  castSay("hb", "고단가 키워드 찾았어!");
+  castSay("hb", "오늘은 뭐부터 챙길까?");
   SFX.chat("f1");
   castTo("hb", 44, 2.0);
   castTo("td", 52, 2.0);
   await sleep(1200);
-  castSay("td", "투덜이 쪽이랑 안 겹치게 맞출게");
+  castSay("td", "급한 것부터 같이 정리해 보자");
   SFX.chat("f1");
   await sleep(1000);
   castStand("hb"); castStand("td");
@@ -5516,7 +5528,7 @@ async function sceneMeet() {
   hideHandoff();
   castItem("td", "📊");
   castCarry("td", true);
-  castSay("td", "바로 반영할게!");
+  castSay("td", "그래, 나도 그렇게 맞출게!");
   SFX.chat("f1");
   await sleep(1200);
   castHush("td");
@@ -5641,9 +5653,9 @@ function applyCorridor() {
 
 /* ================= 층별 잡담 · 자율 휴식 ================= */
 const ROOM_TALK = {
-  f5: [["naver", "고단가 키워드 찾았어!"], ["haebyeongi_adsense", "투덜이 쪽이랑 안 겹치게 맞출게"]],
-  f4: [["grant", "다자녀 환급금 확인 완료!"], ["deal", "특가 링크도 새로 정리했어"]],
-  f3: [["tistory", "애드센스 15편 심사 중!"], ["cafe", "카페 공지는 내가 올릴게"]]
+  f5: [["naver", "오늘 할 일 순서부터 맞춰 볼까?"], ["haebyeongi_adsense", "좋아, 겹치는 건 서로 나눠서 하자"]],
+  f4: [["grant", "확인할 것부터 차근차근 하자"], ["deal", "좋아, 내 쪽도 같이 챙길게"]],
+  f3: [["tistory", "오늘 할 일은 어디서부터 볼까?"], ["cafe", "급한 쪽부터 같이 보자"]]
 };
 let talkRunning = false;
 
