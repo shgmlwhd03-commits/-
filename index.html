@@ -813,6 +813,21 @@
   }
   .copy-toast.show { display: block; }
 
+  /* 안내데스크 직접 지시 버튼: 방 카드에 상시 표시 (경보 박스와 달리 상태와 무관) */
+  .desk-direct { margin-top: 3px; }
+  .desk-direct-btn {
+    width: 100%;
+    background: rgba(8, 47, 73, 0.8);
+    border: 1px solid #38bdf8;
+    color: #bae6fd;
+    border-radius: 4px;
+    padding: 2px 5px;
+    font-size: 6.8px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .desk-direct-btn:active { transform: translateY(1px); }
+
   /* ================= 6F 펜트하우스: 수익 전광판 ================= */
   .pent { display: flex; flex-direction: column; gap: 3px; position: relative; z-index: 1; }
   .pent-top { display: flex; align-items: flex-end; gap: 6px; padding-top: 21px; }
@@ -2033,6 +2048,23 @@
   .rm-btn.shop { flex: 0 0 auto; border-color: #fbbf24; background: rgba(60, 42, 8, 0.8); color: #fde68a; }
   .rm-btn[hidden] { display: none; }
 
+  /* 안내데스크 지시 입력창 */
+  .dd-input {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 10px;
+    line-height: 1.45;
+    color: #e2e8f0;
+    background: #0f172a;
+    border: 1px solid #475569;
+    border-radius: 7px;
+    padding: 6px 8px;
+    resize: vertical;
+    min-height: 64px;
+  }
+  .dd-input:focus { outline: none; border-color: #38bdf8; }
+
   /* ===== 💼 총괄 · 결재·보고 · 긴급 처리 (최상단 통합 패널) =====
      두 부장(해병이·투덜이)의 미결·대기 건을 🔴 → 🔵 → 일반 대기 순으로 모아 보여 준다.
      개인정보 없음: 부서명·할 일·공개 사이트 주소만 담는다. */
@@ -2235,6 +2267,8 @@
     .room-foot { font-size: 8px; }
     .alert-guide { font-size: 9px; }
     .copy-btn, .resolve-btn { font-size: 9px; padding: 2px 7px; }
+    .desk-direct-btn { font-size: 9px; padding: 3px 7px; }
+    .dd-input { font-size: 12px; }
     .copy-toast { font-size: 8.5px; }
     .pent { gap: 5px; }
     .pent-top { padding-top: 24px; gap: 10px; }
@@ -2756,6 +2790,29 @@
       <button class="rm-btn primary" type="button" id="rm-copy" onclick="copyReport()">📋 보고 내용 복사</button>
       <button class="rm-btn shop" type="button" id="rm-shop" onclick="openShopFromReport()" hidden>🛍️ 위탁판매실 바로 보기</button>
       <button class="rm-btn shop" type="button" id="rm-ledger" onclick="openLedgerFromReport()" hidden>📊 스마트스토어 통합 장부 열기</button>
+      <button class="rm-btn shop" type="button" id="rm-desk" onclick="openDeskDirect(event)" hidden>📮 안내데스크에 지시하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 안내데스크 지시 입력 모달: 자유 문구를 적으면 비서에게 붙여넣을 문구가 복사된다 -->
+<div class="modal" id="desk-direct-modal" hidden onclick="if(event.target===this) closeDeskDirect()">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="dd-title">
+    <div class="rm-head">
+      <span class="rm-title" id="dd-title">🛎️ 안내데스크에 지시하기</span>
+      <span class="rm-tag">대표 직속</span>
+      <button class="rm-close" type="button" id="dd-close" onclick="closeDeskDirect()" aria-label="지시 입력 닫기">✕</button>
+    </div>
+    <div class="rm-body">
+      <div class="rm-sec">
+        <div class="rm-h">📮 벨이에게 보낼 지시<em class="rm-hint">확인을 누르면 비서용 문구가 복사됩니다</em></div>
+        <textarea id="dd-input" class="dd-input" rows="4" placeholder="예: 내일 오전 일정 확인해서 알려줘"></textarea>
+      </div>
+      <div class="copy-toast" id="dd-toast">복사됨 — 슬랙 비서에게 붙여넣으세요</div>
+    </div>
+    <div class="rm-foot">
+      <button class="rm-btn primary" type="button" id="dd-send" onclick="confirmDeskDirect()">📮 지시 문구 복사</button>
+      <button class="rm-btn" type="button" onclick="closeDeskDirect()">닫기</button>
     </div>
   </div>
 </div>
@@ -2999,6 +3056,7 @@ function roomHTML(r, i) {
           <span class="led-time" id="time-${r.id}" title="마지막 갱신">--:--</span>
         </div>
         <div class="room-foot"><span class="foot-txt" id="foot-${r.id}">${esc(r.foot)}</span></div>
+        ${concierge ? `<div class="desk-direct"><button class="desk-direct-btn" type="button" onclick="openDeskDirect(event)" title="벨이에게 보낼 지시를 적으면 비서에게 붙여넣을 문구가 복사됩니다">📮 안내데스크에 지시하기</button></div>` : ""}
         <div class="alert-box" id="alertbox-${r.id}">
           <div class="alert-guide" id="guide-${r.id}"><span class="guide-tag">해결</span>${esc(r.guide)}</div>
           <div class="alert-actions">
@@ -4369,6 +4427,8 @@ function openReport(id) {
   if (shopBtn) shopBtn.hidden = (id !== "commerce" && id !== "director_subaki");
   const ledgerBtn = document.getElementById("rm-ledger");
   if (ledgerBtn) ledgerBtn.hidden = (id !== "director_subaki");
+  const deskBtn = document.getElementById("rm-desk");
+  if (deskBtn) deskBtn.hidden = (id !== "front_desk");
   const copyBtn = document.getElementById("rm-copy");
   if (copyBtn) { copyBtn.classList.remove("ok"); }  // 문구는 copyText가 원래대로 되돌린다
   const modal = document.getElementById("report-modal");
@@ -4386,6 +4446,45 @@ function closeReport() {
   modal.classList.remove("show");
   modal.hidden = true;
   REPORT_ID = null;
+}
+
+/* 안내데스크 직접 지시: 자유 문구 입력 → [안내데스크 지시] 문구 복사 → 슬랙 비서에게 붙여넣기
+   (정적 페이지라 서버 저장 없이 클립보드 복사만 한다 — 총괄 패널 승인·불허와 같은 패턴) */
+function openDeskDirect(e) {
+  if (e) { e.stopPropagation(); e.preventDefault(); }
+  const modal = document.getElementById("desk-direct-modal");
+  if (!modal) return;
+  const toast = document.getElementById("dd-toast");
+  if (toast) toast.classList.remove("show");
+  modal.hidden = false;
+  requestAnimationFrame(() => modal.classList.add("show"));
+  const input = document.getElementById("dd-input");
+  if (input) setTimeout(() => input.focus(), 60);
+  SFX.click("f1");
+}
+
+function closeDeskDirect() {
+  const modal = document.getElementById("desk-direct-modal");
+  if (!modal || modal.hidden) return;
+  modal.classList.remove("show");
+  modal.hidden = true;
+}
+
+function confirmDeskDirect() {
+  const input = document.getElementById("dd-input");
+  const text = input ? input.value.trim() : "";
+  if (!text) {
+    if (input) input.focus();
+    return;
+  }
+  copyText("[안내데스크 지시] " + text, document.getElementById("dd-send"));
+  const toast = document.getElementById("dd-toast");
+  if (toast) {
+    toast.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toast.classList.remove("show"), 2600);
+  }
+  if (input) input.value = "";
 }
 
 function copyReport() {
