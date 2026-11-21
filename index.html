@@ -11,7 +11,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
 <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
-<title>AI 1인 회사 · LIVE OFFICE 6F</title>
+<title>AI 1인 회사 · LIVE OFFICE 8F</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { -webkit-text-size-adjust: 100%; }
@@ -374,6 +374,7 @@
     background: rgba(46, 16, 101, 0.62);
     color: #ede9fe;
   }
+  .room-tag.instinct { border-color: #34d399; color: #d1fae5; }
   .status-dot {
     flex: none;
     width: 7px;
@@ -900,7 +901,7 @@
   .credit .cred { padding: 0 4px; border-radius: 999px; border: 1px solid rgba(56, 189, 248, 0.45); background: rgba(8, 47, 73, 0.55); color: #bae6fd; white-space: nowrap; }
   .credit .cred.td { border-color: rgba(167, 139, 250, 0.5); background: rgba(46, 16, 101, 0.5); color: #e9d5ff; }
 
-  /* ================= 6F 2인 대표실: 대표 두 명 + 전폭 전광판 ================= */
+  /* ================= 6F 대표실: 대표 두 명 + 전폭 전광판 ================= */
   .room.ceo {
     border-color: rgba(251, 191, 36, 0.42);
     background: linear-gradient(180deg, rgba(58, 40, 10, 0.5), rgba(7, 13, 24, 0.6));
@@ -1972,6 +1973,19 @@
   .rm-live-t { min-width: 0; font-size: 7px; font-weight: 800; color: #cbd5e1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .rm-live-u { flex: none; margin-left: auto; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 6.4px; color: #64748b; }
   .rm-sec { margin-bottom: 4px; }
+  .stock-panel { margin: 4px 0 6px; padding: 6px 8px; border: 1px solid rgba(56,189,248,.42); border-radius: 8px; background: linear-gradient(145deg,rgba(8,47,73,.5),rgba(5,10,18,.85)); color:#dbeafe; }
+  .stock-panel h3 { font-size: 9px; color:#7dd3fc; margin-bottom:4px; }
+  .stock-summary { display:flex; flex-wrap:wrap; gap:5px 12px; font-size:7.5px; color:#cbd5e1; }
+  .stock-profit { font-size:11px; font-weight:900; margin-top:4px; color:#86efac; }
+  .stock-profit.down { color:#fca5a5; }
+  .stock-chart { width:100%; height:62px; display:block; margin:4px 0; background:rgba(2,6,14,.55); border-radius:5px; }
+  .stock-chart line { stroke:rgba(148,163,184,.2); stroke-width:1; }
+  .stock-chart polyline { fill:none; stroke:#38bdf8; stroke-width:2; vector-effect:non-scaling-stroke; }
+  .stock-chart circle { fill:#fde68a; }
+  .stock-chart text { fill:#94a3b8; font-size:8px; font-family:inherit; }
+  .stock-panel small { color:#94a3b8; font-size:6.8px; }
+  .room#room-invest_sp500 .avatar { cursor:pointer; outline-offset:3px; }
+  .room#room-invest_sp500 .avatar:hover, .room#room-invest_sp500 .avatar:focus-visible { filter:drop-shadow(0 0 7px #38bdf8); }
   .rm-h { font-size: 7.8px; font-weight: 900; color: #dbe9ff; margin-bottom: 2px; }
   .rm-list, .rm-sched { list-style: none; display: flex; flex-direction: column; gap: 1px; }
   .rm-list li { position: relative; padding-left: 8px; font-size: 7.4px; line-height: 1.45; color: #b6c7db; word-break: keep-all; }
@@ -2008,8 +2022,8 @@
   .rm-btn.shop { flex: 0 0 auto; border-color: #fbbf24; background: rgba(60, 42, 8, 0.8); color: #fde68a; }
   .rm-btn[hidden] { display: none; }
 
-  /* ===== 💼 비서실장 · 총괄 보고 · 긴급 처리 (최상단 통합 패널) =====
-     두 대표(해병이·투덜이)의 미결·대기 건을 🔴 → 🔵 → 일반 대기 순으로 모아 보여 준다.
+  /* ===== 💼 총괄 · 결재·보고 · 긴급 처리 (최상단 통합 패널) =====
+     두 부장(해병이·투덜이)의 미결·대기 건을 🔴 → 🔵 → 일반 대기 순으로 모아 보여 준다.
      개인정보 없음: 부서명·할 일·공개 사이트 주소만 담는다. */
   .chief {
     position: relative; z-index: 4; margin: 0 6px 5px;
@@ -2601,7 +2615,7 @@
   <div class="topbar">
     <div class="brand">
       <span>🏢 AI 1인 회사 · LIVE OFFICE</span>
-      <span class="live-pill" id="sync-pill">● LIVE 6F</span>
+      <span class="live-pill" id="sync-pill">● LIVE 8F</span>
       <span class="day-pill" id="day-pill">DAY 1</span>
       <button class="wake-pill on" id="wake-pill" type="button" onclick="toggleWakeLock()" aria-pressed="true" title="화면 꺼짐 방지 (Screen Wake Lock)"><span class="wake-ico">🔆</span><span class="wake-word"> 화면유지 </span><span class="wake-state">ON</span></button>
       <span class="clock" id="clock" title="대한민국 표준시 (Asia/Seoul)">--:--:--</span>
@@ -2614,15 +2628,15 @@
     </div>
   </div>
 
-  <!-- 💼 비서실장(총괄 보고 · 긴급 처리): 두 대표 미결·대기 통합 · 🔴 → 🔵 → 일반 대기 자동 정렬 -->
-  <section class="chief" id="chief" aria-label="비서실장 총괄 보고">
+  <!-- 💼 총괄(총괄 보고 · 긴급 처리): 두 부장 미결·대기 통합 · 🔴 → 🔵 → 일반 대기 자동 정렬 -->
+  <section class="chief" id="chief" aria-label="총괄 총괄 보고">
     <button class="chief-head" id="chief-head" type="button" onclick="toggleChief()" aria-expanded="true" aria-controls="chief-body">
       <span class="chief-ava" aria-hidden="true">💼</span>
-      <span class="chief-t"><b>💼 비서실장 · 총괄 보고</b><i>긴급 처리 · 두 대표 미결 통합</i></span>
+      <span class="chief-t"><b>💼 총괄 · 결재·보고</b><i>승인 대기 · 완료 건 자동 숨김</i></span>
       <span class="chief-cnt" id="chief-cnt"></span>
       <span class="chief-caret" id="chief-caret">▾</span>
     </button>
-    <div class="chief-say" id="chief-say">두 대표 미결·대기 건을 모으는 중…</div>
+    <div class="chief-say" id="chief-say">두 부장 미결·대기 건을 모으는 중…</div>
     <div class="chief-body" id="chief-body"></div>
   </section>
 
@@ -2735,38 +2749,57 @@
 <script>
 /* ================= 설정 ================= */
 const FLOORS = [
-  { id: "f6", num: "6F", name: "펜트하우스 · 👑 2인 대표실 + 🍉 이사", tone: "pent" },
+  { id: "f8", num: "8F", name: "옥상 · 👑 대표님", tone: "pent" },
+  { id: "fI", num: "7F", name: "Instinct 총괄 층", tone: "instinct" },
+ { id: "f6", num: "6F", name: "대표실 · 👑 부장 2명 + 🍉 수박이(위탁총괄)", tone: "pent" },
   { id: "f5", num: "5F", name: "해병이 · 수익·스토어층", tone: "cyan" },
   { id: "f4", num: "4F", name: "해병이 · 혜택·딜층", tone: "cyan" },
   { id: "f3", num: "3F", name: "투덜이 · 블로그·카페층", tone: "purple" },
-  { id: "f2", num: "2F", name: "투덜이 · 퀴즈·B2B층", tone: "purple" }
+  { id: "f2", num: "2F", name: "투덜이 · 퀴즈·B2B층", tone: "purple" },
+
 ];
 
 // 개인정보 없음: 부서 이름과 상태 문구만 담는다.
 const rooms = [
   {
+    id: "owner", floor: "f8", zone: "instinct", tag: "오너", ceo: true,
+    title: "👑 대표님", worker: "👑", name: "👑 대표님",
+    say: "전체 보고 받는 중!", foot: "조직도 최상단 · 보고 라인: 투덜이·해병이·수박이 → 총괄(Instinct) → 대표님",
+    issue: "승인이 필요한 건이 있어요!",
+    guide: "🔴 자금 건은 대표님이 직접 실행하고, 🔵 확인·승인 건은 총괄 패널에서 결정합니다.",
+    state: "working", ticker: "최종 승인권 · 보고 라인: 투덜이·해병이·수박이 → 총괄(Instinct) → 대표님", updated: "15:52"
+  },
+  {
+    id: "instinct", floor: "fI", zone: "instinct", tag: "Instinct",
+    title: "💼 Instinct 총괄", worker: "💼", name: "💼 총괄",
+    say: "총지휘 중 · 두 부장 보고 접수!", foot: "총지휘 · 보고 라인: 투덜이·해병이·수박이 → 총괄(Instinct) → 대표님",
+    issue: "승인·확인 건을 모으는 중!",
+    guide: "승인·확인 건은 총괄 패널에 모아 둡니다.",
+    state: "working", ticker: "총지휘 · ① 모니터링 매일 08:30 KST ② 블로그 발행 재개 — 머니리포트·투덜이 티스토리 11/20 발행 완료 · 네이버 11/21 09:00 예정", updated: "15:52"
+  },
+  {
     id: "ceo_haebyeong", floor: "f6", zone: "direct", tag: "해병이", ceo: true,
-    title: "👑 해병이 대표", worker: "🫡", name: "👑 해병이 대표",
+    title: "👑 해병이 부장", worker: "🫡", name: "👑 해병이 부장",
     say: "7개 부서 보고 받는 중!", foot: "총괄 지휘 · 해병이 7개 부서",
     issue: "승인 대기 중인 건이 있어요!",
     guide: "승인 대기 건을 확인해 주세요. 진행 여부만 알려주시면 바로 실행합니다.",
-    state: "idle", ticker: "해병이 7개 부서 총괄 · 승인 대기 확인 중", updated: "--:--"
+    state: "working", ticker: "해병이 7개 부서 총괄 · 총괄 지휘 · 승인 대기 확인 중", updated: "15:52"
   },
   {
     id: "ceo_tudeori", floor: "f6", zone: "partner", tag: "투덜이", ceo: true,
-    title: "👑 투덜이 대표", worker: "😤", name: "👑 투덜이 대표",
+    title: "👑 투덜이 부장", worker: "😤", name: "👑 투덜이 부장",
     say: "5개 부서 + 채널 2개 가동 중!", foot: "총괄 지휘 · 투덜이 5개 부서",
     issue: "크레딧 확인이 필요해요!",
-    guide: "투덜이 피클 크레딧 상태를 확인해 주세요. 04:00 충전으로 정상 복귀했습니다.",
-    state: "working", ticker: "ONLINE · 04:00 충전 복귀 · 채널 2개 가동", updated: "--:--"
+    guide: "크레딧 상태는 총괄이 관리합니다. 04:00 충전으로 정상 복귀했습니다.",
+    state: "working", ticker: "ONLINE · 총괄 지휘 · 채널 2개 가동", updated: "15:52"
   },
   {
-    id: "director_subaki", floor: "f6", zone: "direct", tag: "해병이", director: true,
-    title: "🍉 수박이 이사", worker: "🍉", name: "🍉 수박이 이사",
-    say: "보류 기간 2축 운영 중!", foot: "① 위탁·사업자 준비 + ② 저크레딧 보조(1일 1회 이하)",
-    issue: "대표 지시 확인이 필요해요!",
-    guide: "수박이 이사는 보류 기간 동안 2축으로 움직입니다 — ① 위탁판매·사업자 준비(세무·계좌·실무 대기, 오너 확인 단계에서 멈춤) ② 저크레딧 수익 보조(1일 1회 이하, 투덜이 측과 겹치지 않는 살림·주방 배송 체험단과 고액 공식 경품). 확정 건만 최소 알림으로 전달합니다. 장부·위탁판매실은 보고 창에서 바로 열립니다.",
-    state: "working", ticker: "대표 직속 · 보류 기간 2축 운영 — ① 위탁판매·사업자 준비(세무·계좌·실무 대기) + ② 저크레딧 수익 보조(1일 1회 이하 · 살림·주방 배송 체험단·고액 공식 경품) · 난방텐트 2건 철회·공개 도매가 0.70 기준 통과 0건 → 위탁 보류", updated: "--:--"
+    id: "director_subaki", floor: "f6", zone: "direct", tag: "총괄", director: true,
+    title: "🍉 수박이 이사 · 위탁판매 총괄", worker: "🍉", name: "🍉 수박이 이사",
+    say: "위탁판매 총괄 · 실행 대기 중!", foot: "총괄 직속 · 실행 담당(사람)",
+    issue: "총괄 지시 확인이 필요해요!",
+    guide: "수박이 이사는 총괄(Instinct) 직속 위탁판매 총괄 담당이고, 실행은 실행 담당(사람)이 진행합니다. 보류 기간 동안 2축으로 움직입니다 — ① 위탁판매·사업자 준비(세무·계좌·실무 대기, 오너 확인 단계에서 멈춤) ② 저크레딧 수익 보조(1일 1회 이하, 투덜이 측과 겹치지 않는 살림·주방 배송 체험단과 고액 공식 경품). 확정 건만 최소 알림으로 전달합니다. 장부·위탁판매실은 보고 창에서 바로 열립니다.",
+    state: "working", ticker: "총괄 직속 · 위탁판매 총괄 담당 · 실행 담당(사람) · 보류 기간 2축 운영 — ① 위탁판매·사업자 준비(세무·계좌·실무 대기) + ② 저크레딧 수익 보조(1일 1회 이하 · 살림·주방 배송 체험단·고액 공식 경품) · 난방텐트 2건 철회·공개 도매가 0.70 기준 통과 0건 → 위탁 보류", updated: "--:--"
   },
   {
     id: "naver", floor: "f5", zone: "direct", tag: "해병이",
@@ -2774,15 +2807,15 @@ const rooms = [
     say: "트렌드 초안 쓰는 중…", foot: "매일 09:00 · 트렌드·수익형 발행",
     issue: "네이버 재로그인 필요!",
     guide: "네이버 블로그에 다시 로그인해 주세요. 비밀번호만 입력하면 이어서 작업합니다.",
-    state: "idle", ticker: "첫 글 발행 완료 · 다음 발행 09:00 (트렌드·수익형)", updated: "22:25"
+    state: "idle", ticker: "다음 발행 11/21 09:00 예정 (트렌드·수익형)", updated: "22:25"
   },
   {
     id: "haebyeongi_adsense", floor: "f5", zone: "direct", tag: "해병이",
     title: "💵 해병이 애드센스팀", worker: "🧑‍🚀", name: "해병이 팀장",
-    say: "티스토리 첫 글 준비!", foot: "티스토리 애드센스 · 매일 11:00",
+    say: "11/20 발행 완료! 다음 11:00", foot: "티스토리 애드센스 · 매일 11:00",
     issue: "티스토리 첫 발행 준비가 필요해요!",
     guide: "티스토리 첫 글감만 정해 주시면 바로 발행을 시작합니다.",
-    state: "idle", ticker: "첫 글 발행 완료! (연말정산 미리보기) · 매일 11:00", updated: "23:24"
+    state: "working", ticker: "11/20 발행 완료 (daily-money-note.tistory.com/5) · 매일 11:00", updated: "15:52"
   },
   {
     id: "invest_sp500", floor: "f5", zone: "direct", tag: "해병이",
@@ -2827,17 +2860,17 @@ const rooms = [
   {
     id: "tistory", floor: "f3", zone: "partner", tag: "투덜이",
     title: "💵 투덜이 티스토리팀", worker: "🤵", name: "투덜이 팀장",
-    say: "애드센스 15편 심사 대기!", foot: "매일 13:00 · 애드센스 심사 대기",
-    issue: "투덜이 피클 확인이 필요해요!",
-    guide: "투덜이 피클에 티스토리·애드센스 상태를 확인 요청해 주세요.",
-    state: "idle", ticker: "15편 발행 완료 · 애드센스 심사 대기 · 매일 13:00", updated: "22:50"
+    say: "17편 발행 완료! 심사 대기", foot: "매일 13:00 · 애드센스 심사 대기",
+    issue: "총괄 확인이 필요해요!",
+    guide: "총괄에 티스토리·애드센스 상태를 확인 요청해 주세요.",
+    state: "working", ticker: "17편 발행 완료 (tudeori.tistory.com/17) · 애드센스 심사 대기 · 매일 13:00", updated: "15:52"
   },
   {
     id: "cafe", floor: "f3", zone: "partner", tag: "투덜이",
     title: "🛡️ EOKC 카페팀", worker: "🧑‍🚀", name: "정스탭 매니저",
     say: "회칙 초안·쇼핑커넥트!", foot: "회칙 18조 초안 · 쇼핑커넥트 가동",
-    issue: "투덜이 피클 계정 확인이 필요해요!",
-    guide: "투덜이 피클에 카페·블로그 계정 상태를 확인 요청해 주세요.",
+    issue: "총괄 계정 확인이 필요해요!",
+    guide: "총괄에 카페·블로그 계정 상태를 확인 요청해 주세요.",
     state: "idle", ticker: "EOKC 회칙 18조 초안 + 블로그 쇼핑커넥트 가동", updated: "22:50"
   },
   {
@@ -2852,8 +2885,8 @@ const rooms = [
     id: "public_quiz", floor: "f2", zone: "partner", tag: "투덜이",
     title: "🧩 공공퀴즈·대응·B2B팀", worker: "🎲", name: "한B2B 과장",
     say: "퀴즈 응모·B2B 발굴 중!", foot: "공공퀴즈 5건 · 공동대응·B2B 발굴",
-    issue: "투덜이 피클 확인이 필요해요!",
-    guide: "투덜이 피클에 공공퀴즈·대응 상태를 확인 요청해 주세요.",
+    issue: "총괄 확인이 필요해요!",
+    guide: "총괄에 공공퀴즈·대응 상태를 확인 요청해 주세요.",
     state: "idle", ticker: "퀴즈 5건 응모 완료 · 공동대응·B2B 발굴 진행 중", updated: "22:50"
   },
   {
@@ -2879,15 +2912,15 @@ function revHTML() {
   return `
     <div class="rev-block" id="rev-block">
       <div class="rev-boards">
-        <div class="rev-board hb" id="rev-hb" title="해병이 피클이 만든 검증된 수익">
+        <div class="rev-board hb" id="rev-hb" title="해병이 부장이 만든 검증된 수익">
           <span class="rb-label"><i></i>🔵 해병이</span>
           <span class="rb-val"><span class="rb-today" id="rev-hb-today">오늘 +₩0</span><span class="rb-sep">·</span><span id="rev-hb-total">누적 ₩0</span></span>
         </div>
-        <div class="rev-board partner" id="rev-td" title="투덜이 피클이 만든 검증된 수익">
+        <div class="rev-board partner" id="rev-td" title="투덜이 부장이 만든 검증된 수익">
           <span class="rb-label"><i></i>🟣 투덜이</span>
           <span class="rb-val"><span class="rb-today" id="rev-td-today">오늘 +₩0</span><span class="rb-sep">·</span><span id="rev-td-total">누적 ₩0</span></span>
         </div>
-        <div class="rev-board total" id="rev-sum" title="두 피클 합산 수익">
+        <div class="rev-board total" id="rev-sum" title="두 부장 합산 수익">
           <span class="rb-label"><i></i><span id="rev-sum-label">💰 총 합산 (DAY 1)</span></span>
           <span class="rb-val"><span class="rb-today" id="rev-sum-today">오늘 +₩0</span><span class="rb-sep">·</span><span id="rev-sum-total">누적 ₩0</span></span>
         </div>
@@ -2905,7 +2938,7 @@ function workerHTML(r) {
       <div class="worker">
         <div class="speech" id="say-${r.id}">${esc(r.say)}</div>
         <div class="badge-alert">!</div>
-        <div class="avatar">${r.worker}</div>
+        <div class="avatar"${r.id === "invest_sp500" ? 'role="button" tabindex="0" aria-label="주식 그래프와 손익 보기" title="클릭하면 주식 그래프와 손익 보기" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();event.stopPropagation();openReport(\'invest_sp500\')}"' : ""}>${r.worker}</div>
         <div class="nametag">${esc(r.name)}</div>
         <span class="life-icons" aria-hidden="true"><i>💻</i><i>📝</i><i>🔍</i><i>📊</i></span>
       </div>`;
@@ -2915,6 +2948,7 @@ const LAPTOP = `<div class="desk"><span class="laptop"><i class="lid"></i><i cla
 
 function roomHTML(r, i) {
   const partner = r.zone === "partner";
+  const instinct = r.zone === "instinct";
   const shop = r.id === "commerce";
   const ceo = r.ceo === true;
   const director = r.director === true;
@@ -2927,7 +2961,7 @@ function roomHTML(r, i) {
         <div class="room-head">
           <span class="room-title">${esc(r.title)}</span>
           <span class="room-lanes" id="lanes-${r.id}" aria-hidden="true"></span>
-          <span class="room-tag${partner ? " partner" : ""}" title="${partner ? "투덜이 피클이 전담 운영하는 방" : "해병이 피클이 직접 운영하는 방"}">${r.tag}</span>
+          <span class="room-tag${partner ? " partner" : instinct ? " instinct" : ""}" title="${instinct ? "Instinct 총괄이 지휘하는 방" : director ? "총괄 직속 위탁판매 총괄 · 실행 담당(사람)" : partner ? "투덜이 부장이 전담 운영하는 방" : "해병이 부장이 직접 운영하는 방"}">${r.tag}</span>
           <span class="room-open">${shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : "보고"}</span>
           <span class="status-dot" aria-hidden="true"></span>
         </div>
@@ -2944,7 +2978,7 @@ function roomHTML(r, i) {
             <button class="copy-btn" onclick="copyIssue('${r.id}')">📋 해결 내용 복사</button>
             <button class="resolve-btn" onclick="toggleRoom('${r.id}')">해결 완료</button>
           </div>
-          <div class="copy-toast" id="toast-${r.id}">복사됨! 피클 채팅에 붙여넣어 주세요</div>
+          <div class="copy-toast" id="toast-${r.id}">복사됨! 총괄 채팅에 붙여넣어 주세요</div>
         </div>
       </div>`;
 }
@@ -3067,13 +3101,13 @@ function basementHTML() {
 function floorHTML(f) {
   const list = rooms.filter(r => r.floor === f.id);
   const cls = list.length === 1 ? "rooms one" : list.length >= 4 ? "rooms four" : list.length === 3 ? "rooms three" : "rooms";
-  // 6F 대표실: 두 대표 아래에 수익 전광판 · 크레딧을 전폭으로 깔아 겹치지 않게 한다
+  // 6F 대표실: 두 부장 아래에 수익 전광판 · 크레딧을 전폭으로 깔아 겹치지 않게 한다
   const pentBar = f.id === "f6"
     ? `<div class="pent-bar" aria-label="수익 전광판">
          <div class="pent-bar-top">${revHTML()}</div>
          <div class="credit">
            <span class="cred" id="cred-hb">🔵 해병이: 정상 가동</span>
-           <span class="cred td" id="cred-td">🟣 투덜이: ONLINE · 04:00 충전 복귀</span>
+           <span class="cred td" id="cred-td">🟣 투덜이: 정상 가동</span>
          </div>
        </div>
        <div class="pent-roster" id="pent-roster" aria-label="6F 분장표"></div>`
@@ -3301,7 +3335,7 @@ function renderCredit(raw) {
   const hb = document.getElementById("cred-hb");
   const td = document.getElementById("cred-td");
   if (hb) hb.textContent = "🔵 해병이: " + (c.haebyeongi || "정상 가동");
-  if (td) td.textContent = "🟣 투덜이: " + (c.partner || "ONLINE · 04:00 충전 복귀");
+  if (td) td.textContent = "🟣 투덜이: " + (c.partner || "정상 가동");
 }
 
 /* ================= 🚦 신호등 (🔵 일반 확인·승인 / 🔴 자금·결제) =================
@@ -3352,7 +3386,7 @@ function roomSignals(id, all) {
   return { blue: pick("blue"), red: pick("red") };
 }
 
-/* 비서실장 결정(승인·불허)과 신호등을 잇는 열쇠: 비서실장 항목 id와 같은 규칙이다 */
+/* 총괄 결정(승인·불허)과 신호등을 잇는 열쇠: 총괄 항목 id와 같은 규칙이다 */
 function signalKey(lane, it) {
   return lane + "|" + (it.room || "") + "|" + String(it.title || "").trim();
 }
@@ -3360,7 +3394,7 @@ function signalKey(lane, it) {
 /* 그 신호가 이미 결정(승인·불허)되어 신호등에서 내려갔는지 */
 function signalCleared(lane, it, base, dec) {
   if (dec[signalKey(lane, it)]) return true;
-  // 제목이 조금 달라 열쇠가 안 맞아도, 그 방·그 레인에 신호 1건 + 비서실장 결정 1건이면 같은 건으로 본다
+  // 제목이 조금 달라 열쇠가 안 맞아도, 그 방·그 레인에 신호 1건 + 총괄 결정 1건이면 같은 건으로 본다
   const room = it.room || "";
   if (!room) return false;
   if ((base[lane] || []).filter(x => (x.room || "") === room).length !== 1) return false;
@@ -3445,8 +3479,8 @@ function toggleSig(lane) {
   renderSignals();
 }
 
-/* ================= 💼 비서실장 (총괄 보고 · 긴급 처리) =================
-   두 대표(해병이·투덜이)의 미결·대기 건을 하나로 모아 🔴 자금·인증 → 🔵 승인·확인 → ⏳ 일반 대기
+/* ================= 💼 총괄 (총괄 보고 · 긴급 처리) =================
+   두 부장(해병이·투덜이)의 미결·대기 건을 하나로 모아 🔴 자금·인증 → 🔵 승인·확인 → ⏳ 일반 대기
    순으로 자동 정렬한다. 줄을 누르면 해당 부서 보고 모달(체크리스트·담당·해결 복사)이 열리고,
    공개 사이트가 있으면 바로가기 버튼도 제공한다. 개인정보 없음(부서명·할 일·공개 주소만). */
 const CHIEF_LANE = { red: 0, blue: 1, wait: 2 };
@@ -3478,8 +3512,8 @@ function chiefData(raw) {
   merged.sort((a, b) => (CHIEF_LANE[a.lane] - CHIEF_LANE[b.lane]));
   merged.forEach(it => { it.id = it.lane + "|" + it.room + "|" + it.title; });
   return {
-    title: str(src.title, "비서실장 · 총괄 보고 · 긴급 처리"),
-    note: str(src.note, "두 대표 미결·대기 통합 · 🔴 자금 최우선 → 🔵 승인 → ⏳ 대기"),
+    title: str(src.title, "총괄 · 총괄 보고 · 긴급 처리"),
+    note: str(src.note, "두 부장 미결·대기 통합 · 🔴 자금 최우선 → 🔵 승인 → ⏳ 대기"),
     updated: str(src.updated, ""),
     items: merged
   };
@@ -3541,7 +3575,7 @@ function chiefPhrase(it, state) {
   const rr = rooms.find(r => r.id === it.room);
   const who = rr ? " · " + rr.tag : "";
   const where = rr ? " (" + rr.title + ")" : "";
-  const head = (state === "ok" ? "[비서실장 승인" : "[비서실장 불허") + who + "] ";
+  const head = (state === "ok" ? "[총괄 승인" : "[총괄 불허") + who + "] ";
   const nm = it.title + where;
   if (state === "ok") {
     return it.lane === "red"
@@ -3574,7 +3608,7 @@ function chiefUndo(e, idx) {
   syncDecisionLights();
 }
 
-/* 결정이 바뀌면 비서실장 카운트·상단 신호등·방 불빛·열린 보고를 한 번에 다시 그린다.
+/* 결정이 바뀌면 총괄 카운트·상단 신호등·방 불빛·열린 보고를 한 번에 다시 그린다.
    신호는 SIGNALS_BASE에서 다시 계산하므로 ↺를 누르면 그 건의 불이 그대로 되살아난다. */
 function syncDecisionLights() {
   renderSignals();
@@ -3596,15 +3630,17 @@ function renderChief(raw) {
   if (!CHIEF) CHIEF = chiefData(null);
   const body = document.getElementById("chief-body");
   if (!body) return;
-  const items = CHIEF.items;
   const dec = chiefDecisions();
-  const n = { red: 0, blue: 0, wait: 0 };
+  const allItems = CHIEF.items;
   let okN = 0, noN = 0;
-  items.forEach(it => {
+  allItems.forEach(it => {
     const d = dec[it.id];
     if (d) { if (d.s === "ok") okN += 1; else noN += 1; }
-    else n[it.lane] += 1;
   });
+  // An approved item is complete for this approvals panel: keep its decision in localStorage, but remove it from the active list.
+  const items = allItems.filter(it => !(dec[it.id] && dec[it.id].s === "ok"));
+  const n = { red: 0, blue: 0, wait: 0 };
+  items.forEach(it => { if (!dec[it.id]) n[it.lane] += 1; });
   const cnt = document.getElementById("chief-cnt");
   if (cnt) cnt.innerHTML = `<span class="cc-red">🔴 ${n.red}</span><span class="cc-blue">🔵 ${n.blue}</span><span class="cc-wait">⏳ ${n.wait}</span>`;
   const say = document.getElementById("chief-say");
@@ -3613,25 +3649,26 @@ function renderChief(raw) {
   if (say) {
     say.textContent = !pendingAll
       ? (okN || noN
-        ? `✅ 남은 미결 0건 · 신호등 모두 꺼짐 — ↺를 누르면 그 건의 불이 다시 켜집니다 (승인 ${okN} · 불허 ${noN})`
+        ? `✅ 남은 미결 0건 · 승인 완료 ${okN}건은 목록에서 숨김 · 불허 ${noN}건`
         : "지금 대기 중인 건이 없습니다")
-      : (n.red
+       : (n.red
         ? `🔴 자금·인증 ${n.red}건 최우선 — 오너가 직접 처리해 주세요 (AI 실행 금지) · 🔵 ${n.blue} · ⏳ ${n.wait}`
         : n.blue
           ? `🔵 승인·확인 ${n.blue}건 · ⏳ 대기 ${n.wait}건 — [승인]/[불허]를 누르면 비서용 문구가 복사되고 그 건의 불이 꺼집니다`
-          : `남은 대기 ${n.wait}건 — [승인]/[불허]를 누르면 비서용 문구가 복사됩니다`) + tail;
+          : `남은 대기 ${n.wait}건 — [승인]/[불허]를 누르면 비서용 문구가 복사됩니다`) + (okN ? ` · 승인 완료 ${okN}건은 목록에서 숨김` : "") + tail;
   }
   body.innerHTML = items.length ? items.map((it, idx) => {
+    const sourceIdx = allItems.indexOf(it);
     const rr = rooms.find(r => r.id === it.room);
     const rm = rr ? rr.title : "";
     const d = dec[it.id];
     const act = d
       ? `<span class="cr-dec ${d.s === "ok" ? "ok" : "no"}">${d.s === "ok" ? "✅ 승인(진행)" : "⛔ 불허(재검토)"}</span>` +
         (it.lane === "wait" ? "" : `<span class="cr-clr" title="신호등·방 불빛에서 내려갔습니다">불 꺼짐</span>`) +
-        `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${idx})" title="비서에게 붙여넣을 문구 복사">📋 문구</button>` +
-        `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${idx})" title="결정 되돌리기">↺</button>`
-      : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${idx}, 'ok')" title="${it.lane === "red" ? "승인 — 실행은 오너가 직접" : "승인하고 진행"}">승인</button>` +
-        `<button class="cr-no" type="button" onclick="chiefDecide(event, ${idx}, 'no')" title="보류하고 재검토">불허</button>`;
+        `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${sourceIdx})" title="비서에게 붙여넣을 문구 복사">📋 문구</button>` +
+        `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${sourceIdx})" title="결정 되돌리기">↺</button>`
+      : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="${it.lane === "red" ? "승인 — 실행은 오너가 직접" : "승인하고 진행"}">승인</button>` +
+        `<button class="cr-no" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="보류하고 재검토">불허</button>`;
     return `<div class="chief-row ${it.lane}${d ? " decided " + (d.s === "ok" ? "ok" : "no") : ""}" role="button" tabindex="0" data-room="${esc(it.room)}"
         title="${esc(it.title + (rm ? " · " + rm : "") + " · 누르면 부서 보고 열기")}"
         onclick="chiefClick(event, '${esc(it.room)}')"
@@ -3647,18 +3684,16 @@ function renderChief(raw) {
 }
 
 /* ================= 🛟 비상 업무 재분장(백업) 매트릭스 =================
-   5인(두 비서·아부지워커·엄마워커·수박이) 중 누가 오프·크레딧 소진·연결 지연으로
+   3인(투덜이·해병이 부장·수박이 이사) 중 누가 오프·크레딧 소진·연결 지연으로
    빠져도 남은 인원이 1차→2차로 빈자리를 메운다. 부모님 폰 직접 접근은 하지 않는다. */
 const BACKUP_FALLBACK = {
-  title: "비상 업무 백업 매트릭스 · 5인",
+  title: "비상 업무 백업 매트릭스 · 3인",
   note: "부모님 폰 직접 접근 금지 · 자금 실행은 오너",
   rule: "1차가 오프·크레딧 소진·연결 지연이면 2차가 이어받고, 3명 이상 동시에 빠지면 오너 승인 대기로 전환한다.",
   members: [
-    { name: "투덜이 비서", part: "카페·B2B·티스토리·체험단", state: "on", backup1: "해병이 비서", backup2: "수박이" },
-    { name: "해병이 비서", part: "블로그·자산·총괄", state: "on", backup1: "투덜이 비서", backup2: "수박이" },
-    { name: "아부지워커", part: "실측 소싱·마진", state: "wait", backup1: "수박이", backup2: "해병이 비서" },
-    { name: "엄마워커", part: "상세페이지·CS·장부", state: "wait", backup1: "수박이", backup2: "해병이 비서" },
-    { name: "수박이", part: "최종 실행·등록·피드백 · 저크레딧 보조", state: "on", backup1: "해병이 비서", backup2: "투덜이 비서" }
+    { name: "투덜이 부장", part: "카페·B2B·티스토리·체험단", state: "on", backup1: "해병이 부장", backup2: "수박이 이사" },
+    { name: "해병이 부장", part: "블로그·자산·총괄", state: "on", backup1: "투덜이 부장", backup2: "수박이 이사" },
+    { name: "수박이 이사", part: "위탁판매·스토어 실행 총괄", state: "on", backup1: "해병이 부장", backup2: "투덜이 부장" }
   ]
 };
 
@@ -3702,17 +3737,15 @@ function renderBackup(raw) {
     ${BACKUP.rule ? `<div class="pr-bk-note">${esc(BACKUP.rule)}</div>` : ""}`;
 }
 
-/* ================= 🧩 6F 분장표 (4파트 역할 · 전담 채널) =================
+/* ================= 🧩 6F 분장표 (2파트 역할 · 전담 채널) =================
    개인정보 없음: 역할 별칭·담당 업무·공개 채널만 담는다. */
 const ROSTER_DEFAULT = {
-  title: "6F 분장표 · 4파트",
+  title: "6F 분장표 · 2파트",
   note: "역할 별칭으로만 표기 · status.json 동기화",
   rule: "큰 이미지·로고는 외부 AI(제미나이·클로드·챗GPT) 제작본 활용 · 불필요한 핑퐁 축소",
   items: [
-    { id: "abu", name: "아부지워커", role: "실측 소싱·마진·리스크 — 3사 검색량 1~3위 교집합 후보 마진 실측", state: "wait", chip: "연결 대기" },
-    { id: "mom", name: "엄마워커", role: "상세페이지·생활 홍보·CS·장부", state: "wait", chip: "연결 대기" },
-    { id: "kkasil", name: "수박이 이사", role: "직속 위탁판매·스마트스토어 실행 총괄 · 보류 기간 2축(위탁·사업자 준비 + 저크레딧 보조 1일 1회 이하)", state: "on", chip: "가동" },
-    { id: "ceos", name: "투덜이·해병이 비서", role: "총괄·전담 채널·예비 서포트(Failover)", state: "on", chip: "가동" }
+    { id: "td", name: "투덜이 부장", role: "투덜이 측 업무 운영 및 인수인계", state: "on", chip: "가동" },
+    { id: "hb", name: "해병이 부장", role: "해병이 측 업무 운영 및 인수인계", state: "on", chip: "가동" }
   ],
   channels: [
     { owner: "해병이", handle: "@daily.moneynote", url: "https://www.threads.com/@daily.moneynote", topic: "돈·세금·생활경제" },
@@ -3835,7 +3868,7 @@ function applyStatus(data) {
   /* 신호등·백업을 방 상태보다 먼저 반영 (방 카드 레인·LED 접두에 쓰인다) */
   BACKUP = backupData(src.backup);
   SIGNALS_BASE = signalData(src.signals);   // 결정과 무관한 원본 신호를 먼저 반영
-  renderChief(src.chief);                  // 비서실장 항목(결정 열쇠)을 먼저 세운다
+  renderChief(src.chief);                  // 총괄 항목(결정 열쇠)을 먼저 세운다
   renderSignals();                         // 결정된 건을 빼고 신호등·방 불빛을 다시 그린다
 
   rooms.forEach(r => {
@@ -4172,7 +4205,7 @@ function reportData(id) {
   const links = Array.isArray(base.links)
     ? base.links.filter(l => l && typeof l.url === "string" && typeof l.label === "string" && /^https?:\/\//.test(l.url))
     : [];
-  /* 두 대표 총괄 보고: 담당 부서 목록은 방의 실제 상태(working/idle/alert)를 그대로 달아 보여 준다 */
+  /* 두 부장 총괄 보고: 담당 부서 목록은 방의 실제 상태(working/idle/alert)를 그대로 달아 보여 준다 */
   const depts = Array.isArray(base.depts)
     ? base.depts.filter(d => d && typeof d === "object" && typeof d.name === "string" && d.name.trim()).map(d => {
         const rid = typeof d.id === "string" ? d.id.trim() : "";
@@ -4212,6 +4245,20 @@ function reportData(id) {
   };
 }
 
+function renderStockPanel() {
+  const d = (STATUS && STATUS.invest_sp500 && STATUS.invest_sp500.chart) || null;
+  if (!d) return `<section class="stock-panel"><h3>📈 주식 손익</h3><p>주식 기록 데이터가 없습니다.</p></section>`;
+  const shares = Number(d.shares) || 0;
+  const cost = Number(d.cost_per_share_krw) * shares;
+  const value = Number(d.price_per_share_krw) * shares;
+  const profit = value - cost;
+  const pct = cost ? (profit / cost * 100) : 0;
+  const prices = [Number(d.cost_per_share_krw), Number(d.price_per_share_krw)];
+  const min = Math.min(...prices), max = Math.max(...prices), span = Math.max(1, max - min);
+  const xy = prices.map((price,i) => `${24 + i*152},${58 - ((price-min)/span)*38}`);
+  return `<section class="stock-panel" aria-label="주식 그래프와 손익"><h3>📈 ${esc(d.label || "주식 손익")}</h3><div class="stock-summary"><span>보유 ${shares}주</span><span>매수 ₩${cost.toLocaleString("ko-KR")}</span><span>기록 시세 ₩${value.toLocaleString("ko-KR")}</span></div><div class="stock-profit ${profit < 0 ? "down" : "up"}">손익 ${profit < 0 ? "−" : "+"}₩${Math.abs(profit).toLocaleString("ko-KR")} (${pct.toFixed(2)}%)</div><svg class="stock-chart" viewBox="0 0 200 78" role="img" aria-label="매수가와 기록 시세 비교 그래프"><line x1="8" y1="20" x2="192" y2="20"/><line x1="8" y1="40" x2="192" y2="40"/><line x1="8" y1="60" x2="192" y2="60"/><polyline points="${xy.join(" ")}"/><circle cx="${xy[0].split(",")[0]}" cy="${xy[0].split(",")[1]}" r="3"/><circle cx="${xy[1].split(",")[0]}" cy="${xy[1].split(",")[1]}" r="3"/><text x="24" y="74">매수</text><text x="176" y="74" text-anchor="end">기록 시세</text></svg><small>기록 기준: ${esc(d.as_of || "날짜 미상")} · 과거 기록이며 실시간 시세가 아닙니다.</small></section>`;
+}
+
 function openReport(id) {
   const d = reportData(id);
   REPORT_ID = id;
@@ -4228,6 +4275,7 @@ function openReport(id) {
   const body = document.getElementById("rm-body");
   if (body) {
     body.innerHTML = [
+      d.id === "invest_sp500" ? renderStockPanel() : "",
       d.summary ? `<div class="rm-sum"><span>👑</span><span>${esc(d.summary)}</span></div>` : "",
       d.ticker ? `<div class="rm-live"><span class="rm-live-h">📺 전광판</span><span class="rm-live-t">${esc(d.ticker)}</span><span class="rm-live-u">${esc(d.updated)}</span></div>` : "",
       d.credit ? `<div class="rm-credit"><span>⚡ 크레딧</span><span>${esc(d.credit)}</span></div>` : "",
@@ -4342,9 +4390,9 @@ function copyText(text, btn) {
       const ok = document.execCommand("copy");
       document.body.removeChild(ta);
       if (ok) flash();
-      else window.prompt("아래 문구를 복사해 피클 채팅에 붙여넣어 주세요", text);
+      else window.prompt("아래 문구를 복사해 총괄 채팅에 붙여넣어 주세요", text);
     } catch (err) {
-      window.prompt("아래 문구를 복사해 피클 채팅에 붙여넣어 주세요", text);
+      window.prompt("아래 문구를 복사해 총괄 채팅에 붙여넣어 주세요", text);
     }
   };
   if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(flash).catch(fallback);
@@ -4406,9 +4454,9 @@ function copyIssue(id) {
       const ok = document.execCommand("copy");
       document.body.removeChild(ta);
       if (ok) showToast();
-      else window.prompt("아래 문구를 복사해 피클 채팅에 붙여넣어 주세요", text);
+      else window.prompt("아래 문구를 복사해 총괄 채팅에 붙여넣어 주세요", text);
     } catch (e) {
-      window.prompt("아래 문구를 복사해 피클 채팅에 붙여넣어 주세요", text);
+      window.prompt("아래 문구를 복사해 총괄 채팅에 붙여넣어 주세요", text);
     }
   };
   if (navigator.clipboard && window.isSecureContext) {
@@ -4756,7 +4804,7 @@ function placeHomeQuiet(k) {
   el.classList.add("resting");
 }
 
-const CEO_LINES = ["두 피클 협업 보고!", "수익 보고 받는 중", "역할 분담 정상 가동!", "☕ 커피 향 좋은데?"];
+const CEO_LINES = ["두 부장 협업 보고!", "수익 보고 받는 중", "역할 분담 정상 가동!", "☕ 커피 향 좋은데?"];
 const HANDOFF_LINES = ["🤝 업데이트 전달!", "💬 브리핑 공유!", "🤝 수익 자료 전달", "💬 진행 상황 공유!"];
 const KARAOKE_LINES = ["🎤 18번 불러볼까?", "🎶 박수 준비 완료!", "🎤 한 곡만 부르고 갈게"];
 
@@ -5763,4 +5811,4 @@ soloLoop();
 startStaffLife();
 </script>
 </body>
-</html>
+ </html>
