@@ -2006,7 +2006,7 @@
   .rm-btn.shop { flex: 0 0 auto; border-color: #fbbf24; background: rgba(60, 42, 8, 0.8); color: #fde68a; }
   .rm-btn[hidden] { display: none; }
 
-  /* ===== 💼 총괄 · 결재·보고 · 긴급 처리 (최상단 통합 패널) =====
+  /* ===== 💼 총괄 · 검토·결재 목록 · 긴급 처리 (최상단 통합 패널) =====
      두 부장(해병이·투덜이)의 미결·대기 건을 🔴 → 🔵 → 일반 대기 순으로 모아 보여 준다.
      개인정보 없음: 부서명·할 일·공개 사이트 주소만 담는다. */
   .chief {
@@ -2819,11 +2819,11 @@
   <section class="chief" id="chief" aria-label="총괄 총괄 보고">
     <button class="chief-head" id="chief-head" type="button" onclick="toggleChief()" aria-expanded="true" aria-controls="chief-body">
       <span class="chief-ava" aria-hidden="true">💼</span>
-      <span class="chief-t"><b>💼 총괄 · 결재·보고</b><i>결재 분류별 집계 · 로컬 선택은 미접수</i></span>
+      <span class="chief-t"><b>💼 총괄 · 검토·결재 목록</b><i>팩트검토 상태 미확인 · 로컬 선택은 미접수</i></span>
       <span class="chief-cnt" id="chief-cnt"></span>
       <span class="chief-caret" id="chief-caret">▾</span>
     </button>
-    <p class="chief-route" id="chief-route"><b>결재 흐름</b> 담당자 상신 → 담당 부장 검토 → 총괄 검토 → 대표님 최종 결재<br><small>반려·재심의: 담당자 보완 후 새 버전 상신 · 승인 후: 실행 결과 별도 보고<br>현재는 전달·접수와 단계별 검토가 연결되지 않았습니다. 검토·승인·실행·완료는 별개입니다. 위탁판매의 부장·수박이 이사 검토 순서는 확인 중입니다.</small></p>
+    <p class="chief-route" id="chief-route"><b>결재 흐름</b> 부장 작성 → 총괄 팩트검토 → 대표님 결재<br><small>불허·재심의: 부장 보완 → 총괄 재검토 → 대표님 재상신 · 승인 후: 실행 결과 별도 보고<br>현재는 전달·접수와 단계별 검토가 연결되지 않았습니다. 검토·승인·실행·완료는 별개입니다. 기존 안건은 팩트검토 완료 근거가 없어 대표 결재 단계인지 미확인입니다.</small></p>
     <div class="chief-tools"><button class="chief-report" id="chief-report" type="button" onclick="openReport('instinct')">💼 총괄 종합 보고 · 담당 부서 보기</button></div>
     <div class="chief-say" id="chief-say">두 부장 미결·대기 건을 모으는 중…</div>
     <p class="chief-receipt-note" id="chief-receipt-note"><strong>승인·불허·재심의 버튼은 문구 복사와 이 브라우저의 선택 저장만 합니다.</strong><br>복사한 문구를 Slack #피클지시에 직접 보내야 접수됩니다. 전달 전에는 목록과 신호를 유지하며, 실제 완료로 처리하지 않습니다. 재심의 10분 검토 기준은 채널 도착 시각부터입니다.</p>
@@ -3912,7 +3912,7 @@ function renderChief(raw) {
   if (cnt) cnt.innerHTML = `<span class="cc-red${unreadRedItems().length ? "" : " read"}">${unreadRedItems().length ? "🔴" : "⚪"} ${unreadRedItems().length}</span><span class="cc-blue">🔵 ${n.blue}</span><span class="cc-wait">⏳ ${n.wait}</span>`;
   const say = document.getElementById("chief-say");
   const localN = okN + noN + reN;
-  if (say) say.textContent = `결재 분류(쇼츠 보류는 ⏳) · 접수·완료 확인 전 대기 🔴 ${n.red} · 🔵 ${n.blue} · ⏳ ${n.wait}` + (localN ? ` · 이 브라우저 선택 ${localN}건 (미접수)` : '') + ' · 버튼은 문구 복사만, Slack 전송 필요';
+  if (say) say.textContent = `기존 안건(팩트검토 미확인) · 접수·완료 확인 전 대기 🔴 ${n.red} · 🔵 ${n.blue} · ⏳ ${n.wait}` + (localN ? ` · 이 브라우저 선택 ${localN}건 (미접수)` : '') + ' · 버튼은 문구 복사만, Slack 전송 필요';
   body.innerHTML = items.length ? items.map((it, idx) => {
     const sourceIdx = allItems.indexOf(it);
     const rr = rooms.find(r => r.id === it.room);
@@ -4609,7 +4609,7 @@ function openReport(id) {
       d.id === "invest_sp500" ? renderStockPanel() : "",
       d.summary ? `<div class="rm-sum"><span>👑</span><span>${esc(d.summary)}</span></div>` : "",
       d.ticker ? `<div class="rm-live"><span class="rm-live-h">📺 전광판</span><span class="rm-live-t">${esc(d.ticker)}</span><span class="rm-live-u">${esc(d.updated)}</span></div>` : "",
-      d.overview ? `<div class="report-scope-note">${d.coordinator ? "종합·결정 대기와 담당 보고 바로가기입니다. 개별 업무 상세는 담당 보고에서 확인하세요." : d.manager ? "이 부장이 맡은 부서의 신호와 보고만 모았습니다. 다른 부서 신호·공통 역할표는 총괄에서 확인하세요." : "대표님 결정 사항은 총괄 패널에서, 개별 업무 상세는 각 담당 보고에서 확인하세요."}<div class="report-scope-actions">${d.coordinator || id === "owner" ? `<button type="button" onclick="openChiefFromReport()">결정 대기 목록 보기</button>` : ""}${!d.coordinator ? `<button type="button" onclick="openReport('instinct')">총괄 종합 보고</button>` : ""}</div></div>` : "",
+      d.overview ? `<div class="report-scope-note">${d.coordinator ? "종합·검토 목록과 담당 보고 바로가기입니다. 개별 업무 상세는 담당 보고에서 확인하세요." : d.manager ? "이 부장이 맡은 부서의 신호와 보고만 모았습니다. 다른 부서 신호·공통 역할표는 총괄에서 확인하세요." : "검토·결재 안건은 총괄 패널에서, 개별 업무 상세는 각 담당 보고에서 확인하세요."}<div class="report-scope-actions">${d.coordinator || id === "owner" ? `<button type="button" onclick="openChiefFromReport()">검토·결재 목록 보기</button>` : ""}${!d.coordinator ? `<button type="button" onclick="openReport('instinct')">총괄 종합 보고</button>` : ""}</div></div>` : "",
       d.credit ? `<div class="rm-credit"><span>⚡ 크레딧</span><span>${esc(d.credit)}</span></div>` : "",
       (d.signals.red.length || d.signals.blue.length) ? `<div class="rm-sec"><div class="rm-h">🚦 미결 신호 · 🔵 ${d.signals.blue.length} · 빨간 알림 ${d.signals.red.filter(redGroupUnread).length} / 미결 ${d.signals.red.length}</div>${d.signals.red.length ? `<div class="rm-sig-note">🔴 자금·계좌·이체·결제는 AI가 실행하지 않습니다. 오너가 직접 처리해 주세요.</div>` : ""}<div class="rm-sigs">${d.signals.red.map(x => sigRow(x, "red")).join("")}${d.signals.blue.map(x => sigRow(x, "blue")).join("")}</div></div>` : "",
       d.depts.length ? `<div class="rm-sec"><div class="rm-h">🏢 담당 부서 현황 · ${d.depts.length}개<em class="rm-hint">칩을 누르면 해당 부서 보고로 이동</em></div><div class="rm-depts">${d.depts.map(x => (x.id && rooms.some(r => r.id === x.id))
