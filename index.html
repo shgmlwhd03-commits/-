@@ -2846,10 +2846,10 @@
       <span hidden class="chief-cnt" id="chief-cnt"></span>
       <span class="chief-caret" id="chief-caret">▾</span>
     </button>
-    <p class="chief-short-note">버튼을 누르면 이 브라우저에 선택이 저장되고 문구가 복사됩니다. 실제 접수는 비서실 접수판에서 오너 확인으로 보낼 수 있습니다(별도 화면으로 이동 · 실행은 대화에서 별도 확인).</p>
+    <p class="chief-short-note">승인·불허·재심의 버튼을 누르면 GitHub 결재함(Issue)으로 즉시 접수되어 AI가 확인·실행합니다. (토큰 설정 시 새 창 없이 바로 접수)</p>
     <details class="chief-details"><summary>절차·전체 보고 보기</summary>
-    <p class="chief-route" id="chief-route"><b>비서실 창구</b> 비서실장(Instinct 총괄)이 부서 보고를 검토·지휘해 이 창구에 올리고, 대표님은 여기서 결재합니다.<br><b>결재 흐름</b> 부장 작성 → 비서실장(총괄) 팩트검토·지휘 → 대표님 결재<br><small>불허: 해당 안 진행 중단 · 삭제 범위 확정 전 원기록 보존<br>재심의: 부장 보완 → 총괄 팩트 재검토 → 대표님 재상신<br>승인 후: 실행 결과 별도 보고<br>현재는 전달·접수와 단계별 검토가 연결되지 않았습니다. 검토·승인·실행·완료는 별개입니다. 기존 안건은 팩트검토 완료 근거가 없어 대표 결재 단계인지 미확인입니다.</small></p>
-    <div class="chief-tools"><button class="chief-report" id="chief-report" type="button" onclick="openReport('instinct')">💼 비서실장(총괄) 종합 보고 · 담당 부서 보기</button> <a class="chief-report" href="https://files.instinct.com/9pixwbczx32k" target="_blank" rel="noopener">🗂️ 비서실 접수판 열기(결정·자유지시 보내기) ›</a></div>
+    <p class="chief-route" id="chief-route"><b>비서실 창구</b> 비서실장(Instinct 총괄)이 부서 보고를 검토·지휘해 이 창구에 올리고, 대표님은 여기서 결재합니다.<br><b>결재 흐름</b> 부장 작성 → 비서실장(총괄) 팩트검토·지휘 → 대표님 결재<br><small>불허: 해당 안 진행 중단 · 삭제 범위 확정 전 원기록 보존<br>재심의: 부장 보완 → 총괄 팩트 재검토 → 대표님 재상신<br>승인 후: 실행 결과 별도 보고</small></p>
+    <div class="chief-tools"><button class="chief-report" id="chief-report" type="button" onclick="openReport('instinct')">💼 비서실장(총괄) 종합 보고 · 담당 부서 보기</button> <button class="chief-report" id="chief-gh-setup" type="button" onclick="setupGhToken()">⚙️ 원클릭 자동전송 설정</button> <a class="chief-report" href="https://github.com/shgmlwhd03-commits/-/issues?q=label%3Adecision" target="_blank" rel="noopener">📥 접수된 결재함 보기 ›</a></div>
     <div hidden class="chief-say" id="chief-say">두 부장 미결·대기 건을 모으는 중…</div>
     <p class="chief-receipt-note" id="chief-receipt-note"><strong>이 목록의 버튼은 이 브라우저에 선택만 저장합니다. 실제 접수는 위 "비서실 접수판" 링크에서 오너 확인으로 보냅니다.</strong><br>접수판은 별도 화면(Instinct 파일)으로 이동하며, 거기서 누른 결정·자유지시는 접수 요청으로 총괄에 도착합니다. 도착한 요청은 실행이 아니라 접수이고, 외부 발송·삭제·게시·지출 등 실행이 필요한 건은 총괄이 대화에서 안건과 범위를 다시 확인한 뒤 진행합니다. 전달 전에는 목록과 신호를 유지하며, 실제 완료로 처리하지 않습니다. 재심의 10분 검토 기준은 채널 도착 시각부터입니다.</p>
     </details>
@@ -3890,6 +3890,103 @@ function chiefPhrase(it, state) {
     : head + nm + " — 불허합니다. 해당 안건 내용을 삭제해 주세요. 원기록은 보존합니다.";
 }
 
+function setupGhToken() {
+  let cur = "";
+  try { cur = localStorage.getItem("liveoffice_gh_token") || ""; } catch (e) {}
+  const msg = cur
+    ? "현재 원클릭 자동전송 토큰이 저장되어 있습니다.\n새 토큰을 입력해 덮어쓰거나, 빈 칸으로 확인을 누르면 저장된 토큰을 삭제합니다."
+    : "새 창 없이 버튼 한 번으로 바로 결재를 접수하려면 GitHub Fine-grained 토큰(이 저장소 Issues 쓰기 전용)을 입력하세요.\n(토큰은 이 브라우저에만 저장되며 코드에 남지 않습니다.)";
+  const val = window.prompt(msg, "");
+  if (val === null) return;
+  try {
+    const clean = val.trim();
+    if (clean) {
+      localStorage.setItem("liveoffice_gh_token", clean);
+      alert("원클릭 자동전송 설정 완료! 이제 승인·불허·재심의 버튼을 누르면 새 창 없이 바로 접수·실행됩니다.");
+    } else {
+      localStorage.removeItem("liveoffice_gh_token");
+      alert("저장된 토큰을 삭제했습니다. 버튼 클릭 시 GitHub 접수창이 열립니다.");
+    }
+  } catch (e) {}
+}
+
+function decisionLabel(s) {
+  return s === "ok" ? "승인" : s === "re" ? "재심의" : "불허";
+}
+
+function decisionBadge(d) {
+  if (!d) return "";
+  const lbl = decisionLabel(d.s);
+  const icon = d.s === "ok" ? "✅" : d.s === "re" ? "🔁" : "⛔";
+  if (d.sent) {
+    return `${icon} ${lbl} 접수됨${d.issueNum ? ` (#${d.issueNum})` : ""} · AI 실행 대기`;
+  }
+  if (d.opened) {
+    return `📤 ${lbl} 접수창 열림 · 등록 시 실행`;
+  }
+  if (d.sending) {
+    return `⏳ ${lbl} 전송 중…`;
+  }
+  return `${icon} ${lbl} 선택 · 미접수`;
+}
+
+async function sendDecisionToGitHub(it, state, entry) {
+  const rr = rooms.find(r => r.id === it.room);
+  const who = rr ? rr.tag : (it.room || "미지정");
+  const where = rr ? rr.title : "";
+  const lbl = decisionLabel(state);
+  const title = `[결재·${lbl}] ${it.title}`;
+  const phrase = chiefPhrase(it, state);
+  const body = [
+    `## 결재 결정: ${lbl}`,
+    `- **안건 ID**: \`${it.id}\``,
+    `- **담당**: ${who}${where ? ` (${where})` : ""}`,
+    `- **시각**: ${new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}`,
+    "",
+    "### 지시 문구",
+    phrase,
+    it.detail ? `\n### 안건 상세\n${it.detail}` : ""
+  ].join("\n");
+
+  let tok = "";
+  try { tok = localStorage.getItem("liveoffice_gh_token") || ""; } catch (e) {}
+  if (tok) {
+    entry.sending = true;
+    syncDecisionLights();
+    try {
+      const res = await fetch("https://api.github.com/repos/shgmlwhd03-commits/-/issues", {
+        method: "POST",
+        headers: {
+          "Accept": "application/vnd.github+json",
+          "Authorization": "Bearer " + tok,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ title, body, labels: ["decision"] })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        entry.sending = false;
+        entry.sent = true;
+        entry.opened = false;
+        entry.issueNum = data.number;
+        entry.issueUrl = data.html_url;
+        chiefSaveDecisions();
+        syncDecisionLights();
+        return;
+      }
+    } catch (err) {}
+    entry.sending = false;
+  }
+
+  const url = "https://github.com/shgmlwhd03-commits/-/issues/new?labels=decision&title=" +
+    encodeURIComponent(title) + "&body=" + encodeURIComponent(body);
+  entry.opened = true;
+  entry.sent = false;
+  chiefSaveDecisions();
+  syncDecisionLights();
+  window.open(url, "_blank", "noopener");
+}
+
 function chiefDecide(e, idx, state) {
   if (e) e.stopPropagation();
   const it = chiefItem(idx);
@@ -3899,6 +3996,7 @@ function chiefDecide(e, idx, state) {
   chiefSaveDecisions();
   copyText(chiefPhrase(it, state), null);
   syncDecisionLights();
+  sendDecisionToGitHub(it, state, d[it.id]);
 }
 
 function chiefUndo(e, idx) {
@@ -3963,10 +4061,10 @@ function renderChief(raw) {
       `<button class="cr-no${sel === "no" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="불허 선택 저장 · 아직 접수 안 됨${sel === "no" ? " · 현재 선택" : sel ? " · 누르면 불허로 변경" : ""}">불허</button>` +
       `<button class="cr-re${sel === "re" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 선택 저장 · 아직 접수 안 됨 · 신호 유지${sel === "re" ? " · 현재 선택" : sel ? " · 누르면 재심의로 변경" : ""}">재심의</button>`;
     const act = d
-      ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${d.s === "ok" ? "✅ 승인 선택 · 미접수 · 연결 준비 중" : d.s === "re" ? "🔁 재심의 선택 · 미접수 · 연결 준비 중" : "⛔ 불허 선택 · 미접수 · 연결 준비 중"}</span>` +
-        (it.lane === "wait" ? "" : `<span class="cr-clr" title="실제 접수 확인 전이므로 신호와 대기 목록을 유지합니다">신호 유지</span>`) +
+      ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${decisionBadge(d)}</span>` +
+        (it.lane === "wait" ? "" : `<span class="cr-clr" title="실제 처리 완료 전이므로 신호와 대기 목록을 유지합니다">신호 유지</span>`) +
         (it.lane === "red" ? "" : decBtns(d.s)) +
-        `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${sourceIdx})" title="결정 문구 복사(참고용 · 아직 접수 안 됨)">📋 문구</button>` +
+        (d.issueUrl ? `<a class="cr-cp" href="${esc(d.issueUrl)}" target="_blank" rel="noopener" title="접수된 GitHub 이슈 열기">🔗 #${d.issueNum}</a>` : `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${sourceIdx})" title="결정 문구 복사">📋 문구</button>`) +
         `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${sourceIdx})" title="결정 되돌리기">↺</button>`
       : it.lane === "red"
       ? `<span class="rs-rm">오너 직접 처리 건 · 버튼 없음</span>`
@@ -4679,10 +4777,10 @@ function chiefIndexForSignal(x, lane) {
       : ci < 0
       ? `<span class="rs-rm">결재는 상단 결재 목록에서</span>`
       : dec
-        ? `<span class="cr-dec ${dec.s === "ok" ? "ok" : dec.s === "re" ? "re" : "no"}">${dec.s === "ok" ? "✅ 승인 선택 · 미접수 · 연결 준비 중" : dec.s === "re" ? "🔁 재심의 선택 · 미접수 · 연결 준비 중" : "⛔ 불허 선택 · 미접수 · 연결 준비 중"}</span>` +
-          `<button class="cr-ok${dec.s === "ok" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="승인 선택 저장 · 아직 접수 안 됨${dec.s === "ok" ? " · 현재 선택" : " · 누르면 승인으로 변경"}">승인</button><button class="cr-no${dec.s === "no" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="불허 선택 저장 · 아직 접수 안 됨${dec.s === "no" ? " · 현재 선택" : " · 누르면 불허로 변경"}">불허</button><button class="cr-re${dec.s === "re" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 're')" title="재심의 선택 저장 · 아직 접수 안 됨 · 신호 유지${dec.s === "re" ? " · 현재 선택" : " · 누르면 재심의로 변경"}">재심의</button>` +
+        ? `<span class="cr-dec ${dec.s === "ok" ? "ok" : dec.s === "re" ? "re" : "no"}">${decisionBadge(dec)}</span>` +
+          `<button class="cr-ok${dec.s === "ok" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="누르면 즉시 승인 접수·실행${dec.s === "ok" ? " · 현재 선택" : ""}">승인</button><button class="cr-no${dec.s === "no" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="누르면 즉시 불허 접수·중단${dec.s === "no" ? " · 현재 선택" : ""}">불허</button><button class="cr-re${dec.s === "re" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 're')" title="누르면 즉시 재심의 접수${dec.s === "re" ? " · 현재 선택" : ""}">재심의</button>` +
           `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${ci})" title="결정 되돌리기">↺</button>`
-        : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="${lane === "red" ? "승인 선택 저장 · 실행은 오너가 직접 · 아직 접수 안 됨" : "승인 선택 저장 · 아직 접수 안 됨"}">승인</button><button class="cr-no" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="불허 선택 저장 · 아직 접수 안 됨">불허</button><button class="cr-re" type="button" onclick="chiefDecide(event, ${ci}, 're')" title="재심의 선택 저장 · 아직 접수 안 됨 · 신호 유지">재심의</button>`;
+        : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="누르면 즉시 승인 접수·실행">승인</button><button class="cr-no" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="누르면 즉시 불허 접수·중단">불허</button><button class="cr-re" type="button" onclick="chiefDecide(event, ${ci}, 're')" title="누르면 즉시 재심의 접수">재심의</button>`;
     return `<div class="rm-sig ${lane}${lane === "red" && !redGroupUnread(x) ? " read" : ""}"><span class="rs-lane">${lane === "red" ? (redGroupUnread(x) ? "🔴" : "⚪") : "🔵"}</span><span class="rs-tx"><b>${esc(x.title)}</b>${x.detail ? `<i>${esc(x.detail)}</i>` : ""}</span>${lane === "red" && !redGroupUnread(x) ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : ""}${act}${d.overview && x.room ? `<span class="rs-rm">${esc(roomTitle(x.room))}</span>` : ""}</div>`;
   };
   const body = document.getElementById("rm-body");
