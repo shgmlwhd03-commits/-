@@ -2094,6 +2094,9 @@
   .cr-ok { border: 1px solid rgba(74, 222, 128, 0.6); background: rgba(6, 45, 28, 0.85); color: #bbf7d0; }
   .cr-no { border: 1px solid rgba(248, 113, 113, 0.55); background: rgba(45, 10, 10, 0.85); color: #fecaca; }
   .cr-re { border: 1px solid rgba(250, 204, 21, 0.55); background: rgba(56, 43, 4, 0.85); color: #fef08a; }
+  .cr-ok.sel { outline: 2px solid #4ade80; font-weight: 700; }
+  .cr-no.sel { outline: 2px solid #f87171; font-weight: 700; }
+  .cr-re.sel { outline: 2px solid #facc15; font-weight: 700; }
   .cr-undo { border: 1px solid #475569; background: rgba(15, 23, 42, 0.9); color: #cbd5e1; }
   .cr-cp { border: 1px solid rgba(56, 189, 248, 0.55); background: rgba(8, 47, 73, 0.8); color: #bae6fd; }
   .cr-dec { flex: none; align-self: center; font-size: 6.6px; font-weight: 900; padding: 1px 6px; border-radius: 999px; white-space: nowrap; }
@@ -3955,16 +3958,19 @@ function renderChief(raw) {
     const d = dec[it.id];
     const redRead = it.lane === "red" && !redGroupUnread(it);
     const ack = it.lane === "red" ? (redRead ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : `<button class="red-ack" type="button" onkeydown="event.stopPropagation()" onclick="acknowledgeRed(event, 'chief', ${sourceIdx})">확인</button>`) : "";
+    const decBtns = (sel) =>
+      `<button class="cr-ok${sel === "ok" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="승인 선택 저장 · 아직 접수 안 됨${sel === "ok" ? " · 현재 선택" : sel ? " · 누르면 승인으로 변경" : ""}">승인</button>` +
+      `<button class="cr-no${sel === "no" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="불허 선택 저장 · 아직 접수 안 됨${sel === "no" ? " · 현재 선택" : sel ? " · 누르면 불허로 변경" : ""}">불허</button>` +
+      `<button class="cr-re${sel === "re" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 선택 저장 · 아직 접수 안 됨 · 신호 유지${sel === "re" ? " · 현재 선택" : sel ? " · 누르면 재심의로 변경" : ""}">재심의</button>`;
     const act = d
       ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${d.s === "ok" ? "✅ 승인 선택 · 미접수 · 연결 준비 중" : d.s === "re" ? "🔁 재심의 선택 · 미접수 · 연결 준비 중" : "⛔ 불허 선택 · 미접수 · 연결 준비 중"}</span>` +
         (it.lane === "wait" ? "" : `<span class="cr-clr" title="실제 접수 확인 전이므로 신호와 대기 목록을 유지합니다">신호 유지</span>`) +
+        (it.lane === "red" ? "" : decBtns(d.s)) +
         `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${sourceIdx})" title="결정 문구 복사(참고용 · 아직 접수 안 됨)">📋 문구</button>` +
         `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${sourceIdx})" title="결정 되돌리기">↺</button>`
       : it.lane === "red"
       ? `<span class="rs-rm">오너 직접 처리 건 · 버튼 없음</span>`
-      : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="승인 선택 저장 · 아직 접수 안 됨">승인</button>` +
-        `<button class="cr-no" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="불허 선택 저장 · 아직 접수 안 됨">불허</button>` +
-        `<button class="cr-re" type="button" onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 선택 저장 · 아직 접수 안 됨 · 신호 유지">재심의</button>`;
+      : decBtns(null);
     return `<div class="chief-row ${it.lane}${redRead ? " read" : ""}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" data-room="${esc(it.room)}">
         <div class="cr-main"><b>${esc(it.title)}</b><p class="cr-review">총괄 팩트검토: 미확인</p></div>
         <span class="cr-act">${act}</span>
@@ -4673,7 +4679,9 @@ function chiefIndexForSignal(x, lane) {
       : ci < 0
       ? `<span class="rs-rm">결재는 상단 결재 목록에서</span>`
       : dec
-        ? `<span class="cr-dec ${dec.s === "ok" ? "ok" : dec.s === "re" ? "re" : "no"}">${dec.s === "ok" ? "✅ 승인 선택 · 미접수 · 연결 준비 중" : dec.s === "re" ? "🔁 재심의 선택 · 미접수 · 연결 준비 중" : "⛔ 불허 선택 · 미접수 · 연결 준비 중"}</span><button class="cr-undo" type="button" onclick="chiefUndo(event, ${ci})" title="결정 되돌리기">↺</button>`
+        ? `<span class="cr-dec ${dec.s === "ok" ? "ok" : dec.s === "re" ? "re" : "no"}">${dec.s === "ok" ? "✅ 승인 선택 · 미접수 · 연결 준비 중" : dec.s === "re" ? "🔁 재심의 선택 · 미접수 · 연결 준비 중" : "⛔ 불허 선택 · 미접수 · 연결 준비 중"}</span>` +
+          `<button class="cr-ok${dec.s === "ok" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="승인 선택 저장 · 아직 접수 안 됨${dec.s === "ok" ? " · 현재 선택" : " · 누르면 승인으로 변경"}">승인</button><button class="cr-no${dec.s === "no" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="불허 선택 저장 · 아직 접수 안 됨${dec.s === "no" ? " · 현재 선택" : " · 누르면 불허로 변경"}">불허</button><button class="cr-re${dec.s === "re" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 're')" title="재심의 선택 저장 · 아직 접수 안 됨 · 신호 유지${dec.s === "re" ? " · 현재 선택" : " · 누르면 재심의로 변경"}">재심의</button>` +
+          `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${ci})" title="결정 되돌리기">↺</button>`
         : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="${lane === "red" ? "승인 선택 저장 · 실행은 오너가 직접 · 아직 접수 안 됨" : "승인 선택 저장 · 아직 접수 안 됨"}">승인</button><button class="cr-no" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="불허 선택 저장 · 아직 접수 안 됨">불허</button><button class="cr-re" type="button" onclick="chiefDecide(event, ${ci}, 're')" title="재심의 선택 저장 · 아직 접수 안 됨 · 신호 유지">재심의</button>`;
     return `<div class="rm-sig ${lane}${lane === "red" && !redGroupUnread(x) ? " read" : ""}"><span class="rs-lane">${lane === "red" ? (redGroupUnread(x) ? "🔴" : "⚪") : "🔵"}</span><span class="rs-tx"><b>${esc(x.title)}</b>${x.detail ? `<i>${esc(x.detail)}</i>` : ""}</span>${lane === "red" && !redGroupUnread(x) ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : ""}${act}${d.overview && x.room ? `<span class="rs-rm">${esc(roomTitle(x.room))}</span>` : ""}</div>`;
   };
