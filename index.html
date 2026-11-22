@@ -3959,7 +3959,9 @@ function renderChief(raw) {
         (it.lane === "wait" ? "" : `<span class="cr-clr" title="실제 접수 확인 전이므로 신호와 대기 목록을 유지합니다">신호 유지</span>`) +
         `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${sourceIdx})" title="결정 문구 복사(참고용 · 아직 접수 안 됨)">📋 문구</button>` +
         `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${sourceIdx})" title="결정 되돌리기">↺</button>`
-      : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="${it.lane === "red" ? "승인 선택 저장 · 실행은 오너가 직접 · 아직 접수 안 됨" : "승인 선택 저장 · 아직 접수 안 됨"}">승인</button>` +
+      : it.lane === "red"
+      ? `<span class="rs-rm">오너 직접 처리 건 · 버튼 없음</span>`
+      : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="승인 선택 저장 · 아직 접수 안 됨">승인</button>` +
         `<button class="cr-no" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="불허 선택 저장 · 아직 접수 안 됨">불허</button>` +
         `<button class="cr-re" type="button" onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 선택 저장 · 아직 접수 안 됨 · 신호 유지">재심의</button>`;
     return `<div class="chief-row ${it.lane}${redRead ? " read" : ""}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" data-room="${esc(it.room)}">
