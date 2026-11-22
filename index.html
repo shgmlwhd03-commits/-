@@ -4655,8 +4655,10 @@ const SIGNAL_TO_CHIEF_ID = {
 };
 function chiefIndexForSignal(x, lane) {
   if (!CHIEF || !Array.isArray(CHIEF.items)) return -1;
-  const exact = CHIEF.items.findIndex(it => it.room === x.room && it.title === x.title);
-  if (exact >= 0) return exact;
+  const hits = [];
+  CHIEF.items.forEach((it, i) => { if (it.room === x.room && it.title === x.title) hits.push(i); });
+  if (hits.length === 1) return hits[0];          // 정확 일치가 유일할 때만 자동 연결
+  if (hits.length > 1) return -1;                  // 동명 다수(개정·중복)는 자동 매칭 금지 — 명시 id 연결만
   const mapped = SIGNAL_TO_CHIEF_ID[x.room + "|" + x.title];
   if (!mapped) return -1;
   return CHIEF.items.findIndex(it => it.id === mapped);
