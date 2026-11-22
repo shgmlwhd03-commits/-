@@ -1170,6 +1170,17 @@ function chiefCopyPhrase(e, idx) {
   copyText(chiefPhrase(it, d[it.id].s), e && e.currentTarget ? e.currentTarget : null);
 }
 
+// Display only: a received final choice can be folded without changing its status.
+function chiefCanCompact(it, entry) {
+  return !!(it && it.lane !== "red" && entry && entry.sent === true &&
+    ["ok", "no"].includes(entry.s) && !entry.sending && !entry.queued &&
+    !entry.uncertain && !entry.error);
+}
+
+function compactDecisionReport(title, entry, content) {
+  return `<details class="decision-compact"><summary><b>${esc(title)}</b><span title="${esc(decisionBadge(entry))}">${decisionLabel(entry.s)} 접수 · 처리 대기</span><small>상세</small></summary>${content}</details>`;
+}
+
 function renderChief(raw) {
   if (raw !== undefined) CHIEF = chiefData(raw);
   if (!CHIEF) CHIEF = chiefData(null);
@@ -1183,7 +1194,8 @@ function renderChief(raw) {
     if (d) { if (d.s === "ok") okN += 1; else if (d.s === "re") reN += 1; else noN += 1; }
   });
   // Only source-completed tasks with a known age of 24 hours are separated.
-  const items = allItems.filter(it => TaskArchive.bucket(it) !== "archived");
+  const items = allItems.filter(it => TaskArchive.bucket(it) !== "archived")
+    .sort((a, b) => Number(chiefCanCompact(a, dec[a.id])) - Number(chiefCanCompact(b, dec[b.id])));
   const n = { red: 0, blue: 0, wait: 0 };
   items.forEach(it => { n[it.lane] += 1; });
   const cnt = document.getElementById("chief-cnt");
@@ -1211,16 +1223,17 @@ function renderChief(raw) {
       : it.lane === "red"
       ? `<span class="rs-rm">오너 직접 처리 건 · 버튼 없음</span>`
       : decBtns(null);
-    return `<div class="chief-row ${it.lane}${redRead ? " read" : ""}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" data-room="${esc(it.room)}">
+    const row = `<div class="chief-row ${it.lane}${redRead ? " read" : ""}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" data-room="${esc(it.room)}">
         <div class="cr-main"><b>${esc(it.title)}</b><p class="cr-review">총괄 팩트검토: 미확인</p></div>
         <span class="cr-act">${act}</span>
-        <details class="cr-detail"><summary>상세 보기${rm ? " · " + esc(rm) : ""}</summary>
+        <details class="cr-detail"${chiefCanCompact(it, d) ? " open" : ""}><summary>상세 보기${rm ? " · " + esc(rm) : ""}</summary>
           ${it.detail ? `<p>${esc(it.detail)}</p>` : ""}
           ${it.room ? `<button class="cr-go" type="button" onclick="openReport('${esc(it.room)}')">원보고 보기 ›</button>` : ""}
           ${it.url ? `<a class="cr-url" href="${esc(it.url)}" target="_blank" rel="noopener">↗ ${esc(it.urlLabel)}</a>` : ""}
           ${ack}
         </details>
       </div>`;
+    return chiefCanCompact(it, d) ? compactDecisionReport(it.title, d, row) : row;
   }).join("") : `<div class="chief-row wait"><span class="cr-lane">✅</span><span class="cr-tx"><b>지금 대기 중인 건이 없습니다</b></span></div>`;
   applyChiefState();
 }
@@ -1923,8 +1936,14 @@ function chiefIndexForSignal(x, lane) {
           `<button class="cr-ok${dec.s === "ok" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="승인 선택·전달 요청${dec.s === "ok" ? " · 현재 선택" : ""}">승인</button><button class="cr-no${dec.s === "no" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="불허 선택·전달 요청${dec.s === "no" ? " · 현재 선택" : ""}">불허</button><button class="cr-re${dec.s === "re" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 're')" title="재심의 선택·전달 요청${dec.s === "re" ? " · 현재 선택" : ""}">재심의</button>` +
           (chiefUndoable(CHIEF.items[ci]) ? `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${ci})" title="미접수 선택 지우기">↺</button>` : "")
         : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="승인 선택·전달 요청">승인</button><button class="cr-no" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="불허 선택·전달 요청">불허</button><button class="cr-re" type="button" onclick="chiefDecide(event, ${ci}, 're')" title="재심의 선택·전달 요청">재심의</button>`;
-    return `<div class="rm-sig ${lane}${lane === "red" && !redGroupUnread(x) ? " read" : ""}"><span class="rs-lane">${lane === "red" ? (redGroupUnread(x) ? "🔴" : "⚪") : "🔵"}</span><span class="rs-tx"><b>${esc(x.title)}</b>${x.detail ? `<i>${esc(x.detail)}</i>` : ""}</span>${lane === "red" && !redGroupUnread(x) ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : ""}${act}${d.overview && x.room ? `<span class="rs-rm">${esc(roomTitle(x.room))}</span>` : ""}</div>`;
+    const row = `<div class="rm-sig ${lane}${lane === "red" && !redGroupUnread(x) ? " read" : ""}"><span class="rs-lane">${lane === "red" ? (redGroupUnread(x) ? "🔴" : "⚪") : "🔵"}</span><span class="rs-tx"><b>${esc(x.title)}</b>${x.detail ? `<i>${esc(x.detail)}</i>` : ""}</span>${lane === "red" && !redGroupUnread(x) ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : ""}${act}${d.overview && x.room ? `<span class="rs-rm">${esc(roomTitle(x.room))}</span>` : ""}</div>`;
+    return ci >= 0 && chiefCanCompact(CHIEF.items[ci], dec) ? compactDecisionReport(x.title, dec, row) : row;
   };
+  const reportSignals = [...d.signals.blue].sort((a, b) => {
+    const ac = chiefIndexForSignal(a, "blue"), bc = chiefIndexForSignal(b, "blue");
+    const compact = ci => ci >= 0 && chiefCanCompact(CHIEF.items[ci], chiefDecisions()[CHIEF.items[ci].id]);
+    return Number(compact(ac)) - Number(compact(bc));
+  });
   const body = document.getElementById("rm-body");
   if (body) {
     body.innerHTML = [
@@ -1934,7 +1953,7 @@ function chiefIndexForSignal(x, lane) {
       d.ticker ? `<div class="rm-live"><span class="rm-live-h">📺 전광판</span><span class="rm-live-t">${esc(d.ticker)}</span><span class="rm-live-u">${esc(d.updated)}</span></div>` : "",
       d.overview ? `<div class="report-scope-note">${d.coordinator ? "종합·검토 목록과 담당 보고 바로가기입니다. 개별 업무 상세는 담당 보고에서 확인하세요." : d.manager ? "이 부장이 맡은 부서의 신호와 보고만 모았습니다. 다른 부서 신호·공통 역할표는 총괄에서 확인하세요." : "검토·결재 안건은 비서실 창구에서, 개별 업무 상세는 각 담당 보고에서 확인하세요."}<div class="report-scope-actions">${d.coordinator || id === "owner" ? `<button type="button" onclick="openChiefFromReport()">비서실 창구 보기</button>` : ""}${!d.coordinator ? `<button type="button" onclick="openReport('instinct')">비서실장 종합 보고</button>` : ""}</div></div>` : "",
       d.credit ? `<div class="rm-credit"><span>⚡ 크레딧</span><span>${esc(d.credit)}</span></div>` : "",
-      (d.signals.red.length || d.signals.blue.length) ? `<div class="rm-sec"><div class="rm-h">🚦 미결 신호 · 🔵 ${d.signals.blue.length} · 빨간 알림 ${d.signals.red.filter(redGroupUnread).length} / 미결 ${d.signals.red.length}</div>${d.signals.red.length ? `<div class="rm-sig-note">🔴 자금·계좌·이체·결제는 AI가 실행하지 않습니다. 오너가 직접 처리해 주세요.</div>` : ""}<div class="rm-sigs">${d.signals.red.map(x => sigRow(x, "red")).join("")}${d.signals.blue.map(x => sigRow(x, "blue")).join("")}</div></div>` : "",
+      (d.signals.red.length || d.signals.blue.length) ? `<div class="rm-sec"><div class="rm-h">🚦 미결 신호 · 🔵 ${d.signals.blue.length} · 빨간 알림 ${d.signals.red.filter(redGroupUnread).length} / 미결 ${d.signals.red.length}</div>${d.signals.red.length ? `<div class="rm-sig-note">🔴 자금·계좌·이체·결제는 AI가 실행하지 않습니다. 오너가 직접 처리해 주세요.</div>` : ""}<div class="rm-sigs">${d.signals.red.map(x => sigRow(x, "red")).join("")}${reportSignals.map(x => sigRow(x, "blue")).join("")}</div></div>` : "",
       d.depts.length ? `<div class="rm-sec"><div class="rm-h">🏢 담당 부서 현황 · ${d.depts.length}개<em class="rm-hint">칩을 누르면 해당 부서 보고로 이동</em></div><div class="rm-depts">${d.depts.map(x => (x.id && rooms.some(r => r.id === x.id))
         ? `<button type="button" class="rm-dept ${x.state}" title="${esc(x.name + " · " + REPORT_STATE_TXT[x.state] + " · 눌러서 부서 보고 열기")}" onclick="openReport('${esc(x.id)}')"><i></i>${esc(x.name)}<span class="rm-arw">›</span></button>`
         : `<span class="rm-dept ${x.state}" title="${esc(REPORT_STATE_TXT[x.state])}"><i></i>${esc(x.name)}</span>`).join("")}</div></div>` : "",
