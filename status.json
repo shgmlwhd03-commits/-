@@ -1278,7 +1278,39 @@
   "credit": {
     "haebyeongi": "가동 미확인 · 소진 제보 없음",
     "partner": "가동 중 · GitHub 연결(08:13) · 정비 작업 실행(08:22) · 크레딧 잔량은 화면에서 확인 불가",
-    "updated": "2026-11-22T08:22+09:00"
+    "updated": "2026-11-22T08:22+09:00",
+    "checks": {
+      "td": {
+        "credit": {
+          "state": "unknown",
+          "checked_at": null,
+          "by": null
+        },
+        "ops": {
+          "state": "unknown",
+          "checked_at": null,
+          "by": null
+        },
+        "report": {
+          "text": "GitHub 연결·정비 작업 실행 보고",
+          "source": "투덜이 Slack 보고",
+          "reported_at": "2026-11-22T08:24+09:00"
+        }
+      },
+      "hb": {
+        "credit": {
+          "state": "unknown",
+          "checked_at": null,
+          "by": null
+        },
+        "ops": {
+          "state": "unknown",
+          "checked_at": null,
+          "by": null
+        },
+        "report": null
+      }
+    }
   },
   "revenue": {
     "_note": "검증된 실제 수익만 기록한다. start_date(2026-11-19, Asia/Seoul)가 DAY 1이고 화면의 DAY 표시는 이 날짜에서 자동 계산된다. 두 부장 모두 확인된 수익은 0원. haebyeongi=해병이 피클 수익, partner=투덜이 피클 수익. history는 최근 7일(오늘 포함) 두 피클 합산 일별 금액이고, 전광판은 이를 월별로 합산해 매달 총수익을 표시한다. 12월 데이터가 쌓이면 해당 연도 총수익이 '🧾 12월 결산' 칸에 자동 표시된다.",
