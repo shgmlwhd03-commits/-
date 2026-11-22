@@ -3936,16 +3936,11 @@ async function sendDecisionToGitHub(it, state, entry) {
   const where = rr ? rr.title : "";
   const lbl = decisionLabel(state);
   const title = `[결재·${lbl}] ${it.title}`;
-  const phrase = chiefPhrase(it, state);
   const body = [
-    `## 결재 결정: ${lbl}`,
-    `- **안건 ID**: \`${it.id}\``,
-    `- **담당**: ${who}${where ? ` (${where})` : ""}`,
-    `- **시각**: ${new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}`,
-    "",
-    "### 지시 문구",
-    phrase,
-    it.detail ? `\n### 안건 상세\n${it.detail}` : ""
+    `안건 ID: ${it.id}`,
+    `결정: ${lbl}`,
+    `담당: ${who}${where ? ` (${where})` : ""}`,
+    `시각: ${new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}`
   ].join("\n");
 
   let tok = "";
@@ -3954,14 +3949,21 @@ async function sendDecisionToGitHub(it, state, entry) {
     entry.sending = true;
     syncDecisionLights();
     try {
-      const res = await fetch("https://api.github.com/repos/shgmlwhd03-commits/-/issues", {
-        method: "POST",
+      const endpoint = entry.issueNum
+        ? `https://api.github.com/repos/shgmlwhd03-commits/-/issues/${entry.issueNum}`
+        : "https://api.github.com/repos/shgmlwhd03-commits/-/issues";
+      const method = entry.issueNum ? "PATCH" : "POST";
+      const payload = entry.issueNum
+        ? { title, body, state: "open" }
+        : { title, body, labels: ["decision"] };
+      const res = await fetch(endpoint, {
+        method,
         headers: {
           "Accept": "application/vnd.github+json",
           "Authorization": "Bearer " + tok,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ title, body, labels: ["decision"] })
+        body: JSON.stringify(payload)
       });
       if (res.ok) {
         const data = await res.json();
