@@ -735,6 +735,12 @@
     50% { box-shadow: inset 0 0 10px rgba(0,0,0,.9), 0 0 20px rgba(239,68,68,.85); }
   }
   .room.alert .led-text { color: #fecaca; text-shadow: 0 0 5px rgba(239, 68, 68, 0.95); }
+  /* 가동 미확인: 근거 없는 WORK/IDLE 연출 없이 정적 기본 포즈 */
+  .room.unverified .led-tag { color: #fcd34d; background: linear-gradient(180deg, rgba(245,158,11,.25), rgba(245,158,11,.06)); }
+  .room.unverified .led-tag i { background: #f59e0b; }
+  .cstat.unverified { border-color: #f59e0b; color: #fde68a; background: rgba(120, 53, 15, 0.6); }
+  .rm-dept.unverified { border-color: #f59e0b; background: rgba(120, 53, 15, 0.45); color: #fde68a; }
+  .rm-dept.unverified i { background: #f59e0b; }
   .room.alert .led-tag { color: #fca5a5; background: linear-gradient(180deg, rgba(239,68,68,.3), rgba(239,68,68,.06)); }
   .room.alert .led-tag i { background: #ef4444; box-shadow: 0 0 7px #ef4444; animation: blink 0.7s infinite; }
   .room.alert .led-time { color: #fca5a5; }
@@ -3125,7 +3131,7 @@ const rooms = [
   }
 ];
 
-const STATE_LABEL = { working: "WORK", idle: "IDLE", alert: "ALERT" };
+const STATE_LABEL = { working: "WORK", idle: "IDLE", alert: "ALERT", unverified: "미확인" };
 
 function esc(s) {
   return String(s).replace(/[&<>"']/g, c => ({
@@ -3427,7 +3433,7 @@ function flashBoard(id) {
 function setRoomState(id, state) {
   const el = document.getElementById("room-" + id);
   if (!el) return;
-  el.classList.remove("working", "idle", "alert");
+  el.classList.remove("working", "idle", "alert", "unverified");
   el.classList.add(state);
   if (state !== "idle") el.classList.remove("break");
   const tag = document.getElementById("tag-" + id);
@@ -3589,6 +3595,8 @@ function renderRevenue(raw) {
 }
 
 let CHECKS = {};
+const OPS_ROOMS = { ceo_tudeori: "td", ceo_haebyeong: "hb" };
+function opsUnverifiedRoom(id) { const k = OPS_ROOMS[id]; if (!k) return false; const c = CHECKS && CHECKS[k]; return !checkState(c && typeof c === "object" ? c.ops : null); }
 function checkState(v) { return (v && typeof v === "object" && v.state === "verified" && typeof v.checked_at === "string" && /T\d\d:\d\d/.test(v.checked_at)) ? v : null; }
 function hhmmOf(iso) { const m = /T(\d\d:\d\d)/.exec(typeof iso === "string" ? iso : ""); return m ? m[1] : ""; }
 function reportOf(k) { const r = k && k.report; return (r && typeof r === "object" && typeof r.text === "string" && r.text.trim()) ? r : null; }
@@ -3744,7 +3752,7 @@ function renderSignals(raw) {
       const clean = track.dataset.text.replace(/^(?:🔵|🔴)\uFE0F?\s*/, "");
       const mark = rd > 0 ? "🔴 " : b > 0 ? "🔵 " : "";
       if (mark + clean !== track.dataset.text) {
-        const st = el.classList.contains("alert") ? "alert" : el.classList.contains("working") ? "working" : "idle";
+        const st = el.classList.contains("alert") ? "alert" : el.classList.contains("working") ? "working" : el.classList.contains("unverified") ? "unverified" : "idle";
         setBoardText(r.id, mark + clean, undefined, st);
       }
     }
@@ -4207,6 +4215,7 @@ function applyStatus(data) {
   renderChief();                  // 총괄 항목(결정 열쇠)을 먼저 세운다
   renderSignals();                         // 결정된 건을 빼고 신호등·방 불빛을 다시 그린다
 
+  CHECKS = (src.credit && typeof src.credit === "object" && src.credit.checks && typeof src.credit.checks === "object" && !Array.isArray(src.credit.checks)) ? src.credit.checks : {};
   rooms.forEach(r => {
     const s = src[r.id] || {};
     let state;
@@ -4217,7 +4226,11 @@ function applyStatus(data) {
 
     const tickerRaw = (typeof s.ticker === "string" && s.ticker.trim()) ? s.ticker.trim() : r.ticker;
     const updated = (typeof s.updated === "string" && s.updated.trim()) ? s.updated.trim() : r.updated;
-    const ticker = tickerFor(state, tickerRaw, laneOf(r.id));
+    let ticker = tickerFor(state, tickerRaw, laneOf(r.id));
+    if (state !== "alert" && opsUnverifiedRoom(r.id)) {   // 가동 확인 기록 없는 부장 방: WORK/IDLE 단정 대신 출처·시각 있는 자기보고로 표시
+      state = "unverified";
+      ticker = "자기보고 " + (/^\d\d:\d\d$/.test(updated || "") ? updated : "시각미상") + " · " + ticker;
+    }
 
     const track = document.getElementById("track-" + r.id);
     const before = track ? track.dataset.text : undefined;
@@ -4523,7 +4536,7 @@ function setView(v) {
 
 /* ================= 부서 업무 보고 (클릭 → 모달) =================
    방을 눌러도 상태(working/idle/alert)는 절대 바꾸지 않는다. */
-const REPORT_STATE_TXT = { working: "진행중", idle: "대기", alert: "확인필요" };
+const REPORT_STATE_TXT = { working: "진행중", idle: "대기", alert: "확인필요", unverified: "가동 미확인" };
 let REPORT_ID = null;
 
 function reportData(id) {
@@ -4536,7 +4549,7 @@ function reportData(id) {
   const s = (STATUS && STATUS[id] && typeof STATUS[id] === "object") ? STATUS[id] : {};
   const sourceState = s.status || r.state || "idle";
   let state = ["working", "alert"].includes(sourceState) ? sourceState : "idle";
-  if (el) state = el.classList.contains("alert") ? "alert" : el.classList.contains("working") ? "working" : "idle";
+  if (el) state = el.classList.contains("alert") ? "alert" : el.classList.contains("working") ? "working" : el.classList.contains("unverified") ? "unverified" : "idle";
   const next = Array.isArray(base.next)
     ? base.next.filter(n => n && typeof n === "object" && (n.task || n.time)).map(n => ({ time: String(n.time || ""), task: String(n.task || "") }))
     : [];
@@ -4549,7 +4562,7 @@ function reportData(id) {
         const rid = typeof d.id === "string" ? d.id.trim() : "";
         const rel = rid ? document.getElementById("room-" + rid) : null;
         let st = (d.state === "working" || d.state === "alert") ? d.state : "idle";
-        if (rel) st = rel.classList.contains("alert") ? "alert" : rel.classList.contains("working") ? "working" : "idle";
+        if (rel) st = rel.classList.contains("alert") ? "alert" : rel.classList.contains("working") ? "working" : rel.classList.contains("unverified") ? "unverified" : "idle";
         return { id: rid, name: d.name.trim(), state: st };
       })
     : [];
@@ -5066,6 +5079,7 @@ function roomStateOf(id) {
   if (!el) return "idle";
   if (el.classList.contains("working")) return "working";
   if (el.classList.contains("alert")) return "alert";
+  if (el.classList.contains("unverified")) return "unverified";   // 자리 지킴도 휴식도 단정하지 않음(이동 연출 제외)
   return "idle";
 }
 /* working / alert = 업무 중 → 자리 지킴. idle(자율 휴게)만 이동 가능 */
