@@ -4685,7 +4685,7 @@ function chiefIndexForSignal(x, lane) {
       ? `<span class="rs-rm">결재는 상단 결재 목록에서</span>`
       : dec
         ? `<span class="cr-dec ${dec.s === "ok" ? "ok" : dec.s === "re" ? "re" : "no"}">${dec.s === "ok" ? "✅ 승인 선택 · 미접수 · 연결 준비 중" : dec.s === "re" ? "🔁 재심의 선택 · 미접수 · 연결 준비 중" : "⛔ 불허 선택 · 미접수 · 연결 준비 중"}</span><button class="cr-undo" type="button" onclick="chiefUndo(event, ${ci})" title="결정 되돌리기">↺</button>`
-        : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="${lane === "red" ? "승인 선택 저장 · 실행은 오너가 직접 · 아직 접수 안 됨" : "승인 선택 저장 · 아직 접수 안 됨"}">승인</button><button class="cr-no" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="불허 선택 저장 · 아직 접수 안 됨">불허</button>`;
+        : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="${lane === "red" ? "승인 선택 저장 · 실행은 오너가 직접 · 아직 접수 안 됨" : "승인 선택 저장 · 아직 접수 안 됨"}">승인</button><button class="cr-no" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="불허 선택 저장 · 아직 접수 안 됨">불허</button><button class="cr-re" type="button" onclick="chiefDecide(event, ${ci}, 're')" title="재심의 선택 저장 · 아직 접수 안 됨 · 신호 유지">재심의</button>`;
     return `<div class="rm-sig ${lane}${lane === "red" && !redGroupUnread(x) ? " read" : ""}"><span class="rs-lane">${lane === "red" ? (redGroupUnread(x) ? "🔴" : "⚪") : "🔵"}</span><span class="rs-tx"><b>${esc(x.title)}</b>${x.detail ? `<i>${esc(x.detail)}</i>` : ""}</span>${lane === "red" && !redGroupUnread(x) ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : ""}${act}${d.overview && x.room ? `<span class="rs-rm">${esc(roomTitle(x.room))}</span>` : ""}</div>`;
   };
   const body = document.getElementById("rm-body");
