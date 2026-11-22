@@ -2032,6 +2032,7 @@
   .chief-tools { padding: 2px 8px 7px; }
   .chief-report { border: 1px solid #b89b42; border-radius: 6px; background: #292412; color: #fef3c7; font: inherit; font-size: 11px; padding: 7px 10px; cursor: pointer; touch-action: manipulation; }
   .chief-report:focus-visible { outline: 2px solid #fef3c7; outline-offset: 2px; }
+  a.chief-report { display: inline-block; text-decoration: none; }
   #chief-cnt[hidden], #chief-say[hidden] { display: none; }
   .chief-short-note { margin: 2px 10px 8px; color: #e2e8f0; font-size: 11px; line-height: 1.5; }
   .chief-details { margin: 0 10px 8px; font-size: 11px; color: #cbd5e1; }
@@ -2842,12 +2843,12 @@
       <span hidden class="chief-cnt" id="chief-cnt"></span>
       <span class="chief-caret" id="chief-caret">▾</span>
     </button>
-    <p class="chief-short-note">버튼은 켜져 있습니다. 누르면 이 브라우저에 선택만 저장되고 문구가 복사됩니다. 실제 접수·처리 연결은 준비 중입니다.</p>
+    <p class="chief-short-note">버튼을 누르면 이 브라우저에 선택이 저장되고 문구가 복사됩니다. 실제 접수는 비서실 접수판에서 오너 확인으로 보낼 수 있습니다(별도 화면으로 이동 · 실행은 대화에서 별도 확인).</p>
     <details class="chief-details"><summary>절차·전체 보고 보기</summary>
     <p class="chief-route" id="chief-route"><b>비서실 창구</b> 비서실장(Instinct 총괄)이 부서 보고를 검토·지휘해 이 창구에 올리고, 대표님은 여기서 결재합니다.<br><b>결재 흐름</b> 부장 작성 → 비서실장(총괄) 팩트검토·지휘 → 대표님 결재<br><small>불허: 해당 안 진행 중단 · 삭제 범위 확정 전 원기록 보존<br>재심의: 부장 보완 → 총괄 팩트 재검토 → 대표님 재상신<br>승인 후: 실행 결과 별도 보고<br>현재는 전달·접수와 단계별 검토가 연결되지 않았습니다. 검토·승인·실행·완료는 별개입니다. 기존 안건은 팩트검토 완료 근거가 없어 대표 결재 단계인지 미확인입니다.</small></p>
-    <div class="chief-tools"><button class="chief-report" id="chief-report" type="button" onclick="openReport('instinct')">💼 비서실장(총괄) 종합 보고 · 담당 부서 보기</button></div>
+    <div class="chief-tools"><button class="chief-report" id="chief-report" type="button" onclick="openReport('instinct')">💼 비서실장(총괄) 종합 보고 · 담당 부서 보기</button> <a class="chief-report" href="https://files.instinct.com/9pixwbczx32k" target="_blank" rel="noopener">🗂️ 비서실 접수판 열기(결정·자유지시 보내기) ›</a></div>
     <div hidden class="chief-say" id="chief-say">두 부장 미결·대기 건을 모으는 중…</div>
-    <p class="chief-receipt-note" id="chief-receipt-note"><strong>버튼은 켜져 있지만 아직 실제 접수·처리와 연결되지 않았습니다. 연결 준비 중 · 실제 처리 안 됨.</strong><br>눌러도 어디에도 전달되지 않고 이 브라우저에 선택만 저장됩니다(문구 복사는 참고용). 실제 접수가 연결되면 별도로 안내합니다. 전달 전에는 목록과 신호를 유지하며, 실제 완료로 처리하지 않습니다. 재심의 10분 검토 기준은 채널 도착 시각부터입니다.</p>
+    <p class="chief-receipt-note" id="chief-receipt-note"><strong>이 목록의 버튼은 이 브라우저에 선택만 저장합니다. 실제 접수는 위 "비서실 접수판" 링크에서 오너 확인으로 보냅니다.</strong><br>접수판은 별도 화면(Instinct 파일)으로 이동하며, 거기서 누른 결정·자유지시는 접수 요청으로 총괄에 도착합니다. 도착한 요청은 실행이 아니라 접수이고, 외부 발송·삭제·게시·지출 등 실행이 필요한 건은 총괄이 대화에서 안건과 범위를 다시 확인한 뒤 진행합니다. 전달 전에는 목록과 신호를 유지하며, 실제 완료로 처리하지 않습니다. 재심의 10분 검토 기준은 채널 도착 시각부터입니다.</p>
     </details>
     <div class="chief-body" id="chief-body"></div>
   </section>
