@@ -2834,18 +2834,18 @@
     </div>
   </div>
 
-  <!-- 💼 총괄(총괄 보고 · 긴급 처리): 두 부장 미결·대기 통합 · 🔴 → 🔵 → 일반 대기 자동 정렬 -->
-  <section class="chief" id="chief" aria-label="총괄 검토·대표 결재">
+  <!-- 🗂️ 비서실(대표 보고 창구 · 결재): 비서실장(총괄)이 검토·지휘해 올린 미결·대기 통합 · 🔴 → 🔵 → 일반 대기 자동 정렬 -->
+  <section class="chief" id="chief" aria-label="비서실 보고 창구 · 대표 결재">
     <button class="chief-head" id="chief-head" type="button" onclick="toggleChief()" aria-expanded="true" aria-controls="chief-body">
       <span class="chief-ava" aria-hidden="true">💼</span>
-      <span class="chief-t"><b>💼 총괄 · 검토·결재 목록</b></span>
+      <span class="chief-t"><b>🗂️ 비서실 · 보고·결재 창구</b></span>
       <span hidden class="chief-cnt" id="chief-cnt"></span>
       <span class="chief-caret" id="chief-caret">▾</span>
     </button>
     <p class="chief-short-note">버튼은 켜져 있습니다. 누르면 이 브라우저에 선택만 저장되고 문구가 복사됩니다. 실제 접수·처리 연결은 준비 중입니다.</p>
     <details class="chief-details"><summary>절차·전체 보고 보기</summary>
-    <p class="chief-route" id="chief-route"><b>결재 흐름</b> 부장 작성 → 총괄 팩트검토 → 대표님 결재<br><small>불허: 해당 안 진행 중단 · 삭제 범위 확정 전 원기록 보존<br>재심의: 부장 보완 → 총괄 팩트 재검토 → 대표님 재상신<br>승인 후: 실행 결과 별도 보고<br>현재는 전달·접수와 단계별 검토가 연결되지 않았습니다. 검토·승인·실행·완료는 별개입니다. 기존 안건은 팩트검토 완료 근거가 없어 대표 결재 단계인지 미확인입니다.</small></p>
-    <div class="chief-tools"><button class="chief-report" id="chief-report" type="button" onclick="openReport('instinct')">💼 총괄 종합 보고 · 담당 부서 보기</button></div>
+    <p class="chief-route" id="chief-route"><b>비서실 창구</b> 비서실장(Instinct 총괄)이 부서 보고를 검토·지휘해 이 창구에 올리고, 대표님은 여기서 결재합니다.<br><b>결재 흐름</b> 부장 작성 → 비서실장(총괄) 팩트검토·지휘 → 대표님 결재<br><small>불허: 해당 안 진행 중단 · 삭제 범위 확정 전 원기록 보존<br>재심의: 부장 보완 → 총괄 팩트 재검토 → 대표님 재상신<br>승인 후: 실행 결과 별도 보고<br>현재는 전달·접수와 단계별 검토가 연결되지 않았습니다. 검토·승인·실행·완료는 별개입니다. 기존 안건은 팩트검토 완료 근거가 없어 대표 결재 단계인지 미확인입니다.</small></p>
+    <div class="chief-tools"><button class="chief-report" id="chief-report" type="button" onclick="openReport('instinct')">💼 비서실장(총괄) 종합 보고 · 담당 부서 보기</button></div>
     <div hidden class="chief-say" id="chief-say">두 부장 미결·대기 건을 모으는 중…</div>
     <p class="chief-receipt-note" id="chief-receipt-note"><strong>버튼은 켜져 있지만 아직 실제 접수·처리와 연결되지 않았습니다. 연결 준비 중 · 실제 처리 안 됨.</strong><br>눌러도 어디에도 전달되지 않고 이 브라우저에 선택만 저장됩니다(문구 복사는 참고용). 실제 접수가 연결되면 별도로 안내합니다. 전달 전에는 목록과 신호를 유지하며, 실제 완료로 처리하지 않습니다. 재심의 10분 검토 기준은 채널 도착 시각부터입니다.</p>
     </details>
@@ -2978,17 +2978,17 @@ const rooms = [
   {
     id: "owner", floor: "f8", zone: "instinct", tag: "오너", ceo: true,
     title: "👑 대표님", worker: "👑", name: "👑 대표님",
-    say: "전체 보고 받는 중!", foot: "조직도 최상단 · 보고 라인: 투덜이·해병이·수박이 → 총괄(Instinct) → 대표님",
+    say: "전체 보고 받는 중!", foot: "조직도 최상단 · 보고 라인: 투덜이·해병이·수박이 → 비서실장(총괄) → 대표님",
     issue: "승인이 필요한 건이 있어요!",
-    guide: "🔴 자금 건은 대표님이 직접 실행하고, 🔵 확인·승인 건은 총괄 패널에서 결정합니다.",
-    state: "working", ticker: "최종 승인권 · 보고 라인: 투덜이·해병이·수박이 → 총괄(Instinct) → 대표님", updated: "15:52"
+    guide: "🔴 자금 건은 대표님이 직접 실행하고, 🔵 확인·승인 건은 비서실 창구에서 결정합니다.",
+    state: "working", ticker: "최종 승인권 · 보고 라인: 투덜이·해병이·수박이 → 비서실장(총괄) → 대표님", updated: "15:52"
   },
   {
     id: "instinct", floor: null, zone: "instinct", tag: "Instinct",
-    title: "💼 Instinct 총괄", worker: "💼", name: "💼 총괄",
-    say: "총지휘 중 · 두 부장 보고 접수!", foot: "총지휘 · 보고 라인: 투덜이·해병이·수박이 → 총괄(Instinct) → 대표님",
+    title: "💼 비서실장 · Instinct 총괄", worker: "💼", name: "💼 비서실장",
+    say: "검토·지휘 중 · 두 부장 보고 접수!", foot: "비서실장(총지휘) · 보고 라인: 투덜이·해병이·수박이 → 비서실장(총괄) → 대표님",
     issue: "승인·확인 건을 모으는 중!",
-    guide: "승인·확인 건은 총괄 패널에 모아 둡니다.",
+    guide: "승인·확인 건은 비서실 창구에 모아 둡니다.",
     state: "working", ticker: "총지휘 · [총괄 지시 008] /6 최저임금 연도 정정 완료(13:56 · 15시 검증 대기) · [총괄 지시 010~014] 자녀 경제교육 8주 PWA 기획안·부모용 대본 12회분 완료 보고 접수 — 승인 6건 대표님 결재 대기 · [총괄 지시 007] 머니리포트 「맞벌이 연말정산」 13:29 공개 발행(공개 6편 · 9편 남음) · 색인 5/5 · 네이버 제휴 셋업·쿠팡 파트너스 가입 완료", updated: "14:06"
   },
   {
@@ -4683,7 +4683,7 @@ function chiefIndexForSignal(x, lane) {
       d.id === "invest_sp500" ? renderStockPanel() : "",
       d.summary ? `<div class="rm-sum"><span>👑</span><span>${esc(d.summary)}</span></div>` : "",
       d.ticker ? `<div class="rm-live"><span class="rm-live-h">📺 전광판</span><span class="rm-live-t">${esc(d.ticker)}</span><span class="rm-live-u">${esc(d.updated)}</span></div>` : "",
-      d.overview ? `<div class="report-scope-note">${d.coordinator ? "종합·검토 목록과 담당 보고 바로가기입니다. 개별 업무 상세는 담당 보고에서 확인하세요." : d.manager ? "이 부장이 맡은 부서의 신호와 보고만 모았습니다. 다른 부서 신호·공통 역할표는 총괄에서 확인하세요." : "검토·결재 안건은 총괄 패널에서, 개별 업무 상세는 각 담당 보고에서 확인하세요."}<div class="report-scope-actions">${d.coordinator || id === "owner" ? `<button type="button" onclick="openChiefFromReport()">검토·결재 목록 보기</button>` : ""}${!d.coordinator ? `<button type="button" onclick="openReport('instinct')">총괄 종합 보고</button>` : ""}</div></div>` : "",
+      d.overview ? `<div class="report-scope-note">${d.coordinator ? "종합·검토 목록과 담당 보고 바로가기입니다. 개별 업무 상세는 담당 보고에서 확인하세요." : d.manager ? "이 부장이 맡은 부서의 신호와 보고만 모았습니다. 다른 부서 신호·공통 역할표는 총괄에서 확인하세요." : "검토·결재 안건은 비서실 창구에서, 개별 업무 상세는 각 담당 보고에서 확인하세요."}<div class="report-scope-actions">${d.coordinator || id === "owner" ? `<button type="button" onclick="openChiefFromReport()">비서실 창구 보기</button>` : ""}${!d.coordinator ? `<button type="button" onclick="openReport('instinct')">비서실장 종합 보고</button>` : ""}</div></div>` : "",
       d.credit ? `<div class="rm-credit"><span>⚡ 크레딧</span><span>${esc(d.credit)}</span></div>` : "",
       (d.signals.red.length || d.signals.blue.length) ? `<div class="rm-sec"><div class="rm-h">🚦 미결 신호 · 🔵 ${d.signals.blue.length} · 빨간 알림 ${d.signals.red.filter(redGroupUnread).length} / 미결 ${d.signals.red.length}</div>${d.signals.red.length ? `<div class="rm-sig-note">🔴 자금·계좌·이체·결제는 AI가 실행하지 않습니다. 오너가 직접 처리해 주세요.</div>` : ""}<div class="rm-sigs">${d.signals.red.map(x => sigRow(x, "red")).join("")}${d.signals.blue.map(x => sigRow(x, "blue")).join("")}</div></div>` : "",
       d.depts.length ? `<div class="rm-sec"><div class="rm-h">🏢 담당 부서 현황 · ${d.depts.length}개<em class="rm-hint">칩을 누르면 해당 부서 보고로 이동</em></div><div class="rm-depts">${d.depts.map(x => (x.id && rooms.some(r => r.id === x.id))
