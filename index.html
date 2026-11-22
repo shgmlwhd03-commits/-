@@ -2849,12 +2849,12 @@
       <span hidden class="chief-cnt" id="chief-cnt"></span>
       <span class="chief-caret" id="chief-caret">▾</span>
     </button>
-    <p class="chief-short-note">실제 전달은 미연결입니다. 버튼은 문구 복사·로컬 저장만 하며 미접수 상태입니다.</p>
+    <p class="chief-short-note">버튼은 켜져 있습니다. 누르면 이 브라우저에 선택만 저장되고 문구가 복사됩니다. 실제 접수·처리 연결은 준비 중입니다.</p>
     <details class="chief-details"><summary>절차·전체 보고 보기</summary>
     <p class="chief-route" id="chief-route"><b>결재 흐름</b> 부장 작성 → 총괄 팩트검토 → 대표님 결재<br><small>불허: 해당 안 진행 중단 · 삭제 범위 확정 전 원기록 보존<br>재심의: 부장 보완 → 총괄 팩트 재검토 → 대표님 재상신<br>승인 후: 실행 결과 별도 보고<br>현재는 전달·접수와 단계별 검토가 연결되지 않았습니다. 검토·승인·실행·완료는 별개입니다. 기존 안건은 팩트검토 완료 근거가 없어 대표 결재 단계인지 미확인입니다.</small></p>
     <div class="chief-tools"><button class="chief-report" id="chief-report" type="button" onclick="openReport('instinct')">💼 총괄 종합 보고 · 담당 부서 보기</button></div>
     <div hidden class="chief-say" id="chief-say">두 부장 미결·대기 건을 모으는 중…</div>
-    <p class="chief-receipt-note" id="chief-receipt-note"><strong>승인·불허·재심의 버튼은 문구 복사와 이 브라우저의 선택 저장만 합니다.</strong><br>복사한 문구를 Slack #피클지시에 직접 보내야 접수됩니다. 전달 전에는 목록과 신호를 유지하며, 실제 완료로 처리하지 않습니다. 재심의 10분 검토 기준은 채널 도착 시각부터입니다.</p>
+    <p class="chief-receipt-note" id="chief-receipt-note"><strong>버튼은 켜져 있지만 아직 실제 접수·처리와 연결되지 않았습니다. 연결 준비 중 · 실제 처리 안 됨.</strong><br>눌러도 어디에도 전달되지 않고 이 브라우저에 선택만 저장됩니다(문구 복사는 참고용). 실제 접수가 연결되면 별도로 안내합니다. 전달 전에는 목록과 신호를 유지하며, 실제 완료로 처리하지 않습니다. 재심의 10분 검토 기준은 채널 도착 시각부터입니다.</p>
     </details>
     <div class="chief-body" id="chief-body"></div>
   </section>
@@ -3863,7 +3863,7 @@ function chiefClick(e, room) {
   if (room) openReport(room);
 }
 
-/* 승인·불허·재심의 결정: 정적 페이지라 localStorage에 남기고, 동시에 Slack에 붙여넣을 문구를 복사한다. */
+/* 승인·불허·재심의 결정: 정적 페이지라 localStorage에 선택만 저장하고 문구는 참고용으로 복사한다. 실제 접수·처리 연결은 준비 중이며 버튼 클릭은 어디에도 전달되지 않는다. */
 let CHIEF_DEC = null;
 
 function chiefDecisions() {
@@ -3900,8 +3900,8 @@ function chiefPhrase(it, state) {
     return head + nm + " — 재심의합니다. 근거·대안·비용·일정을 보완해서 다시 상신해 주세요. 결론이 날 때까지 신호는 켜 둡니다.";
   }
   return it.lane === "red"
-    ? head + nm + " — 보류합니다. 자금·인증 건이니 대안·비용·일정을 정리한 재검토안을 다시 보고해 주세요."
-    : head + nm + " — 보류합니다. 재검토안을 정리해 다시 보고해 주세요.";
+    ? head + nm + " — 불허합니다. 해당 안건 내용을 삭제해 주세요. 자금·인증 건이니 진행을 중단하고 원기록은 보존해 주세요."
+    : head + nm + " — 불허합니다. 해당 안건 내용을 삭제해 주세요. 원기록은 보존합니다.";
 }
 
 function chiefDecide(e, idx, state) {
@@ -3964,7 +3964,7 @@ function renderChief(raw) {
   if (cnt) cnt.innerHTML = `<span class="cc-red${unreadRedItems().length ? "" : " read"}">${unreadRedItems().length ? "🔴" : "⚪"} ${unreadRedItems().length}</span><span class="cc-blue">🔵 ${n.blue}</span><span class="cc-wait">⏳ ${n.wait}</span>`;
   const say = document.getElementById("chief-say");
   const localN = okN + noN + reN;
-  if (say) say.textContent = `기존 안건(팩트검토 미확인) · 접수·완료 확인 전 대기 🔴 ${n.red} · 🔵 ${n.blue} · ⏳ ${n.wait}` + (localN ? ` · 이 브라우저 선택 ${localN}건 (미접수)` : '') + ' · 버튼은 문구 복사만, Slack 전송 필요';
+  if (say) say.textContent = `기존 안건(팩트검토 미확인) · 접수·완료 확인 전 대기 🔴 ${n.red} · 🔵 ${n.blue} · ⏳ ${n.wait}` + (localN ? ` · 이 브라우저 선택 ${localN}건 (미접수)` : '') + ' · 버튼 작동 중 · 실제 접수 연결 준비 중(미접수)';
   body.innerHTML = items.length ? items.map((it, idx) => {
     const sourceIdx = allItems.indexOf(it);
     const rr = rooms.find(r => r.id === it.room);
@@ -3973,13 +3973,13 @@ function renderChief(raw) {
     const redRead = it.lane === "red" && !redGroupUnread(it);
     const ack = it.lane === "red" ? (redRead ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : `<button class="red-ack" type="button" onkeydown="event.stopPropagation()" onclick="acknowledgeRed(event, 'chief', ${sourceIdx})">확인</button>`) : "";
     const act = d
-      ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${d.s === "ok" ? "✅ 승인 선택 · 미접수" : d.s === "re" ? "🔁 재심의 선택 · 미접수" : "⛔ 불허 선택 · 미접수"}</span>` +
+      ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${d.s === "ok" ? "✅ 승인 선택 · 미접수 · 연결 준비 중" : d.s === "re" ? "🔁 재심의 선택 · 미접수 · 연결 준비 중" : "⛔ 불허 선택 · 미접수 · 연결 준비 중"}</span>` +
         (it.lane === "wait" ? "" : `<span class="cr-clr" title="실제 접수 확인 전이므로 신호와 대기 목록을 유지합니다">신호 유지</span>`) +
-        `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${sourceIdx})" title="Slack에 붙여넣을 문구 복사">📋 문구</button>` +
+        `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${sourceIdx})" title="결정 문구 복사(참고용 · 아직 접수 안 됨)">📋 문구</button>` +
         `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${sourceIdx})" title="결정 되돌리기">↺</button>`
-      : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="${it.lane === "red" ? "승인 — 실행은 오너가 직접" : "승인하고 진행"}">승인</button>` +
-        `<button class="cr-no" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="보류하고 재검토">불허</button>` +
-        `<button class="cr-re" type="button" onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 문구 복사 · Slack 채팅에 보내야 접수 · 신호 유지">재심의</button>`;
+      : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="${it.lane === "red" ? "승인 선택 저장 · 실행은 오너가 직접 · 아직 접수 안 됨" : "승인 선택 저장 · 아직 접수 안 됨"}">승인</button>` +
+        `<button class="cr-no" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="불허 선택 저장 · 아직 접수 안 됨">불허</button>` +
+        `<button class="cr-re" type="button" onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 선택 저장 · 아직 접수 안 됨 · 신호 유지">재심의</button>`;
     return `<div class="chief-row ${it.lane}${redRead ? " read" : ""}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" data-room="${esc(it.room)}">
         <div class="cr-main"><b>${esc(it.title)}</b><p class="cr-review">총괄 팩트검토: 미확인</p></div>
         <span class="cr-act">${act}</span>
