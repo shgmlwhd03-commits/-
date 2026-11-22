@@ -4666,7 +4666,28 @@ function openReport(id) {
 
   const list = (items) => items.map(x => `<li>${esc(x)}</li>`).join("");
   const roomTitle = (rid) => { const rr = rooms.find(x => x.id === rid); return rr ? rr.title : rid; };
-  const sigRow = (x, lane) => `<div class="rm-sig ${lane}${lane === "red" && !redGroupUnread(x) ? " read" : ""}"><span class="rs-lane">${lane === "red" ? (redGroupUnread(x) ? "🔴" : "⚪") : "🔵"}</span><span class="rs-tx"><b>${esc(x.title)}</b>${x.detail ? `<i>${esc(x.detail)}</i>` : ""}</span>${lane === "red" && !redGroupUnread(x) ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : ""}${d.overview && x.room ? `<span class="rs-rm">${esc(roomTitle(x.room))}</span>` : ""}</div>`;
+/* 보고서 모달 미결 신호 ↔ 총괄 결재 항목 연결: 방+제목 정확히 일치 우선, 없으면 그 방의 그 레인 항목이 1건일 때만. 둘 다 아니면 -1(버튼 미표시) */
+function chiefIndexForSignal(x, lane) {
+  if (!CHIEF || !Array.isArray(CHIEF.items)) return -1;
+  const exact = CHIEF.items.findIndex(it => it.room === x.room && it.title === x.title);
+  if (exact >= 0) return exact;
+  if (!x.room) return -1;
+  const cand = CHIEF.items.map((it, i) => ({ it, i })).filter(o => o.it.room === x.room && o.it.lane === lane);
+  if (cand.length === 1) return cand[0].i;
+  const byRoom = CHIEF.items.map((it, i) => ({ it, i })).filter(o => o.it.room === x.room);
+  return byRoom.length === 1 ? byRoom[0].i : -1;
+}
+
+  const sigRow = (x, lane) => {
+    const ci = chiefIndexForSignal(x, lane);
+    const dec = ci >= 0 ? chiefDecisions()[CHIEF.items[ci].id] : null;
+    const act = ci < 0
+      ? `<span class="rs-rm">결재는 상단 결재 목록에서</span>`
+      : dec
+        ? `<span class="cr-dec ${dec.s === "ok" ? "ok" : dec.s === "re" ? "re" : "no"}">${dec.s === "ok" ? "✅ 승인 선택 · 미접수 · 연결 준비 중" : dec.s === "re" ? "🔁 재심의 선택 · 미접수 · 연결 준비 중" : "⛔ 불허 선택 · 미접수 · 연결 준비 중"}</span><button class="cr-undo" type="button" onclick="chiefUndo(event, ${ci})" title="결정 되돌리기">↺</button>`
+        : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="${lane === "red" ? "승인 선택 저장 · 실행은 오너가 직접 · 아직 접수 안 됨" : "승인 선택 저장 · 아직 접수 안 됨"}">승인</button><button class="cr-no" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="불허 선택 저장 · 아직 접수 안 됨">불허</button>`;
+    return `<div class="rm-sig ${lane}${lane === "red" && !redGroupUnread(x) ? " read" : ""}"><span class="rs-lane">${lane === "red" ? (redGroupUnread(x) ? "🔴" : "⚪") : "🔵"}</span><span class="rs-tx"><b>${esc(x.title)}</b>${x.detail ? `<i>${esc(x.detail)}</i>` : ""}</span>${lane === "red" && !redGroupUnread(x) ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : ""}${act}${d.overview && x.room ? `<span class="rs-rm">${esc(roomTitle(x.room))}</span>` : ""}</div>`;
+  };
   const body = document.getElementById("rm-body");
   if (body) {
     body.innerHTML = [
