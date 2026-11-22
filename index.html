@@ -3366,6 +3366,13 @@ function render() {
 
   // 전광판 기본 문구 (status.json 오기 전에도 꽉 차 보이게)
   rooms.forEach(r => setBoardText(r.id, tickerFor(r.state, r.ticker, laneOf(r.id)), r.updated, r.state));
+  // 가동 확인 기록은 status.json 도착 후에야 알 수 있으므로, 첫 로드 전 두 부장 방은 WORK/IDLE 대신 미확인으로 시작
+  ["ceo_tudeori", "ceo_haebyeong"].forEach(id => {
+    const r = rooms.find(x => x.id === id);
+    if (!r) return;
+    setRoomState(id, "unverified");
+    setBoardText(id, "자기보고 시각미상 · " + tickerFor("unverified", r.ticker, laneOf(id)), r.updated, "unverified");
+  });
   renderRevenue(null);
   renderShop(null);
   renderSignals(null);
