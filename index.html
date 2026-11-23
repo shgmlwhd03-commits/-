@@ -2625,7 +2625,7 @@
   .rooms.desk-rooms .room-stage { min-height: 96px; }
   #floor-f8 .rooms:not(.desk-rooms) { background-image: url(assets/floor_f8.jpg); aspect-ratio: 1400/369; min-height: 150px; }
   #floor-f6 .rooms:not(.desk-rooms) { background-image: url(assets/floor_f6.jpg); aspect-ratio: 1400/280; min-height: 150px; }
-  #floor-f5 .rooms:not(.desk-rooms) { background-image: url(assets/floor_f5.jpg); aspect-ratio: 1400/314; min-height: 150px; }
+  #floor-f5 .rooms:not(.desk-rooms) { background-image: url(assets/floor_f5.jpg); aspect-ratio: auto; min-height: 150px; }
   #floor-f4 .rooms:not(.desk-rooms) { background-image: url(assets/floor_f4.jpg); aspect-ratio: 1400/310; min-height: 150px; }
   #floor-f3 .rooms:not(.desk-rooms) { background-image: url(assets/floor_f3.jpg); aspect-ratio: 1400/289; min-height: 150px; }
   #floor-f2 .rooms:not(.desk-rooms) { background-image: url(assets/floor_f2.jpg); aspect-ratio: 1400/288; min-height: 150px; }
@@ -2662,7 +2662,8 @@
   .rooms .room-stage { margin-bottom: 2px; }
   .rooms.four .speech { max-width: 104px; font-size: 8.5px; }
   .rooms.four .room-title, .rooms.three .room-title { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 8.5px; }
-  .rooms.four .room-head { flex-wrap: nowrap; overflow: hidden; }
+  .rooms.four .room-head { flex-wrap: wrap; overflow: visible; flex-shrink: 0; }
+  .rooms.four .room-title { overflow: visible; text-overflow: clip; white-space: normal; }
   .rooms.desk-rooms .room-stage { min-height: 100px; }
   @media (max-width: 560px) {
     .rooms { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); padding: 0 !important; aspect-ratio: auto !important; min-height: 0 !important; background-size: cover; }
