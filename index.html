@@ -2044,6 +2044,9 @@
   .cr-review { margin: 4px 0 0; font-size: 11px; color: #a8b5c6; }
   #chief .cr-act, .owner-queue .cr-act { flex-wrap: wrap; align-self: center; }
   #chief .cr-act button, .owner-queue .cr-act button { font-size: 11px; padding: 7px 10px; min-height: 34px; }
+  /* 대표님 결재 큐는 좁은 모달 안이라 항상 한 열로 쌓는다(제목 0px 붕괴 방지). */
+  .owner-queue .chief-row { grid-template-columns: minmax(0,1fr); }
+  .owner-queue .cr-act { justify-self: start; gap: 7px; margin: 4px 0; }
   .cr-detail { grid-column: 1 / -1; font-size: 11px; color: #9eb1c8; }
   .cr-detail p { line-height: 1.6; margin: 4px 0 8px; }
   .cr-detail button, .cr-detail a { font-size: 11px; }
@@ -2985,6 +2988,6 @@
 <script src="task-archive.js"></script>
 <script src="red-read.js"></script>
 <div id="runtime-load-error" role="alert" hidden style="position:fixed;top:8px;left:8px;right:8px;z-index:10000;padding:12px;background:#7f1d1d;color:#fff;border:1px solid #fecaca;border-radius:8px;font-size:14px">사무실 기능을 불러오지 못했습니다. 새로고침 후에도 같으면 이 대화에 알려주세요. 이 화면에서 결정은 전송되지 않았습니다.</div>
-<script src="office-runtime.js?v=048f4fc648d2" onerror="document.getElementById('runtime-load-error').hidden=false"></script>
+<script src="office-runtime.js?v=6cdba1c174b1" onerror="document.getElementById('runtime-load-error').hidden=false"></script>
 </body>
  </html>

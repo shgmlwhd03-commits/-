@@ -982,9 +982,29 @@ function decisionBadge(d) {
     return `${icon} ${lbl} 접수됨${d.issueNum ? ` (#${d.issueNum})` : ""} · 담당 확인·처리 대기`;
   }
   if (d.opened) {
-    return `📤 ${lbl} 접수창 열림 · 아직 접수 확인 전`;
+    return `📤 ${lbl} 접수창 열림 · 아직 접수 확인 전 · 창이 안 열렸으면 ↺ 후 재시도`;
   }
   return `${icon} ${lbl} 선택 · 미접수`;
+}
+
+function chiefGhToken() {
+  try { return (localStorage.getItem("liveoffice_gh_token") || "").trim(); } catch (e) { return ""; }
+}
+
+function chiefIssueDraft(it, state) {
+  const rr = rooms.find(r => r.id === it.room);
+  const who = rr ? rr.tag : (it.room || "미지정");
+  const where = rr ? rr.title : "";
+  const lbl = decisionLabel(state);
+  return {
+    title: `[결재·${lbl}] ${it.title}`,
+    body: [
+      `안건 ID: ${it.id}`,
+      `결정: ${lbl}`,
+      `담당: ${who}${where ? ` (${where})` : ""}`,
+      `시각: ${new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}`
+    ].join("\n")
+  };
 }
 
 async function sendDecisionToGitHub(it, state, entry, revision) {
@@ -1005,13 +1025,7 @@ async function sendDecisionToGitHub(it, state, entry, revision) {
   const who = rr ? rr.tag : (it.room || "미지정");
   const where = rr ? rr.title : "";
   const lbl = decisionLabel(state);
-  const title = `[결재·${lbl}] ${it.title}`;
-  const body = [
-    `안건 ID: ${it.id}`,
-    `결정: ${lbl}`,
-    `담당: ${who}${where ? ` (${where})` : ""}`,
-    `시각: ${new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}`
-  ].join("\n");
+  const { title, body } = chiefIssueDraft(it, state);
 
   let relayKey = "";
   try { relayKey = (localStorage.getItem("liveoffice_relay_key") || "").trim(); } catch (e) {}
@@ -1047,8 +1061,7 @@ async function sendDecisionToGitHub(it, state, entry, revision) {
     return;
   }
 
-  let tok = "";
-  try { tok = localStorage.getItem("liveoffice_gh_token") || ""; } catch (e) {}
+  const tok = chiefGhToken();
   if (tok) {
     entry.sending = true;
     syncDecisionLights();
@@ -1088,13 +1101,12 @@ async function sendDecisionToGitHub(it, state, entry, revision) {
 
   const url = "https://github.com/shgmlwhd03-commits/-/issues/new?labels=decision&title=" +
     encodeURIComponent(title) + "&body=" + encodeURIComponent(body);
-  entry.sending = false;
-  entry.queued = false;
-  entry.opened = true;
-  entry.sent = false;
-  chiefSaveDecisions();
-  syncDecisionLights();
-  window.open(url, "_blank", "noopener");
+  const pop = window.open(url, "_blank", "noopener");
+  if (pop) {
+    mark({ sending: false, queued: false, sent: false, opened: true, error: "" });
+  } else {
+    mark({ sending: false, queued: false, sent: false, opened: false, error: "팝업이 차단돼 접수창을 열지 못했습니다. 브라우저 팝업 허용 후 다시 눌러 주세요." });
+  }
 }
 
 function chiefDecide(e, idx, state) {
@@ -1117,6 +1129,20 @@ function chiefDecide(e, idx, state) {
   d[it.id] = entry;
   chiefSaveDecisions();
   syncDecisionLights();
+  // 전송 수단(중계 키·토큰)이 없으면 접수창은 클릭 직후 바로 연다.
+  // 비동기 전송 안에서 열면 브라우저가 팝업을 막아 버튼이 아무 반응 없이 끝난다.
+  if (!hasRelayKey() && !chiefGhToken()) {
+    const draft = chiefIssueDraft(it, state);
+    const popUrl = "https://github.com/shgmlwhd03-commits/-/issues/new?labels=decision&title=" +
+      encodeURIComponent(draft.title) + "&body=" + encodeURIComponent(draft.body);
+    const pop = window.open(popUrl, "_blank", "noopener");
+    Object.assign(entry, pop
+      ? { sending: false, queued: false, sent: false, opened: true, error: "" }
+      : { sending: false, queued: false, sent: false, opened: false, error: "팝업이 차단돼 접수창을 열지 못했습니다. 브라우저 팝업 허용 후 다시 눌러 주세요." });
+    chiefSaveDecisions();
+    syncDecisionLights();
+    return;
+  }
   const previous = CHIEF_SENDS.get(it.id) || Promise.resolve();
   const next = previous.catch(() => {}).then(async () => {
     // Coalesce choices not yet sent. Never let an older response confirm a new one.
@@ -1135,7 +1161,9 @@ function chiefDecide(e, idx, state) {
 
 function chiefUndoable(it) {
   const entry = chiefDecisions()[it.id];
-  return !(entry && (CHIEF_SENDS.has(it.id) || entry.sent || entry.opened || entry.issueNum || entry.uncertain));
+  // 접수가 확인되지 않은 "접수창 열림"은 지우고 다시 시도할 수 있어야 한다.
+  // 접수 확인(sent·issueNum)·전송 중·수신 미확인 건은 지우지 않는다.
+  return !(entry && (CHIEF_SENDS.has(it.id) || entry.sent || entry.issueNum || entry.uncertain));
 }
 
 function chiefUndo(e, idx) {
@@ -1198,7 +1226,7 @@ function chiefDecisionActions(it, sourceIdx, d) {
       (it.lane === "wait" ? "" : `<span class="cr-clr" title="실제 처리 완료 전이므로 신호와 대기 목록을 유지합니다">신호 유지</span>`) +
       (it.lane === "red" ? "" : decBtns(d.s)) +
       (d.issueUrl ? `<a class="cr-cp" href="${esc(d.issueUrl)}" target="_blank" rel="noopener" title="접수된 GitHub 이슈 열기">🔗 #${d.issueNum}</a>` : `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${sourceIdx})" title="결정 문구 복사">📋 문구</button>`) +
-      (chiefUndoable(it) ? `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${sourceIdx})" title="미접수 선택 지우기">↺</button>` : "")
+      (chiefUndoable(it) ? `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${sourceIdx})" title="미확인·미접수 선택 지우기">↺</button>` : "")
     : it.lane === "red"
     ? `<span class="rs-rm">오너 직접 처리 건 · 버튼 없음</span>`
     : decBtns(null);
