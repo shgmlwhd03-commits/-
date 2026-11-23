@@ -31,8 +31,8 @@
 <body>
 <div class="wrap">
   <span class="badge">시험본 · 기존 사무실과 분리</span>
-  <h1>🧪 AI 회의실 시험본</h1>
-  <p class="note">지시를 접수하면 실행 AI(Instinct)가 확인 후 이 페이지에 결과를 회신합니다. 화면만 꾸민 모형이 아니라 실제 접수 → 실행 → 회신 왕복을 검증하는 시험본입니다. 즉시 응답이 아니라 확인 주기가 있고, 외부 AI(클로드·GPT·코덱스) 직접 연결은 별도 승인이 필요합니다.</p>
+  <h1>🧪 AI 회의실 접수 시험본</h1>
+  <p class="note">지시의 접수와 그 표시만 검증하는 시험본입니다. 외부 AI가 실행해 결과를 돌려주는 연결은 아직 되어 있지 않습니다. 접수된 내용과 그에 달린 기록이 아래에 그대로 표시됩니다.</p>
 
   <div class="card">
     <h2>1️⃣ 지시 보내기</h2>
@@ -42,7 +42,7 @@
   </div>
 
   <div class="card">
-    <h2>2️⃣ 접수 · 결과 보기</h2>
+    <h2>2️⃣ 접수 · 기록 보기</h2>
     <button id="refresh" type="button" class="sub">새로고침</button>
     <span class="dim" id="status"></span>
     <div id="list"></div>
@@ -87,7 +87,7 @@ async function loadList() {
             const last = cs[cs.length - 1];
             const rp = document.createElement("div");
             rp.className = "reply";
-            rp.textContent = "🤖 " + last.body;
+            rp.textContent = "📎 " + last.body;
             div.appendChild(rp);
           }
         } catch (e) {}
