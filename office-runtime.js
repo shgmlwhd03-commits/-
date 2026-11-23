@@ -881,7 +881,7 @@ function chiefClick(e, room) {
   if (room) openReport(room);
 }
 
-/* 승인·불허·재심의 결정: 정적 페이지라 localStorage에 선택만 저장하고 문구는 참고용으로 복사한다. 실제 접수·처리 연결은 준비 중이며 버튼 클릭은 어디에도 전달되지 않는다. */
+/* 승인·불허·재심의 결정: 정적 페이지라 localStorage에 선택만 저장하고, 버튼 클릭은 미리 채운 GitHub 접수창을 열 뿐 어디에도 자동 전송하지 않는다. 실제 접수는 사용자가 열린 창에서 직접 제출한다. */
 let CHIEF_DEC = null;
 // One ordered transport per agenda item. Selections stay editable while sending.
 const CHIEF_SENDS = new Map();
@@ -929,42 +929,9 @@ function chiefPhrase(it, state) {
     : head + nm + " — 불허합니다. 해당 안건 내용을 삭제해 주세요. 원기록은 보존합니다.";
 }
 
-function setupRelayFromUrl() {
-  try {
-    const u = new URL(window.location.href);
-    const k = (u.searchParams.get("k") || "").trim();
-    if (k && /^[a-zA-Z0-9_-]{12,80}$/.test(k)) {
-      localStorage.setItem("liveoffice_relay_key", k);
-      u.searchParams.delete("k");
-      window.history.replaceState({}, "", u.pathname + u.search + u.hash);
-    }
-  } catch (e) {}
-}
-setupRelayFromUrl();
-
-function hasRelayKey() {
-  try { return !!(localStorage.getItem("liveoffice_relay_key") || "").trim(); } catch (e) { return false; }
-}
-
-function setupGhToken() {
-  let cur = "";
-  try { cur = localStorage.getItem("liveoffice_gh_token") || ""; } catch (e) {}
-  const msg = cur
-    ? "현재 원클릭 자동전송 토큰이 저장되어 있습니다.\n새 토큰을 입력해 덮어쓰거나, 빈 칸으로 확인을 누르면 저장된 토큰을 삭제합니다."
-    : "새 창 없이 버튼 한 번으로 바로 결재를 접수하려면 GitHub Fine-grained 토큰(이 저장소 Issues 쓰기 전용)을 입력하세요.\n(토큰은 이 브라우저에만 저장되며 코드에 남지 않습니다.)";
-  const val = window.prompt(msg, "");
-  if (val === null) return;
-  try {
-    const clean = val.trim();
-    if (clean) {
-      localStorage.setItem("liveoffice_gh_token", clean);
-      alert("원클릭 자동전송 설정 완료! 이제 승인·불허·재심의 버튼을 누르면 새 창 없이 바로 접수·실행됩니다.");
-    } else {
-      localStorage.removeItem("liveoffice_gh_token");
-      alert("저장된 토큰을 삭제했습니다. 버튼 클릭 시 GitHub 접수창이 열립니다.");
-    }
-  } catch (e) {}
-}
+/* 보안: 브라우저 평문 저장 비밀(GitHub 토큰·중계 키) 경로는 폐기한다.
+   예전 버전이 저장해 둔 값이 남아 있으면 이 브라우저에서 지운다. */
+try { localStorage.removeItem("liveoffice_gh_token"); localStorage.removeItem("liveoffice_relay_key"); } catch (e) {}
 
 function decisionLabel(s) {
   return s === "ok" ? "승인" : s === "re" ? "재심의" : "불허";
@@ -987,10 +954,6 @@ function decisionBadge(d) {
   return `${icon} ${lbl} 선택 · 미접수`;
 }
 
-function chiefGhToken() {
-  try { return (localStorage.getItem("liveoffice_gh_token") || "").trim(); } catch (e) { return ""; }
-}
-
 function chiefIssueDraft(it, state) {
   const rr = rooms.find(r => r.id === it.room);
   const who = rr ? rr.tag : (it.room || "미지정");
@@ -1005,108 +968,6 @@ function chiefIssueDraft(it, state) {
       `시각: ${new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}`
     ].join("\n")
   };
-}
-
-async function sendDecisionToGitHub(it, state, entry, revision) {
-  const current = () => chiefDecisions()[it.id] === entry && entry.revision === revision;
-  const mark = (values) => {
-    if (!current()) return;
-    Object.assign(entry, values);
-    chiefSaveDecisions();
-    syncDecisionLights();
-  };
-  const markUncertain = () => {
-    if (chiefDecisions()[it.id] !== entry) return;
-    Object.assign(entry, { sending: false, queued: false, sent: false, uncertain: true });
-    chiefSaveDecisions();
-    syncDecisionLights();
-  };
-  const rr = rooms.find(r => r.id === it.room);
-  const who = rr ? rr.tag : (it.room || "미지정");
-  const where = rr ? rr.title : "";
-  const lbl = decisionLabel(state);
-  const { title, body } = chiefIssueDraft(it, state);
-
-  let relayKey = "";
-  try { relayKey = (localStorage.getItem("liveoffice_relay_key") || "").trim(); } catch (e) {}
-  if (relayKey) {
-    entry.sending = true;
-    syncDecisionLights();
-    try {
-      const res = await fetch("https://ntfy.sh/" + encodeURIComponent(relayKey), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: it.id,
-          title: it.title,
-          room: it.room,
-          who,
-          where,
-          state,
-          label: lbl,
-          phrase: chiefPhrase(it, state),
-          ts: Date.now()
-        })
-      });
-      if (res.ok) {
-        mark({ sending: false, queued: false, sent: true, relay: true, opened: false });
-        return;
-      }
-      if (res.status >= 500) { markUncertain(); return; }
-      mark({ sending: false, queued: false, sent: false, error: "중계 서버가 전송을 거절했습니다" });
-    } catch (err) {
-      markUncertain();
-    }
-    // Do not silently send the same request to a second, public destination.
-    return;
-  }
-
-  const tok = chiefGhToken();
-  if (tok) {
-    entry.sending = true;
-    syncDecisionLights();
-    try {
-      const endpoint = entry.issueNum
-        ? `https://api.github.com/repos/shgmlwhd03-commits/-/issues/${entry.issueNum}`
-        : "https://api.github.com/repos/shgmlwhd03-commits/-/issues";
-      const method = entry.issueNum ? "PATCH" : "POST";
-      const payload = entry.issueNum
-        ? { title, body, state: "open" }
-        : { title, body, labels: ["decision"] };
-      const res = await fetch(endpoint, {
-        method,
-        headers: {
-          "Accept": "application/vnd.github+json",
-          "Authorization": "Bearer " + tok,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-      if (res.ok) {
-        const data = await res.json();
-        // Preserve the receipt even if a newer choice was made while awaiting it.
-        entry.issueNum = data.number;
-        entry.issueUrl = data.html_url;
-        mark({ sending: false, queued: false, sent: true, opened: false });
-        chiefSaveDecisions();
-        return;
-      }
-      if (res.status >= 500) { markUncertain(); return; }
-      mark({ sending: false, queued: false, sent: false, error: "GitHub 전송을 거절했습니다" });
-    } catch (err) {
-      markUncertain();
-    }
-    return;
-  }
-
-  const url = "https://github.com/shgmlwhd03-commits/-/issues/new?labels=decision&title=" +
-    encodeURIComponent(title) + "&body=" + encodeURIComponent(body);
-  const pop = window.open(url, "_blank", "noopener");
-  if (pop) {
-    mark({ sending: false, queued: false, sent: false, opened: true, error: "" });
-  } else {
-    mark({ sending: false, queued: false, sent: false, opened: false, error: "팝업이 차단돼 접수창을 열지 못했습니다. 브라우저 팝업 허용 후 다시 눌러 주세요." });
-  }
 }
 
 function chiefDecide(e, idx, state) {
@@ -1129,34 +990,17 @@ function chiefDecide(e, idx, state) {
   d[it.id] = entry;
   chiefSaveDecisions();
   syncDecisionLights();
-  // 전송 수단(중계 키·토큰)이 없으면 접수창은 클릭 직후 바로 연다.
-  // 비동기 전송 안에서 열면 브라우저가 팝업을 막아 버튼이 아무 반응 없이 끝난다.
-  if (!hasRelayKey() && !chiefGhToken()) {
-    const draft = chiefIssueDraft(it, state);
-    const popUrl = "https://github.com/shgmlwhd03-commits/-/issues/new?labels=decision&title=" +
-      encodeURIComponent(draft.title) + "&body=" + encodeURIComponent(draft.body);
-    const pop = window.open(popUrl, "_blank", "noopener");
-    Object.assign(entry, pop
-      ? { sending: false, queued: false, sent: false, opened: true, error: "" }
-      : { sending: false, queued: false, sent: false, opened: false, error: "팝업이 차단돼 접수창을 열지 못했습니다. 브라우저 팝업 허용 후 다시 눌러 주세요." });
-    chiefSaveDecisions();
-    syncDecisionLights();
-    return;
-  }
-  const previous = CHIEF_SENDS.get(it.id) || Promise.resolve();
-  const next = previous.catch(() => {}).then(async () => {
-    // Coalesce choices not yet sent. Never let an older response confirm a new one.
-    if (d[it.id] !== entry || entry.revision !== revision || entry.uncertain) return;
-    entry.queued = false;
-    entry.sending = true;
-    chiefSaveDecisions();
-    syncDecisionLights();
-    await sendDecisionToGitHub(it, state, entry, revision);
-  });
-  CHIEF_SENDS.set(it.id, next);
-  next.finally(() => {
-    if (CHIEF_SENDS.get(it.id) === next) CHIEF_SENDS.delete(it.id);
-  }).catch(() => {});
+  // 접수창은 클릭 직후 바로 연다. 비동기 전송 안에서 열면 브라우저가 팝업을 막아
+  // 버튼이 아무 반응 없이 끝난다. 자동 전송 경로(토큰·중계 키)는 폐기했다.
+  const draft = chiefIssueDraft(it, state);
+  const popUrl = "https://github.com/shgmlwhd03-commits/-/issues/new?labels=decision&title=" +
+    encodeURIComponent(draft.title) + "&body=" + encodeURIComponent(draft.body);
+  const pop = window.open(popUrl, "_blank", "noopener");
+  Object.assign(entry, pop
+    ? { sending: false, queued: false, sent: false, opened: true, error: "" }
+    : { sending: false, queued: false, sent: false, opened: false, error: "팝업이 차단돼 접수창을 열지 못했습니다. 브라우저 팝업 허용 후 다시 눌러 주세요." });
+  chiefSaveDecisions();
+  syncDecisionLights();
 }
 
 function chiefUndoable(it) {
@@ -1277,7 +1121,7 @@ function ownerApprovalsHtml() {
     const sourceIdx = allItems.indexOf(it);
     return chiefRowHtml(it, sourceIdx, chiefDecisionActions(it, sourceIdx, dec[it.id]));
   }).join("") : `<div class="chief-row wait"><span class="cr-lane">✅</span><span class="cr-tx"><b>지금 결재 대기 중인 건이 없습니다</b></span></div>`;
-  return `<div class="rm-sec"><div class="rm-h">🖊️ 대표님 결재 · 승인 대기 ${pending}건<em class="rm-hint">승인·불허·재심의는 여기서만 선택</em></div><p class="rm-sig-note">버튼을 누르면 이 브라우저에 결정이 저장되고 접수 요청을 보냅니다. 실제 접수·처리 연결은 아직 미확인 상태라, 도착이 확인되기 전에는 실행으로 처리하지 않고 목록과 신호를 유지합니다.</p><div class="chief-body owner-queue">${rows}</div><div class="chief-tools"><button class="chief-report" type="button" onclick="setupGhToken()">⚙️ 원클릭 자동전송 설정</button> <a class="chief-report" href="https://github.com/shgmlwhd03-commits/-/issues?q=label%3Adecision" target="_blank" rel="noopener">📥 접수된 결재함 보기 ›</a></div></div>`;
+  return `<div class="rm-sec"><div class="rm-h">🖊️ 대표님 결재 · 승인 대기 ${pending}건<em class="rm-hint">승인·불허·재심의는 여기서만 선택</em></div><p class="rm-sig-note">버튼을 누르면 이 브라우저에 결정이 저장되고 GitHub 접수창이 열립니다. 접수는 열린 창에서 직접 제출해야 하고, 도착이 확인되기 전에는 실행으로 처리하지 않고 목록과 신호를 유지합니다.</p><div class="chief-body owner-queue">${rows}</div><div class="chief-tools"><a class="chief-report" href="https://github.com/shgmlwhd03-commits/-/issues?q=label%3Adecision" target="_blank" rel="noopener">📥 접수된 결재함 보기 ›</a></div></div>`;
 }
 
 function renderChief(raw) {
