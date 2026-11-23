@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex" />
+<title>AI 회의실 시험본</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Pretendard", "Apple SD Gothic Neo", sans-serif; background: #0f1424; color: #e8ecf6; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 20px; margin: 8px 0 4px; }
+  .badge { display: inline-block; background: #f59e0b; color: #111; font-weight: 800; font-size: 12px; border-radius: 999px; padding: 3px 10px; }
+  .note { color: #9aa4c0; font-size: 13px; line-height: 1.6; }
+  .card { background: #171e33; border: 1px solid #2a3554; border-radius: 14px; padding: 16px; margin-top: 16px; }
+  .card h2 { font-size: 15px; margin: 0 0 10px; }
+  textarea { width: 100%; min-height: 90px; border-radius: 10px; border: 1px solid #3a4770; background: #0d1220; color: #e8ecf6; padding: 10px; font-size: 14px; resize: vertical; }
+  button { cursor: pointer; border: 0; border-radius: 10px; padding: 10px 16px; font-size: 14px; font-weight: 700; background: #4f7cff; color: #fff; margin-top: 10px; }
+  button.sub { background: #2a3554; }
+  .item { border-top: 1px solid #2a3554; padding: 10px 0; }
+  .item:first-of-type { border-top: 0; }
+  .st { font-size: 12px; font-weight: 800; border-radius: 999px; padding: 2px 8px; margin-left: 6px; }
+  .st.open { background: #1d3a2a; color: #6ee7a0; }
+  .st.closed { background: #3a2a1d; color: #f5c06e; }
+  .reply { margin-top: 6px; background: #10182e; border-left: 3px solid #4f7cff; border-radius: 6px; padding: 8px 10px; font-size: 13px; white-space: pre-wrap; color: #cdd6ee; }
+  .dim { color: #8b94b3; font-size: 12px; }
+  a { color: #7ea2ff; }
+  .err { color: #ff9c9c; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="badge">시험본 · 기존 사무실과 분리</span>
+  <h1>🧪 AI 회의실 시험본</h1>
+  <p class="note">지시를 접수하면 실행 AI(Instinct)가 확인 후 이 페이지에 결과를 회신합니다. 화면만 꾸민 모형이 아니라 실제 접수 → 실행 → 회신 왕복을 검증하는 시험본입니다. 즉시 응답이 아니라 확인 주기가 있고, 외부 AI(클로드·GPT·코덱스) 직접 연결은 별도 승인이 필요합니다.</p>
+
+  <div class="card">
+    <h2>1️⃣ 지시 보내기</h2>
+    <textarea id="task" placeholder="시험 지시를 적어 주세요. 예: 오늘 날짜와 연결 확인 문구를 회신해 줘"></textarea>
+    <button id="send" type="button">접수창 열기 (GitHub 로그인 상태에서 제출)</button>
+    <p class="dim">기존 결재 접수와 같은 검증된 경로를 씁니다. 열린 창에서 제출해야 접수됩니다.</p>
+  </div>
+
+  <div class="card">
+    <h2>2️⃣ 접수 · 결과 보기</h2>
+    <button id="refresh" type="button" class="sub">새로고침</button>
+    <span class="dim" id="status"></span>
+    <div id="list"></div>
+  </div>
+</div>
+<script>
+const REPO = "https://github.com/shgmlwhd03-commits/-";
+const API = "https://api.github.com/repos/shgmlwhd03-commits/-";
+const LABEL = "meeting-test";
+
+document.getElementById("send").addEventListener("click", () => {
+  const t = document.getElementById("task").value.trim();
+  if (!t) { alert("지시 내용을 적어 주세요."); return; }
+  const title = "[회의실시험] " + t.slice(0, 40);
+  const body = "시험 지시: " + t + "\n\n시각: " + new Date().toLocaleString("ko-KR") + "\n유형: AI 회의실 시험본 왕복 검증";
+  window.open(REPO + "/issues/new?labels=" + LABEL + "&title=" + encodeURIComponent(title) + "&body=" + encodeURIComponent(body), "_blank", "noopener");
+});
+
+async function loadList() {
+  const st = document.getElementById("status");
+  const list = document.getElementById("list");
+  st.textContent = " 불러오는 중…";
+  list.innerHTML = "";
+  try {
+    const r = await fetch(API + "/issues?labels=" + LABEL + "&state=all&per_page=20&sort=created&direction=desc");
+    if (!r.ok) throw new Error("API " + r.status);
+    const issues = await r.json();
+    st.textContent = " " + new Date().toLocaleTimeString("ko-KR") + " 기준 " + issues.length + "건";
+    if (!issues.length) { list.innerHTML = '<p class="dim">아직 접수된 시험 지시가 없습니다.</p>'; return; }
+    for (const it of issues) {
+      const div = document.createElement("div");
+      div.className = "item";
+      const state = it.state === "open" ? '<span class="st open">확인 대기</span>' : '<span class="st closed">완료</span>';
+      div.innerHTML = "<b></b>" + state + ' <span class="dim"></span>';
+      div.querySelector("b").textContent = it.title;
+      div.querySelector(".dim").textContent = new Date(it.created_at).toLocaleString("ko-KR");
+      if (it.comments > 0) {
+        try {
+          const cr = await fetch(it.comments_url + "?per_page=1&direction=desc");
+          const cs = await cr.json();
+          if (Array.isArray(cs) && cs.length) {
+            const last = cs[cs.length - 1];
+            const rp = document.createElement("div");
+            rp.className = "reply";
+            rp.textContent = "🤖 " + last.body;
+            div.appendChild(rp);
+          }
+        } catch (e) {}
+      }
+      const link = document.createElement("div");
+      link.innerHTML = '<a href="' + it.html_url + '" target="_blank" rel="noopener">접수 원문 ›</a>';
+      div.appendChild(link);
+      list.appendChild(div);
+    }
+  } catch (e) {
+    st.innerHTML = ' <span class="err">불러오지 못했습니다: ' + e.message + "</span>";
+  }
+}
+document.getElementById("refresh").addEventListener("click", loadList);
+loadList();
+</script>
+</body>
+</html>
