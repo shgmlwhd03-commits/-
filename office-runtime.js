@@ -1212,8 +1212,10 @@ function chiefProgressActions(it, d) {
       (d.issueUrl ? `<a class="cr-cp" href="${esc(d.issueUrl)}" target="_blank" rel="noopener" title="접수된 GitHub 이슈 열기">🔗 #${d.issueNum}</a>` : "")
     : it.lane === "red"
     ? `<span class="rs-rm">오너 직접 처리 건 · 버튼 없음</span>`
+    : it.lane === "wait"
+    ? `<span class="rs-rm">⏳ 진행·대기 중 · 결재 불필요</span>`
     : `<span class="rs-rm">👑 대표님 결재 대기</span>`;
-  return status + (it.lane === "red" ? "" : `<button class="cr-owner" type="button" onclick="goOwnerDecide(event)" title="👑 대표님 보고의 결재 큐로 이동">👑 대표님 결재</button>`);
+  return status + (it.lane === "red" || it.lane === "wait" ? "" : `<button class="cr-owner" type="button" onclick="goOwnerDecide(event)" title="👑 대표님 보고의 결재 큐로 이동">👑 대표님 결재</button>`);
 }
 
 function chiefRowHtml(it, sourceIdx, act) {
@@ -1223,7 +1225,7 @@ function chiefRowHtml(it, sourceIdx, act) {
   const redRead = it.lane === "red" && !redGroupUnread(it);
   const ack = it.lane === "red" ? (redRead ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : `<button class="red-ack" type="button" onkeydown="event.stopPropagation()" onclick="acknowledgeRed(event, 'chief', ${sourceIdx})">확인</button>`) : "";
   const row = `<div class="chief-row ${it.lane}${redRead ? " read" : ""}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" data-room="${esc(it.room)}">
-        <div class="cr-main"><b>${esc(it.title)}</b><p class="cr-review">총괄 팩트검토: 미확인</p></div>
+        <div class="cr-main"><b>${esc(it.title)}</b>${it.lane === "wait" ? "" : `<p class="cr-review">총괄 팩트검토: 미확인</p>`}</div>
         <span class="cr-act">${act}</span>
         <details class="cr-detail"${chiefCanCompact(it, d) ? " open" : ""}><summary>상세 보기${rm ? " · " + esc(rm) : ""}</summary>
           ${it.detail ? `<p>${esc(it.detail)}</p>` : ""}
@@ -1240,9 +1242,9 @@ function ownerApprovalsHtml() {
   if (!CHIEF) CHIEF = chiefData(null);
   const dec = chiefDecisions();
   const allItems = CHIEF.items;
-  const items = allItems.filter(it => TaskArchive.bucket(it) !== "archived")
+  const items = allItems.filter(it => it.lane !== "wait" && TaskArchive.bucket(it) !== "archived")
     .sort((a, b) => Number(chiefCanCompact(a, dec[a.id])) - Number(chiefCanCompact(b, dec[b.id])));
-  const pending = items.filter(it => it.lane !== "red" && !chiefCanCompact(it, dec[it.id])).length;
+  const pending = items.filter(it => it.lane !== "red" && it.lane !== "wait" && !chiefCanCompact(it, dec[it.id])).length;
   const rows = items.length ? items.map(it => {
     const sourceIdx = allItems.indexOf(it);
     return chiefRowHtml(it, sourceIdx, chiefDecisionActions(it, sourceIdx, dec[it.id]));
