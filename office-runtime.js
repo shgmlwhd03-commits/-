@@ -16,7 +16,7 @@ const rooms = [
     title: "👑 대표님", worker: "👑", name: "👑 대표님",
     say: "전체 보고 받는 중!", foot: "조직도 최상단 · 보고 라인: 투덜이·해병이·수박이 → 비서실장(총괄) → 대표님",
     issue: "승인이 필요한 건이 있어요!",
-    guide: "🔴 자금 건은 대표님이 직접 실행하고, 🔵 확인·승인 건은 비서실 창구에서 결정합니다.",
+    guide: "🔴 자금 건은 대표님이 직접 실행하고, 🔵 확인·승인 건은 이 대표님 보고의 결재 큐에서 결정합니다.",
     state: "working", ticker: "최종 승인권 · 보고 라인: 투덜이·해병이·수박이 → 비서실장(총괄) → 대표님", updated: "15:52"
   },
   {
@@ -216,7 +216,7 @@ function roomHTML(r, i) {
           <span class="room-title">${esc(r.title)}</span>
           <span class="room-lanes" id="lanes-${r.id}" aria-hidden="true"></span>
           <span class="room-tag${partner ? " partner" : instinct ? " instinct" : ""}" title="${instinct ? "Instinct 총괄이 지휘하는 방" : director ? "총괄 직속 위탁판매 총괄 · 실행 담당(사람)" : partner ? "투덜이 부장이 전담 운영하는 방" : "해병이 부장이 직접 운영하는 방"}">${r.tag}</span>
-          <span class="room-open">${r.id === "prize" ? "응모결과▸" : shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : "보고"}</span>
+          <span class="room-open">${r.id === "prize" ? "응모결과▸" : r.id === "owner" ? "결재▸" : shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : "보고"}</span>
           <span class="status-dot" aria-hidden="true"></span>
         </div>
         ${stage}
@@ -1181,6 +1181,75 @@ function compactDecisionReport(title, entry, content) {
   return `<details class="decision-compact"><summary><b>${esc(title)}</b><span title="${esc(decisionBadge(entry))}">${decisionLabel(entry.s)} 접수 · 처리 대기</span><small>상세</small></summary>${content}</details>`;
 }
 
+/* 승인·불허·재심의 조작은 👑 대표님 보고의 결재 큐에서만 그린다.
+   비서실 목록과 부서 신호는 진행 상태만 보여 주고 대표님 결재로 연결한다. */
+function goOwnerDecide(e) {
+  if (e) e.stopPropagation();
+  openReport("owner");
+}
+
+function chiefDecisionActions(it, sourceIdx, d) {
+  const decBtns = (sel) =>
+    `<button class="cr-ok${sel === "ok" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="승인 선택 저장 · 아직 접수 안 됨${sel === "ok" ? " · 현재 선택" : sel ? " · 누르면 승인으로 변경" : ""}">승인</button>` +
+    `<button class="cr-no${sel === "no" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="불허 선택 저장 · 아직 접수 안 됨${sel === "no" ? " · 현재 선택" : sel ? " · 누르면 불허로 변경" : ""}">불허</button>` +
+    `<button class="cr-re${sel === "re" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 선택 저장 · 아직 접수 안 됨 · 신호 유지${sel === "re" ? " · 현재 선택" : sel ? " · 누르면 재심의로 변경" : ""}">재심의</button>`;
+  return d
+    ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${decisionBadge(d)}</span>` +
+      (it.lane === "wait" ? "" : `<span class="cr-clr" title="실제 처리 완료 전이므로 신호와 대기 목록을 유지합니다">신호 유지</span>`) +
+      (it.lane === "red" ? "" : decBtns(d.s)) +
+      (d.issueUrl ? `<a class="cr-cp" href="${esc(d.issueUrl)}" target="_blank" rel="noopener" title="접수된 GitHub 이슈 열기">🔗 #${d.issueNum}</a>` : `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${sourceIdx})" title="결정 문구 복사">📋 문구</button>`) +
+      (chiefUndoable(it) ? `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${sourceIdx})" title="미접수 선택 지우기">↺</button>` : "")
+    : it.lane === "red"
+    ? `<span class="rs-rm">오너 직접 처리 건 · 버튼 없음</span>`
+    : decBtns(null);
+}
+
+/* 비서실 진행 보고 전용: 상태 배지와 기록 링크만 남기고 결정 버튼은 두지 않는다. */
+function chiefProgressActions(it, d) {
+  const status = d
+    ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${decisionBadge(d)}</span>` +
+      (it.lane === "wait" ? "" : `<span class="cr-clr" title="실제 처리 완료 전이므로 신호와 대기 목록을 유지합니다">신호 유지</span>`) +
+      (d.issueUrl ? `<a class="cr-cp" href="${esc(d.issueUrl)}" target="_blank" rel="noopener" title="접수된 GitHub 이슈 열기">🔗 #${d.issueNum}</a>` : "")
+    : it.lane === "red"
+    ? `<span class="rs-rm">오너 직접 처리 건 · 버튼 없음</span>`
+    : `<span class="rs-rm">👑 대표님 결재 대기</span>`;
+  return status + (it.lane === "red" ? "" : `<button class="cr-owner" type="button" onclick="goOwnerDecide(event)" title="👑 대표님 보고의 결재 큐로 이동">👑 대표님 결재</button>`);
+}
+
+function chiefRowHtml(it, sourceIdx, act) {
+  const rr = rooms.find(r => r.id === it.room);
+  const rm = rr ? rr.title : "";
+  const d = chiefDecisions()[it.id];
+  const redRead = it.lane === "red" && !redGroupUnread(it);
+  const ack = it.lane === "red" ? (redRead ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : `<button class="red-ack" type="button" onkeydown="event.stopPropagation()" onclick="acknowledgeRed(event, 'chief', ${sourceIdx})">확인</button>`) : "";
+  const row = `<div class="chief-row ${it.lane}${redRead ? " read" : ""}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" data-room="${esc(it.room)}">
+        <div class="cr-main"><b>${esc(it.title)}</b><p class="cr-review">총괄 팩트검토: 미확인</p></div>
+        <span class="cr-act">${act}</span>
+        <details class="cr-detail"${chiefCanCompact(it, d) ? " open" : ""}><summary>상세 보기${rm ? " · " + esc(rm) : ""}</summary>
+          ${it.detail ? `<p>${esc(it.detail)}</p>` : ""}
+          ${it.room ? `<button class="cr-go" type="button" onclick="openReport('${esc(it.room)}')">원보고 보기 ›</button>` : ""}
+          ${it.url ? `<a class="cr-url" href="${esc(it.url)}" target="_blank" rel="noopener">↗ ${esc(it.urlLabel)}</a>` : ""}
+          ${ack}
+        </details>
+      </div>`;
+  return chiefCanCompact(it, d) ? compactDecisionReport(it.title, d, row) : row;
+}
+
+/* 👑 대표님 보고 전용 결재 큐: 비서실 진행 보고에서 버튼을 빼고, 승인·불허·재심의는 여기서만 받는다. */
+function ownerApprovalsHtml() {
+  if (!CHIEF) CHIEF = chiefData(null);
+  const dec = chiefDecisions();
+  const allItems = CHIEF.items;
+  const items = allItems.filter(it => TaskArchive.bucket(it) !== "archived")
+    .sort((a, b) => Number(chiefCanCompact(a, dec[a.id])) - Number(chiefCanCompact(b, dec[b.id])));
+  const pending = items.filter(it => it.lane !== "red" && !chiefCanCompact(it, dec[it.id])).length;
+  const rows = items.length ? items.map(it => {
+    const sourceIdx = allItems.indexOf(it);
+    return chiefRowHtml(it, sourceIdx, chiefDecisionActions(it, sourceIdx, dec[it.id]));
+  }).join("") : `<div class="chief-row wait"><span class="cr-lane">✅</span><span class="cr-tx"><b>지금 결재 대기 중인 건이 없습니다</b></span></div>`;
+  return `<div class="rm-sec"><div class="rm-h">🖊️ 대표님 결재 · 승인 대기 ${pending}건<em class="rm-hint">승인·불허·재심의는 여기서만 선택</em></div><p class="rm-sig-note">버튼을 누르면 이 브라우저에 결정이 저장되고 접수 요청을 보냅니다. 실제 접수·처리 연결은 아직 미확인 상태라, 도착이 확인되기 전에는 실행으로 처리하지 않고 목록과 신호를 유지합니다.</p><div class="chief-body owner-queue">${rows}</div><div class="chief-tools"><button class="chief-report" type="button" onclick="setupGhToken()">⚙️ 원클릭 자동전송 설정</button> <a class="chief-report" href="https://github.com/shgmlwhd03-commits/-/issues?q=label%3Adecision" target="_blank" rel="noopener">📥 접수된 결재함 보기 ›</a></div></div>`;
+}
+
 function renderChief(raw) {
   if (raw !== undefined) CHIEF = chiefData(raw);
   if (!CHIEF) CHIEF = chiefData(null);
@@ -1202,38 +1271,10 @@ function renderChief(raw) {
   if (cnt) cnt.innerHTML = `<span class="cc-red${unreadRedItems().length ? "" : " read"}">${unreadRedItems().length ? "🔴" : "⚪"} ${unreadRedItems().length}</span><span class="cc-blue">🔵 ${n.blue}</span><span class="cc-wait">⏳ ${n.wait}</span>`;
   const say = document.getElementById("chief-say");
   const localN = okN + noN + reN;
-  if (say) say.textContent = `기존 안건(팩트검토 미확인) · 접수·완료 확인 전 대기 🔴 ${n.red} · 🔵 ${n.blue} · ⏳ ${n.wait}` + (localN ? ` · 이 브라우저 선택 ${localN}건 (미접수)` : '') + ' · 버튼 작동 중 · 실제 접수 연결 준비 중(미접수)';
-  body.innerHTML = items.length ? items.map((it, idx) => {
+  if (say) say.textContent = `총괄 진행 보고 전용 · 승인·결재는 👑 대표님(8F)에서 · 🔴 ${n.red} · 🔵 ${n.blue} · ⏳ ${n.wait}` + (localN ? ` · 이 브라우저 결정 기록 ${localN}건 (실제 접수 연결 미확인)` : '');
+  body.innerHTML = items.length ? items.map((it) => {
     const sourceIdx = allItems.indexOf(it);
-    const rr = rooms.find(r => r.id === it.room);
-    const rm = rr ? rr.title : "";
-    const d = dec[it.id];
-    const redRead = it.lane === "red" && !redGroupUnread(it);
-    const ack = it.lane === "red" ? (redRead ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : `<button class="red-ack" type="button" onkeydown="event.stopPropagation()" onclick="acknowledgeRed(event, 'chief', ${sourceIdx})">확인</button>`) : "";
-    const decBtns = (sel) =>
-      `<button class="cr-ok${sel === "ok" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="승인 선택 저장 · 아직 접수 안 됨${sel === "ok" ? " · 현재 선택" : sel ? " · 누르면 승인으로 변경" : ""}">승인</button>` +
-      `<button class="cr-no${sel === "no" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="불허 선택 저장 · 아직 접수 안 됨${sel === "no" ? " · 현재 선택" : sel ? " · 누르면 불허로 변경" : ""}">불허</button>` +
-      `<button class="cr-re${sel === "re" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 선택 저장 · 아직 접수 안 됨 · 신호 유지${sel === "re" ? " · 현재 선택" : sel ? " · 누르면 재심의로 변경" : ""}">재심의</button>`;
-    const act = d
-      ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${decisionBadge(d)}</span>` +
-        (it.lane === "wait" ? "" : `<span class="cr-clr" title="실제 처리 완료 전이므로 신호와 대기 목록을 유지합니다">신호 유지</span>`) +
-        (it.lane === "red" ? "" : decBtns(d.s)) +
-        (d.issueUrl ? `<a class="cr-cp" href="${esc(d.issueUrl)}" target="_blank" rel="noopener" title="접수된 GitHub 이슈 열기">🔗 #${d.issueNum}</a>` : `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${sourceIdx})" title="결정 문구 복사">📋 문구</button>`) +
-        (chiefUndoable(it) ? `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${sourceIdx})" title="미접수 선택 지우기">↺</button>` : "")
-      : it.lane === "red"
-      ? `<span class="rs-rm">오너 직접 처리 건 · 버튼 없음</span>`
-      : decBtns(null);
-    const row = `<div class="chief-row ${it.lane}${redRead ? " read" : ""}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" data-room="${esc(it.room)}">
-        <div class="cr-main"><b>${esc(it.title)}</b><p class="cr-review">총괄 팩트검토: 미확인</p></div>
-        <span class="cr-act">${act}</span>
-        <details class="cr-detail"${chiefCanCompact(it, d) ? " open" : ""}><summary>상세 보기${rm ? " · " + esc(rm) : ""}</summary>
-          ${it.detail ? `<p>${esc(it.detail)}</p>` : ""}
-          ${it.room ? `<button class="cr-go" type="button" onclick="openReport('${esc(it.room)}')">원보고 보기 ›</button>` : ""}
-          ${it.url ? `<a class="cr-url" href="${esc(it.url)}" target="_blank" rel="noopener">↗ ${esc(it.urlLabel)}</a>` : ""}
-          ${ack}
-        </details>
-      </div>`;
-    return chiefCanCompact(it, d) ? compactDecisionReport(it.title, d, row) : row;
+    return chiefRowHtml(it, sourceIdx, chiefProgressActions(it, dec[it.id]));
   }).join("") : `<div class="chief-row wait"><span class="cr-lane">✅</span><span class="cr-tx"><b>지금 대기 중인 건이 없습니다</b></span></div>`;
   applyChiefState();
 }
@@ -1930,12 +1971,11 @@ function chiefIndexForSignal(x, lane) {
     const act = lane === "red"
       ? `<span class="rs-rm">오너 직접 처리 건 · 버튼 없음</span>`
       : ci < 0
-      ? `<span class="rs-rm">결재는 상단 결재 목록에서</span>`
-      : dec
-        ? `<span class="cr-dec ${dec.s === "ok" ? "ok" : dec.s === "re" ? "re" : "no"}">${decisionBadge(dec)}</span>` +
-          `<button class="cr-ok${dec.s === "ok" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="승인 선택·전달 요청${dec.s === "ok" ? " · 현재 선택" : ""}">승인</button><button class="cr-no${dec.s === "no" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="불허 선택·전달 요청${dec.s === "no" ? " · 현재 선택" : ""}">불허</button><button class="cr-re${dec.s === "re" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 're')" title="재심의 선택·전달 요청${dec.s === "re" ? " · 현재 선택" : ""}">재심의</button>` +
-          (chiefUndoable(CHIEF.items[ci]) ? `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${ci})" title="미접수 선택 지우기">↺</button>` : "")
-        : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="승인 선택·전달 요청">승인</button><button class="cr-no" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="불허 선택·전달 요청">불허</button><button class="cr-re" type="button" onclick="chiefDecide(event, ${ci}, 're')" title="재심의 선택·전달 요청">재심의</button>`;
+      ? `<span class="rs-rm">결재는 👑 대표님 보고에서</span>`
+      : (dec
+          ? `<span class="cr-dec ${dec.s === "ok" ? "ok" : dec.s === "re" ? "re" : "no"}">${decisionBadge(dec)}</span>`
+          : `<span class="rs-rm">👑 대표님 결재 대기</span>`) +
+        `<button class="cr-owner" type="button" onclick="goOwnerDecide(event)" title="👑 대표님 보고의 결재 큐로 이동">👑 대표님 결재</button>`;
     const row = `<div class="rm-sig ${lane}${lane === "red" && !redGroupUnread(x) ? " read" : ""}"><span class="rs-lane">${lane === "red" ? (redGroupUnread(x) ? "🔴" : "⚪") : "🔵"}</span><span class="rs-tx"><b>${esc(x.title)}</b>${x.detail ? `<i>${esc(x.detail)}</i>` : ""}</span>${lane === "red" && !redGroupUnread(x) ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : ""}${act}${d.overview && x.room ? `<span class="rs-rm">${esc(roomTitle(x.room))}</span>` : ""}</div>`;
     return ci >= 0 && chiefCanCompact(CHIEF.items[ci], dec) ? compactDecisionReport(x.title, dec, row) : row;
   };
@@ -1951,7 +1991,8 @@ function chiefIndexForSignal(x, lane) {
       d.id === "invest_sp500" ? renderStockPanel() : "",
       d.summary ? `<div class="rm-sum"><span>👑</span><span>${esc(d.summary)}</span></div>` : "",
       d.ticker ? `<div class="rm-live"><span class="rm-live-h">📺 전광판</span><span class="rm-live-t">${esc(d.ticker)}</span><span class="rm-live-u">${esc(d.updated)}</span></div>` : "",
-      d.overview ? `<div class="report-scope-note">${d.coordinator ? "종합·검토 목록과 담당 보고 바로가기입니다. 개별 업무 상세는 담당 보고에서 확인하세요." : d.manager ? "이 부장이 맡은 부서의 신호와 보고만 모았습니다. 다른 부서 신호·공통 역할표는 총괄에서 확인하세요." : "검토·결재 안건은 비서실 창구에서, 개별 업무 상세는 각 담당 보고에서 확인하세요."}<div class="report-scope-actions">${d.coordinator || id === "owner" ? `<button type="button" onclick="openChiefFromReport()">비서실 창구 보기</button>` : ""}${!d.coordinator ? `<button type="button" onclick="openReport('instinct')">비서실장 종합 보고</button>` : ""}</div></div>` : "",
+      d.overview ? `<div class="report-scope-note">${d.coordinator ? "종합·검토 목록과 담당 보고 바로가기입니다. 개별 업무 상세는 담당 보고에서 확인하세요." : d.manager ? "이 부장이 맡은 부서의 신호와 보고만 모았습니다. 다른 부서 신호·공통 역할표는 총괄에서 확인하세요." : "승인·결재 안건은 아래 대표님 결재에서 결정하고, 총괄 진행 보고는 비서실 창구에서 확인하세요."}<div class="report-scope-actions">${d.coordinator || id === "owner" ? `<button type="button" onclick="openChiefFromReport()">비서실 창구 보기</button>` : ""}${!d.coordinator ? `<button type="button" onclick="openReport('instinct')">비서실장 종합 보고</button>` : ""}</div></div>` : "",
+      d.id === "owner" ? ownerApprovalsHtml() : "",
       d.credit ? `<div class="rm-credit"><span>⚡ 크레딧</span><span>${esc(d.credit)}</span></div>` : "",
       (d.signals.red.length || d.signals.blue.length) ? `<div class="rm-sec"><div class="rm-h">🚦 미결 신호 · 🔵 ${d.signals.blue.length} · 빨간 알림 ${d.signals.red.filter(redGroupUnread).length} / 미결 ${d.signals.red.length}</div>${d.signals.red.length ? `<div class="rm-sig-note">🔴 자금·계좌·이체·결제는 AI가 실행하지 않습니다. 오너가 직접 처리해 주세요.</div>` : ""}<div class="rm-sigs">${d.signals.red.map(x => sigRow(x, "red")).join("")}${reportSignals.map(x => sigRow(x, "blue")).join("")}</div></div>` : "",
       d.depts.length ? `<div class="rm-sec"><div class="rm-h">🏢 담당 부서 현황 · ${d.depts.length}개<em class="rm-hint">칩을 누르면 해당 부서 보고로 이동</em></div><div class="rm-depts">${d.depts.map(x => (x.id && rooms.some(r => r.id === x.id))
