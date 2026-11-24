@@ -360,6 +360,7 @@ function floorHTML(f) {
          <div class="credit">
            <span class="cred" id="cred-hb">🔵 해병이: 가동 미확인</span>
            <span class="cred td" id="cred-td">🟣 투덜이: 가동 미확인</span>
+           <span class="cred-why" id="cred-why" hidden></span>
          </div>
        </div>
        <div class="pent-roster" id="pent-roster" aria-label="6F 분장표"></div>`
@@ -626,21 +627,39 @@ function checkState(v) { return (v && typeof v === "object" && v.state === "veri
 function hhmmOf(iso) { const m = /T(\d\d:\d\d)/.exec(typeof iso === "string" ? iso : ""); return m ? m[1] : ""; }
 function reportOf(k) { const r = k && k.report; return (r && typeof r === "object" && typeof r.text === "string" && r.text.trim()) ? r : null; }
 function reportLabel(k) { const r = reportOf(k); return r ? "자기보고 " + (hhmmOf(r.reported_at) || "시각미상") : ""; }
+function num01(v) { return (typeof v === "number" && isFinite(v) && v >= 0 && v <= 100) ? v : null; }
+function opsValue(v) { return (v && (v.value === "가동" || v.value === "미가동")) ? v.value : null; }
 function checkLine(id, name, raw) {
   const k = (raw && raw[id] && typeof raw[id] === "object") ? raw[id] : {};
   const cr = checkState(k.credit), op = checkState(k.ops), rl = reportLabel(k), r = reportOf(k);
-  const parts = [cr ? "크레딧 확인 " + hhmmOf(cr.checked_at) : "크레딧 미확인", op ? "가동 확인 " + hhmmOf(op.checked_at) : "가동 미확인"];
+  const pct = cr ? num01(cr.usage_pct) : null, ov = op ? opsValue(op) : null;
+  const parts = [
+    pct !== null ? "크레딧(주간 사용) " + pct + "% · " + hhmmOf(cr.checked_at) + " 확인" : "크레딧 미확인",
+    ov ? ov + " · " + hhmmOf(op.checked_at) + " 확인" : "가동 미확인"
+  ];
   if (rl) parts.push(rl);
-  return { text: name + parts.join(" · "), title: r ? ("자기보고(" + (typeof r.source === "string" ? r.source : "출처 미상") + "): " + r.text.trim()) : "확인 기록 없음" };
+  const tip = [];
+  if (pct !== null) tip.push("크레딧 출처: " + (typeof cr.source === "string" && cr.source.trim() ? cr.source.trim() : "출처 미상") + " · " + cr.checked_at);
+  if (ov) tip.push("가동 출처: " + (typeof op.source === "string" && op.source.trim() ? op.source.trim() : "출처 미상") + " · " + op.checked_at);
+  if (r) tip.push("자기보고(" + (typeof r.source === "string" ? r.source : "출처 미상") + "): " + r.text.trim());
+  const unv = (pct === null || !ov);
+  const why = unv ? ((typeof k.unverified_reason === "string" && k.unverified_reason.trim()) ? k.unverified_reason.trim() : "조회 경로 미연결") : "";
+  return { text: name + parts.join(" · "), title: tip.length ? tip.join("\n") : "확인 기록 없음", why: why ? name.replace(/[:：\s]+$/, "").replace(/^\S+\s/, "") + " 미확인 사유: " + why : "" };
 }
 function renderCredit(raw) {
   const c = (raw && typeof raw === "object" && !Array.isArray(raw)) ? raw : {};
   CHECKS = (c.checks && typeof c.checks === "object" && !Array.isArray(c.checks)) ? c.checks : {};
   const hb = document.getElementById("cred-hb");
   const td = document.getElementById("cred-td");
+  const w = document.getElementById("cred-why");
   const a = checkLine("hb", "🔵 해병이: ", CHECKS), b = checkLine("td", "🟣 투덜이: ", CHECKS);
   if (hb) { hb.textContent = a.text; hb.title = a.title; }
   if (td) { td.textContent = b.text; td.title = b.title; }
+  if (w) {
+    const t = [a.why, b.why].filter(Boolean);
+    w.textContent = t.length ? t.join(" · ") + " · 새로고침은 저장된 기록 재읽기이며 실시간 조회가 아님" : "";
+    w.hidden = !t.length;
+  }
 }
 
 /* ================= 🚦 신호등 (🔵 일반 확인·승인 / 🔴 자금·결제) =================
