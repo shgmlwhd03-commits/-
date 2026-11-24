@@ -1441,6 +1441,7 @@ function applyStatus(data) {
   const collab = src.collab;
   COLLAB_ACTIVE = !!(collab === true || (collab && typeof collab === "object" && collab.active));
   applyCorridor();
+  applyMeeting(src.meeting || null);
   renderRevenue(src.revenue);
   renderCredit(src.credit);
   renderShop(src.commerce);
@@ -2305,9 +2306,10 @@ function roomBusy(id) { return roomStateOf(id) !== "idle"; }
 function walkerPinned(k) { return roomBusy(WALKER_CEO[k]); }
 /* 연출에 등장하고, 아직 업무 중이 아닌 캐릭터만 움직인다 */
 function active(k) { return P.indexOf(k) >= 0 && !walkerPinned(k); }
-function freeWalkers() { return ["hb", "td"].filter(k => !walkerPinned(k)); }
+function freeWalkers() { return ["hb", "td"].filter(k => !walkerPinned(k) && !meetWalk().has(k)); }
 function canRoam() { return freeWalkers().length > 0; }
-function syncWalkerPins() { ["hb", "td"].forEach(k => castHide(k, walkerPinned(k))); }
+function meetWalk() { return (window.__meetWalk = window.__meetWalk || new Set()); }
+function syncWalkerPins() { ["hb", "td"].forEach(k => castHide(k, walkerPinned(k) && !meetWalk().has(k))); }
 function castShow(k) { if (P.indexOf(k) < 0) return; castHide(k, walkerPinned(k)); }
 /* 연출에 참여하는 캐릭터만 잠시 숨긴다 (층 이동) */
 function castSceneHide() { P.forEach(k => castHide(k, true)); }
@@ -2359,7 +2361,7 @@ function castStand(k) {
 
 function castHome(k, dur) {
   const el = venEl(k);
-  if (!el || !active(k)) return;
+  if (!el || !active(k) || meetWalk().has(k)) return;
   const d = dur || 1.8;
   const home = VEN[VENUE][k === "hb" ? "hbHome" : "tdHome"];
   if (el.classList.contains("resting") && parseFloat(el.style.left) === home) return;
@@ -2767,11 +2769,11 @@ function settleScene() {
   VENUE = "lobby";
   ["hb", "td"].forEach(k => {
     /* 연출에 없던 캐릭터와 업무 중 캐릭터는 조용히 제자리로 돌려 둔다 */
-    if (!active(k)) placeHomeQuiet(k);
+    if (!active(k) && !meetWalk().has(k)) placeHomeQuiet(k);
     castCarry(k, false);
     castSip(k, false);
     castHush(k);
-    castHide(k, walkerPinned(k));
+    castHide(k, walkerPinned(k) && !meetWalk().has(k));
   });
   castHome("hb", 1.4);
   castHome("td", 1.4);
@@ -2796,7 +2798,7 @@ async function lobShow() {
      한 명만 쉬는 중이면 둘이서 하는 연출(대화·보고)은 건너뛴다 */
   const mode = !pair
     ? (roll < 0.44 ? "pantry" : roll < 0.76 ? "basement" : "stroll")
-    : (roll < 0.30 ? "pantry" : roll < 0.52 ? "basement" : roll < 0.72 ? "meet" : roll < 0.90 ? "stroll" : "ride");
+    : (roll < 0.40 ? "pantry" : roll < 0.70 ? "basement" : "stroll");
 
   castCarry("hb", false); castCarry("td", false);
   castSip("hb", false); castSip("td", false);
@@ -2827,6 +2829,71 @@ function scheduleLobby(delay) {
     scheduleLobby();
   }, base + Math.random() * 5000);
 }
+
+/* ================= 실제 협의 표시 (status.json meeting) =================
+   협의는 status.json의 meeting 값이 있을 때만 보인다(근거 없는 회의 연출 없음).
+   { active:true, round:1~3, participants:[방 id 2~6개], expires_at:"ISO 시각" }
+   - 참여한 담당만 자리를 비우고 "협의 n/3"로 표시된다. 나머지는 그대로 일한다.
+   - active가 꺼지거나 expires_at이 지나면 참여자는 곧바로 자기 자리로 돌아온다.
+   - 단독 처리 업무는 meeting 없이 자기 자리에서 WORK 상태로만 표시된다. */
+let MEETING = null;
+const MEET_ROOMS = new Set();
+let MEET_SHOWN = false;
+function meetingValid(m) {
+  if (!m || typeof m !== "object" || m.active !== true) return null;
+  const round = Number(m.round);
+  if (!(round >= 1 && round <= 3)) return null;
+  if (!(Date.parse(m.expires_at) > Date.now())) return null;
+  const ids = [...new Set((Array.isArray(m.participants) ? m.participants : []).filter(id => typeof id === "string" && rooms.some(r => r.id === id) && document.getElementById("room-" + id)))].slice(0, 6);
+  if (ids.length < 2) return null;
+  return { round, ids };
+}
+function applyMeeting(m) {
+  if (m !== undefined) MEETING = m;
+  const v = meetingValid(MEETING);
+  const keep = new Set(v ? v.ids : []);
+  [...MEET_ROOMS].forEach(id => {
+    if (keep.has(id)) return;
+    const r = rooms.find(x => x.id === id);
+    if (r) staffHome(r);
+    MEET_ROOMS.delete(id);
+  });
+  [...meetWalk()].forEach(k => {
+    if (keep.has(WALKER_CEO[k])) return;
+    meetWalk().delete(k);
+    placeHomeQuiet(k);
+    castHide(k, walkerPinned(k));
+  });
+  const hand = document.getElementById("lob-handoff");
+  if (!v) {
+    if (MEET_SHOWN && hand) hand.classList.remove("show");
+    MEET_SHOWN = false;
+    return;
+  }
+  v.ids.forEach(id => {
+    const r = rooms.find(x => x.id === id);
+    if (!r) return;
+    if (AWAY.has(id) && !MEET_ROOMS.has(id)) return;     // 쉬는 사원 외출 중이면 건드리지 않음
+    staffAway(r, "🗣 협의 " + v.round + "/3");
+    MEET_ROOMS.add(id);
+    const k = id === WALKER_CEO.hb ? "hb" : id === WALKER_CEO.td ? "td" : null;
+    if (k && VENUE === "lobby") {
+      const el = venEl(k);
+      if (el) {
+        meetWalk().add(k);
+        castPlace(k, k === "hb" ? 44 : 52);
+        el.classList.remove("hidden", "walking");
+        el.classList.add("resting");
+      }
+    }
+  });
+  if (hand && VENUE === "lobby") {
+    hand.textContent = "🗣 협의 " + v.round + "/3 · " + v.ids.length + "명";
+    hand.classList.add("show");
+    MEET_SHOWN = true;
+  }
+}
+setInterval(() => applyMeeting(), 20000);
 
 function applyCorridor() {
   const busy = corridorActive();
@@ -2881,6 +2948,7 @@ async function roomTalk(floor) {
 }
 
 function roomTalkLoop() {
+  return;   // 실제 대화가 아닌 잡담 연출은 중단(협의는 status.json meeting이 있을 때만 표시)
   if (reduceMotion) return;
   setTimeout(() => {
     if (!talkRunning) {
