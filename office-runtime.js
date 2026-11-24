@@ -2303,7 +2303,8 @@ function roomStateOf(id) {
 }
 /* working / alert = 업무 중 → 자리 지킴. idle(자율 휴게)만 이동 가능 */
 function roomBusy(id) { return roomStateOf(id) !== "idle"; }
-function walkerPinned(k) { return roomBusy(WALKER_CEO[k]); }
+function isFlowRoom(id) { return !!(window.__flowRooms && window.__flowRooms.has(id)); }
+function walkerPinned(k) { return roomBusy(WALKER_CEO[k]) || isFlowRoom(WALKER_CEO[k]); }
 /* 연출에 등장하고, 아직 업무 중이 아닌 캐릭터만 움직인다 */
 function active(k) { return P.indexOf(k) >= 0 && !walkerPinned(k); }
 function freeWalkers() { return ["hb", "td"].filter(k => !walkerPinned(k) && !meetWalk().has(k)); }
@@ -2819,6 +2820,7 @@ function scheduleLobby(delay) {
   collabTimer = setTimeout(async () => {
     collabTimer = null;
     if (collabRunning) { scheduleLobby(1200); return; }
+    if (MEET_SHOWN) { scheduleLobby(5000); return; }   // 실제 업무 흐름 표시 중에는 연출로 덮어쓰지 않음
     /* 업무 중(WORK) 캐릭터만 있으면 이동 연출을 시작하지 않는다 */
     if (!canRoam()) { syncWalkerPins(); scheduleLobby(20000); return; }
     if (staffBusy || b1StaffBusy || staffRiding) { scheduleLobby(3000); return; }
@@ -2864,6 +2866,22 @@ function meetingValid(m) {
   if (ids.length < 1) return null;
   return { stage, round: 0, ids };
 }
+function meetStaffShow(room, idx) {
+  const hand = document.getElementById("lob-handoff");
+  const scene = hand && hand.parentElement;
+  if (!scene) return;
+  let el = scene.querySelector('.lob-walker[data-meet-room="' + room.id + '"]');
+  if (!el) {
+    el = document.createElement("div");
+    el.className = "lob-walker staff resting";
+    el.dataset.meetRoom = room.id;
+    el.innerHTML = '<span class="w-body"></span><span class="w-who"></span>';
+    scene.appendChild(el);
+  }
+  staffPaint(el, null, room, "", "");
+  const slots = [30, 38, 60, 68, 76, 24];
+  el.style.left = slots[idx % slots.length] + "%";
+}
 function flowBadge(id, text) {
   const el = document.getElementById("room-" + id);
   const stg = el && el.querySelector(".room-stage");
@@ -2881,6 +2899,7 @@ function applyMeeting(m) {
     if (r) staffHome(r);
     MEET_ROOMS.delete(id);
   });
+  document.querySelectorAll(".lob-walker[data-meet-room]").forEach(el => { if (!keep.has(el.dataset.meetRoom)) el.remove(); });
   [...meetWalk()].forEach(k => {
     if (keep.has(WALKER_CEO[k])) return;
     meetWalk().delete(k);
@@ -2889,6 +2908,7 @@ function applyMeeting(m) {
   });
   const badged = new Set(v && v.stage !== "discussion" ? (v.stage === "assign" ? v.ids : [v.ids[0]]) : []);
   [...FLOW_BADGE].forEach(id => { if (!badged.has(id)) flowBadge(id, null); });
+  window.__flowRooms = new Set([...MEET_ROOMS, ...FLOW_BADGE]);
   const hand = document.getElementById("lob-handoff");
   if (!v) {
     if (MEET_SHOWN && hand) hand.classList.remove("show");
@@ -2904,6 +2924,7 @@ function applyMeeting(m) {
       staffAway(r, "🗣 협의 " + v.round + "/3");
       MEET_ROOMS.add(id);
       const k = id === WALKER_CEO.hb ? "hb" : id === WALKER_CEO.td ? "td" : null;
+      if (!k && VENUE === "lobby") meetStaffShow(r, v.ids.filter(x => x !== WALKER_CEO.hb && x !== WALKER_CEO.td).indexOf(id));
       if (k && VENUE === "lobby") {
         const el = venEl(k);
         if (el) {
@@ -2919,13 +2940,14 @@ function applyMeeting(m) {
     badged.forEach(id => flowBadge(id, FLOW_LABEL[v.stage]));
     banner = FLOW_LABEL[v.stage] + (v.stage === "assign" ? " · " + v.ids.length + "개 부서" : "");
   }
+  window.__flowRooms = new Set([...MEET_ROOMS, ...FLOW_BADGE]);
   if (hand && VENUE === "lobby") {
     hand.textContent = banner;
     hand.classList.add("show");
     MEET_SHOWN = true;
   }
 }
-setInterval(() => applyMeeting(), 20000);
+setInterval(() => applyMeeting(), 5000);
 
 function applyCorridor() {
   const busy = corridorActive();
@@ -2998,7 +3020,7 @@ function idleDeptRooms() {
   return rooms.filter(r => {
     if (r.ceo) return false;
     const el = document.getElementById("room-" + r.id);
-    return !!el && el.classList.contains("idle") && !el.classList.contains("break") && !el.classList.contains("alert") && !AWAY.has(r.id);
+    return !!el && el.classList.contains("idle") && !el.classList.contains("break") && !el.classList.contains("alert") && !AWAY.has(r.id) && !isFlowRoom(r.id);
   });
 }
 
@@ -3015,7 +3037,7 @@ function shopHidden() {
 
 function staffStillIdle(room) {
   const el = document.getElementById("room-" + room.id);
-  return !!el && el.classList.contains("idle") && !el.classList.contains("break") && !el.classList.contains("alert");
+  return !!el && !isFlowRoom(room.id) && el.classList.contains("idle") && !el.classList.contains("break") && !el.classList.contains("alert");
 }
 
 function staffPaint(el, sayEl, room, line, item) {
