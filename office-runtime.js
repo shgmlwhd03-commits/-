@@ -626,7 +626,7 @@ function opsUnverifiedRoom(id) { const k = OPS_ROOMS[id]; if (!k) return false; 
 function checkState(v) { return (v && typeof v === "object" && v.state === "verified" && typeof v.checked_at === "string" && /T\d\d:\d\d/.test(v.checked_at)) ? v : null; }
 function hhmmOf(iso) { const m = /T(\d\d:\d\d)/.exec(typeof iso === "string" ? iso : ""); return m ? m[1] : ""; }
 function reportOf(k) { const r = k && k.report; return (r && typeof r === "object" && typeof r.text === "string" && r.text.trim()) ? r : null; }
-function reportLabel(k) { const r = reportOf(k); return r ? "자기보고 " + (hhmmOf(r.reported_at) || "시각미상") : ""; }
+function reportLabel(k) { const r = reportOf(k); return r ? ((typeof r.label === "string" && r.label.trim() ? r.label.trim() : "자기보고") + " " + (hhmmOf(r.reported_at) || "시각미상")) : ""; }
 function num01(v) { return (typeof v === "number" && isFinite(v) && v >= 0 && v <= 100) ? v : null; }
 function opsValue(v) { return (v && (v.value === "가동" || v.value === "미가동")) ? v.value : null; }
 function checkLine(id, name, raw) {
