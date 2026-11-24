@@ -1340,5 +1340,8 @@
     "status": "working",
     "ticker": "최종 승인권 · 보고 라인: 투덜이·해병이·수박이 → 비서실장(총괄) → 대표님",
     "updated": "10:14"
+  },
+  "meeting": {
+    "active": false
   }
 }
