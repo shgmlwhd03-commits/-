@@ -1799,7 +1799,8 @@ function renderPrizePanel(id) {
 
 function renderStockPanel() {
   const d = (STATUS && STATUS.invest_sp500 && STATUS.invest_sp500.chart) || null;
-  if (!d) return `<section class="stock-panel"><h3>📈 주식 손익</h3><p>주식 기록 데이터가 없습니다.</p></section>`;
+  const live = `<div class="stock-live"><h4>📡 실시간 차트 · 다음 금융</h4><iframe class="stock-live-frame" title="TIGER 미국S&P500(360750) 실시간 차트 (다음 금융 제공)" src="https://m.finance.daum.net/domestic/stocks/360750/chart" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe><small class="stock-live-note">시세·차트는 다음 금융 화면을 그대로 표시합니다(화면에 표시된 시각 기준 실시간 · 장중 09:00~15:30 외에는 마지막 체결 기준). 위 손익은 대표님 거래화면 기록이라 차트 시세와 기준 시점이 다를 수 있습니다. <a href="https://m.finance.daum.net/domestic/stocks/360750/chart" target="_blank" rel="noopener">다음 금융에서 크게 보기 ↗</a></small></div>`;
+  if (!d) return `<section class="stock-panel"><h3>📈 주식 손익</h3><p>주식 기록 데이터가 없습니다.</p>${live}</section>`;
   const shares = Number(d.shares) || 0;
   const cost = Number(d.cost_per_share_krw) * shares;
   const value = Number(d.price_per_share_krw) * shares;
@@ -1808,7 +1809,7 @@ function renderStockPanel() {
   const prices = [Number(d.cost_per_share_krw), Number(d.price_per_share_krw)];
   const min = Math.min(...prices), max = Math.max(...prices), span = Math.max(1, max - min);
   const xy = prices.map((price,i) => `${24 + i*152},${58 - ((price-min)/span)*38}`);
-  return `<section class="stock-panel" aria-label="주식 그래프와 손익"><h3>📈 ${esc(d.label || "주식 손익")}</h3><div class="stock-summary"><span>보유 ${shares}주</span><span>매수 ₩${cost.toLocaleString("ko-KR")}</span><span>기록 시세 ₩${value.toLocaleString("ko-KR")}</span></div><div class="stock-profit ${profit < 0 ? "down" : "up"}">손익 ${profit < 0 ? "−" : "+"}₩${Math.abs(profit).toLocaleString("ko-KR")} (${pct.toFixed(2)}%)</div><svg class="stock-chart" viewBox="0 0 200 78" role="img" aria-label="매수가와 기록 시세 비교 그래프"><line x1="8" y1="20" x2="192" y2="20"/><line x1="8" y1="40" x2="192" y2="40"/><line x1="8" y1="60" x2="192" y2="60"/><polyline points="${xy.join(" ")}"/><circle cx="${xy[0].split(",")[0]}" cy="${xy[0].split(",")[1]}" r="3"/><circle cx="${xy[1].split(",")[0]}" cy="${xy[1].split(",")[1]}" r="3"/><text x="24" y="74">매수</text><text x="176" y="74" text-anchor="end">기록 시세</text></svg><small>기록 기준: ${esc(d.as_of || "날짜 미상")} · 과거 기록이며 실시간 시세가 아닙니다.</small></section>`;
+  return `<section class="stock-panel" aria-label="주식 그래프와 손익"><h3>📈 ${esc(d.label || "주식 손익")}</h3><div class="stock-summary"><span>보유 ${shares}주</span><span>매수 ₩${cost.toLocaleString("ko-KR")}</span><span>기록 시세 ₩${value.toLocaleString("ko-KR")}</span></div><div class="stock-profit ${profit < 0 ? "down" : "up"}">손익 ${profit < 0 ? "−" : "+"}₩${Math.abs(profit).toLocaleString("ko-KR")} (${pct.toFixed(2)}%)</div><svg class="stock-chart" viewBox="0 0 200 78" role="img" aria-label="매수가와 기록 시세 비교 그래프"><line x1="8" y1="20" x2="192" y2="20"/><line x1="8" y1="40" x2="192" y2="40"/><line x1="8" y1="60" x2="192" y2="60"/><polyline points="${xy.join(" ")}"/><circle cx="${xy[0].split(",")[0]}" cy="${xy[0].split(",")[1]}" r="3"/><circle cx="${xy[1].split(",")[0]}" cy="${xy[1].split(",")[1]}" r="3"/><text x="24" y="74">매수</text><text x="176" y="74" text-anchor="end">기록 시세</text></svg><small>기록 기준: ${esc(d.as_of || "날짜 미상")} · 과거 기록이며 실시간 시세가 아닙니다.</small>${live}</section>`;
 }
 
 function openReport(id) {
