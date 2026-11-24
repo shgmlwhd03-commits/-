@@ -1342,6 +1342,11 @@
     "updated": "10:14"
   },
   "meeting": {
-    "active": false
+    "active": true,
+    "stage": "solo",
+    "participants": [
+      "instinct"
+    ],
+    "expires_at": "2026-11-24T15:50:00Z"
   }
 }
