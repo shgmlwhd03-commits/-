@@ -1342,6 +1342,11 @@
     "updated": "10:14"
   },
   "meeting": {
-    "active": false
+    "active": true,
+    "stage": "solo",
+    "participants": [
+      "haebyeongi_adsense"
+    ],
+    "expires_at": "2026-11-24T16:15:00Z"
   }
 }
