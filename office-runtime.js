@@ -1799,7 +1799,7 @@ function renderPrizePanel(id) {
 
 function renderStockPanel() {
   const d = (STATUS && STATUS.invest_sp500 && STATUS.invest_sp500.chart) || null;
-  const live = `<div class="stock-live"><h4>📡 실시간 차트 · 다음 금융</h4><iframe class="stock-live-frame" title="TIGER 미국S&P500(360750) 실시간 차트 (다음 금융 제공)" src="https://m.finance.daum.net/domestic/stocks/360750/chart" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe><small class="stock-live-note">시세·차트는 다음 금융 화면을 그대로 표시합니다(화면에 표시된 시각 기준 실시간 · 장중 09:00~15:30 외에는 마지막 체결 기준). 위 손익은 대표님 거래화면 기록이라 차트 시세와 기준 시점이 다를 수 있습니다. <a href="https://m.finance.daum.net/domestic/stocks/360750/chart" target="_blank" rel="noopener">다음 금융에서 크게 보기 ↗</a></small></div>`;
+  const live = `<div class="stock-live"><h4>📡 실시간 차트 · 다음 금융</h4><div class="stock-live-crop"><iframe class="stock-live-frame" title="TIGER 미국S&P500(360750) 실시간 차트 (다음 금융 제공)" src="https://m.finance.daum.net/domestic/stocks/360750/chart" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe></div><small class="stock-live-note">시세·차트는 다음 금융 화면을 그대로 표시합니다(화면에 표시된 시각 기준 실시간 · 장중 09:00~15:30 외에는 마지막 체결 기준). 위 손익은 대표님 거래화면 기록이라 차트 시세와 기준 시점이 다를 수 있습니다. <a href="https://m.finance.daum.net/domestic/stocks/360750/chart" target="_blank" rel="noopener">다음 금융에서 원본 화면 보기 ↗</a></small></div>`;
   if (!d) return `<section class="stock-panel"><h3>📈 주식 손익</h3><p>주식 기록 데이터가 없습니다.</p>${live}</section>`;
   const shares = Number(d.shares) || 0;
   const cost = Number(d.cost_per_share_krw) * shares;
