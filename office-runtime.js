@@ -2879,7 +2879,10 @@ function meetStaffShow(room, idx) {
     scene.appendChild(el);
   }
   staffPaint(el, null, room, "", "");
-  const slots = [30, 38, 60, 68, 76, 24];
+  const av = document.querySelector("#room-" + room.id + " .avatar");
+  const bodyEl = el.querySelector(".w-body");
+  if (av && bodyEl) bodyEl.style.backgroundImage = getComputedStyle(av).backgroundImage;   // 부서 고유 캐릭터 그대로
+  const slots = [14, 27, 66, 79, 90, 35];
   el.style.left = slots[idx % slots.length] + "%";
 }
 function flowBadge(id, text) {
