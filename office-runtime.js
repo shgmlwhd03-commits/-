@@ -2830,28 +2830,51 @@ function scheduleLobby(delay) {
   }, base + Math.random() * 5000);
 }
 
-/* ================= 실제 협의 표시 (status.json meeting) =================
-   협의는 status.json의 meeting 값이 있을 때만 보인다(근거 없는 회의 연출 없음).
-   { active:true, round:1~3, participants:[방 id 2~6개], expires_at:"ISO 시각" }
-   - 참여한 담당만 자리를 비우고 "협의 n/3"로 표시된다. 나머지는 그대로 일한다.
-   - active가 꺼지거나 expires_at이 지나면 참여자는 곧바로 자기 자리로 돌아온다.
-   - 단독 처리 업무는 meeting 없이 자기 자리에서 WORK 상태로만 표시된다. */
+/* ================= 실제 업무 흐름 표시 (status.json meeting) =================
+   status.json의 meeting 값이 있을 때만 보인다(근거 없는 회의·이동 연출 없음).
+   { active:true, stage:"intake|solo|discussion|assign|report", round:1~3(discussion),
+     participants:[방 id], expires_at:"ISO 시각(필수)" }
+   - intake    지시 확인: 첫 방에 "📥 지시 확인" 표시(자리 유지)
+   - solo      단독 처리: 첫 방에 "⚙ 단독 처리·회의 없음" 표시(회의·이동 없음, 자리에서 작업)
+   - discussion 협의 n/3: 참여 방만 자리 비움 표시, 해병이·투덜이 참여 시 로비에 나옴(2~6개 방)
+   - assign    업무 분배: 참여 방에 "📋 분배" 표시(자리 유지)
+   - report    보고: 첫 방에 "📣 결론 보고" 표시(자리 유지)
+   active가 꺼지거나 expires_at이 지나면 표시는 모두 사라지고 원래 상태로 돌아온다. */
 let MEETING = null;
 const MEET_ROOMS = new Set();
+const FLOW_BADGE = new Set();
 let MEET_SHOWN = false;
+const FLOW_LABEL = { intake: "📥 지시 확인", solo: "⚙ 단독 처리·회의 없음", assign: "📋 업무 분배", report: "📣 결론 보고" };
+(function () {
+  const st = document.createElement("style");
+  st.textContent = ".room-stage[data-flow]::after{content:attr(data-flow);position:absolute;right:4px;bottom:1px;font-size:6.8px;font-weight:900;line-height:1.6;white-space:nowrap;color:#fde68a;background:rgba(66,32,6,.92);border:1px solid rgba(251,191,36,.55);border-radius:999px;padding:0 5px;z-index:3}";
+  document.head.appendChild(st);
+})();
 function meetingValid(m) {
   if (!m || typeof m !== "object" || m.active !== true) return null;
-  const round = Number(m.round);
-  if (!(round >= 1 && round <= 3)) return null;
+  const stage = m.stage || "discussion";
+  if (stage !== "discussion" && !FLOW_LABEL[stage]) return null;
   if (!(Date.parse(m.expires_at) > Date.now())) return null;
   const ids = [...new Set((Array.isArray(m.participants) ? m.participants : []).filter(id => typeof id === "string" && rooms.some(r => r.id === id) && document.getElementById("room-" + id)))].slice(0, 6);
-  if (ids.length < 2) return null;
-  return { round, ids };
+  if (stage === "discussion") {
+    const round = Number(m.round);
+    if (!(round >= 1 && round <= 3) || ids.length < 2) return null;
+    return { stage, round, ids };
+  }
+  if (ids.length < 1) return null;
+  return { stage, round: 0, ids };
+}
+function flowBadge(id, text) {
+  const el = document.getElementById("room-" + id);
+  const stg = el && el.querySelector(".room-stage");
+  if (!stg) return;
+  if (text) { stg.dataset.flow = text; FLOW_BADGE.add(id); }
+  else { delete stg.dataset.flow; FLOW_BADGE.delete(id); }
 }
 function applyMeeting(m) {
   if (m !== undefined) MEETING = m;
   const v = meetingValid(MEETING);
-  const keep = new Set(v ? v.ids : []);
+  const keep = new Set(v && v.stage === "discussion" ? v.ids : []);
   [...MEET_ROOMS].forEach(id => {
     if (keep.has(id)) return;
     const r = rooms.find(x => x.id === id);
@@ -2864,31 +2887,40 @@ function applyMeeting(m) {
     placeHomeQuiet(k);
     castHide(k, walkerPinned(k));
   });
+  const badged = new Set(v && v.stage !== "discussion" ? (v.stage === "assign" ? v.ids : [v.ids[0]]) : []);
+  [...FLOW_BADGE].forEach(id => { if (!badged.has(id)) flowBadge(id, null); });
   const hand = document.getElementById("lob-handoff");
   if (!v) {
     if (MEET_SHOWN && hand) hand.classList.remove("show");
     MEET_SHOWN = false;
     return;
   }
-  v.ids.forEach(id => {
-    const r = rooms.find(x => x.id === id);
-    if (!r) return;
-    if (AWAY.has(id) && !MEET_ROOMS.has(id)) return;     // 쉬는 사원 외출 중이면 건드리지 않음
-    staffAway(r, "🗣 협의 " + v.round + "/3");
-    MEET_ROOMS.add(id);
-    const k = id === WALKER_CEO.hb ? "hb" : id === WALKER_CEO.td ? "td" : null;
-    if (k && VENUE === "lobby") {
-      const el = venEl(k);
-      if (el) {
-        meetWalk().add(k);
-        castPlace(k, k === "hb" ? 44 : 52);
-        el.classList.remove("hidden", "walking");
-        el.classList.add("resting");
+  let banner;
+  if (v.stage === "discussion") {
+    v.ids.forEach(id => {
+      const r = rooms.find(x => x.id === id);
+      if (!r) return;
+      if (AWAY.has(id) && !MEET_ROOMS.has(id)) return;     // 쉬는 사원 외출 중이면 건드리지 않음
+      staffAway(r, "🗣 협의 " + v.round + "/3");
+      MEET_ROOMS.add(id);
+      const k = id === WALKER_CEO.hb ? "hb" : id === WALKER_CEO.td ? "td" : null;
+      if (k && VENUE === "lobby") {
+        const el = venEl(k);
+        if (el) {
+          meetWalk().add(k);
+          castPlace(k, k === "hb" ? 44 : 52);
+          el.classList.remove("hidden", "walking");
+          el.classList.add("resting");
+        }
       }
-    }
-  });
+    });
+    banner = "🗣 협의 " + v.round + "/3 · " + v.ids.length + "개 부서";
+  } else {
+    badged.forEach(id => flowBadge(id, FLOW_LABEL[v.stage]));
+    banner = FLOW_LABEL[v.stage] + (v.stage === "assign" ? " · " + v.ids.length + "개 부서" : "");
+  }
   if (hand && VENUE === "lobby") {
-    hand.textContent = "🗣 협의 " + v.round + "/3 · " + v.ids.length + "명";
+    hand.textContent = banner;
     hand.classList.add("show");
     MEET_SHOWN = true;
   }
