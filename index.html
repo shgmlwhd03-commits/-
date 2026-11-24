@@ -882,6 +882,8 @@
   /* 크레딧 상태 안내 */
   .credit { display: flex; flex-wrap: wrap; gap: 4px; font-size: 6.2px; font-weight: 800; letter-spacing: 0.01em; }
   .credit .cred { padding: 0 4px; border-radius: 999px; border: 1px solid rgba(56, 189, 248, 0.45); background: rgba(8, 47, 73, 0.55); color: #bae6fd; white-space: nowrap; }
+  .credit .cred-why { flex: 1 1 100%; font-size: 5.6px; font-weight: 700; color: #cbd5e1; opacity: 0.9; line-height: 1.35; white-space: normal; }
+  .credit .cred-why[hidden] { display: none; }
   .credit .cred.td { border-color: rgba(167, 139, 250, 0.5); background: rgba(46, 16, 101, 0.5); color: #e9d5ff; }
 
   /* ================= 6F 대표실: 대표 두 명 + 전폭 전광판 ================= */
@@ -2269,6 +2271,7 @@
     .rev-labels { font-size: 6.6px; }
     .credit { font-size: 8.5px; gap: 6px; }
     .credit .cred { padding: 0 6px; }
+    .credit .cred-why { font-size: 7.5px; }
     .pent-roster { padding: 5px 8px; margin-top: 6px; }
     .pr-head { font-size: 9.5px; }
     .pr-head em { font-size: 7px; }
