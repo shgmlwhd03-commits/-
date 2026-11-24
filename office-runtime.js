@@ -2863,8 +2863,9 @@ function meetingValid(m) {
     if (!(round >= 1 && round <= 3) || ids.length < 2) return null;
     return { stage, round, ids };
   }
-  if (ids.length < 1) return null;
-  return { stage, round: 0, ids };
+  const office = Array.isArray(m.participants) && m.participants.includes("instinct");   // 비서실(총괄): 별도 방이 없어 로비 배너로만 표시
+  if (ids.length < 1 && !office) return null;
+  return { stage, round: 0, ids, office: office && ids.length < 1 };
 }
 function meetStaffShow(room, idx) {
   const hand = document.getElementById("lob-handoff");
@@ -2909,7 +2910,7 @@ function applyMeeting(m) {
     placeHomeQuiet(k);
     castHide(k, walkerPinned(k));
   });
-  const badged = new Set(v && v.stage !== "discussion" ? (v.stage === "assign" ? v.ids : [v.ids[0]]) : []);
+  const badged = new Set(v && v.stage !== "discussion" ? (v.stage === "assign" ? v.ids : v.ids.slice(0, 1)) : []);
   [...FLOW_BADGE].forEach(id => { if (!badged.has(id)) flowBadge(id, null); });
   window.__flowRooms = new Set([...MEET_ROOMS, ...FLOW_BADGE]);
   const hand = document.getElementById("lob-handoff");
@@ -2941,7 +2942,7 @@ function applyMeeting(m) {
     banner = "🗣 협의 " + v.round + "/3 · " + v.ids.length + "개 부서";
   } else {
     badged.forEach(id => flowBadge(id, FLOW_LABEL[v.stage]));
-    banner = FLOW_LABEL[v.stage] + (v.stage === "assign" ? " · " + v.ids.length + "개 부서" : "");
+    banner = (v.office ? "비서실 · " : "") + FLOW_LABEL[v.stage] + (v.stage === "assign" && v.ids.length ? " · " + v.ids.length + "개 부서" : "");
   }
   window.__flowRooms = new Set([...MEET_ROOMS, ...FLOW_BADGE]);
   if (hand && VENUE === "lobby") {
