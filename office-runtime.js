@@ -1817,9 +1817,54 @@ function renderPrizePanel(id) {
   return `<section class="prize-progress" aria-label="응모 진행결과"><h3>🎯 응모 진행결과</h3><p class="pp-note">기록 정리: ${esc(stamp)} KST<br>${esc(data.notice)}</p><div class="pp-stats"><span>응모 상태 ≠ 당첨 결과</span><span>이 기록에서 당첨 확인 없음</span></div>${groups.map(g=>`<section class="pp-group"><h4>${esc(g.title)}</h4><p class="pp-note">${esc(g.note || "")}</p><div class="pp-items">${(Array.isArray(g.items)?g.items:[]).map(item).join("")}</div></section>`).join("")}<p class="pp-note">이 창은 조회 전용입니다. 클릭해도 응모·승인·계정 사용이나 업무 상태 변경은 일어나지 않습니다.</p></section>`;
 }
 
+const STOCK_LS_KEY = "office_stock_local_v1";
+function stockLocalLoad() {
+  try { const v = JSON.parse(localStorage.getItem(STOCK_LS_KEY) || "null"); return v && typeof v === "object" ? v : null; } catch (e) { return null; }
+}
+function stockLocalHtml(msg) {
+  const v = stockLocalLoad();
+  const won = n => "₩" + Math.round(n).toLocaleString("ko-KR");
+  const inp = "width:100%;box-sizing:border-box;font-size:9px;padding:2px 3px;margin:1px 0 3px;background:#0b1220;color:#e2e8f0;border:1px solid #334155;border-radius:4px";
+  let top = "";
+  if (v) {
+    const shares = Number(v.shares), avg = Number(v.avg), price = Number(v.price);
+    const cost = shares * avg, value = shares * price, profit = value - cost, pct = cost ? profit / cost * 100 : 0;
+    const t = new Date(v.asof), ok = !Number.isNaN(t.getTime());
+    const stale = !ok || (Date.now() - t.getTime() > 24 * 3600 * 1000);
+    const stamp = ok ? t.toLocaleString("ko-KR", { timeZone: "Asia/Seoul", hour12: false }) : "시각 미입력";
+    top = `<div class="stock-summary"><span>보유 ${esc(String(shares))}주</span><span>매수 ${won(cost)}</span><span>입력 시세 ${won(value)}</span></div><div class="stock-profit ${profit < 0 ? "down" : "up"}">손익 ${profit < 0 ? "−" : "+"}${won(Math.abs(profit))} (${pct.toFixed(2)}%)</div><small>직접 입력값 · 가격 기준 ${esc(stamp)} KST · 실시간 시세가 아닙니다.${stale ? " ⚠️ 24시간이 지난 값이거나 시각 미입력입니다. 현재가로 보지 마세요." : ""}</small>`;
+  } else {
+    top = `<small>아직 입력된 값이 없습니다. 증권사 화면의 값을 직접 입력하세요. 자동 실시간 시세는 연결되어 있지 않습니다.</small>`;
+  }
+  const dv = v ? v.asof : "";
+  const form = `<details style="margin-top:4px"${v ? "" : " open"}><summary style="cursor:pointer;font-size:8px;color:#7dd3fc">${v ? "수정" : "입력"}</summary><label style="font-size:7.5px;color:#94a3b8">보유 수량(주)<input id="sl-shares" type="number" step="any" min="0" inputmode="decimal" style="${inp}" value="${v ? esc(String(v.shares)) : ""}"></label><label style="font-size:7.5px;color:#94a3b8">평균 매수가(원)<input id="sl-avg" type="number" step="any" min="0" inputmode="decimal" style="${inp}" value="${v ? esc(String(v.avg)) : ""}"></label><label style="font-size:7.5px;color:#94a3b8">현재가(원, 직접 입력)<input id="sl-price" type="number" step="any" min="0" inputmode="decimal" style="${inp}" value="${v ? esc(String(v.price)) : ""}"></label><label style="font-size:7.5px;color:#94a3b8">가격 기준 시각<input id="sl-asof" type="datetime-local" style="${inp}" value="${esc(dv)}"></label><div style="display:flex;gap:6px;margin-top:2px"><button type="button" onclick="stockLocalSave()" style="font-size:8px;padding:3px 8px">저장</button><button type="button" onclick="stockLocalDelete()" style="font-size:8px;padding:3px 8px">이 기기에서 데이터 삭제</button></div></details>`;
+  return `${top}${form}<p id="sl-msg" role="status" style="font-size:7.5px;color:#fbbf24;margin:3px 0 0">${msg ? esc(msg) : ""}</p><small>이 기기·브라우저에만 저장됩니다. 폰과 PC는 서로 연동되지 않고, 사이트 데이터를 지우면 사라집니다. 공용 기기에서는 다른 사람이 볼 수 있으니 입력 후 반드시 삭제하세요. 로그인 보안이 아닙니다.</small>`;
+}
+function stockLocalRefresh(msg) {
+  const el = document.getElementById("stock-local");
+  if (el) el.innerHTML = stockLocalHtml(msg);
+}
+function stockLocalSave() {
+  const g = id => document.getElementById(id);
+  const raw = { shares: g("sl-shares").value, avg: g("sl-avg").value, price: g("sl-price").value };
+  const shares = Number(raw.shares), avg = Number(raw.avg), price = Number(raw.price);
+  if (raw.shares === "" || raw.avg === "" || raw.price === "" || !(shares > 0) || !Number.isFinite(avg) || avg < 0 || !Number.isFinite(price) || price < 0) {
+    const m = g("sl-msg"); if (m) m.textContent = "수량은 0보다 큰 숫자, 가격은 0 이상 숫자로 모두 입력하세요.";
+    return;
+  }
+  try {
+    localStorage.setItem(STOCK_LS_KEY, JSON.stringify({ shares, avg, price, asof: g("sl-asof").value || "", saved_at: new Date().toISOString() }));
+  } catch (e) { const m = g("sl-msg"); if (m) m.textContent = "이 브라우저에서 저장할 수 없습니다(저장 차단 상태)."; return; }
+  stockLocalRefresh("저장했습니다. 이 기기에만 저장됩니다.");
+}
+function stockLocalDelete() {
+  try { localStorage.removeItem(STOCK_LS_KEY); } catch (e) {}
+  stockLocalRefresh("이 기기의 저장 데이터를 삭제했습니다.");
+}
+
 function renderStockPanel() {
   const d = (STATUS && STATUS.invest_sp500 && STATUS.invest_sp500.chart) || null;
-  if (!d) return `<section class="stock-panel"><h3>📈 주식 손익</h3><p>보유·손익 기록은 공개 화면에서 제외했습니다(본인 전용).</p></section>`;
+  if (!d) return `<section class="stock-panel"><h3>📈 주식 손익 · 내 기기 전용 입력</h3><p>보유·손익 기록은 공개 화면에 표시하지 않습니다. 아래 값은 이 브라우저에만 저장되며 서버·저장소로 전송되지 않습니다.</p><div id="stock-local">${stockLocalHtml()}</div></section>`;
   const shares = Number(d.shares) || 0;
   const cost = Number(d.cost_per_share_krw) * shares;
   const value = Number(d.price_per_share_krw) * shares;
