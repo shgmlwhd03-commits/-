@@ -1864,7 +1864,7 @@ function stockLocalDelete() {
 
 function renderStockPanel() {
   const d = (STATUS && STATUS.invest_sp500 && STATUS.invest_sp500.chart) || null;
-  if (!d) return `<section class="stock-panel"><h3>📈 주식 손익 · 내 기기 전용 입력</h3><p>보유·손익 기록은 공개 화면에 표시하지 않습니다. 아래 값은 이 브라우저에만 저장되며 서버·저장소로 전송되지 않습니다.</p><div id="stock-local">${stockLocalHtml()}</div></section>`;
+  if (!d) return `<section class="stock-panel"><h3>📈 주식 손익 · 내 기기 전용 입력</h3><small style="display:block;margin-bottom:3px">보유·손익 기록은 공개 화면에 표시하지 않습니다. 아래 값은 이 브라우저에만 저장되며 서버·저장소로 전송되지 않습니다.</small><div id="stock-local">${stockLocalHtml()}</div></section>`;
   const shares = Number(d.shares) || 0;
   const cost = Number(d.cost_per_share_krw) * shares;
   const value = Number(d.price_per_share_krw) * shares;
