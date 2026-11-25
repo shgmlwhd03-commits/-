@@ -70,10 +70,10 @@ const rooms = [
   {
     id: "invest_sp500", floor: "f5", zone: "direct", tag: "해병이",
     title: "📈 미국 S&P500 적립투자부", worker: "📈", name: "오적립 주임",
-    say: "보유·손익 기록은 본인 전용", foot: "공개 화면에는 보유·손익을 표시하지 않습니다",
-    issue: "기록은 본인 전용",
-    guide: "보유·적립 내역은 공개 화면에서 제외했습니다. 본인 전용으로 관리합니다.",
-    state: "working", ticker: "보유·손익 기록은 공개 화면에서 제외했습니다(본인 전용) · 실시간 시세 연결은 미구현", updated: "12:53"
+    say: "내 기기 입력 · 자동 시세 미연결", foot: "공개 화면에는 보유·손익을 올리지 않습니다",
+    issue: "자동 실시간 시세 미연결",
+    guide: "보유·손익은 공개 화면에 올리지 않습니다. 대표님이 이 기기에서 직접 입력해 볼 수 있고(기기별 저장), 자동 실시간 시세는 아직 연결되지 않았습니다.",
+    state: "working", ticker: "내 기기에 직접 입력해 보유·손익 확인 가능(수동 입력) · 자동 실시간 시세는 미연결", updated: "15:32"
   },
   {
     id: "commerce", floor: "f5", zone: "direct", tag: "해병이",
@@ -1824,7 +1824,10 @@ function stockLocalLoad() {
 function stockLocalHtml(msg) {
   const v = stockLocalLoad();
   const won = n => "₩" + Math.round(n).toLocaleString("ko-KR");
-  const inp = "width:100%;box-sizing:border-box;font-size:9px;padding:2px 3px;margin:1px 0 3px;background:#0b1220;color:#e2e8f0;border:1px solid #334155;border-radius:4px";
+  const T = "font-size:14px;line-height:1.5;color:#cbd5e1";
+  const lab = "display:block;font-size:14px;color:#e2e8f0;margin-top:8px";
+  const inp = "display:block;width:100%;box-sizing:border-box;font-size:16px;padding:8px 10px;margin-top:3px;background:#0b1220;color:#f1f5f9;border:1px solid #475569;border-radius:6px";
+  const btn = "font-size:14px;padding:8px 12px;border-radius:6px;cursor:pointer";
   let top = "";
   if (v) {
     const shares = Number(v.shares), avg = Number(v.avg), price = Number(v.price);
@@ -1832,13 +1835,13 @@ function stockLocalHtml(msg) {
     const t = new Date(v.asof), ok = !Number.isNaN(t.getTime());
     const stale = !ok || (Date.now() - t.getTime() > 24 * 3600 * 1000);
     const stamp = ok ? t.toLocaleString("ko-KR", { timeZone: "Asia/Seoul", hour12: false }) : "시각 미입력";
-    top = `<div class="stock-summary"><span>보유 ${esc(String(shares))}주</span><span>매수 ${won(cost)}</span><span>입력 시세 ${won(value)}</span></div><div class="stock-profit ${profit < 0 ? "down" : "up"}">손익 ${profit < 0 ? "−" : "+"}${won(Math.abs(profit))} (${pct.toFixed(2)}%)</div><small>직접 입력값 · 가격 기준 ${esc(stamp)} KST · 실시간 시세가 아닙니다.${stale ? " ⚠️ 24시간이 지난 값이거나 시각 미입력입니다. 현재가로 보지 마세요." : ""}</small>`;
+    top = `<div style="${T};display:flex;flex-wrap:wrap;gap:4px 14px"><span>보유 ${esc(String(shares))}주</span><span>매수 ${won(cost)}</span><span>입력 시세 ${won(value)}</span></div><div class="${profit < 0 ? "down" : "up"}" style="font-size:20px;font-weight:700;margin:4px 0">손익 ${profit < 0 ? "−" : "+"}${won(Math.abs(profit))} (${pct.toFixed(2)}%)</div><div style="${T}">직접 입력한 값 · 가격 기준 ${esc(stamp)} KST · <b>실시간 시세 아님</b></div>${stale ? `<div style="font-size:14px;line-height:1.5;color:#fbbf24;margin-top:4px">⚠️ 24시간이 지났거나 기준시각이 없는 값입니다. 현재가로 보지 마세요.</div>` : ""}`;
   } else {
-    top = `<small>아직 입력된 값이 없습니다. 증권사 화면의 값을 직접 입력하세요. 자동 실시간 시세는 연결되어 있지 않습니다.</small>`;
+    top = `<div style="${T}">입력된 값이 없습니다. 증권사 화면의 값을 직접 입력하세요. 자동 실시간 시세는 연결되어 있지 않습니다.</div>`;
   }
   const dv = v ? v.asof : "";
-  const form = `<details style="margin-top:4px"${v ? "" : " open"}><summary style="cursor:pointer;font-size:8px;color:#7dd3fc">${v ? "수정" : "입력"}</summary><label style="font-size:7.5px;color:#94a3b8">보유 수량(주)<input id="sl-shares" type="number" step="any" min="0" inputmode="decimal" style="${inp}" value="${v ? esc(String(v.shares)) : ""}"></label><label style="font-size:7.5px;color:#94a3b8">평균 매수가(원)<input id="sl-avg" type="number" step="any" min="0" inputmode="decimal" style="${inp}" value="${v ? esc(String(v.avg)) : ""}"></label><label style="font-size:7.5px;color:#94a3b8">현재가(원, 직접 입력)<input id="sl-price" type="number" step="any" min="0" inputmode="decimal" style="${inp}" value="${v ? esc(String(v.price)) : ""}"></label><label style="font-size:7.5px;color:#94a3b8">가격 기준 시각<input id="sl-asof" type="datetime-local" style="${inp}" value="${esc(dv)}"></label><div style="display:flex;gap:6px;margin-top:2px"><button type="button" onclick="stockLocalSave()" style="font-size:8px;padding:3px 8px">저장</button><button type="button" onclick="stockLocalDelete()" style="font-size:8px;padding:3px 8px">이 기기에서 데이터 삭제</button></div></details>`;
-  return `${top}${form}<p id="sl-msg" role="status" style="font-size:7.5px;color:#fbbf24;margin:3px 0 0">${msg ? esc(msg) : ""}</p><small>이 기기·브라우저에만 저장됩니다. 폰과 PC는 서로 연동되지 않고, 사이트 데이터를 지우면 사라집니다. 공용 기기에서는 다른 사람이 볼 수 있으니 입력 후 반드시 삭제하세요. 로그인 보안이 아닙니다.</small>`;
+  const form = `<details style="margin-top:8px"${v ? "" : " open"}><summary style="cursor:pointer;font-size:14px;color:#7dd3fc;padding:4px 0">${v ? "값 수정" : "값 입력"}</summary><label style="${lab}">보유 수량(주)<input id="sl-shares" type="number" step="any" min="0" inputmode="decimal" style="${inp}" value="${v ? esc(String(v.shares)) : ""}"></label><label style="${lab}">평균 매수가(원)<input id="sl-avg" type="number" step="any" min="0" inputmode="decimal" style="${inp}" value="${v ? esc(String(v.avg)) : ""}"></label><label style="${lab}">현재가(원, 직접 입력)<input id="sl-price" type="number" step="any" min="0" inputmode="decimal" style="${inp}" value="${v ? esc(String(v.price)) : ""}"></label><label style="${lab}">가격 기준 시각<input id="sl-asof" type="datetime-local" style="${inp}" value="${esc(dv)}"></label><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px"><button type="button" onclick="stockLocalSave()" style="${btn}">저장</button><button type="button" onclick="stockLocalDelete()" style="${btn}">이 기기에서 데이터 삭제</button></div></details>`;
+  return `${top}${form}<div id="sl-msg" role="status" style="font-size:14px;line-height:1.5;color:#fbbf24;margin-top:6px">${msg ? esc(msg) : ""}</div><div style="${T};margin-top:8px">이 기기·브라우저에만 저장됩니다. 폰과 PC는 연동되지 않고, 사이트 데이터를 지우면 사라집니다. 공용 기기에서는 입력 후 꼭 삭제하세요. 로그인 보안이 아닙니다.</div>`;
 }
 function stockLocalRefresh(msg) {
   const el = document.getElementById("stock-local");
@@ -1864,7 +1867,7 @@ function stockLocalDelete() {
 
 function renderStockPanel() {
   const d = (STATUS && STATUS.invest_sp500 && STATUS.invest_sp500.chart) || null;
-  if (!d) return `<section class="stock-panel"><h3>📈 주식 손익 · 내 기기 전용 입력</h3><small style="display:block;margin-bottom:3px">보유·손익 기록은 공개 화면에 표시하지 않습니다. 아래 값은 이 브라우저에만 저장되며 서버·저장소로 전송되지 않습니다.</small><div id="stock-local">${stockLocalHtml()}</div></section>`;
+  if (!d) return `<section class="stock-panel"><h3>📈 주식 손익 · 내 기기 전용 입력</h3><div style="font-size:14px;line-height:1.5;color:#cbd5e1;margin-bottom:6px">공개 화면에는 올리지 않고, 이 브라우저에만 저장합니다(서버 전송 없음).</div><div id="stock-local">${stockLocalHtml()}</div></section>`;
   const shares = Number(d.shares) || 0;
   const cost = Number(d.cost_per_share_krw) * shares;
   const value = Number(d.price_per_share_krw) * shares;
