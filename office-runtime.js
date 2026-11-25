@@ -70,10 +70,10 @@ const rooms = [
   {
     id: "invest_sp500", floor: "f5", zone: "direct", tag: "해병이",
     title: "📈 미국 S&P500 적립투자부", worker: "📈", name: "오적립 주임",
-    say: "첫 1주 매수 기록 · 실시간 시세 아님", foot: "보유 1주 · 매수 ₩23,755 → 기록 시세 ₩23,745 (-₩10 · -0.04%)",
-    issue: "월요일 적립 매수는 오너 직접!",
-    guide: "매주 월요일 1주 매수는 오너가 직접 진행합니다. 부서는 보유 수량·평단·수익률·배당 기록과 다음 매수 수량 점검을 맡습니다.",
-    state: "working", ticker: "1주 보유(TIGER 미국S&P500 360750) · 매수 ₩23,755(실제 체결) → 기록 시세 ₩23,745 (-₩10 · -0.04%) · 11/20 09:49 기준 · 매주 월요일 1주씩 적립(다음: 월요일)", updated: "09:49"
+    say: "보유·손익 기록은 본인 전용", foot: "공개 화면에는 보유·손익을 표시하지 않습니다",
+    issue: "기록은 본인 전용",
+    guide: "보유·적립 내역은 공개 화면에서 제외했습니다. 본인 전용으로 관리합니다.",
+    state: "working", ticker: "보유·손익 기록은 공개 화면에서 제외했습니다(본인 전용) · 실시간 시세 연결은 미구현", updated: "12:59"
   },
   {
     id: "commerce", floor: "f5", zone: "direct", tag: "해병이",
@@ -1955,7 +1955,7 @@ function renderPrizePanel(id) {
 
 function renderStockPanel() {
   const d = (STATUS && STATUS.invest_sp500 && STATUS.invest_sp500.chart) || null;
-  if (!d) return `<section class="stock-panel"><h3>📈 주식 손익</h3><p>주식 기록 데이터가 없습니다.</p></section>`;
+  if (!d) return `<section class="stock-panel"><h3>📈 주식 손익</h3><p>보유·손익 기록은 공개 화면에서 제외했습니다(본인 전용).</p></section>`;
   const shares = Number(d.shares) || 0;
   const cost = Number(d.cost_per_share_krw) * shares;
   const value = Number(d.price_per_share_krw) * shares;
