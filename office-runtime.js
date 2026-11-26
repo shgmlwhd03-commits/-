@@ -1,9 +1,9 @@
 /* ================= 설정 ================= */
 const FLOORS = [
   { id: "f8", num: "8F", name: "대표실 · 👑 대표님", tone: "pent" },
- { id: "f6", num: "6F", name: "부장실 · 👑 부장 2명 + 🍉 수박이(위탁총괄)", tone: "pent" },
+ { id: "f6", num: "6F", name: "경영진 · 👑 총괄·부총괄·관리자·부관리자 + 🍉 수박이", tone: "pent" },
   { id: "f5", num: "5F", name: "해병이 · 수익·스토어층", tone: "cyan" },
-  { id: "f4", num: "4F", name: "해병이 · 혜택·딜·여행층", tone: "cyan" },
+  { id: "f4", num: "4F", name: "해병이 · 혜택·딜층", tone: "cyan" },
   { id: "f3", num: "3F", name: "투덜이 · 블로그·카페층", tone: "purple" },
   { id: "f2", num: "2F", name: "투덜이 · 퀴즈·B2B층", tone: "purple" },
 
@@ -14,74 +14,90 @@ const rooms = [
   {
     id: "owner", floor: "f8", zone: "instinct", tag: "오너", ceo: true,
     title: "👑 대표님", worker: "👑", name: "👑 대표님",
-    say: "전체 보고 받는 중!", foot: "조직도 최상단 · 보고 라인: 역할: 총괄 투덜이 · 부총괄 해병이 · 관리자 뮤즈 · 일꾼(전 총괄 Instinct) · 수박이 이사 · 최종 승인 대표님",
+    say: "전체 보고 받는 중!", foot: "조직도 최상단 · 결재선: 관리자·부총괄 검토 → 총괄 팩트체크·승인 → 대표님",
     issue: "승인이 필요한 건이 있어요!",
-    guide: "🔴 자금 건은 대표님이 직접 실행하고, 🔵 확인·승인 건은 이 대표님 보고의 결재 큐에서 결정합니다.",
-    state: "working", ticker: "최종 승인권 · 보고 라인: 역할: 총괄 투덜이 · 부총괄 해병이 · 관리자 뮤즈 · 일꾼(전 총괄 Instinct) · 수박이 이사 · 최종 승인 대표님", updated: "15:52"
+    guide: "🔴 자금 건은 대표님이 직접 실행하고, 🔵 확인·승인 건은 비서실 창구에서 결정합니다.",
+    state: "working", ticker: "최종 승인권 · 결재선: 관리자(뮤즈)·부총괄(해병이) 검토 → 총괄(투덜이) 팩트체크·승인 → 대표님 · 🔴 자금·금융 인증은 대표님 직접", updated: "07:58"
   },
   {
-    id: "instinct", floor: null, zone: "instinct", tag: "Instinct",
-    title: "💼 일꾼 · 전 총괄 Instinct", worker: "💼", name: "💼 일꾼",
-    say: "실행·정리 중 · 보고 접수!", foot: "일꾼(전 총괄 Instinct) · 보고 라인: 역할: 총괄 투덜이 · 부총괄 해병이 · 관리자 뮤즈 · 일꾼(전 총괄 Instinct) · 수박이 이사 · 최종 승인 대표님",
-    issue: "승인·확인 건을 모으는 중!",
-    guide: "승인·확인 건은 비서실 창구에 모아 둡니다.",
-    state: "working", ticker: "총지휘 · [총괄 지시 008] /6 최저임금 연도 정정 완료(13:56 · 15시 검증 대기) · [총괄 지시 010~014] 자녀 경제교육 8주 PWA 기획안·부모용 대본 12회분 완료 보고 접수 — 승인 6건 대표님 결재 대기 · [총괄 지시 007] 머니리포트 「맞벌이 연말정산」 13:29 공개 발행(공개 6편 · 9편 남음) · 색인 5/5 · 네이버 제휴 셋업·쿠팡 파트너스 가입 완료", updated: "14:06"
+    id: "instinct", floor: null, zone: "instinct", tag: "일꾼",
+    title: "🛠️ 일꾼 · Instinct", worker: "🛠️", name: "🛠️ 일꾼 Instinct",
+    say: "배정받은 조사·작성·검증 실행!", foot: "일꾼(구 총괄) · 조사·초안·수정·검증 실행 → 총괄 보고",
+    issue: "총괄 회신이 필요해요!",
+    guide: "Instinct는 기존 총괄 자리에서 일꾼으로 이동했습니다. 배정받은 조사·작성·수정·검증을 실행해 결과를 총괄(투덜이)에게 올리고, 업무 배분과 전체 보고는 총괄이 맡습니다.",
+    state: "working", ticker: "일꾼(구 총괄) · 배정: tudeori 애드센스 점검·소화기 3채널·브랜드커넥트 / 결과는 총괄에게 수평전개 보고", updated: "07:52"
   },
   {
-    id: "ceo_haebyeong", floor: "f6", zone: "direct", tag: "해병이", ceo: true,
-    title: "👑 해병이 부총괄", worker: "🫡", name: "👑 해병이 부총괄",
-    say: "7개 부서 보고 받는 중!", foot: "총괄 지휘 · 해병이 7개 부서",
+    id: "ceo_haebyeong", floor: "f6", zone: "direct", tag: "부총괄", ceo: true,
+    title: "👑 부총괄 · 해병이", worker: "🫡", name: "👑 부총괄 해병이",
+    say: "부서 7개 + 교차검토 맡았습니다!", foot: "부총괄 · 7개 부서 운영 + 관리자와 교차검토",
     issue: "승인 대기 중인 건이 있어요!",
     guide: "승인 대기 건을 확인해 주세요. 진행 여부만 알려주시면 바로 실행합니다.",
-    state: "working", ticker: "해병이 7개 부서 총괄 · 09:07 네이버 샷시 글 · 11:00 머니리포트 최저임금 · 13:29 머니리포트 맞벌이 연말정산(공개 6편 · 9편 남음) · 13:18 색인 요청 5/5 · 13:30 브랜드커넥트·쇼핑커넥트 가입·스페이스 개설 · 13:31 쿠팡 파트너스 가입 · 13:56 /6 최저임금 연도 정정 완료(2026년 10,320원 / 2027년 10,700원 병기) · 14:00 자녀 경제교육 8주 PWA 기획안·대본 12회분 완성(승인 대기)", updated: "14:06"
+    state: "working", ticker: "부총괄 · 7개 부서 + 교차검토 · 11:00 고향사랑기부제 교정본 발행·색인 대기 / 쿠팡파트너스 최종승인 스크린샷 채널 확정(보고 11:30)", updated: "07:52"
   },
   {
-    id: "ceo_tudeori", floor: "f6", zone: "partner", tag: "투덜이", ceo: true,
-    title: "👑 투덜이 총괄", worker: "😤", name: "👑 투덜이 총괄",
-    say: "5개 부서 + 전담 채널 2개 담당!", foot: "총괄 지휘 · 투덜이 5개 부서",
-    issue: "5개 부서 보고 받는 중!",
-    guide: "가동 중 · GitHub 연결(08:13) · 크레딧 잔량은 화면에서 확인할 수 없으니 필요할 때 바로 확인해 주세요.",
-    state: "working", ticker: "총괄 지휘 · 5개 부서 + 채널 2개 담당 · 가동 중 · GitHub 연결", updated: "08:22"
+    id: "ceo_tudeori", floor: "f6", zone: "partner", tag: "총괄", ceo: true,
+    title: "👑 총괄 · 투덜이", worker: "😤", name: "👑 총괄 투덜이",
+    say: "업무 배분·팩트체크·승인 중!", foot: "총괄 · 배분·팩트체크·전결 승인 → 대표님 상신",
+    issue: "결재로 올릴 안건이 있어요!",
+    guide: "총괄(투덜이)은 업무 배분·우선순위·팩트체크·전결 승인을 맡고, 관리자(뮤즈)·부총괄(해병이) 검토를 거친 안건을 승인해 대표님께 올립니다. 비상 승계 1순위입니다.",
+    state: "working", ticker: "총괄 · 07:37 지시로 임무 배분표·결재선 반영 · 관리자·부총괄 검토 → 총괄 팩트체크·승인 · 자금·금융 인증은 대표님 직접", updated: "07:58"
   },
   {
-    id: "director_subaki", floor: "f6", zone: "direct", tag: "총괄", director: true,
+    id: "director_subaki", floor: "f6", zone: "direct", tag: "위탁", director: true,
     title: "🍉 수박이 이사 · 위탁판매 총괄", worker: "🍉", name: "🍉 수박이 이사",
-    say: "위탁판매 총괄 · 실행 대기 중!", foot: "총괄 직속 · 실행 담당(사람)",
+    say: "위탁판매 총괄 · 실행 대기 중!", foot: "위탁판매·스마트스토어 실행 총괄 · 확정 건만 최소 알림",
     issue: "총괄 지시 확인이 필요해요!",
-    guide: "수박이 이사는 위탁판매 총괄 담당이고, 실행은 실행 담당(사람)이 진행합니다. 보류 기간 동안 2축으로 움직입니다 — ① 위탁판매·사업자 준비(세무·계좌·실무 대기, 오너 확인 단계에서 멈춤) ② 저크레딧 수익 보조(1일 1회 이하, 투덜이 측과 겹치지 않는 살림·주방 배송 체험단과 고액 공식 경품). 확정 건만 최소 알림으로 전달합니다. 장부·위탁판매실은 보고 창에서 바로 열립니다.",
-    state: "working", ticker: "총괄 직속 · 위탁판매 총괄 담당 · 실행 담당(사람) · 보류 기간 2축 운영 — ① 위탁판매·사업자 준비(세무·계좌·실무 대기) + ② 저크레딧 수익 보조(1일 1회 이하 · 살림·주방 배송 체험단·고액 공식 경품) · 난방텐트 2건 철회·공개 도매가 0.70 기준 통과 0건 → 위탁 보류", updated: "--:--"
+    guide: "수박이 이사는 총괄(투덜이) 라인의 위탁판매 총괄 담당이고, 실행은 실행 담당(사람)이 진행합니다. 보류 기간 동안 2축으로 움직입니다 — ① 위탁판매·사업자 준비(세무·계좌·실무 대기, 오너 확인 단계에서 멈춤) ② 저크레딧 수익 보조(1일 1회 이하, 투덜이 측과 겹치지 않는 살림·주방 배송 체험단과 고액 공식 경품). 확정 건만 최소 알림으로 전달합니다. 장부·위탁판매실은 보고 창에서 바로 열립니다.",
+    state: "working", ticker: "위탁판매·스토어 실행 총괄 · 확정 건만 최소 알림 · 보류 기간 2축 운영(위탁·사업자 준비 + 저크레딧 수익 보조)", updated: "07:52"
+  },
+  {
+    id: "manager_muse", floor: "f6", zone: "instinct", tag: "관리자",
+    title: "🧠 관리자 · 뮤즈", worker: "🧠", name: "🧠 관리자 뮤즈",
+    say: "관리자 검토·회의록 정리!", foot: "관리자 검토(1차) · 회의록·아카이브 · 전 업무 숙지",
+    issue: "검토할 안건이 있어요!",
+    guide: "뮤즈(관리자)는 06번 업무계정으로 Slack에 연결돼 있습니다. 관리자 검토(1차)와 회의록·아카이브, 전 업무 현황 숙지를 맡고 비상 승계는 3순위입니다. 07:52 기준 채널 참여는 확인됐지만 자동 응답은 아직 검증되지 않았습니다.",
+    state: "idle", ticker: "관리자 검토(1차) · 회의록·아카이브 · 전 업무 숙지 · 06번 Slack 연결 · 자동 응답 미검증", updated: "07:52"
+  },
+  {
+    id: "deputy_manus", floor: "f6", zone: "instinct", tag: "부관리자",
+    title: "🤖 부관리자 · 큐", worker: "🤖", name: "🤖 부관리자 큐(Manus)",
+    say: "30초 AI 영상 시범안 준비!", foot: "부관리자 · 30초 AI 영상·카드뉴스 · 검수 보조",
+    issue: "수임 확인이 필요해요!",
+    guide: "큐(Manus)는 08번 계정으로 연결됐고, 대표님 계정 멘션에서만 왕복 응답이 확인됐습니다. 30초 AI 영상·카드뉴스 시범안(무료 범위 · 유료 결제 없음)과 소화기·애드센스 보조 자료를 맡습니다. 수임·계획 보고는 14:00입니다.",
+    state: "idle", ticker: "부관리자 · 08번 연결 · 대표님 계정 멘션에서만 응답 확인 · 30초 AI 영상 시범안·검수 보조(보고 14:00)", updated: "07:52"
   },
   {
     id: "naver", floor: "f5", zone: "direct", tag: "해병이",
     title: "✍️ 네이버 블로그팀", worker: "🧑‍💻", name: "박작가 과장",
-    say: "새 발행은 멈춘 상태예요", foot: "네이버 제휴 글 새 발행·재공개 중단 · 수익 연결·지급 설정은 미확인",
-    issue: "새 발행·재공개 중단 상태",
-    guide: "11/24 배수구 제휴 글은 15:55 공개했다가 사용자 16:00 지시로 비공개 전환했고(22:01 독립 확인), 새 제휴 글 발행과 재공개는 중단한 상태입니다. 파트너스 수익 연결·최종 승인·지급 설정은 확인되지 않았습니다. 다음 큐는 보류입니다.",
-    state: "idle", ticker: "11/23 겨울 온습도·결로 글 공개 발행 · 11/24 욕실 배수구·트랩 제휴 글 15:55 공개 → 사용자 16:00 지시로 비공개 전환 완료(22:01 블로그 담당 비로그인 독립 확인) · 새 제휴 발행·재공개 중단 · 파트너스 수익 연결·최종 승인·지급 설정은 미확인 · 다음 큐 보류", updated: "13:32"
+    say: "제휴 셋업 완료! 첫 링크 글 준비~", foot: "브랜드커넥트·쇼핑커넥트 가입 · 쿠팡 파트너스 가입 · 매일 09:00 발행",
+    issue: "네이버 재로그인 필요!",
+    guide: "네이버 제휴 셋업은 끝났습니다 — 브랜드커넥트·쇼핑커넥트 가입과 크리에이터 스페이스 개설(정산 유형 개인), 쿠팡 파트너스 가입(활동 사이트 네이버 블로그 등록)까지 완료했습니다. 다음은 첫 제휴 링크 적용 글 발행이고, 발행 후 최종 승인용 스크린샷을 등록합니다. 배송형 체험단(리뷰노트)은 계정당 블로그 1개 제한으로 투덜이 전담을 유지합니다.",
+    state: "working", ticker: "13:30 네이버 브랜드커넥트·쇼핑커넥트 가입 및 크리에이터 스페이스 개설 완료(정산 유형 개인 · 광고성 정보 수신 거부) · 13:31 쿠팡 파트너스 가입 완료(활동 사이트 네이버 블로그 등록) · 리뷰노트는 슬롯 제한으로 투덜이 전담 유지 · 다음: 첫 제휴 링크 글 발행 → 최종 승인 스크린샷 · 09:07 샷시 글 발행 완료", updated: "13:32"
   },
   {
     id: "haebyeongi_adsense", floor: "f5", zone: "direct", tag: "해병이",
     title: "💵 해병이 애드센스팀", worker: "🧑‍🚀", name: "해병이 팀장",
-    say: "공개 9편! 애드센스 심사 검토 중", foot: "티스토리 애드센스 · 공개 15~20편까지 6편 남음 · 추가 심사 검토 중(미승인)",
-    issue: "애드센스 심사 검토 중(미승인)",
+    say: "공개 6편! 9편 더 채우고 애드센스 사이트 추가", foot: "티스토리 애드센스 · 매일 11:00 · 다음 애드센스 '+ 새 사이트' 신청",
+    issue: "색인 요청 5/5 완료 — 편입 집계 대기 중",
     guide: "13:29 「맞벌이 부부 연말정산」까지 공개 6편입니다(총 7건 중 AI 안경 글은 비공개 유지). 15~20편 목표까지 9편 남았습니다. 공개 5편은 13:18 구글 색인 생성 요청을 모두 넣었고(5/5), 서치콘솔·사이트맵 제출도 완료해 색인·실적은 며칠 뒤부터 집계됩니다. 새 글은 발행 후 색인 생성 요청을 이어서 넣습니다. 13:56 [총괄 지시 008]로 /6 「2026년 최저임금」 글의 연도 표기를 정정했습니다 — 2026년 10,320원·월 2,156,880원은 2026년 12월 31일까지 적용, 2027년은 10,700원·월 2,236,300원(2027년 1월 1일부터 · 고용노동부 2026-08-05 발표)으로 병기했고, 12,384원은 법정 시급이 아니라 주휴수당을 포함한 주 40시간 환산치임을 명시했습니다.",
     state: "working", ticker: "13:29 「맞벌이 부부 연말정산, 공제는 누가 받아야 유리할까」 공개 발행 완료(/7 · 4,186자 · 도해 2장) · 공개 6편(총 7건 · /2 비공개 유지) · 15~20편까지 9편 남음 · 13:18 공개 5편(/1·/3·/4·/5·/6) 구글 색인 생성 요청 5/5 완료 · [총괄 지시 007] #피클지시 보고 완료 · 13:56 [총괄 지시 008] /6 최저임금 연도 표기 정정 완료 — 2026년 10,320원·2,156,880원(12/31까지 적용) vs 2027년 10,700원·2,236,300원(1/1부터) 병기 · 12,384원은 법정 시급 아닌 주휴 포함 환산치 명시 · #피클지시 보고 완료", updated: "14:06"
   },
   {
     id: "invest_sp500", floor: "f5", zone: "direct", tag: "해병이",
     title: "📈 미국 S&P500 적립투자부", worker: "📈", name: "오적립 주임",
-    say: "내 기기 입력 · 자동 시세 미연결", foot: "공개 화면에는 보유·손익을 올리지 않습니다",
-    issue: "자동 실시간 시세 미연결",
-    guide: "보유·손익은 공개 화면에 올리지 않습니다. 대표님이 이 기기에서 직접 입력해 볼 수 있고(기기별 저장), 자동 실시간 시세는 아직 연결되지 않았습니다.",
-    state: "working", ticker: "내 기기에 직접 입력해 보유·손익 확인 가능(수동 입력) · 자동 실시간 시세는 미연결", updated: "15:32"
+    say: "보유·손익 기록은 본인 전용", foot: "공개 화면에는 보유·손익을 표시하지 않습니다",
+    issue: "기록은 본인 전용",
+    guide: "보유·적립 내역은 공개 화면에서 제외했습니다. 본인 전용으로 관리합니다.",
+    state: "working", ticker: "보유·손익 기록은 공개 화면에서 제외했습니다(본인 전용) · 실시간 시세 연결은 미구현", updated: "12:56"
   },
   {
     id: "commerce", floor: "f5", zone: "direct", tag: "해병이",
     title: "🛍️ 위탁판매·스토어팀", worker: "👩‍💼", name: "서스토어 대리",
     say: "공개 도매가 위탁은 보류, 방향 전환!", foot: "개인 판매자 기준 · 난방텐트 철회 · 0.70 기준 통과 0건",
     issue: "정산계좌 등록은 직접 진행!",
-    guide: "사업자등록(간이과세자)은 추후로 미루고, 먼저 개인 판매자 기준으로 준비합니다(① 판매 자격·수수료·정산 구조 확인 → ② 스마트스토어 개설·구매안전서비스 이용확인증 → ③ 사업자등록·통신판매업 신고는 추후). 정산 계좌 확정(계좌·명의 비공개)됐고, 센터 등록과 금융 인증은 오너/수박이가 직접 합니다. 위탁 아이템은 3사 검색량 1~4위 공동 검증에서 1~3위가 쿠팡 PB 최저가와 겹쳐 보류됐고, 4위 난방텐트는 3~4인용 실제 공급가(37,700~43,030원)가 쿠팡 동일 OEM 소매가(32,630~37,900원)보다 비싼 적자 구조로 2건 모두 철회 확정했습니다. 공급가(무료배송) ≤ 인기 실거래가 × 0.70 기준으로 대체 후보 11개 품목(30여 상품)을 더 확인했지만 통과 0건이라, 비로그인 공개 도매가 기반 위탁 후보는 전면 철회·보류합니다. 다음 단계는 사업자 등록 후 도매 사이트 사업자 등급 할인가 직접 확인, 또는 니치 품목·소량 사입으로 소싱 전략 재검토입니다. 국내 위탁처 중심으로 운영하고 판매 부진 품목부터 순차 교체합니다. 위탁판매실 현황판의 [지시 복사]를 채팅에 붙여넣으면 바로 진행합니다.",
-    state: "working", ticker: "난방텐트 2건 철회 · 공개 도매가 0.70 기준 통과 0건 → 공개 도매가 위탁 보류 · 다음: 사업자 등록 후 등급가 확인 또는 니치·소량 사입 · 국내 위탁처 중심 · 정산 계좌 확정(계좌·명의 비공개) · 사업자등록은 추후 진행", updated: "12:27"
+    guide: "사업자등록(간이과세자 525101 · 자택(자가))은 추후로 미루고, 먼저 개인 판매자 기준으로 준비합니다(① 판매 자격·수수료·정산 구조 확인 → ② 스마트스토어 개설·구매안전서비스 이용확인증 → ③ 사업자등록·통신판매업 신고는 추후). 정산 계좌는 수박이 이사 본인 명의 카카오뱅크 계좌로 확정됐고, 센터 등록과 금융 인증은 오너/수박이가 직접 합니다. 위탁 아이템은 3사 검색량 1~4위 공동 검증에서 1~3위가 쿠팡 PB 최저가와 겹쳐 보류됐고, 4위 난방텐트는 3~4인용 실제 공급가(37,700~43,030원)가 쿠팡 동일 OEM 소매가(32,630~37,900원)보다 비싼 적자 구조로 2건 모두 철회 확정했습니다. 공급가(무료배송) ≤ 인기 실거래가 × 0.70 기준으로 대체 후보 11개 품목(30여 상품)을 더 확인했지만 통과 0건이라, 비로그인 공개 도매가 기반 위탁 후보는 전면 철회·보류합니다. 다음 단계는 사업자 등록 후 도매 사이트 사업자 등급 할인가 직접 확인, 또는 니치 품목·소량 사입으로 소싱 전략 재검토입니다. 국내 위탁처 중심으로 운영하고 판매 부진 품목부터 순차 교체합니다. 위탁판매실 현황판의 [지시 복사]를 채팅에 붙여넣으면 바로 진행합니다.",
+    state: "working", ticker: "난방텐트 2건 철회 · 공개 도매가 0.70 기준 통과 0건 → 공개 도매가 위탁 보류 · 다음: 사업자 등록 후 등급가 확인 또는 니치·소량 사입 · 국내 위탁처 중심 · 정산 계좌는 수박이 이사(본인) 명의 카카오뱅크 확정 · 사업자등록(525101)은 추후 진행", updated: "12:27"
   },
   {
     id: "grant", floor: "f4", zone: "direct", tag: "해병이",
@@ -108,14 +124,6 @@ const rooms = [
     state: "idle", ticker: "탐색 범위 확대 — 항공권·자동차·대형가전·숙박/여행권 등 고액 공식 경품까지 · 1만+/3만+ 기준 유지 · 매일 15:00", updated: "11:56"
   },
   {
-    id: "travel_blog", floor: "f4", zone: "direct", tag: "해병이",
-    title: "🧳 영문 여행 블로그팀", worker: "🧳", name: "여행 안내 주임",
-    say: "영문 방한 여행글 2편 공개 중!", foot: "Blogger 무료 · 담당 해병이(내용·출처 검토는 총괄) · 수익 확인 없음",
-    issue: "다음 글 계획·수익은 아직 없어요",
-    guide: "영문 방한 여행 블로그(Korea Travel Note)입니다. 공개 2편(11/25 13:05 인천공항→서울 교통, 13:19 서울 3일 루트)을 블로그 피드에서 직접 확인했습니다. 담당은 해병이이고 내용·출처 검토는 총괄이 합니다. 이후 글 일정과 수익은 확인된 것이 없습니다.",
-    state: "idle", ticker: "영문 여행 블로그 Korea Travel Note · 공개 2편(11/25 13:05·13:19 발행, 11/26 10:38 블로그 피드로 직접 확인) · 담당 해병이 · 수익·다음 글 일정 확인된 것 없음", updated: "10:40"
-  },
-  {
     id: "tistory", floor: "f3", zone: "partner", tag: "투덜이",
     title: "💵 투덜이 티스토리팀", worker: "🤵", name: "투덜이 팀장",
     say: "발행 기록 확인 · 심사 대기", foot: "매일 13:00 · 애드센스 심사 대기",
@@ -126,7 +134,7 @@ const rooms = [
   {
     id: "cafe", floor: "f3", zone: "partner", tag: "투덜이",
     title: "🛡️ EOKC 카페팀", worker: "🧑‍🚀", name: "정스탭 매니저",
-    say: "카페 점검 기록은 과거분이에요", foot: "11/21 16:00 정기 점검 기록 · 이후 점검은 확인 안 됨",
+    say: "회칙 초안·쇼핑커넥트!", foot: "회칙 18조 초안 · 쇼핑커넥트 가동",
     issue: "총괄 계정 확인이 필요해요!",
     guide: "총괄에 카페·블로그 계정 상태를 확인 요청해 주세요.",
     state: "idle", ticker: "EOKC 회칙 18조 초안 + 블로그 쇼핑커넥트 가동", updated: "22:50"
@@ -170,11 +178,11 @@ function revHTML() {
   return `
     <div class="rev-block" id="rev-block">
       <div class="rev-boards">
-        <div class="rev-board hb" id="rev-hb" title="해병이 부총괄이 만든 검증된 수익">
+        <div class="rev-board hb" id="rev-hb" title="해병이 부장이 만든 검증된 수익">
           <span class="rb-label"><i></i>🔵 해병이</span>
           <span class="rb-val"><span class="rb-today" id="rev-hb-today">오늘 +₩0</span><span class="rb-sep">·</span><span id="rev-hb-total">누적 ₩0</span></span>
         </div>
-        <div class="rev-board partner" id="rev-td" title="투덜이 총괄이 만든 검증된 수익">
+        <div class="rev-board partner" id="rev-td" title="투덜이 부장이 만든 검증된 수익">
           <span class="rb-label"><i></i>🟣 투덜이</span>
           <span class="rb-val"><span class="rb-today" id="rev-td-today">오늘 +₩0</span><span class="rb-sep">·</span><span id="rev-td-total">누적 ₩0</span></span>
         </div>
@@ -223,8 +231,8 @@ function roomHTML(r, i) {
         <div class="room-head">
           <span class="room-title">${esc(r.title)}</span>
           <span class="room-lanes" id="lanes-${r.id}" aria-hidden="true"></span>
-          <span class="room-tag${partner ? " partner" : instinct ? " instinct" : ""}" title="${instinct ? "일꾼(전 총괄 Instinct)이 맡은 방" : director ? "위탁판매 총괄 · 실행 담당(사람)" : partner ? "투덜이 총괄이 전담 운영하는 방" : "해병이 부총괄이 직접 운영하는 방"}">${r.tag}</span>
-          <span class="room-open">${r.id === "prize" ? "응모결과▸" : r.id === "owner" ? "결재▸" : shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : "보고"}</span>
+          <span class="room-tag${partner ? " partner" : instinct ? " instinct" : ""}" title="${instinct ? "Instinct 총괄이 지휘하는 방" : director ? "총괄 직속 위탁판매 총괄 · 실행 담당(사람)" : partner ? "투덜이 부장이 전담 운영하는 방" : "해병이 부장이 직접 운영하는 방"}">${r.tag}</span>
+          <span class="room-open">${r.id === "prize" ? "응모결과▸" : shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : "보고"}</span>
           <span class="status-dot" aria-hidden="true"></span>
         </div>
         ${stage}
@@ -368,10 +376,11 @@ function floorHTML(f) {
          <div class="credit">
            <span class="cred" id="cred-hb">🔵 해병이: 가동 미확인</span>
            <span class="cred td" id="cred-td">🟣 투덜이: 가동 미확인</span>
-           <span class="cred-why" id="cred-why" hidden></span>
          </div>
        </div>
-       <div class="pent-roster" id="pent-roster" aria-label="6F 분장표"></div>`
+       <div class="pent-assign" id="pent-assign" aria-label="임무 배분표"></div>
+       <div class="pent-roster" id="pent-roster" aria-label="6F 분장표"></div>
+       <div class="pent-invite" id="pent-invite" aria-label="뮤즈 초대코드"></div>`
     : "";
   return `
     <section class="floor tone-${f.tone}" id="floor-${f.id}">
@@ -405,6 +414,8 @@ function render() {
   renderSignals(null);
   renderChief(null);
   renderRoster(null);
+  renderAssignments(null);
+  renderInvite(null);
   applyCorridor();
   requestAnimationFrame(() => { liftPark(); buildTicks(); });
 }
@@ -634,40 +645,22 @@ function opsUnverifiedRoom(id) { const k = OPS_ROOMS[id]; if (!k) return false; 
 function checkState(v) { return (v && typeof v === "object" && v.state === "verified" && typeof v.checked_at === "string" && /T\d\d:\d\d/.test(v.checked_at)) ? v : null; }
 function hhmmOf(iso) { const m = /T(\d\d:\d\d)/.exec(typeof iso === "string" ? iso : ""); return m ? m[1] : ""; }
 function reportOf(k) { const r = k && k.report; return (r && typeof r === "object" && typeof r.text === "string" && r.text.trim()) ? r : null; }
-function reportLabel(k) { const r = reportOf(k); return r ? ((typeof r.label === "string" && r.label.trim() ? r.label.trim() : "자기보고") + " " + (hhmmOf(r.reported_at) || "시각미상")) : ""; }
-function num01(v) { return (typeof v === "number" && isFinite(v) && v >= 0 && v <= 100) ? v : null; }
-function opsValue(v) { return (v && (v.value === "가동" || v.value === "미가동")) ? v.value : null; }
+function reportLabel(k) { const r = reportOf(k); return r ? "자기보고 " + (hhmmOf(r.reported_at) || "시각미상") : ""; }
 function checkLine(id, name, raw) {
   const k = (raw && raw[id] && typeof raw[id] === "object") ? raw[id] : {};
   const cr = checkState(k.credit), op = checkState(k.ops), rl = reportLabel(k), r = reportOf(k);
-  const pct = cr ? num01(cr.usage_pct) : null, ov = op ? opsValue(op) : null;
-  const parts = [
-    pct !== null ? "크레딧(주간 사용) " + pct + "% · " + hhmmOf(cr.checked_at) + " 확인" : "크레딧 미확인",
-    ov ? ov + " · " + hhmmOf(op.checked_at) + " 확인" : "가동 미확인"
-  ];
+  const parts = [cr ? "크레딧 확인 " + hhmmOf(cr.checked_at) : "크레딧 미확인", op ? "가동 확인 " + hhmmOf(op.checked_at) : "가동 미확인"];
   if (rl) parts.push(rl);
-  const tip = [];
-  if (pct !== null) tip.push("크레딧 출처: " + (typeof cr.source === "string" && cr.source.trim() ? cr.source.trim() : "출처 미상") + " · " + cr.checked_at);
-  if (ov) tip.push("가동 출처: " + (typeof op.source === "string" && op.source.trim() ? op.source.trim() : "출처 미상") + " · " + op.checked_at);
-  if (r) tip.push("자기보고(" + (typeof r.source === "string" ? r.source : "출처 미상") + "): " + r.text.trim());
-  const unv = (pct === null || !ov);
-  const why = unv ? ((typeof k.unverified_reason === "string" && k.unverified_reason.trim()) ? k.unverified_reason.trim() : "조회 경로 미연결") : "";
-  return { text: name + parts.join(" · "), title: tip.length ? tip.join("\n") : "확인 기록 없음", why: why ? name.replace(/[:：\s]+$/, "").replace(/^\S+\s/, "") + " 미확인 사유: " + why : "" };
+  return { text: name + parts.join(" · "), title: r ? ("자기보고(" + (typeof r.source === "string" ? r.source : "출처 미상") + "): " + r.text.trim()) : "확인 기록 없음" };
 }
 function renderCredit(raw) {
   const c = (raw && typeof raw === "object" && !Array.isArray(raw)) ? raw : {};
   CHECKS = (c.checks && typeof c.checks === "object" && !Array.isArray(c.checks)) ? c.checks : {};
   const hb = document.getElementById("cred-hb");
   const td = document.getElementById("cred-td");
-  const w = document.getElementById("cred-why");
   const a = checkLine("hb", "🔵 해병이: ", CHECKS), b = checkLine("td", "🟣 투덜이: ", CHECKS);
   if (hb) { hb.textContent = a.text; hb.title = a.title; }
   if (td) { td.textContent = b.text; td.title = b.title; }
-  if (w) {
-    const t = [a.why, b.why].filter(Boolean);
-    w.textContent = t.length ? t.join(" · ") + " · 새로고침은 저장된 기록 재읽기이며 실시간 조회가 아님" : "";
-    w.hidden = !t.length;
-  }
 }
 
 /* ================= 🚦 신호등 (🔵 일반 확인·승인 / 🔴 자금·결제) =================
@@ -679,10 +672,10 @@ const SIGNAL_FALLBACK = {
   note: "🔵 파란불=일반 확인·승인 · 🔴 빨간불=자금·결제(오너 직접) · 🏭 큐맥스는 지시 시 가동",
   updated: "--:--",
   blue: [
-    { room: "commerce", title: "판매 시작 방식 — 개인 판매자 기준(사업자등록 추후)", detail: "스마트스토어는 개인 판매자 기준으로 먼저 준비 · 개인사업자(간이과세자) 신규 등록은 추후 진행 · 오너 확인 후 개설 단계 진행" }
+    { room: "commerce", title: "판매 시작 방식 — 개인 판매자 기준(사업자등록 추후)", detail: "스마트스토어는 개인 판매자 기준으로 먼저 준비 · 개인사업자(간이과세자 525101 · 자택(자가)) 신규 등록은 추후 진행 · 오너 확인 후 개설 단계 진행" }
   ],
   red: [
-    { room: "commerce", title: "스마트스토어 정산계좌 등록 — 금융 인증", detail: "정산 계좌 확정(계좌·명의 비공개) · 센터 정산계좌 등록과 금융 인증은 오너/수박이 직접" }
+    { room: "commerce", title: "스마트스토어 정산계좌 등록 — 금융 인증", detail: "정산 계좌는 수박이 이사(본인) 명의 카카오뱅크 계좌로 확정 · 센터 정산계좌 등록과 금융 인증은 오너/수박이 직접" }
   ]
 };
 
@@ -744,9 +737,9 @@ function roomSignals(id, all, scopeIds = []) {
   return { blue: pick("blue"), red: pick("red") };
 }
 
-/* 총괄 결정(승인·불허)과 신호등을 잇는 열쇠: 총괄 항목 id와 같은 규칙이다 */
+/* 총괄 결정(승인·반려)과 신호등을 잇는 열쇠: 총괄 항목 id와 같은 규칙이다 */
 
-/* 그 신호가 이미 결정(승인·불허)되어 신호등에서 내려갔는지 — 재심의(re)는 결론 전이라 불을 켠 채로 둔다 */
+/* 그 신호가 이미 결정(승인·반려)되어 신호등에서 내려갔는지 — 재심의(re)는 결론 전이라 불을 켠 채로 둔다 */
 function signalCleared(lane, it, base, dec) {
   // Only a matching source-completed task can leave the active signal view.
   return !!(CHIEF && CHIEF.items.some(x => x.room === it.room && x.title === it.title && TaskArchive.bucket(x) === "archived"));
@@ -871,8 +864,8 @@ function chiefData(raw) {
   merged.sort((a, b) => (CHIEF_LANE[a.lane] - CHIEF_LANE[b.lane]));
   merged.forEach(it => { it.id = it.lane + "|" + it.room + "|" + it.title; });
   return {
-    title: str(src.title, "총괄 · 총괄 보고 · 긴급 처리"),
-    note: str(src.note, "두 부장 미결·대기 통합 · 🔴 자금 최우선 → 🔵 승인 → ⏳ 대기"),
+    title: str(src.title, "총괄 · 보고·결재 창구"),
+    note: str(src.note, "관리자·부총괄 검토 → 총괄 팩트체크·승인 · 🔴 자금 최우선 → 🔵 승인 → ⏳ 대기"),
     updated: str(src.updated, ""),
     items: merged
   };
@@ -908,7 +901,8 @@ function chiefClick(e, room) {
   if (room) openReport(room);
 }
 
-/* 승인·불허·재심의 결정: 정적 페이지라 localStorage에 선택만 저장하고, 버튼 클릭은 미리 채운 GitHub 접수창을 열 뿐 어디에도 자동 전송하지 않는다. 실제 접수는 사용자가 열린 창에서 직접 제출한다. */
+/* 승인·반려·재심의 결정: 원터치 중계 키(ntfy)가 있으면 바로 접수되고, 없으면 GitHub 결재함(Issue)으로 접수된다.
+   접수 결과는 #피클지시 실행 감시(5분 간격)가 확인해 처리하며, 화면은 접수 번호와 상태를 보존한다. */
 let CHIEF_DEC = null;
 // One ordered transport per agenda item. Selections stay editable while sending.
 const CHIEF_SENDS = new Map();
@@ -941,7 +935,7 @@ function chiefPhrase(it, state) {
   const rr = rooms.find(r => r.id === it.room);
   const who = rr ? " · " + rr.tag : "";
   const where = rr ? " (" + rr.title + ")" : "";
-  const head = (state === "ok" ? "[총괄 승인" : state === "re" ? "[총괄 재심의" : "[총괄 불허") + who + "] ";
+  const head = (state === "ok" ? "[총괄 승인" : state === "re" ? "[총괄 재심의" : "[총괄 반려") + who + "] ";
   const nm = it.title + where;
   if (state === "ok") {
     return it.lane === "red"
@@ -952,16 +946,53 @@ function chiefPhrase(it, state) {
     return head + nm + " — 재심의합니다. 근거·대안·비용·일정을 보완해서 다시 상신해 주세요. 결론이 날 때까지 신호는 켜 둡니다.";
   }
   return it.lane === "red"
-    ? head + nm + " — 불허합니다. 해당 안건 내용을 삭제해 주세요. 자금·인증 건이니 진행을 중단하고 원기록은 보존해 주세요."
-    : head + nm + " — 불허합니다. 해당 안건 내용을 삭제해 주세요. 원기록은 보존합니다.";
+    ? head + nm + " — 반려합니다. 해당 안건 내용을 삭제해 주세요. 자금·인증 건이니 진행을 중단하고 원기록은 보존해 주세요."
+    : head + nm + " — 반려합니다. 해당 안건 내용을 삭제해 주세요. 원기록은 보존합니다.";
 }
 
-/* 보안: 브라우저 평문 저장 비밀(GitHub 토큰·중계 키) 경로는 폐기한다.
-   예전 버전이 저장해 둔 값이 남아 있으면 이 브라우저에서 지운다. */
-try { localStorage.removeItem("liveoffice_gh_token"); localStorage.removeItem("liveoffice_relay_key"); } catch (e) {}
+function setupRelayFromUrl() {
+  try {
+    const u = new URL(window.location.href);
+    const k = (u.searchParams.get("k") || "").trim();
+    if (k && /^[a-zA-Z0-9_-]{12,80}$/.test(k)) {
+      localStorage.setItem("liveoffice_relay_key", k);
+      u.searchParams.delete("k");
+      window.history.replaceState({}, "", u.pathname + u.search + u.hash);
+    }
+  } catch (e) {}
+}
+setupRelayFromUrl();
+
+function hasRelayKey() {
+  try { return !!(localStorage.getItem("liveoffice_relay_key") || "").trim(); } catch (e) { return false; }
+}
+
+function ghToken() {
+  try { return (localStorage.getItem("liveoffice_gh_token") || "").trim(); } catch (e) { return ""; }
+}
+
+function setupGhToken() {
+  let cur = "";
+  try { cur = localStorage.getItem("liveoffice_gh_token") || ""; } catch (e) {}
+  const msg = cur
+    ? "현재 원클릭 자동전송 토큰이 저장되어 있습니다.\n새 토큰을 입력해 덮어쓰거나, 빈 칸으로 확인을 누르면 저장된 토큰을 삭제합니다."
+    : "새 창 없이 버튼 한 번으로 바로 결재를 접수하려면 GitHub Fine-grained 토큰(이 저장소 Issues 쓰기 전용)을 입력하세요.\n(토큰은 이 브라우저에만 저장되며 코드에 남지 않습니다.)";
+  const val = window.prompt(msg, "");
+  if (val === null) return;
+  try {
+    const clean = val.trim();
+    if (clean) {
+      localStorage.setItem("liveoffice_gh_token", clean);
+      alert("원클릭 자동전송 설정 완료! 이제 승인·반려·재심의 버튼을 누르면 새 창 없이 바로 접수·실행됩니다.");
+    } else {
+      localStorage.removeItem("liveoffice_gh_token");
+      alert("저장된 토큰을 삭제했습니다. 버튼 클릭 시 GitHub 접수창이 열립니다.");
+    }
+  } catch (e) {}
+}
 
 function decisionLabel(s) {
-  return s === "ok" ? "승인" : s === "re" ? "재심의" : "불허";
+  return s === "ok" ? "승인" : s === "re" ? "재심의" : "반려";
 }
 
 function decisionBadge(d) {
@@ -976,25 +1007,119 @@ function decisionBadge(d) {
     return `${icon} ${lbl} 접수됨${d.issueNum ? ` (#${d.issueNum})` : ""} · 담당 확인·처리 대기`;
   }
   if (d.opened) {
-    return `📤 ${lbl} 접수창 열림 · 아직 접수 확인 전 · 창이 안 열렸으면 ↺ 후 재시도`;
+    return `📤 ${lbl} 접수창 열림 · 아직 접수 확인 전`;
   }
   return `${icon} ${lbl} 선택 · 미접수`;
 }
 
-function chiefIssueDraft(it, state) {
+async function sendDecisionToGitHub(it, state, entry, revision) {
+  const current = () => chiefDecisions()[it.id] === entry && entry.revision === revision;
+  const mark = (values) => {
+    if (!current()) return;
+    Object.assign(entry, values);
+    chiefSaveDecisions();
+    syncDecisionLights();
+  };
+  const markUncertain = () => {
+    if (chiefDecisions()[it.id] !== entry) return;
+    Object.assign(entry, { sending: false, queued: false, sent: false, uncertain: true });
+    chiefSaveDecisions();
+    syncDecisionLights();
+  };
   const rr = rooms.find(r => r.id === it.room);
   const who = rr ? rr.tag : (it.room || "미지정");
   const where = rr ? rr.title : "";
   const lbl = decisionLabel(state);
-  return {
-    title: `[결재·${lbl}] ${it.title}`,
-    body: [
-      `안건 ID: ${it.id}`,
-      `결정: ${lbl}`,
-      `담당: ${who}${where ? ` (${where})` : ""}`,
-      `시각: ${new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}`
-    ].join("\n")
-  };
+  const title = `[결재·${lbl}] ${it.title}`;
+  const body = [
+    `안건 ID: ${it.id}`,
+    `결정: ${lbl}`,
+    `담당: ${who}${where ? ` (${where})` : ""}`,
+    `시각: ${new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}`
+  ].join("\n");
+
+  let relayKey = "";
+  try { relayKey = (localStorage.getItem("liveoffice_relay_key") || "").trim(); } catch (e) {}
+  if (relayKey) {
+    entry.sending = true;
+    syncDecisionLights();
+    try {
+      const res = await fetch("https://ntfy.sh/" + encodeURIComponent(relayKey), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: it.id,
+          title: it.title,
+          room: it.room,
+          who,
+          where,
+          state,
+          label: lbl,
+          phrase: chiefPhrase(it, state),
+          ts: Date.now()
+        })
+      });
+      if (res.ok) {
+        mark({ sending: false, queued: false, sent: true, relay: true, opened: false });
+        return;
+      }
+      if (res.status >= 500) { markUncertain(); return; }
+      mark({ sending: false, queued: false, sent: false, error: "중계 서버가 전송을 거절했습니다" });
+    } catch (err) {
+      markUncertain();
+    }
+    // Do not silently send the same request to a second, public destination.
+    return;
+  }
+
+  let tok = "";
+  try { tok = localStorage.getItem("liveoffice_gh_token") || ""; } catch (e) {}
+  if (tok) {
+    entry.sending = true;
+    syncDecisionLights();
+    try {
+      const endpoint = entry.issueNum
+        ? `https://api.github.com/repos/shgmlwhd03-commits/-/issues/${entry.issueNum}`
+        : "https://api.github.com/repos/shgmlwhd03-commits/-/issues";
+      const method = entry.issueNum ? "PATCH" : "POST";
+      const payload = entry.issueNum
+        ? { title, body, state: "open" }
+        : { title, body, labels: ["decision"] };
+      const res = await fetch(endpoint, {
+        method,
+        headers: {
+          "Accept": "application/vnd.github+json",
+          "Authorization": "Bearer " + tok,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        // Preserve the receipt even if a newer choice was made while awaiting it.
+        entry.issueNum = data.number;
+        entry.issueUrl = data.html_url;
+        mark({ sending: false, queued: false, sent: true, opened: false });
+        chiefSaveDecisions();
+        return;
+      }
+      if (res.status >= 500) { markUncertain(); return; }
+      mark({ sending: false, queued: false, sent: false, error: "GitHub 전송을 거절했습니다" });
+    } catch (err) {
+      markUncertain();
+    }
+    return;
+  }
+
+  const url = "https://github.com/shgmlwhd03-commits/-/issues/new?labels=decision&title=" +
+    encodeURIComponent(title) + "&body=" + encodeURIComponent(body);
+  entry.sending = false;
+  entry.queued = false;
+  entry.opened = true;
+  entry.sent = false;
+  chiefSaveDecisions();
+  syncDecisionLights();
+  window.open(url, "_blank", "noopener");
 }
 
 function chiefDecide(e, idx, state) {
@@ -1017,24 +1142,25 @@ function chiefDecide(e, idx, state) {
   d[it.id] = entry;
   chiefSaveDecisions();
   syncDecisionLights();
-  // 접수창은 클릭 직후 바로 연다. 비동기 전송 안에서 열면 브라우저가 팝업을 막아
-  // 버튼이 아무 반응 없이 끝난다. 자동 전송 경로(토큰·중계 키)는 폐기했다.
-  const draft = chiefIssueDraft(it, state);
-  const popUrl = "https://github.com/shgmlwhd03-commits/-/issues/new?labels=decision&title=" +
-    encodeURIComponent(draft.title) + "&body=" + encodeURIComponent(draft.body);
-  const pop = window.open(popUrl, "_blank", "noopener");
-  Object.assign(entry, pop
-    ? { sending: false, queued: false, sent: false, opened: true, error: "" }
-    : { sending: false, queued: false, sent: false, opened: false, error: "팝업이 차단돼 접수창을 열지 못했습니다. 브라우저 팝업 허용 후 다시 눌러 주세요." });
-  chiefSaveDecisions();
-  syncDecisionLights();
+  const previous = CHIEF_SENDS.get(it.id) || Promise.resolve();
+  const next = previous.catch(() => {}).then(async () => {
+    // Coalesce choices not yet sent. Never let an older response confirm a new one.
+    if (d[it.id] !== entry || entry.revision !== revision || entry.uncertain) return;
+    entry.queued = false;
+    entry.sending = true;
+    chiefSaveDecisions();
+    syncDecisionLights();
+    await sendDecisionToGitHub(it, state, entry, revision);
+  });
+  CHIEF_SENDS.set(it.id, next);
+  next.finally(() => {
+    if (CHIEF_SENDS.get(it.id) === next) CHIEF_SENDS.delete(it.id);
+  }).catch(() => {});
 }
 
 function chiefUndoable(it) {
   const entry = chiefDecisions()[it.id];
-  // 접수가 확인되지 않은 "접수창 열림"은 지우고 다시 시도할 수 있어야 한다.
-  // 접수 확인(sent·issueNum)·전송 중·수신 미확인 건은 지우지 않는다.
-  return !(entry && (CHIEF_SENDS.has(it.id) || entry.sent || entry.issueNum || entry.uncertain));
+  return !(entry && (CHIEF_SENDS.has(it.id) || entry.sent || entry.opened || entry.issueNum || entry.uncertain));
 }
 
 function chiefUndo(e, idx) {
@@ -1080,77 +1206,6 @@ function compactDecisionReport(title, entry, content) {
   return `<details class="decision-compact"><summary><b>${esc(title)}</b><span title="${esc(decisionBadge(entry))}">${decisionLabel(entry.s)} 접수 · 처리 대기</span><small>상세</small></summary>${content}</details>`;
 }
 
-/* 승인·불허·재심의 조작은 👑 대표님 보고의 결재 큐에서만 그린다.
-   비서실 목록과 부서 신호는 진행 상태만 보여 주고 대표님 결재로 연결한다. */
-function goOwnerDecide(e) {
-  if (e) e.stopPropagation();
-  openReport("owner");
-}
-
-function chiefDecisionActions(it, sourceIdx, d) {
-  const decBtns = (sel) =>
-    `<button class="cr-ok${sel === "ok" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="승인 선택 저장 · 아직 접수 안 됨${sel === "ok" ? " · 현재 선택" : sel ? " · 누르면 승인으로 변경" : ""}">승인</button>` +
-    `<button class="cr-no${sel === "no" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="불허 선택 저장 · 아직 접수 안 됨${sel === "no" ? " · 현재 선택" : sel ? " · 누르면 불허로 변경" : ""}">불허</button>` +
-    `<button class="cr-re${sel === "re" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 선택 저장 · 아직 접수 안 됨 · 신호 유지${sel === "re" ? " · 현재 선택" : sel ? " · 누르면 재심의로 변경" : ""}">재심의</button>`;
-  return d
-    ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${decisionBadge(d)}</span>` +
-      (it.lane === "wait" ? "" : `<span class="cr-clr" title="실제 처리 완료 전이므로 신호와 대기 목록을 유지합니다">신호 유지</span>`) +
-      (it.lane === "red" ? "" : decBtns(d.s)) +
-      (d.issueUrl ? `<a class="cr-cp" href="${esc(d.issueUrl)}" target="_blank" rel="noopener" title="접수된 GitHub 이슈 열기">🔗 #${d.issueNum}</a>` : `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${sourceIdx})" title="결정 문구 복사">📋 문구</button>`) +
-      (chiefUndoable(it) ? `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${sourceIdx})" title="미확인·미접수 선택 지우기">↺</button>` : "")
-    : it.lane === "red"
-    ? `<span class="rs-rm">오너 직접 처리 건 · 버튼 없음</span>`
-    : decBtns(null);
-}
-
-/* 비서실 진행 보고 전용: 상태 배지와 기록 링크만 남기고 결정 버튼은 두지 않는다. */
-function chiefProgressActions(it, d) {
-  const status = d
-    ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${decisionBadge(d)}</span>` +
-      (it.lane === "wait" ? "" : `<span class="cr-clr" title="실제 처리 완료 전이므로 신호와 대기 목록을 유지합니다">신호 유지</span>`) +
-      (d.issueUrl ? `<a class="cr-cp" href="${esc(d.issueUrl)}" target="_blank" rel="noopener" title="접수된 GitHub 이슈 열기">🔗 #${d.issueNum}</a>` : "")
-    : it.lane === "red"
-    ? `<span class="rs-rm">오너 직접 처리 건 · 버튼 없음</span>`
-    : it.lane === "wait"
-    ? `<span class="rs-rm">⏳ 진행·대기 중 · 결재 불필요</span>`
-    : `<span class="rs-rm">👑 대표님 결재 대기</span>`;
-  return status + (it.lane === "red" || it.lane === "wait" ? "" : `<button class="cr-owner" type="button" onclick="goOwnerDecide(event)" title="👑 대표님 보고의 결재 큐로 이동">👑 대표님 결재</button>`);
-}
-
-function chiefRowHtml(it, sourceIdx, act) {
-  const rr = rooms.find(r => r.id === it.room);
-  const rm = rr ? rr.title : "";
-  const d = chiefDecisions()[it.id];
-  const redRead = it.lane === "red" && !redGroupUnread(it);
-  const ack = it.lane === "red" ? (redRead ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : `<button class="red-ack" type="button" onkeydown="event.stopPropagation()" onclick="acknowledgeRed(event, 'chief', ${sourceIdx})">확인</button>`) : "";
-  const row = `<div class="chief-row ${it.lane}${redRead ? " read" : ""}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" data-room="${esc(it.room)}">
-        <div class="cr-main"><b>${esc(it.title)}</b>${it.lane === "wait" ? "" : `<p class="cr-review">부총괄·관리자 교차검수: 미확인</p>`}</div>
-        <span class="cr-act">${act}</span>
-        <details class="cr-detail"${chiefCanCompact(it, d) ? " open" : ""}><summary>상세 보기${rm ? " · " + esc(rm) : ""}</summary>
-          ${it.detail ? `<p>${esc(it.detail)}</p>` : ""}
-          ${it.room ? `<button class="cr-go" type="button" onclick="openReport('${esc(it.room)}')">원보고 보기 ›</button>` : ""}
-          ${it.url ? `<a class="cr-url" href="${esc(it.url)}" target="_blank" rel="noopener">↗ ${esc(it.urlLabel)}</a>` : ""}
-          ${ack}
-        </details>
-      </div>`;
-  return chiefCanCompact(it, d) ? compactDecisionReport(it.title, d, row) : row;
-}
-
-/* 👑 대표님 보고 전용 결재 큐: 비서실 진행 보고에서 버튼을 빼고, 승인·불허·재심의는 여기서만 받는다. */
-function ownerApprovalsHtml() {
-  if (!CHIEF) CHIEF = chiefData(null);
-  const dec = chiefDecisions();
-  const allItems = CHIEF.items;
-  const items = allItems.filter(it => it.lane !== "wait" && TaskArchive.bucket(it) !== "archived")
-    .sort((a, b) => Number(chiefCanCompact(a, dec[a.id])) - Number(chiefCanCompact(b, dec[b.id])));
-  const pending = items.filter(it => it.lane !== "red" && it.lane !== "wait" && !chiefCanCompact(it, dec[it.id])).length;
-  const rows = items.length ? items.map(it => {
-    const sourceIdx = allItems.indexOf(it);
-    return chiefRowHtml(it, sourceIdx, chiefDecisionActions(it, sourceIdx, dec[it.id]));
-  }).join("") : `<div class="chief-row wait"><span class="cr-lane">✅</span><span class="cr-tx"><b>지금 결재 대기 중인 건이 없습니다</b></span></div>`;
-  return `<div class="rm-sec"><div class="rm-h">🖊️ 대표님 결재 · 승인 대기 ${pending}건<em class="rm-hint">승인·불허·재심의는 여기서만 선택</em></div><p class="rm-sig-note">버튼을 누르면 이 브라우저에 결정이 저장되고 GitHub 접수창이 열립니다. 접수는 열린 창에서 직접 제출해야 하고, 도착이 확인되기 전에는 실행으로 처리하지 않고 목록과 신호를 유지합니다.</p><div class="chief-body owner-queue">${rows}</div><div class="chief-tools"><a class="chief-report" href="https://github.com/shgmlwhd03-commits/-/issues?q=label%3Adecision" target="_blank" rel="noopener">📥 접수된 결재함 보기 ›</a></div></div>`;
-}
-
 function renderChief(raw) {
   if (raw !== undefined) CHIEF = chiefData(raw);
   if (!CHIEF) CHIEF = chiefData(null);
@@ -1172,25 +1227,54 @@ function renderChief(raw) {
   if (cnt) cnt.innerHTML = `<span class="cc-red${unreadRedItems().length ? "" : " read"}">${unreadRedItems().length ? "🔴" : "⚪"} ${unreadRedItems().length}</span><span class="cc-blue">🔵 ${n.blue}</span><span class="cc-wait">⏳ ${n.wait}</span>`;
   const say = document.getElementById("chief-say");
   const localN = okN + noN + reN;
-  if (say) say.textContent = `일꾼 진행 보고 전용 · 승인·결재는 👑 대표님(8F)에서 · 🔴 ${n.red} · 🔵 ${n.blue} · ⏳ ${n.wait}` + (localN ? ` · 이 브라우저 결정 기록 ${localN}건 (실제 접수 연결 미확인)` : '');
-  body.innerHTML = items.length ? items.map((it) => {
+  const route = hasRelayKey() ? '원터치 접수 연결됨(중계)' : (ghToken() ? '원터치 접수 연결됨(결재함)' : '접수 시 GitHub 결재함 접수창');
+  if (say) say.textContent = `관리자·부총괄 검토 → 총괄 팩트체크·승인 · 접수·처리 확인 전 대기 🔴 ${n.red} · 🔵 ${n.blue} · ⏳ ${n.wait}` + (localN ? ` · 이 브라우저 선택 ${localN}건` : '') + ' · ' + route;
+  body.innerHTML = items.length ? items.map((it, idx) => {
     const sourceIdx = allItems.indexOf(it);
-    return chiefRowHtml(it, sourceIdx, chiefProgressActions(it, dec[it.id]));
+    const rr = rooms.find(r => r.id === it.room);
+    const rm = rr ? rr.title : "";
+    const d = dec[it.id];
+    const redRead = it.lane === "red" && !redGroupUnread(it);
+    const ack = it.lane === "red" ? (redRead ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : `<button class="red-ack" type="button" onkeydown="event.stopPropagation()" onclick="acknowledgeRed(event, 'chief', ${sourceIdx})">확인</button>`) : "";
+    const decBtns = (sel) =>
+      `<button class="cr-ok${sel === "ok" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="승인 선택 저장 · 아직 접수 안 됨${sel === "ok" ? " · 현재 선택" : sel ? " · 누르면 승인으로 변경" : ""}">승인</button>` +
+      `<button class="cr-no${sel === "no" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="반려 선택${sel === "no" ? " · 현재 선택" : sel ? " · 누르면 반려로 변경" : ""} · 원터치 키·토큰이 있으면 즉시 접수, 없으면 접수창 열림">반려</button>` +
+      `<button class="cr-re${sel === "re" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 선택 저장 · 아직 접수 안 됨 · 신호 유지${sel === "re" ? " · 현재 선택" : sel ? " · 누르면 재심의로 변경" : ""}">재심의</button>`;
+    const act = d
+      ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${decisionBadge(d)}</span>` +
+        (it.lane === "wait" ? "" : `<span class="cr-clr" title="실제 처리 완료 전이므로 신호와 대기 목록을 유지합니다">신호 유지</span>`) +
+        (it.lane === "red" ? "" : decBtns(d.s)) +
+        (d.issueUrl ? `<a class="cr-cp" href="${esc(d.issueUrl)}" target="_blank" rel="noopener" title="접수된 GitHub 이슈 열기">🔗 #${d.issueNum}</a>` : `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${sourceIdx})" title="결정 문구 복사">📋 문구</button>`) +
+        (chiefUndoable(it) ? `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${sourceIdx})" title="미접수 선택 지우기">↺</button>` : "")
+      : it.lane === "red"
+      ? `<span class="rs-rm">오너 직접 처리 건 · 버튼 없음</span>`
+      : decBtns(null);
+    const row = `<div class="chief-row ${it.lane}${redRead ? " read" : ""}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" data-room="${esc(it.room)}">
+        <div class="cr-main"><b>${esc(it.title)}</b><p class="cr-review">총괄 팩트검토: 미확인</p></div>
+        <span class="cr-act">${act}</span>
+        <details class="cr-detail"${chiefCanCompact(it, d) ? " open" : ""}><summary>상세 보기${rm ? " · " + esc(rm) : ""}</summary>
+          ${it.detail ? `<p>${esc(it.detail)}</p>` : ""}
+          ${it.room ? `<button class="cr-go" type="button" onclick="openReport('${esc(it.room)}')">원보고 보기 ›</button>` : ""}
+          ${it.url ? `<a class="cr-url" href="${esc(it.url)}" target="_blank" rel="noopener">↗ ${esc(it.urlLabel)}</a>` : ""}
+          ${ack}
+        </details>
+      </div>`;
+    return chiefCanCompact(it, d) ? compactDecisionReport(it.title, d, row) : row;
   }).join("") : `<div class="chief-row wait"><span class="cr-lane">✅</span><span class="cr-tx"><b>지금 대기 중인 건이 없습니다</b></span></div>`;
   applyChiefState();
 }
 
 /* ================= 🛟 비상 업무 재분장(백업) 매트릭스 =================
-   3인(투덜이·해병이 부총괄·수박이 이사) 중 누가 오프·크레딧 소진·연결 지연으로
+   3인(투덜이·해병이 부장·수박이 이사) 중 누가 오프·크레딧 소진·연결 지연으로
    빠져도 남은 인원이 1차→2차로 빈자리를 메운다. 부모님 폰 직접 접근은 하지 않는다. */
 const BACKUP_FALLBACK = {
   title: "비상 업무 백업 매트릭스 · 3인",
   note: "부모님 폰 직접 접근 금지 · 자금 실행은 오너",
   rule: "1차가 오프·크레딧 소진·연결 지연이면 2차가 이어받고, 3명 이상 동시에 빠지면 오너 승인 대기로 전환한다.",
   members: [
-    { name: "투덜이 총괄", part: "카페·B2B·티스토리·체험단", state: "on", backup1: "해병이 부총괄", backup2: "수박이 이사" },
-    { name: "해병이 부총괄", part: "블로그·자산", state: "on", backup1: "투덜이 총괄", backup2: "수박이 이사" },
-    { name: "수박이 이사", part: "위탁판매·스토어 실행 총괄", state: "on", backup1: "해병이 부총괄", backup2: "투덜이 총괄" }
+    { name: "투덜이 부장", part: "카페·B2B·티스토리·체험단", state: "on", backup1: "해병이 부장", backup2: "수박이 이사" },
+    { name: "해병이 부장", part: "블로그·자산·총괄", state: "on", backup1: "투덜이 부장", backup2: "수박이 이사" },
+    { name: "수박이 이사", part: "위탁판매·스토어 실행 총괄", state: "on", backup1: "해병이 부장", backup2: "투덜이 부장" }
   ]
 };
 
@@ -1237,12 +1321,16 @@ function renderBackup(raw) {
 /* ================= 🧩 6F 분장표 (2파트 역할 · 전담 채널) =================
    개인정보 없음: 역할 별칭·담당 업무·공개 채널만 담는다. */
 const ROSTER_DEFAULT = {
-  title: "6F 분장표 · 2파트",
+  title: "6F 경영진 분장표 · 5인 + 수박이",
   note: "역할 별칭으로만 표기 · status.json 동기화",
   rule: "큰 이미지·로고는 외부 AI(제미나이·클로드·챗GPT) 제작본 활용 · 불필요한 핑퐁 축소",
   items: [
-    { id: "td", name: "투덜이 총괄", role: "투덜이 측 업무 운영 및 인수인계", state: "wait", chip: "가동 미확인" },
-    { id: "hb", name: "해병이 부총괄", role: "해병이 측 업무 운영 및 인수인계", state: "wait", chip: "가동 미확인" }
+    { id: "td", name: "👑 총괄 · 투덜이", role: "업무 배분·우선순위·팩트체크·전결 승인 → 대표님 상신", state: "wait", chip: "가동 미확인" },
+    { id: "hb", name: "👑 부총괄 · 해병이", role: "7개 부서 운영 + 관리자와 교차검토", state: "wait", chip: "가동 미확인" },
+    { id: "muse", name: "🧠 관리자 · 뮤즈", role: "관리자 검토(1차) · 회의록·아카이브 · 전 업무 숙지", state: "wait", chip: "연결 확인" },
+    { id: "manus", name: "🤖 부관리자 · 큐(Manus)", role: "30초 AI 영상·카드뉴스 시범 · 소화기·애드센스 보조 검수", state: "wait", chip: "08번 연결" },
+    { id: "inst", name: "🛠️ 일꾼 · Instinct", role: "조사·초안·수정·검증 실행 → 총괄 보고(기존 총괄)", state: "wait", chip: "#피클지시" },
+    { id: "subaki", name: "🍉 수박이 이사", role: "위탁판매·스마트스토어 실행 · 확정 건만 최소 알림", state: "wait", chip: "실행 담당(사람)" }
   ],
   channels: [
     { owner: "해병이", handle: "@daily.moneynote", url: "https://www.threads.com/@daily.moneynote", topic: "돈·세금·생활경제" },
@@ -1350,6 +1438,108 @@ function renderRoster(raw) {
   applyRosterState();
 }
 
+/* ================= 🧾 임무 배분표 (2026-11-27 07:37 지시 반영) =================
+   각자 맡은 임무·완료 기준·보고 시점과 결재선을 한 표로 보여 준다.
+   담당이 바뀌면 status.json(assignments)만 고치면 화면이 그대로 따라온다. */
+const ASSIGN_DEFAULT = {
+  title: "🧾 임무 배분표 · 07:37 지시 반영",
+  note: "담당 · 완료 기준 · 보고 시점",
+  route: "결재선: 담당 작성 → 관리자(뮤즈)·부총괄(해병이) 검토 → 총괄(투덜이) 팩트체크·승인 → 대표님(자금·최종)",
+  items: [
+    { no: "1", task: "애드센스 2곳 · daily-money-note", owner: "부총괄 해병이", state: "work", note: "11:00 고향사랑기부제 교정본 발행 + 색인 · 완료: 공개 URL·색인 확인 · 보고 11:15" },
+    { no: "2", task: "애드센스 2곳 · tudeori", owner: "일꾼 Instinct", state: "block", note: "잔여 정책·구조 점검 + 모바일 안내 동선 · 카카오 재인증 대기(대표님) · 보고 10:00" },
+    { no: "3", task: "소화기 3채널 콘텐츠", owner: "일꾼 Instinct", state: "wait", note: "제조년월 2024년 이후·사진 권리 확보 → 3자 검수(해병이·뮤즈·투덜이) · 보고 12:00" },
+    { no: "4", task: "쿠팡파트너스", owner: "부총괄 해병이", state: "work", note: "최종승인용 스크린샷 채널 확정 · 보고 11:30" },
+    { no: "5", task: "30초 AI 영상·카드뉴스", owner: "부관리자 큐", state: "wait", note: "무료 범위 시범안 1건(유료 결제 없음) · 수임·계획 보고 14:00" },
+    { no: "6", task: "브랜드커넥트", owner: "일꾼 Instinct", state: "wait", note: "연결·적용 상태 + 유입·수익 확인 · 보고 12:30" },
+    { no: "7", task: "관리자 검토·회의록", owner: "관리자 뮤즈", state: "work", note: "전 업무 숙지 · 교차검수 · 회의록·아카이브 · 비상 승계 3순위" },
+    { no: "8", task: "배분·팩트체크·승인", owner: "총괄 투덜이", state: "work", note: "배분표 유지 · 결재선 준수 · 대표님 보고 · 비상 승계 1순위" }
+  ]
+};
+let ASSIGN = null;
+
+function assignData(raw) {
+  const src = (raw && typeof raw === "object" && !Array.isArray(raw)) ? raw : {};
+  const str = (v, d) => (typeof v === "string" && v.trim()) ? v.trim() : d;
+  const list = Array.isArray(src.items) ? src.items.filter(it => it && typeof it === "object" && typeof it.task === "string" && it.task.trim()) : [];
+  const st = (v) => (v === "work" || v === "wait" || v === "block" || v === "done") ? v : "wait";
+  const items = (list.length ? list : ASSIGN_DEFAULT.items).map((it, i) => ({
+    no: str(it.no, String(i + 1)),
+    task: it.task.trim(),
+    owner: str(it.owner, "미지정"),
+    state: st(it.state),
+    note: str(it.note, "")
+  }));
+  return {
+    title: str(src.title, ASSIGN_DEFAULT.title),
+    note: str(src.note, ASSIGN_DEFAULT.note),
+    route: str(src.route, ASSIGN_DEFAULT.route),
+    updated: str(src.updated, ""),
+    items
+  };
+}
+
+const ASSIGN_LABEL = { work: "진행", wait: "대기", block: "막힘", done: "완료" };
+
+function renderAssignments(raw) {
+  if (raw !== undefined) ASSIGN = assignData(raw);
+  if (!ASSIGN) ASSIGN = assignData(null);
+  const el = document.getElementById("pent-assign");
+  if (!el) return;
+  const d = ASSIGN;
+  el.innerHTML = `
+    <div class="as-head"><span>${esc(d.title)}</span><em>${esc(d.note)}</em></div>
+    <div class="as-rows">${d.items.map(it => `
+      <div class="as-row ${it.state}">
+        <span class="as-no">${esc(it.no)}</span>
+        <span class="as-tx"><b>${esc(it.task)}</b><i>${esc(it.note)}</i></span>
+        <span class="as-own">${esc(it.owner)}</span>
+        <span class="as-st">${esc(ASSIGN_LABEL[it.state] || it.state)}</span>
+      </div>`).join("")}</div>
+    <div class="as-route">${esc(d.route)}</div>`;
+}
+
+/* ================= 🎁 뮤즈(Muse) 초대코드 카드 =================
+   대표님 지시(2026-11-27 07:49~07:50)로 코드를 50KW4O로 반영한다.
+   초대 문구·토큰 지급은 Muse 측 안내이고, 한국 지역 지원 여부는 확인되지 않았으므로 그대로 밝힌다. */
+const INVITE_DEFAULT = {
+  title: "🎁 뮤즈(Muse) 초대코드",
+  code: "50KW4O",
+  url: "https://muse.ai/join",
+  note: "가입 후 48시간 이내 설정에서 코드 입력 시 10억 토큰(초대 프로그램 안내) · 초대 문구는 Muse 측 안내이며, 한국 지역 지원 여부는 확인되지 않았습니다.",
+  updated: "07:50"
+};
+let INVITE = null;
+
+function inviteData(raw) {
+  const src = (raw && typeof raw === "object" && !Array.isArray(raw)) ? raw : {};
+  const str = (v, d) => (typeof v === "string" && v.trim()) ? v.trim() : d;
+  const url = (typeof src.url === "string" && /^https?:\/\//.test(src.url)) ? src.url : INVITE_DEFAULT.url;
+  return {
+    title: str(src.title, INVITE_DEFAULT.title),
+    code: str(src.code, INVITE_DEFAULT.code),
+    url,
+    note: str(src.note, INVITE_DEFAULT.note),
+    updated: str(src.updated, INVITE_DEFAULT.updated)
+  };
+}
+
+function renderInvite(raw) {
+  if (raw !== undefined) INVITE = inviteData(raw);
+  if (!INVITE) INVITE = inviteData(null);
+  const el = document.getElementById("pent-invite");
+  if (!el) return;
+  const d = INVITE;
+  el.innerHTML = `
+    <div class="iv-head"><span>${esc(d.title)}</span><em>${esc(d.updated)} 반영</em></div>
+    <div class="iv-body">
+      <span class="iv-code" id="iv-code">${esc(d.code)}</span>
+      <button class="iv-copy" type="button" onclick="copyText(INVITE.code, this)" title="초대코드 복사">코드 복사</button>
+      <a class="iv-link" href="${esc(d.url)}" target="_blank" rel="noopener">muse.ai/join ↗</a>
+    </div>
+    <div class="iv-note">${esc(d.note)}</div>`;
+}
+
 /* ================= 상태 동기화 ================= */
 let STATUS = null;
 let lastSync = "";
@@ -1449,11 +1639,12 @@ function applyStatus(data) {
   const collab = src.collab;
   COLLAB_ACTIVE = !!(collab === true || (collab && typeof collab === "object" && collab.active));
   applyCorridor();
-  applyMeeting(src.meeting || null);
   renderRevenue(src.revenue);
   renderCredit(src.credit);
   renderShop(src.commerce);
   renderRoster(src.roster);
+  renderAssignments(src.assignments);
+  renderInvite(src.invite);
   refreshReport();
   updatePill();
 }
@@ -1483,15 +1674,15 @@ async function loadStatus() {
 const SHOP_STEPS = [
   {
     key: "tax", name: "① 개인 판매자 기준 정리", note: "스마트스토어 판매 자격·수수료·정산 구조 확인 · 사업자등록은 추후",
-    ask: "[위탁판매 1단계 · 개인 판매자 기준] 개인사업자(간이과세자) 신규 등록은 추후로 미루고, 우선 개인 판매자 기준으로 스마트스토어를 준비합니다. 다음을 정리해 주세요. ① 사업자등록 없이 개인 판매자로 판매할 수 있는 범위와 제한 ② 판매 수수료·정산 주기·정산 계좌 등록 조건 ③ 개인 판매자도 필요한 구매안전서비스(에스크로) 이용확인증 발급 조건 ④ 사업자등록 전에 미리 준비해 둘 서류·세팅. 실제 주소·계좌·인증 정보는 채팅에 쓰지 말아 주세요."
+    ask: "[위탁판매 1단계 · 개인 판매자 기준] 개인사업자(간이과세자 525101) 신규 등록은 추후로 미루고, 우선 개인 판매자 기준으로 스마트스토어를 준비합니다. 다음을 정리해 주세요. ① 사업자등록 없이 개인 판매자로 판매할 수 있는 범위와 제한 ② 판매 수수료·정산 주기·정산 계좌 등록 조건 ③ 개인 판매자도 필요한 구매안전서비스(에스크로) 이용확인증 발급 조건 ④ 사업자등록 전에 미리 준비해 둘 서류·세팅. 실제 주소·계좌·인증 정보는 채팅에 쓰지 말아 주세요."
   },
   {
-    key: "biz", name: "② 스마트스토어 개설·정산계좌 등록", note: "판매자 계정 개설 · 정산 계좌 사용자 지정 계좌(비공개) · 금융 인증은 직접",
-    ask: "[위탁판매 2단계 · 스마트스토어 개설과 정산계좌] 개인 판매자 계정으로 스마트스토어 센터를 개설하는 절차를 정리해 주세요. ① 개설 화면 입력 항목과 스토어 형태 선택 ② 정산 계좌 등록 절차(정산 계좌 확정(계좌·명의 비공개)) ③ 구매안전서비스(에스크로) 이용확인증 발급·제출 방식 ④ 개설 직후 체크리스트. 금융 인증·계좌번호 입력은 오너/수박이가 직접 하니 채팅에 쓰지 말아 주세요."
+    key: "biz", name: "② 스마트스토어 개설·정산계좌 등록", note: "판매자 계정 개설 · 정산 계좌 카카오뱅크(수박이 이사 본인 명의) · 금융 인증은 직접",
+    ask: "[위탁판매 2단계 · 스마트스토어 개설과 정산계좌] 개인 판매자 계정으로 스마트스토어 센터를 개설하는 절차를 정리해 주세요. ① 개설 화면 입력 항목과 스토어 형태 선택 ② 정산 계좌 등록 절차(수박이 이사 본인 명의 카카오뱅크 계좌로 확정) ③ 구매안전서비스(에스크로) 이용확인증 발급·제출 방식 ④ 개설 직후 체크리스트. 금융 인증·계좌번호 입력은 오너/수박이가 직접 하니 채팅에 쓰지 말아 주세요."
   },
   {
-    key: "report", name: "③ 사업자등록·통신판매업 신고 (추후)", note: "간이과세자 · 판매 실적·필요 시점에 세무사 확인 → 사업자등록 → 정부24 신고",
-    ask: "[위탁판매 3단계 · 사업자등록과 통신판매업 신고 — 추후] 개인사업자(간이과세자 · 전자상거래 소매업) 신규 등록을 추후 진행할 때를 대비해 준비 사항만 정리해 주세요. ① 개인사업자 등록 없이 판매하다 등록이 필요해지는 시점·기준(매출·정산·세금계산서) ② 세무사 대행 시 서류·비용·기간과 홈택스 직접 신청의 차이 ③ 자가 사업장이라 임대차 특약 확인이 불필요한지 ④ 정부24 통신판매업 신고 대상과 면제 조건. 실제 주소·주민번호는 채팅에 쓰지 말아 주세요."
+    key: "report", name: "③ 사업자등록·통신판매업 신고 (추후)", note: "간이과세자 525101 · 자택(자가) · 판매 실적·필요 시점에 세무사 확인 → 사업자등록 → 정부24 신고",
+    ask: "[위탁판매 3단계 · 사업자등록과 통신판매업 신고 — 추후] 개인사업자(간이과세자 525101 · 전자상거래 소매업 · 자택(자가)) 신규 등록을 추후 진행할 때를 대비해 준비 사항만 정리해 주세요. ① 개인사업자 등록 없이 판매하다 등록이 필요해지는 시점·기준(매출·정산·세금계산서) ② 세무사 대행 시 서류·비용·기간과 홈택스 직접 신청의 차이 ③ 자가 사업장이라 임대차 특약 확인이 불필요한지 ④ 정부24 통신판매업 신고 대상과 면제 조건. 실제 주소·주민번호는 채팅에 쓰지 말아 주세요."
   },
   {
     key: "wholesale", name: "도매처 연동 (국내 위탁)", note: "국내 위탁처(도매매·오너클랜) · 공개 도매가 후보는 철회·보류 · 사업자 등급가 확인",
@@ -1763,8 +1954,8 @@ function reportData(id) {
   const credit = (typeof base.credit === "string" && base.credit.trim()) ? base.credit.trim() : "";
   const now = arr(base.now);
   // Reporting scope follows the source's explicit department links, never ceo styling.
-  const coordinator = id === "instinct";
-  const manager = ["ceo_haebyeong", "ceo_tudeori"].includes(id);
+  const coordinator = id === "ceo_tudeori";          // 총괄(투덜이): 전체 종합 보고
+  const manager = ["ceo_haebyeong", "manager_muse", "deputy_manus"].includes(id);   // 부총괄·관리자·부관리자
   const overview = coordinator || manager || id === "owner";
   const roster = coordinator ? ROSTER : null;
   const signals = id === "owner" ? {red:[],blue:[]} : roomSignals(id, coordinator, depts.map(x => x.id));
@@ -1825,152 +2016,9 @@ function renderPrizePanel(id) {
   return `<section class="prize-progress" aria-label="응모 진행결과"><h3>🎯 응모 진행결과</h3><p class="pp-note">기록 정리: ${esc(stamp)} KST<br>${esc(data.notice)}</p><div class="pp-stats"><span>응모 상태 ≠ 당첨 결과</span><span>이 기록에서 당첨 확인 없음</span></div>${groups.map(g=>`<section class="pp-group"><h4>${esc(g.title)}</h4><p class="pp-note">${esc(g.note || "")}</p><div class="pp-items">${(Array.isArray(g.items)?g.items:[]).map(item).join("")}</div></section>`).join("")}<p class="pp-note">이 창은 조회 전용입니다. 클릭해도 응모·승인·계정 사용이나 업무 상태 변경은 일어나지 않습니다.</p></section>`;
 }
 
-const STOCK_LS_KEY = "office_stock_local_v1";
-const STOCK_LS_KEY2 = "office_stock_local_v2";
-/* 내 기기 전용(v2): 체결 내역 목록 + 현재가(직접 입력). 서버·저장소로 전송하지 않는다.
-   #sf=YYYYMMDD:수량:가격[:HHMM[:수수료]],... 형태의 주소 조각(fragment)은 서버로 전송되지 않으며, 읽은 즉시 저장하고 주소창에서 지운다. */
-function stockV2Load() {
-  try {
-    const v = JSON.parse(localStorage.getItem(STOCK_LS_KEY2) || "null");
-    if (v && typeof v === "object" && Array.isArray(v.fills)) return v;
-  } catch (e) {}
-  try {
-    const o = JSON.parse(localStorage.getItem(STOCK_LS_KEY) || "null");
-    if (o && Number(o.shares) > 0 && Number.isFinite(Number(o.avg))) {
-      return { fills: [{ d: "", q: Number(o.shares), p: Number(o.avg), legacy: true }], price: Number(o.price) || 0, asof: o.asof || "" };
-    }
-  } catch (e) {}
-  return null;
-}
-function stockFillCmp(a, b) { const x = (a.d || "") + " " + (a.t || ""), y = (b.d || "") + " " + (b.t || ""); return x < y ? -1 : x > y ? 1 : 0; }
-function stockV2Save(v) { localStorage.setItem(STOCK_LS_KEY2, JSON.stringify(v)); }
-function stockLocalSeed() {
-  try {
-    const m = /(?:^|[#&])sf=([0-9:,.]+)/.exec(location.hash || "");
-    if (!m) return;
-    const add = [];
-    m[1].split(",").forEach(seg => {
-      const p = seg.split(":");
-      if (p.length < 3 || p.length > 5 || !/^\d{8}$/.test(p[0])) return;
-      const q = Number(p[1]), pr = Number(p[2]);
-      if (!(q > 0 && q <= 100000) || !(pr > 0 && pr <= 100000000)) return;
-      const t = /^\d{4}$/.test(p[3] || "") ? p[3].slice(0, 2) + ":" + p[3].slice(2) : "";
-      const fe = Number(p[4] || 0);
-      add.push({ d: p[0].slice(0, 4) + "-" + p[0].slice(4, 6) + "-" + p[0].slice(6, 8), t, q, p: pr, fee: fe >= 0 && fe <= 1000000 ? fe : 0 });
-    });
-    if (add.length) {
-      const cur = stockV2Load() || { fills: [], price: 0, asof: "" };
-      cur.fills = cur.fills.filter(f => !f.legacy);
-      add.forEach(a => { const k = cur.fills.findIndex(f => f.d === a.d && f.q === a.q && f.p === a.p && (!f.t || !a.t || f.t === a.t)); if (k < 0) cur.fills.push(a); else cur.fills[k] = a; });
-      cur.fills.sort(stockFillCmp);
-      stockV2Save(cur);
-    }
-    history.replaceState(null, "", location.pathname + location.search);
-  } catch (e) {}
-}
-stockLocalSeed();
-function stockLocalHtml(msg) {
-  const v = stockV2Load();
-  const won = n => "₩" + Math.round(n).toLocaleString("ko-KR");
-  const won2 = n => "₩" + (Math.round(n * 100) / 100).toLocaleString("ko-KR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const T = "font-size:14px;line-height:1.5;color:#cbd5e1";
-  const lab = "display:block;font-size:14px;color:#e2e8f0;margin-top:8px";
-  const inp = "display:block;width:100%;box-sizing:border-box;font-size:16px;padding:8px 10px;margin-top:3px;background:#0b1220;color:#f1f5f9;border:1px solid #475569;border-radius:6px";
-  const btn = "font-size:14px;padding:8px 12px;border-radius:6px;cursor:pointer";
-  const fills = v ? v.fills : [];
-  const shares = fills.reduce((s, f) => s + f.q, 0);
-  const cost = fills.reduce((s, f) => s + f.q * f.p, 0);
-  const avg = shares ? cost / shares : 0;
-  const fee = fills.reduce((s, f) => s + (Number(f.fee) || 0), 0);
-  const costFee = cost + fee, avgFee = shares ? costFee / shares : 0;
-  const price = v && Number(v.price) > 0 ? Number(v.price) : 0;
-  let top = "";
-  if (shares > 0) {
-    const value = shares * price, profit = value - cost, pct = cost ? profit / cost * 100 : 0;
-    top = `<div style="${T};display:flex;flex-wrap:wrap;gap:4px 14px"><span>보유 ${esc(String(shares))}주</span><span>매수합계 ${won(cost)}</span><span>평균단가 ${won2(avg)}</span></div><div style="${T};display:flex;flex-wrap:wrap;gap:4px 14px"><span>수수료 ${won(fee)}</span><span>수수료 포함 ${won(costFee)}</span><span>포함 평균 ${won2(avgFee)}</span></div>`;
-    if (price) {
-      const t = new Date(v.asof), ok = v.asof && !Number.isNaN(t.getTime());
-      const stamp = ok ? t.toLocaleString("ko-KR", { timeZone: "Asia/Seoul", hour12: false }) : "시각 미입력";
-      const stale = !ok || (Date.now() - t.getTime() > 24 * 3600 * 1000);
-      const profitF = value - costFee, pctF = costFee ? profitF / costFee * 100 : 0;
-      top += `<div class="${profit < 0 ? "down" : "up"}" style="font-size:20px;font-weight:700;margin:4px 0">손익(수수료 제외) ${profit < 0 ? "−" : "+"}${won(Math.abs(profit))} (${pct.toFixed(2)}%)</div><div class="${profitF < 0 ? "down" : "up"}" style="font-size:15px;margin:2px 0">수수료 포함 손익 ${profitF < 0 ? "−" : "+"}${won(Math.abs(profitF))} (${pctF.toFixed(2)}%)</div><div style="${T}">입력한 현재가 ${won(price)} · 기준 ${esc(stamp)} KST · <b>실시간 시세 아님</b></div>${stale ? `<div style="font-size:14px;line-height:1.5;color:#fbbf24;margin-top:4px">⚠️ 현재가 기준 시각이 없거나 24시간이 지났습니다. 새 값으로 바꾸기 전까지 현재 손익으로 보지 마세요.</div>` : ""}`;
-    } else {
-      top += `<div style="${T};margin-top:4px">현재가를 입력하면 손익을 계산합니다. 자동 실시간 시세는 연결되어 있지 않습니다.</div>`;
-    }
-    /* 체결 그래프: 체결가(점) · 평균단가(점선) · 입력 현재가(실선) */
-    const W = 300, H = 130, L = 8, R = 8, Tp = 16, B = 26;
-    const ys = fills.map(f => f.p).concat([avg]).concat(price ? [price] : []);
-    let lo = Math.min(...ys), hi = Math.max(...ys);
-    const pad = Math.max(5, (hi - lo) * 0.18); lo -= pad; hi += pad;
-    const Y = p => Tp + (hi - p) / (hi - lo) * (H - Tp - B);
-    const n = fills.length;
-    const X = i => n === 1 ? W / 2 : L + 16 + i * (W - L - R - 32) / (n - 1);
-    const lbl = f => f.d ? f.d.slice(5).replace("-", "/") : "기존";
-    let svg = `<div style="${T};font-weight:700;margin-top:8px">체결가 추이 (내 체결 기록)</div><svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="내 체결가와 평균단가 그래프(시장 시세 그래프 아님)" style="display:block;margin-top:4px;background:#0b1220;border:1px solid #334155;border-radius:8px">`;
-    svg += `<line x1="${L}" x2="${W - R}" y1="${Y(avg).toFixed(1)}" y2="${Y(avg).toFixed(1)}" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="5 3"/><text x="${L + 2}" y="${(Y(avg) - 3).toFixed(1)}" font-size="11" fill="#7dd3fc">평균 ${won2(avg)}</text>`;
-    if (price) svg += `<line x1="${L}" x2="${W - R}" y1="${Y(price).toFixed(1)}" y2="${Y(price).toFixed(1)}" stroke="#fbbf24" stroke-width="1.5"/><text x="${W - R - 2}" y="${(Y(price) - 3).toFixed(1)}" font-size="11" fill="#fcd34d" text-anchor="end">입력가 ${won(price)}</text>`;
-    if (n > 1) svg += `<polyline fill="none" stroke="#64748b" stroke-width="1" points="${fills.map((f, i) => X(i).toFixed(1) + "," + Y(f.p).toFixed(1)).join(" ")}"/>`;
-    fills.forEach((f, i) => { svg += `<circle cx="${X(i).toFixed(1)}" cy="${Y(f.p).toFixed(1)}" r="4" fill="#f472b6"/><text x="${X(i).toFixed(1)}" y="${H - 12}" font-size="11" fill="#e2e8f0" text-anchor="middle">${esc(lbl(f))}</text><text x="${X(i).toFixed(1)}" y="${H - 2}" font-size="11" fill="#94a3b8" text-anchor="middle">${Math.round(f.p).toLocaleString("ko-KR")}</text>`; });
-    svg += `</svg><div style="${T};font-size:13px;margin-top:3px">점은 내 체결가이고 가로 간격은 체결 순서일 뿐 시간에 비례하지 않습니다. 같은 날 두 체결도 등간격으로 그려지며, 시장의 일중 시세 추이가 아닙니다.</div>`;
-    const rows = fills.map((f, i) => `<div style="${T};display:flex;justify-content:space-between;gap:8px;align-items:center;padding:3px 0;border-bottom:1px solid #1e293b"><span>${esc(f.d || "이전 기록")}${f.t ? " " + esc(f.t) : ""} · ${esc(String(f.q))}주 × ${won(f.p)}${Number(f.fee) ? " · 수수료 " + won(f.fee) : ""}</span><button type="button" onclick="stockLocalDelFill(${i})" style="${btn};padding:4px 10px" aria-label="이 체결 삭제">삭제</button></div>`).join("");
-    top += svg + `<div style="margin-top:6px">${rows}</div><div style="${T};font-size:13px;margin-top:4px">체결 기록은 직접 넣은 값입니다. 수수료는 입력된 값만 반영하며 세금은 반영하지 않았습니다. 매수 평균(수수료 제외)과 수수료 포함 값은 따로 표시합니다.</div>`;
-  } else {
-    top = `<div style="${T}">체결 내역이 없습니다. 아래에서 매수한 날짜·수량·체결가를 넣으면 보유, 평균단가, 그래프가 계산됩니다. 자동 실시간 시세는 연결되어 있지 않습니다.</div>`;
-  }
-  const today = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
-  const addForm = `<details style="margin-top:8px"${shares ? "" : " open"}><summary style="cursor:pointer;font-size:14px;color:#7dd3fc;padding:4px 0">체결 추가 (매주 1주)</summary><label style="${lab}">체결일<input id="sl-fd" type="date" style="${inp}" value="${today}"></label><label style="${lab}">체결 시각(선택)<input id="sl-ft" type="time" style="${inp}"></label><label style="${lab}">수수료(원, 선택)<input id="sl-ffee" type="number" step="any" min="0" inputmode="decimal" style="${inp}" value="0"></label><label style="${lab}">수량(주)<input id="sl-fq" type="number" step="1" min="1" inputmode="numeric" style="${inp}" value="1"></label><label style="${lab}">체결가(주당 원)<input id="sl-fp" type="number" step="any" min="0" inputmode="decimal" style="${inp}"></label><div style="margin-top:10px"><button type="button" onclick="stockLocalAddFill()" style="${btn}">체결 추가</button></div></details>`;
-  const pf = `<details style="margin-top:8px"><summary style="cursor:pointer;font-size:14px;color:#7dd3fc;padding:4px 0">현재가 입력(직접)</summary><label style="${lab}">현재가(원)<input id="sl-price" type="number" step="any" min="0" inputmode="decimal" style="${inp}" value="${price ? esc(String(price)) : ""}"></label><label style="${lab}">가격 기준 시각<input id="sl-asof" type="datetime-local" style="${inp}" value="${v ? esc(v.asof || "") : ""}"></label><div style="margin-top:10px"><button type="button" onclick="stockLocalSavePrice()" style="${btn}">현재가 저장</button></div></details>`;
-  const del = `<div style="margin-top:8px"><button type="button" onclick="stockLocalDelete()" style="${btn}">이 기기에서 데이터 모두 삭제</button></div>`;
-  return `${top}${addForm}${pf}${del}<div id="sl-msg" role="status" style="font-size:14px;line-height:1.5;color:#fbbf24;margin-top:6px">${msg ? esc(msg) : ""}</div><div style="${T};margin-top:8px">이 기기·브라우저에만 저장됩니다. 폰과 PC는 연동되지 않고, 사이트 데이터를 지우면 사라집니다. 공용 기기에서는 입력 후 꼭 삭제하세요. 로그인 보안이 아닙니다.</div>`;
-}
-function stockLocalRefresh(msg) {
-  const el = document.getElementById("stock-local");
-  if (el) el.innerHTML = stockLocalHtml(msg);
-}
-function stockLocalAddFill() {
-  const g = id => document.getElementById(id);
-  const d = g("sl-fd").value, q = Number(g("sl-fq").value), p = Number(g("sl-fp").value);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(d) || !(q > 0) || !(p > 0)) { const m = g("sl-msg"); if (m) m.textContent = "날짜, 수량(1 이상), 체결가(0보다 큼)를 모두 넣어 주세요."; return; }
-  const cur = stockV2Load() || { fills: [], price: 0, asof: "" };
-  cur.fills = cur.fills.filter(f => !f.legacy);
-  cur.fills.push({ d, t: g("sl-ft").value || "", q, p, fee: Math.max(0, Number(g("sl-ffee").value) || 0) });
-  cur.fills.sort(stockFillCmp);
-  try { stockV2Save(cur); } catch (e) { const m = g("sl-msg"); if (m) m.textContent = "이 브라우저에서 저장할 수 없습니다(저장 차단 상태)."; return; }
-  stockLocalRefresh("체결을 추가했습니다. 이 기기에만 저장됩니다.");
-}
-function stockLocalDelFill(i) {
-  const cur = stockV2Load(); if (!cur) return;
-  cur.fills.splice(i, 1);
-  try { stockV2Save(cur); } catch (e) {}
-  stockLocalRefresh("체결 1건을 삭제했습니다.");
-}
-function stockLocalSavePrice() {
-  const g = id => document.getElementById(id);
-  const price = Number(g("sl-price").value);
-  if (g("sl-price").value === "" || !(price > 0)) { const m = g("sl-msg"); if (m) m.textContent = "현재가는 0보다 큰 숫자로 넣어 주세요."; return; }
-  const cur = stockV2Load() || { fills: [], price: 0, asof: "" };
-  cur.fills = cur.fills.filter(f => !f.legacy || true);
-  cur.price = price; cur.asof = g("sl-asof").value || "";
-  try { stockV2Save(cur); } catch (e) { const m = g("sl-msg"); if (m) m.textContent = "이 브라우저에서 저장할 수 없습니다(저장 차단 상태)."; return; }
-  stockLocalRefresh("현재가를 저장했습니다. 이 기기에만 저장됩니다.");
-}
-function stockLocalDelete() {
-  try { localStorage.removeItem(STOCK_LS_KEY); localStorage.removeItem(STOCK_LS_KEY2); } catch (e) {}
-  stockLocalRefresh("이 기기의 저장 데이터를 삭제했습니다.");
-}
-
-const STOCK_DAUM_URL = "https://finance.daum.net/quotes/A360750";
-const STOCK_NAVER_URL = "https://stock.naver.com/domestic/stock/360750/price";
-const STOCK_GOOGLE_URL = "https://www.google.com/finance/quote/360750:KRX";
-function stockMarketHtml() {
-  const T = "font-size:14px;line-height:1.5;color:#cbd5e1";
-  const lk = "color:#7dd3fc;text-decoration:underline";
-  const btn = "display:inline-block;padding:10px 14px;margin:4px 6px 4px 0;border-radius:8px;background:#0ea5e9;color:#04121f;font-weight:700;text-decoration:none;font-size:15px";
-  return `<div id="stock-market" style="margin-bottom:10px"><div style="${T};font-weight:700">현재 시세 (TIGER 미국S&amp;P500 · KRX 360750)</div><div style="${T};font-size:13px;margin:2px 0 6px">아래 가격은 Daum 금융 화면을 이 기기에서 직접 불러온 것이며, 기준시각은 Daum 화면의 표시를 따릅니다(이 사이트의 확인 시각이 아님). 이 사이트는 시세를 저장·가공·재게시하지 않습니다. 차트는 사무실 안에 표시되지 않으니 아래 버튼으로 원본 차트를 여세요.</div><div style="height:215px;overflow:hidden;border:1px solid #334155;border-radius:8px;background:#fff"><iframe title="Daum 금융 TIGER 미국S&amp;P500 현재가" src="${STOCK_DAUM_URL}" loading="eager" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups" scrolling="no" style="width:100%;height:700px;margin-top:-125px;border:0;background:#fff;pointer-events:none"></iframe></div><div style="margin-top:6px"><a href="${STOCK_DAUM_URL}" target="_blank" rel="noopener noreferrer" style="${btn}">📈 원본 차트 열기 (Daum 금융)</a></div><div style="${T};font-size:14px;margin-top:2px">다른 화면: <a href="${STOCK_NAVER_URL}" target="_blank" rel="noopener noreferrer" style="${lk}">Naver 증권</a> · <a href="${STOCK_GOOGLE_URL}" target="_blank" rel="noopener noreferrer" style="${lk}">Google Finance</a></div></div>`;
-}
 function renderStockPanel() {
   const d = (STATUS && STATUS.invest_sp500 && STATUS.invest_sp500.chart) || null;
-  if (!d) return `<section class="stock-panel"><h3>📈 주식 시세 · 손익</h3>${stockMarketHtml()}<div style="font-size:15px;font-weight:700;color:#e2e8f0;margin:6px 0 2px">내 체결 · 손익 (내 기기 전용)</div><div style="font-size:14px;line-height:1.5;color:#cbd5e1;margin-bottom:6px">공개 화면에는 올리지 않고, 이 브라우저에만 저장합니다(서버 전송 없음).</div><div id="stock-local">${stockLocalHtml()}</div></section>`;
+  if (!d) return `<section class="stock-panel"><h3>📈 주식 손익</h3><p>보유·손익 기록은 공개 화면에서 제외했습니다(본인 전용).</p></section>`;
   const shares = Number(d.shares) || 0;
   const cost = Number(d.cost_per_share_krw) * shares;
   const value = Number(d.price_per_share_krw) * shares;
@@ -2016,11 +2064,12 @@ function chiefIndexForSignal(x, lane) {
     const act = lane === "red"
       ? `<span class="rs-rm">오너 직접 처리 건 · 버튼 없음</span>`
       : ci < 0
-      ? `<span class="rs-rm">결재는 👑 대표님 보고에서</span>`
-      : (dec
-          ? `<span class="cr-dec ${dec.s === "ok" ? "ok" : dec.s === "re" ? "re" : "no"}">${decisionBadge(dec)}</span>`
-          : `<span class="rs-rm">👑 대표님 결재 대기</span>`) +
-        `<button class="cr-owner" type="button" onclick="goOwnerDecide(event)" title="👑 대표님 보고의 결재 큐로 이동">👑 대표님 결재</button>`;
+      ? `<span class="rs-rm">결재는 상단 결재 목록에서</span>`
+      : dec
+        ? `<span class="cr-dec ${dec.s === "ok" ? "ok" : dec.s === "re" ? "re" : "no"}">${decisionBadge(dec)}</span>` +
+          `<button class="cr-ok${dec.s === "ok" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="승인 선택·전달 요청${dec.s === "ok" ? " · 현재 선택" : ""}">승인</button><button class="cr-no${dec.s === "no" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="반려 선택·전달 요청${dec.s === "no" ? " · 현재 선택" : ""}">반려</button><button class="cr-re${dec.s === "re" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 're')" title="재심의 선택·전달 요청${dec.s === "re" ? " · 현재 선택" : ""}">재심의</button>` +
+          (chiefUndoable(CHIEF.items[ci]) ? `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${ci})" title="미접수 선택 지우기">↺</button>` : "")
+        : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="승인 선택·전달 요청">승인</button><button class="cr-no" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="반려 선택·전달 요청">반려</button><button class="cr-re" type="button" onclick="chiefDecide(event, ${ci}, 're')" title="재심의 선택·전달 요청">재심의</button>`;
     const row = `<div class="rm-sig ${lane}${lane === "red" && !redGroupUnread(x) ? " read" : ""}"><span class="rs-lane">${lane === "red" ? (redGroupUnread(x) ? "🔴" : "⚪") : "🔵"}</span><span class="rs-tx"><b>${esc(x.title)}</b>${x.detail ? `<i>${esc(x.detail)}</i>` : ""}</span>${lane === "red" && !redGroupUnread(x) ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : ""}${act}${d.overview && x.room ? `<span class="rs-rm">${esc(roomTitle(x.room))}</span>` : ""}</div>`;
     return ci >= 0 && chiefCanCompact(CHIEF.items[ci], dec) ? compactDecisionReport(x.title, dec, row) : row;
   };
@@ -2036,8 +2085,7 @@ function chiefIndexForSignal(x, lane) {
       d.id === "invest_sp500" ? renderStockPanel() : "",
       d.summary ? `<div class="rm-sum"><span>👑</span><span>${esc(d.summary)}</span></div>` : "",
       d.ticker ? `<div class="rm-live"><span class="rm-live-h">📺 전광판</span><span class="rm-live-t">${esc(d.ticker)}</span><span class="rm-live-u">${esc(d.updated)}</span></div>` : "",
-      d.overview ? `<div class="report-scope-note">${d.coordinator ? "종합·검토 목록과 담당 보고 바로가기입니다. 개별 업무 상세는 담당 보고에서 확인하세요." : d.manager ? "이 부장이 맡은 부서의 신호와 보고만 모았습니다. 다른 부서 신호·공통 역할표는 일꾼(Instinct) 보고에서 확인하세요." : "승인·결재 안건은 아래 대표님 결재에서 결정하고, 일꾼 진행 보고는 비서실 창구에서 확인하세요."}<div class="report-scope-actions">${d.coordinator || id === "owner" ? `<button type="button" onclick="openChiefFromReport()">비서실 창구 보기</button>` : ""}${!d.coordinator ? `<button type="button" onclick="openReport('instinct')">일꾼 종합 보고</button>` : ""}</div></div>` : "",
-      d.id === "owner" ? ownerApprovalsHtml() : "",
+      d.overview ? `<div class="report-scope-note">${d.coordinator ? "종합·검토 목록과 담당 보고 바로가기입니다. 개별 업무 상세는 담당 보고에서 확인하세요." : d.manager ? "이 부장이 맡은 부서의 신호와 보고만 모았습니다. 다른 부서 신호·공통 역할표는 총괄에서 확인하세요." : "검토·결재 안건은 비서실 창구에서, 개별 업무 상세는 각 담당 보고에서 확인하세요."}<div class="report-scope-actions">${d.coordinator || id === "owner" ? `<button type="button" onclick="openChiefFromReport()">비서실 창구 보기</button>` : ""}${!d.coordinator ? `<button type="button" onclick="openReport('instinct')">비서실장 종합 보고</button>` : ""}</div></div>` : "",
       d.credit ? `<div class="rm-credit"><span>⚡ 크레딧</span><span>${esc(d.credit)}</span></div>` : "",
       (d.signals.red.length || d.signals.blue.length) ? `<div class="rm-sec"><div class="rm-h">🚦 미결 신호 · 🔵 ${d.signals.blue.length} · 빨간 알림 ${d.signals.red.filter(redGroupUnread).length} / 미결 ${d.signals.red.length}</div>${d.signals.red.length ? `<div class="rm-sig-note">🔴 자금·계좌·이체·결제는 AI가 실행하지 않습니다. 오너가 직접 처리해 주세요.</div>` : ""}<div class="rm-sigs">${d.signals.red.map(x => sigRow(x, "red")).join("")}${reportSignals.map(x => sigRow(x, "blue")).join("")}</div></div>` : "",
       d.depts.length ? `<div class="rm-sec"><div class="rm-h">🏢 담당 부서 현황 · ${d.depts.length}개<em class="rm-hint">칩을 누르면 해당 부서 보고로 이동</em></div><div class="rm-depts">${d.depts.map(x => (x.id && rooms.some(r => r.id === x.id))
@@ -2106,8 +2154,6 @@ function roomTap(e, el, id) {
 
 /* 동기화 후 열려 있는 보고가 있으면 최신 내용으로 다시 그린다 */
 function refreshReport() {
-  /* 주식 시세 화면이 열려 있으면 1분마다 다시 불러오지 않는다(깜빡임·불필요한 외부 요청 방지) */
-  if (REPORT_ID === "invest_sp500" && document.getElementById("stock-market")) return;
   if (REPORT_ID) openReport(REPORT_ID);
 }
 
@@ -2456,14 +2502,12 @@ function roomStateOf(id) {
 }
 /* working / alert = 업무 중 → 자리 지킴. idle(자율 휴게)만 이동 가능 */
 function roomBusy(id) { return roomStateOf(id) !== "idle"; }
-function isFlowRoom(id) { return !!(window.__flowRooms && window.__flowRooms.has(id)); }
-function walkerPinned(k) { return roomBusy(WALKER_CEO[k]) || isFlowRoom(WALKER_CEO[k]); }
+function walkerPinned(k) { return roomBusy(WALKER_CEO[k]); }
 /* 연출에 등장하고, 아직 업무 중이 아닌 캐릭터만 움직인다 */
 function active(k) { return P.indexOf(k) >= 0 && !walkerPinned(k); }
-function freeWalkers() { return ["hb", "td"].filter(k => !walkerPinned(k) && !meetWalk().has(k)); }
+function freeWalkers() { return ["hb", "td"].filter(k => !walkerPinned(k)); }
 function canRoam() { return freeWalkers().length > 0; }
-function meetWalk() { return (window.__meetWalk = window.__meetWalk || new Set()); }
-function syncWalkerPins() { ["hb", "td"].forEach(k => castHide(k, walkerPinned(k) && !meetWalk().has(k))); }
+function syncWalkerPins() { ["hb", "td"].forEach(k => castHide(k, walkerPinned(k))); }
 function castShow(k) { if (P.indexOf(k) < 0) return; castHide(k, walkerPinned(k)); }
 /* 연출에 참여하는 캐릭터만 잠시 숨긴다 (층 이동) */
 function castSceneHide() { P.forEach(k => castHide(k, true)); }
@@ -2515,7 +2559,7 @@ function castStand(k) {
 
 function castHome(k, dur) {
   const el = venEl(k);
-  if (!el || !active(k) || meetWalk().has(k)) return;
+  if (!el || !active(k)) return;
   const d = dur || 1.8;
   const home = VEN[VENUE][k === "hb" ? "hbHome" : "tdHome"];
   if (el.classList.contains("resting") && parseFloat(el.style.left) === home) return;
@@ -2923,11 +2967,11 @@ function settleScene() {
   VENUE = "lobby";
   ["hb", "td"].forEach(k => {
     /* 연출에 없던 캐릭터와 업무 중 캐릭터는 조용히 제자리로 돌려 둔다 */
-    if (!active(k) && !meetWalk().has(k)) placeHomeQuiet(k);
+    if (!active(k)) placeHomeQuiet(k);
     castCarry(k, false);
     castSip(k, false);
     castHush(k);
-    castHide(k, walkerPinned(k) && !meetWalk().has(k));
+    castHide(k, walkerPinned(k));
   });
   castHome("hb", 1.4);
   castHome("td", 1.4);
@@ -2952,7 +2996,7 @@ async function lobShow() {
      한 명만 쉬는 중이면 둘이서 하는 연출(대화·보고)은 건너뛴다 */
   const mode = !pair
     ? (roll < 0.44 ? "pantry" : roll < 0.76 ? "basement" : "stroll")
-    : (roll < 0.40 ? "pantry" : roll < 0.70 ? "basement" : "stroll");
+    : (roll < 0.30 ? "pantry" : roll < 0.52 ? "basement" : roll < 0.72 ? "meet" : roll < 0.90 ? "stroll" : "ride");
 
   castCarry("hb", false); castCarry("td", false);
   castSip("hb", false); castSip("td", false);
@@ -2973,7 +3017,6 @@ function scheduleLobby(delay) {
   collabTimer = setTimeout(async () => {
     collabTimer = null;
     if (collabRunning) { scheduleLobby(1200); return; }
-    if (MEET_SHOWN) { scheduleLobby(5000); return; }   // 실제 업무 흐름 표시 중에는 연출로 덮어쓰지 않음
     /* 업무 중(WORK) 캐릭터만 있으면 이동 연출을 시작하지 않는다 */
     if (!canRoam()) { syncWalkerPins(); scheduleLobby(20000); return; }
     if (staffBusy || b1StaffBusy || staffRiding) { scheduleLobby(3000); return; }
@@ -2984,127 +3027,6 @@ function scheduleLobby(delay) {
     scheduleLobby();
   }, base + Math.random() * 5000);
 }
-
-/* ================= 실제 업무 흐름 표시 (status.json meeting) =================
-   status.json의 meeting 값이 있을 때만 보인다(근거 없는 회의·이동 연출 없음).
-   { active:true, stage:"intake|solo|discussion|assign|report", round:1~3(discussion),
-     participants:[방 id], expires_at:"ISO 시각(필수)" }
-   - intake    지시 확인: 첫 방에 "📥 지시 확인" 표시(자리 유지)
-   - solo      단독 처리: 첫 방에 "⚙ 단독 처리·회의 없음" 표시(회의·이동 없음, 자리에서 작업)
-   - discussion 협의 n/3: 참여 방만 자리 비움 표시, 해병이·투덜이 참여 시 로비에 나옴(2~6개 방)
-   - assign    업무 분배: 참여 방에 "📋 분배" 표시(자리 유지)
-   - report    보고: 첫 방에 "📣 결론 보고" 표시(자리 유지)
-   active가 꺼지거나 expires_at이 지나면 표시는 모두 사라지고 원래 상태로 돌아온다. */
-let MEETING = null;
-const MEET_ROOMS = new Set();
-const FLOW_BADGE = new Set();
-let MEET_SHOWN = false;
-const FLOW_LABEL = { intake: "📥 지시 확인", solo: "⚙ 단독 처리·회의 없음", assign: "📋 업무 분배", report: "📣 결론 보고" };
-(function () {
-  const st = document.createElement("style");
-  st.textContent = ".room-stage[data-flow]::after{content:attr(data-flow);position:absolute;right:4px;bottom:1px;font-size:6.8px;font-weight:900;line-height:1.6;white-space:nowrap;color:#fde68a;background:rgba(66,32,6,.92);border:1px solid rgba(251,191,36,.55);border-radius:999px;padding:0 5px;z-index:3}";
-  document.head.appendChild(st);
-})();
-function meetingValid(m) {
-  if (!m || typeof m !== "object" || m.active !== true) return null;
-  const stage = m.stage || "discussion";
-  if (stage !== "discussion" && !FLOW_LABEL[stage]) return null;
-  if (!(Date.parse(m.expires_at) > Date.now())) return null;
-  const ids = [...new Set((Array.isArray(m.participants) ? m.participants : []).filter(id => typeof id === "string" && rooms.some(r => r.id === id) && document.getElementById("room-" + id)))].slice(0, 6);
-  if (stage === "discussion") {
-    const round = Number(m.round);
-    if (!(round >= 1 && round <= 3) || ids.length < 2) return null;
-    return { stage, round, ids };
-  }
-  const office = Array.isArray(m.participants) && m.participants.includes("instinct");   // 비서실(총괄): 별도 방이 없어 로비 배너로만 표시
-  if (ids.length < 1 && !office) return null;
-  return { stage, round: 0, ids, office: office && ids.length < 1 };
-}
-function meetStaffShow(room, idx) {
-  const hand = document.getElementById("lob-handoff");
-  const scene = hand && hand.parentElement;
-  if (!scene) return;
-  let el = scene.querySelector('.lob-walker[data-meet-room="' + room.id + '"]');
-  if (!el) {
-    el = document.createElement("div");
-    el.className = "lob-walker staff resting";
-    el.dataset.meetRoom = room.id;
-    el.innerHTML = '<span class="w-body"></span><span class="w-who"></span>';
-    scene.appendChild(el);
-  }
-  staffPaint(el, null, room, "", "");
-  const av = document.querySelector("#room-" + room.id + " .avatar");
-  const bodyEl = el.querySelector(".w-body");
-  if (av && bodyEl) bodyEl.style.backgroundImage = getComputedStyle(av).backgroundImage;   // 부서 고유 캐릭터 그대로
-  const slots = [14, 27, 66, 79, 90, 35];
-  el.style.left = slots[idx % slots.length] + "%";
-}
-function flowBadge(id, text) {
-  const el = document.getElementById("room-" + id);
-  const stg = el && el.querySelector(".room-stage");
-  if (!stg) return;
-  if (text) { stg.dataset.flow = text; FLOW_BADGE.add(id); }
-  else { delete stg.dataset.flow; FLOW_BADGE.delete(id); }
-}
-function applyMeeting(m) {
-  if (m !== undefined) MEETING = m;
-  const v = meetingValid(MEETING);
-  const keep = new Set(v && v.stage === "discussion" ? v.ids : []);
-  [...MEET_ROOMS].forEach(id => {
-    if (keep.has(id)) return;
-    const r = rooms.find(x => x.id === id);
-    if (r) staffHome(r);
-    MEET_ROOMS.delete(id);
-  });
-  document.querySelectorAll(".lob-walker[data-meet-room]").forEach(el => { if (!keep.has(el.dataset.meetRoom)) el.remove(); });
-  [...meetWalk()].forEach(k => {
-    if (keep.has(WALKER_CEO[k])) return;
-    meetWalk().delete(k);
-    placeHomeQuiet(k);
-    castHide(k, walkerPinned(k));
-  });
-  const badged = new Set(v && v.stage !== "discussion" ? (v.stage === "assign" ? v.ids : v.ids.slice(0, 1)) : []);
-  [...FLOW_BADGE].forEach(id => { if (!badged.has(id)) flowBadge(id, null); });
-  window.__flowRooms = new Set([...MEET_ROOMS, ...FLOW_BADGE]);
-  const hand = document.getElementById("lob-handoff");
-  if (!v) {
-    if (MEET_SHOWN && hand) hand.classList.remove("show");
-    MEET_SHOWN = false;
-    return;
-  }
-  let banner;
-  if (v.stage === "discussion") {
-    v.ids.forEach(id => {
-      const r = rooms.find(x => x.id === id);
-      if (!r) return;
-      if (AWAY.has(id) && !MEET_ROOMS.has(id)) return;     // 쉬는 사원 외출 중이면 건드리지 않음
-      staffAway(r, "🗣 협의 " + v.round + "/3");
-      MEET_ROOMS.add(id);
-      const k = id === WALKER_CEO.hb ? "hb" : id === WALKER_CEO.td ? "td" : null;
-      if (!k && VENUE === "lobby") meetStaffShow(r, v.ids.filter(x => x !== WALKER_CEO.hb && x !== WALKER_CEO.td).indexOf(id));
-      if (k && VENUE === "lobby") {
-        const el = venEl(k);
-        if (el) {
-          meetWalk().add(k);
-          castPlace(k, k === "hb" ? 44 : 52);
-          el.classList.remove("hidden", "walking");
-          el.classList.add("resting");
-        }
-      }
-    });
-    banner = "🗣 협의 " + v.round + "/3 · " + v.ids.length + "개 부서";
-  } else {
-    badged.forEach(id => flowBadge(id, FLOW_LABEL[v.stage]));
-    banner = (v.office ? "비서실 · " : "") + FLOW_LABEL[v.stage] + (v.stage === "assign" && v.ids.length ? " · " + v.ids.length + "개 부서" : "");
-  }
-  window.__flowRooms = new Set([...MEET_ROOMS, ...FLOW_BADGE]);
-  if (hand && VENUE === "lobby") {
-    hand.textContent = banner;
-    hand.classList.add("show");
-    MEET_SHOWN = true;
-  }
-}
-setInterval(() => applyMeeting(), 5000);
 
 function applyCorridor() {
   const busy = corridorActive();
@@ -3159,7 +3081,6 @@ async function roomTalk(floor) {
 }
 
 function roomTalkLoop() {
-  return;   // 실제 대화가 아닌 잡담 연출은 중단(협의는 status.json meeting이 있을 때만 표시)
   if (reduceMotion) return;
   setTimeout(() => {
     if (!talkRunning) {
@@ -3177,7 +3098,7 @@ function idleDeptRooms() {
   return rooms.filter(r => {
     if (r.ceo) return false;
     const el = document.getElementById("room-" + r.id);
-    return !!el && el.classList.contains("idle") && !el.classList.contains("break") && !el.classList.contains("alert") && !AWAY.has(r.id) && !isFlowRoom(r.id);
+    return !!el && el.classList.contains("idle") && !el.classList.contains("break") && !el.classList.contains("alert") && !AWAY.has(r.id);
   });
 }
 
@@ -3194,7 +3115,7 @@ function shopHidden() {
 
 function staffStillIdle(room) {
   const el = document.getElementById("room-" + room.id);
-  return !!el && !isFlowRoom(room.id) && el.classList.contains("idle") && !el.classList.contains("break") && !el.classList.contains("alert");
+  return !!el && el.classList.contains("idle") && !el.classList.contains("break") && !el.classList.contains("alert");
 }
 
 function staffPaint(el, sayEl, room, line, item) {
@@ -3630,7 +3551,7 @@ document.addEventListener("keydown", (e) => {
   }
 });
 window.addEventListener("resize", () => { buildTicks(); liftPark(); });
-// 다른 탭·창에서 승인·불허를 바꾸면 이 화면의 신호등·방 불빛도 같이 따라간다
+// 다른 탭·창에서 승인·반려를 바꾸면 이 화면의 신호등·방 불빛도 같이 따라간다
 window.addEventListener("storage", (e) => {
   if (e.key !== "liveoffice_chief_dec") return;
   CHIEF_DEC = null;
