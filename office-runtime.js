@@ -1953,12 +1953,13 @@ function stockLocalDelete() {
   stockLocalRefresh("이 기기의 저장 데이터를 삭제했습니다.");
 }
 
-const STOCK_NAVER_URL = "https://finance.naver.com/item/main.naver?code=360750";
+const STOCK_DAUM_URL = "https://finance.daum.net/quotes/A360750";
+const STOCK_NAVER_URL = "https://stock.naver.com/domestic/stock/360750/price";
 const STOCK_GOOGLE_URL = "https://www.google.com/finance/quote/360750:KRX";
 function stockMarketHtml() {
   const T = "font-size:14px;line-height:1.5;color:#cbd5e1";
   const lk = "color:#7dd3fc;text-decoration:underline";
-  return `<div id="stock-market" style="margin-bottom:10px"><div style="${T};font-weight:700">현재 시세 · 시장 차트 (TIGER 미국S&amp;P500 · KRX 360750)</div><div style="${T};font-size:13px;margin:2px 0 4px">아래는 Naver 증권 화면을 이 기기에서 직접 불러온 것입니다. 가격과 기준시각은 그 화면의 표시를 따르며, 이 사이트는 시세를 저장·가공·재게시하지 않습니다. 화면이 비어 있으면 새 탭으로 여세요.</div><iframe title="Naver 증권 TIGER 미국S&amp;P500 시세와 차트" src="${STOCK_NAVER_URL}" loading="eager" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups" style="width:100%;height:430px;border:1px solid #334155;border-radius:8px;background:#fff"></iframe><div style="${T};font-size:14px;margin-top:4px"><a href="${STOCK_NAVER_URL}" target="_blank" rel="noopener noreferrer" style="${lk}">Naver 증권에서 열기</a> · <a href="${STOCK_GOOGLE_URL}" target="_blank" rel="noopener noreferrer" style="${lk}">Google Finance에서 열기</a></div></div>`;
+  return `<div id="stock-market" style="margin-bottom:10px"><div style="${T};font-weight:700">현재 시세 · 시장 차트 (TIGER 미국S&amp;P500 · KRX 360750)</div><div style="${T};font-size:13px;margin:2px 0 4px">아래는 Daum 금융 화면을 이 기기에서 직접 불러온 것입니다. 가격과 기준시각은 그 화면의 표시를 따르며, 이 사이트는 시세를 저장·가공·재게시하지 않습니다. 화면이 비어 있으면 새 탭으로 여세요.</div><iframe title="Daum 금융 TIGER 미국S&amp;P500 시세와 차트" src="${STOCK_DAUM_URL}" loading="eager" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups" style="width:100%;height:560px;border:1px solid #334155;border-radius:8px;background:#fff"></iframe><div style="${T};font-size:14px;margin-top:4px"><a href="${STOCK_DAUM_URL}" target="_blank" rel="noopener noreferrer" style="${lk}">Daum 금융에서 열기</a> · <a href="${STOCK_NAVER_URL}" target="_blank" rel="noopener noreferrer" style="${lk}">Naver 증권에서 열기</a> · <a href="${STOCK_GOOGLE_URL}" target="_blank" rel="noopener noreferrer" style="${lk}">Google Finance에서 열기</a></div></div>`;
 }
 function renderStockPanel() {
   const d = (STATUS && STATUS.invest_sp500 && STATUS.invest_sp500.chart) || null;
