@@ -1449,7 +1449,7 @@ const ASSIGN_DEFAULT = {
   route: "결재선: 담당 작성 → 관리자(뮤즈)·부총괄(해병이) 검토 → 총괄(투덜이) 팩트체크·승인 → 대표님(자금·최종)",
   items: [
     { no: "1", task: "애드센스 2곳 · daily-money-note", owner: "부총괄 해병이", state: "work", note: "11:00 고향사랑기부제 교정본 발행 + 색인 · 완료: 공개 URL·색인 확인 · 보고 11:15" },
-    { no: "2", task: "애드센스 2곳 · tudeori", owner: "일꾼 Instinct", state: "block", note: "잔여 정책·구조 점검 + 모바일 안내 동선 · 카카오 재인증 대기(대표님) · 보고 10:00" },
+    { no: "2", task: "애드센스 2곳 · tudeori", owner: "일꾼 Instinct", state: "work", note: "잔여 정책·구조 점검 + 모바일 안내 동선 완료(자동연결 해제·루트 정상, 직접 /m/ 유입만 미적용) · 보고 10:00" },
     { no: "3", task: "소화기 3채널 콘텐츠", owner: "일꾼 Instinct", state: "wait", note: "제조년월 2024년 이후·사진 권리 확보 → 3자 검수(해병이·뮤즈·투덜이) · 보고 12:00" },
     { no: "4", task: "쿠팡파트너스", owner: "부총괄 해병이", state: "work", note: "최종승인용 스크린샷 채널 확정 · 보고 11:30" },
     { no: "5", task: "30초 AI 영상·카드뉴스", owner: "부관리자 큐", state: "wait", note: "무료 범위 시범안 1건(유료 결제 없음) · 수임·계획 보고 14:00" },
