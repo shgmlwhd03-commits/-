@@ -14,22 +14,22 @@ const rooms = [
   {
     id: "owner", floor: "f8", zone: "instinct", tag: "오너", ceo: true,
     title: "👑 대표님", worker: "👑", name: "👑 대표님",
-    say: "전체 보고 받는 중!", foot: "조직도 최상단 · 보고 라인: 해병이(부총괄)·뮤즈(관리자)·수박이·일꾼 → 총괄 투덜이 → 대표님",
+    say: "전체 보고 받는 중!", foot: "조직도 최상단 · 보고 라인: 역할: 총괄 투덜이 · 부총괄 해병이 · 관리자 뮤즈 · 일꾼(전 총괄 Instinct) · 수박이 이사 · 최종 승인 대표님",
     issue: "승인이 필요한 건이 있어요!",
     guide: "🔴 자금 건은 대표님이 직접 실행하고, 🔵 확인·승인 건은 이 대표님 보고의 결재 큐에서 결정합니다.",
-    state: "working", ticker: "최종 승인권 · 보고 라인: 해병이(부총괄)·뮤즈(관리자)·수박이·일꾼 → 총괄 투덜이 → 대표님", updated: "15:52"
+    state: "working", ticker: "최종 승인권 · 보고 라인: 역할: 총괄 투덜이 · 부총괄 해병이 · 관리자 뮤즈 · 일꾼(전 총괄 Instinct) · 수박이 이사 · 최종 승인 대표님", updated: "15:52"
   },
   {
     id: "instinct", floor: null, zone: "instinct", tag: "Instinct",
     title: "💼 일꾼 · 전 총괄 Instinct", worker: "💼", name: "💼 일꾼",
-    say: "실행·정리 중 · 보고 접수!", foot: "일꾼(전 총괄 Instinct) · 보고 라인: 해병이(부총괄)·뮤즈(관리자)·수박이·일꾼 → 총괄 투덜이 → 대표님",
+    say: "실행·정리 중 · 보고 접수!", foot: "일꾼(전 총괄 Instinct) · 보고 라인: 역할: 총괄 투덜이 · 부총괄 해병이 · 관리자 뮤즈 · 일꾼(전 총괄 Instinct) · 수박이 이사 · 최종 승인 대표님",
     issue: "승인·확인 건을 모으는 중!",
     guide: "승인·확인 건은 비서실 창구에 모아 둡니다.",
     state: "working", ticker: "총지휘 · [총괄 지시 008] /6 최저임금 연도 정정 완료(13:56 · 15시 검증 대기) · [총괄 지시 010~014] 자녀 경제교육 8주 PWA 기획안·부모용 대본 12회분 완료 보고 접수 — 승인 6건 대표님 결재 대기 · [총괄 지시 007] 머니리포트 「맞벌이 연말정산」 13:29 공개 발행(공개 6편 · 9편 남음) · 색인 5/5 · 네이버 제휴 셋업·쿠팡 파트너스 가입 완료", updated: "14:06"
   },
   {
     id: "ceo_haebyeong", floor: "f6", zone: "direct", tag: "해병이", ceo: true,
-    title: "👑 해병이 부장", worker: "🫡", name: "👑 해병이 부장",
+    title: "👑 해병이 부총괄", worker: "🫡", name: "👑 해병이 부총괄",
     say: "7개 부서 보고 받는 중!", foot: "총괄 지휘 · 해병이 7개 부서",
     issue: "승인 대기 중인 건이 있어요!",
     guide: "승인 대기 건을 확인해 주세요. 진행 여부만 알려주시면 바로 실행합니다.",
@@ -37,7 +37,7 @@ const rooms = [
   },
   {
     id: "ceo_tudeori", floor: "f6", zone: "partner", tag: "투덜이", ceo: true,
-    title: "👑 투덜이 부장", worker: "😤", name: "👑 투덜이 부장",
+    title: "👑 투덜이 총괄", worker: "😤", name: "👑 투덜이 총괄",
     say: "5개 부서 + 전담 채널 2개 담당!", foot: "총괄 지휘 · 투덜이 5개 부서",
     issue: "5개 부서 보고 받는 중!",
     guide: "가동 중 · GitHub 연결(08:13) · 크레딧 잔량은 화면에서 확인할 수 없으니 필요할 때 바로 확인해 주세요.",
@@ -170,11 +170,11 @@ function revHTML() {
   return `
     <div class="rev-block" id="rev-block">
       <div class="rev-boards">
-        <div class="rev-board hb" id="rev-hb" title="해병이 부장이 만든 검증된 수익">
+        <div class="rev-board hb" id="rev-hb" title="해병이 부총괄이 만든 검증된 수익">
           <span class="rb-label"><i></i>🔵 해병이</span>
           <span class="rb-val"><span class="rb-today" id="rev-hb-today">오늘 +₩0</span><span class="rb-sep">·</span><span id="rev-hb-total">누적 ₩0</span></span>
         </div>
-        <div class="rev-board partner" id="rev-td" title="투덜이 부장이 만든 검증된 수익">
+        <div class="rev-board partner" id="rev-td" title="투덜이 총괄이 만든 검증된 수익">
           <span class="rb-label"><i></i>🟣 투덜이</span>
           <span class="rb-val"><span class="rb-today" id="rev-td-today">오늘 +₩0</span><span class="rb-sep">·</span><span id="rev-td-total">누적 ₩0</span></span>
         </div>
@@ -223,7 +223,7 @@ function roomHTML(r, i) {
         <div class="room-head">
           <span class="room-title">${esc(r.title)}</span>
           <span class="room-lanes" id="lanes-${r.id}" aria-hidden="true"></span>
-          <span class="room-tag${partner ? " partner" : instinct ? " instinct" : ""}" title="${instinct ? "일꾼(전 총괄 Instinct)이 맡은 방" : director ? "위탁판매 총괄 · 실행 담당(사람)" : partner ? "투덜이 부장이 전담 운영하는 방" : "해병이 부장이 직접 운영하는 방"}">${r.tag}</span>
+          <span class="room-tag${partner ? " partner" : instinct ? " instinct" : ""}" title="${instinct ? "일꾼(전 총괄 Instinct)이 맡은 방" : director ? "위탁판매 총괄 · 실행 담당(사람)" : partner ? "투덜이 총괄이 전담 운영하는 방" : "해병이 부총괄이 직접 운영하는 방"}">${r.tag}</span>
           <span class="room-open">${r.id === "prize" ? "응모결과▸" : r.id === "owner" ? "결재▸" : shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : "보고"}</span>
           <span class="status-dot" aria-hidden="true"></span>
         </div>
@@ -1124,7 +1124,7 @@ function chiefRowHtml(it, sourceIdx, act) {
   const redRead = it.lane === "red" && !redGroupUnread(it);
   const ack = it.lane === "red" ? (redRead ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : `<button class="red-ack" type="button" onkeydown="event.stopPropagation()" onclick="acknowledgeRed(event, 'chief', ${sourceIdx})">확인</button>`) : "";
   const row = `<div class="chief-row ${it.lane}${redRead ? " read" : ""}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" data-room="${esc(it.room)}">
-        <div class="cr-main"><b>${esc(it.title)}</b>${it.lane === "wait" ? "" : `<p class="cr-review">총괄 팩트검토: 미확인</p>`}</div>
+        <div class="cr-main"><b>${esc(it.title)}</b>${it.lane === "wait" ? "" : `<p class="cr-review">부총괄·관리자 교차검수: 미확인</p>`}</div>
         <span class="cr-act">${act}</span>
         <details class="cr-detail"${chiefCanCompact(it, d) ? " open" : ""}><summary>상세 보기${rm ? " · " + esc(rm) : ""}</summary>
           ${it.detail ? `<p>${esc(it.detail)}</p>` : ""}
@@ -1181,16 +1181,16 @@ function renderChief(raw) {
 }
 
 /* ================= 🛟 비상 업무 재분장(백업) 매트릭스 =================
-   3인(투덜이·해병이 부장·수박이 이사) 중 누가 오프·크레딧 소진·연결 지연으로
+   3인(투덜이·해병이 부총괄·수박이 이사) 중 누가 오프·크레딧 소진·연결 지연으로
    빠져도 남은 인원이 1차→2차로 빈자리를 메운다. 부모님 폰 직접 접근은 하지 않는다. */
 const BACKUP_FALLBACK = {
   title: "비상 업무 백업 매트릭스 · 3인",
   note: "부모님 폰 직접 접근 금지 · 자금 실행은 오너",
   rule: "1차가 오프·크레딧 소진·연결 지연이면 2차가 이어받고, 3명 이상 동시에 빠지면 오너 승인 대기로 전환한다.",
   members: [
-    { name: "투덜이 부장", part: "카페·B2B·티스토리·체험단", state: "on", backup1: "해병이 부장", backup2: "수박이 이사" },
-    { name: "해병이 부장", part: "블로그·자산·총괄", state: "on", backup1: "투덜이 부장", backup2: "수박이 이사" },
-    { name: "수박이 이사", part: "위탁판매·스토어 실행 총괄", state: "on", backup1: "해병이 부장", backup2: "투덜이 부장" }
+    { name: "투덜이 총괄", part: "카페·B2B·티스토리·체험단", state: "on", backup1: "해병이 부총괄", backup2: "수박이 이사" },
+    { name: "해병이 부총괄", part: "블로그·자산", state: "on", backup1: "투덜이 총괄", backup2: "수박이 이사" },
+    { name: "수박이 이사", part: "위탁판매·스토어 실행 총괄", state: "on", backup1: "해병이 부총괄", backup2: "투덜이 총괄" }
   ]
 };
 
@@ -1241,8 +1241,8 @@ const ROSTER_DEFAULT = {
   note: "역할 별칭으로만 표기 · status.json 동기화",
   rule: "큰 이미지·로고는 외부 AI(제미나이·클로드·챗GPT) 제작본 활용 · 불필요한 핑퐁 축소",
   items: [
-    { id: "td", name: "투덜이 부장", role: "투덜이 측 업무 운영 및 인수인계", state: "wait", chip: "가동 미확인" },
-    { id: "hb", name: "해병이 부장", role: "해병이 측 업무 운영 및 인수인계", state: "wait", chip: "가동 미확인" }
+    { id: "td", name: "투덜이 총괄", role: "투덜이 측 업무 운영 및 인수인계", state: "wait", chip: "가동 미확인" },
+    { id: "hb", name: "해병이 부총괄", role: "해병이 측 업무 운영 및 인수인계", state: "wait", chip: "가동 미확인" }
   ],
   channels: [
     { owner: "해병이", handle: "@daily.moneynote", url: "https://www.threads.com/@daily.moneynote", topic: "돈·세금·생활경제" },
