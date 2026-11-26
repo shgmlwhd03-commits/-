@@ -1,7 +1,8 @@
 /* ================= 설정 ================= */
 const FLOORS = [
   { id: "f8", num: "8F", name: "대표실 · 👑 대표님", tone: "pent" },
- { id: "f6", num: "6F", name: "경영진 · 👑 총괄·부총괄·관리자·부관리자 + 🍉 수박이", tone: "pent" },
+  { id: "f7", num: "7F", name: "관리자실 · 🧠 관리자 뮤즈 · 🤖 부관리자 큐", tone: "cyan" },
+  { id: "f6", num: "6F", name: "경영진 · 👑 총괄·부총괄 + 🍉 수박이", tone: "pent" },
   { id: "f5", num: "5F", name: "해병이 · 수익·스토어층", tone: "cyan" },
   { id: "f4", num: "4F", name: "해병이 · 혜택·딜층", tone: "cyan" },
   { id: "f3", num: "3F", name: "투덜이 · 블로그·카페층", tone: "purple" },
@@ -16,7 +17,7 @@ const rooms = [
     title: "👑 대표님", worker: "👑", name: "👑 대표님",
     say: "전체 보고 받는 중!", foot: "조직도 최상단 · 결재선: 관리자·부총괄 검토 → 총괄 팩트체크·승인 → 대표님",
     issue: "승인이 필요한 건이 있어요!",
-    guide: "🔴 자금 건은 대표님이 직접 실행하고, 🔵 확인·승인 건은 비서실 창구에서 결정합니다.",
+    guide: "🔴 자금 건은 대표님이 직접 실행하고, 🔵 확인·승인 건은 보고·결재 창구에서 결정합니다(승인·반려·재심의).",
     state: "working", ticker: "최종 승인권 · 결재선: 관리자(뮤즈)·부총괄(해병이) 검토 → 총괄(투덜이) 팩트체크·승인 → 대표님 · 🔴 자금·금융 인증은 대표님 직접", updated: "07:58"
   },
   {
@@ -52,7 +53,7 @@ const rooms = [
     state: "working", ticker: "위탁판매·스토어 실행 총괄 · 확정 건만 최소 알림 · 보류 기간 2축 운영(위탁·사업자 준비 + 저크레딧 수익 보조)", updated: "07:52"
   },
   {
-    id: "manager_muse", floor: "f6", zone: "instinct", tag: "관리자",
+    id: "manager_muse", floor: "f7", zone: "instinct", tag: "관리자",
     title: "🧠 관리자 · 뮤즈", worker: "🧠", name: "🧠 관리자 뮤즈",
     say: "관리자 검토·회의록 정리!", foot: "관리자 검토(1차) · 회의록·아카이브 · 전 업무 숙지",
     issue: "검토할 안건이 있어요!",
@@ -60,7 +61,7 @@ const rooms = [
     state: "idle", ticker: "관리자 검토(1차) · 회의록·아카이브 · 전 업무 숙지 · 06번 Slack 연결 · 자동 응답 미검증", updated: "07:52"
   },
   {
-    id: "deputy_manus", floor: "f6", zone: "instinct", tag: "부관리자",
+    id: "deputy_manus", floor: "f7", zone: "instinct", tag: "부관리자",
     title: "🤖 부관리자 · 큐", worker: "🤖", name: "🤖 부관리자 큐(Manus)",
     say: "30초 AI 영상 시범안 준비!", foot: "부관리자 · 30초 AI 영상·카드뉴스 · 검수 보조",
     issue: "수임 확인이 필요해요!",
@@ -231,7 +232,7 @@ function roomHTML(r, i) {
         <div class="room-head">
           <span class="room-title">${esc(r.title)}</span>
           <span class="room-lanes" id="lanes-${r.id}" aria-hidden="true"></span>
-          <span class="room-tag${partner ? " partner" : instinct ? " instinct" : ""}" title="${instinct ? "Instinct 총괄이 지휘하는 방" : director ? "총괄 직속 위탁판매 총괄 · 실행 담당(사람)" : partner ? "투덜이 부장이 전담 운영하는 방" : "해병이 부장이 직접 운영하는 방"}">${r.tag}</span>
+          <span class="room-tag${partner ? " partner" : instinct ? " instinct" : ""}" title="${instinct ? "대표님·경영진 직할 방" : director ? "위탁판매·스토어 실행 담당(사람)" : partner ? "총괄(투덜이) 측 운영 방" : "부총괄(해병이) 측 운영 방"}">${r.tag}</span>
           <span class="room-open">${r.id === "prize" ? "응모결과▸" : shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : "보고"}</span>
           <span class="status-dot" aria-hidden="true"></span>
         </div>
@@ -368,7 +369,8 @@ function basementHTML() {
 
 function floorHTML(f) {
   const list = rooms.filter(r => r.floor === f.id);
-  const cls = list.length === 1 ? "rooms one" : list.length >= 4 ? "rooms four" : list.length === 3 ? "rooms three" : "rooms";
+  let cls = list.length === 1 ? "rooms one" : list.length >= 4 ? "rooms four" : list.length === 3 ? "rooms three" : "rooms";
+  if (f.id === "f7") cls += " desk-rooms";   // 7F 관리자실: 사진 대신 사무 데스크 배경
   // 6F 대표실: 두 부장 아래에 수익 전광판 · 크레딧을 전폭으로 깔아 겹치지 않게 한다
   const pentBar = f.id === "f6"
     ? `<div class="pent-bar" aria-label="수익 전광판">
@@ -2085,7 +2087,7 @@ function chiefIndexForSignal(x, lane) {
       d.id === "invest_sp500" ? renderStockPanel() : "",
       d.summary ? `<div class="rm-sum"><span>👑</span><span>${esc(d.summary)}</span></div>` : "",
       d.ticker ? `<div class="rm-live"><span class="rm-live-h">📺 전광판</span><span class="rm-live-t">${esc(d.ticker)}</span><span class="rm-live-u">${esc(d.updated)}</span></div>` : "",
-      d.overview ? `<div class="report-scope-note">${d.coordinator ? "종합·검토 목록과 담당 보고 바로가기입니다. 개별 업무 상세는 담당 보고에서 확인하세요." : d.manager ? "이 부장이 맡은 부서의 신호와 보고만 모았습니다. 다른 부서 신호·공통 역할표는 총괄에서 확인하세요." : "검토·결재 안건은 비서실 창구에서, 개별 업무 상세는 각 담당 보고에서 확인하세요."}<div class="report-scope-actions">${d.coordinator || id === "owner" ? `<button type="button" onclick="openChiefFromReport()">비서실 창구 보기</button>` : ""}${!d.coordinator ? `<button type="button" onclick="openReport('instinct')">비서실장 종합 보고</button>` : ""}</div></div>` : "",
+      d.overview ? `<div class="report-scope-note">${d.coordinator ? "종합·검토 목록과 담당 보고 바로가기입니다. 개별 업무 상세는 담당 보고에서 확인하세요." : d.manager ? "이 담당이 맡은 부서의 신호와 보고만 모았습니다. 다른 부서 신호·공통 역할표는 총괄 보고에서 확인하세요." : "검토·결재 안건은 보고·결재 창구에서, 개별 업무 상세는 각 담당 보고에서 확인하세요."}<div class="report-scope-actions">${d.coordinator || id === "owner" ? `<button type="button" onclick="openChiefFromReport()">보고·결재 창구 보기</button>` : ""}${!d.coordinator ? `<button type="button" onclick="openReport('ceo_tudeori')">총괄 종합 보고</button>` : ""}</div></div>` : "",
       d.credit ? `<div class="rm-credit"><span>⚡ 크레딧</span><span>${esc(d.credit)}</span></div>` : "",
       (d.signals.red.length || d.signals.blue.length) ? `<div class="rm-sec"><div class="rm-h">🚦 미결 신호 · 🔵 ${d.signals.blue.length} · 빨간 알림 ${d.signals.red.filter(redGroupUnread).length} / 미결 ${d.signals.red.length}</div>${d.signals.red.length ? `<div class="rm-sig-note">🔴 자금·계좌·이체·결제는 AI가 실행하지 않습니다. 오너가 직접 처리해 주세요.</div>` : ""}<div class="rm-sigs">${d.signals.red.map(x => sigRow(x, "red")).join("")}${reportSignals.map(x => sigRow(x, "blue")).join("")}</div></div>` : "",
       d.depts.length ? `<div class="rm-sec"><div class="rm-h">🏢 담당 부서 현황 · ${d.depts.length}개<em class="rm-hint">칩을 누르면 해당 부서 보고로 이동</em></div><div class="rm-depts">${d.depts.map(x => (x.id && rooms.some(r => r.id === x.id))
