@@ -1900,12 +1900,12 @@ function stockLocalHtml(msg) {
     const n = fills.length;
     const X = i => n === 1 ? W / 2 : L + 16 + i * (W - L - R - 32) / (n - 1);
     const lbl = f => f.d ? f.d.slice(5).replace("-", "/") : "기존";
-    let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="체결가와 평균단가 그래프" style="display:block;margin-top:8px;background:#0b1220;border:1px solid #334155;border-radius:8px">`;
+    let svg = `<div style="${T};font-weight:700;margin-top:8px">체결가 추이 (내 체결 기록)</div><svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="내 체결가와 평균단가 그래프(시장 시세 그래프 아님)" style="display:block;margin-top:4px;background:#0b1220;border:1px solid #334155;border-radius:8px">`;
     svg += `<line x1="${L}" x2="${W - R}" y1="${Y(avg).toFixed(1)}" y2="${Y(avg).toFixed(1)}" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="5 3"/><text x="${L + 2}" y="${(Y(avg) - 3).toFixed(1)}" font-size="11" fill="#7dd3fc">평균 ${won2(avg)}</text>`;
     if (price) svg += `<line x1="${L}" x2="${W - R}" y1="${Y(price).toFixed(1)}" y2="${Y(price).toFixed(1)}" stroke="#fbbf24" stroke-width="1.5"/><text x="${W - R - 2}" y="${(Y(price) - 3).toFixed(1)}" font-size="11" fill="#fcd34d" text-anchor="end">입력가 ${won(price)}</text>`;
     if (n > 1) svg += `<polyline fill="none" stroke="#64748b" stroke-width="1" points="${fills.map((f, i) => X(i).toFixed(1) + "," + Y(f.p).toFixed(1)).join(" ")}"/>`;
     fills.forEach((f, i) => { svg += `<circle cx="${X(i).toFixed(1)}" cy="${Y(f.p).toFixed(1)}" r="4" fill="#f472b6"/><text x="${X(i).toFixed(1)}" y="${H - 12}" font-size="11" fill="#e2e8f0" text-anchor="middle">${esc(lbl(f))}</text><text x="${X(i).toFixed(1)}" y="${H - 2}" font-size="11" fill="#94a3b8" text-anchor="middle">${Math.round(f.p).toLocaleString("ko-KR")}</text>`; });
-    svg += `</svg>`;
+    svg += `</svg><div style="${T};font-size:13px;margin-top:3px">점은 내 체결가이고 가로 간격은 체결 순서일 뿐 시간에 비례하지 않습니다. 같은 날 두 체결도 등간격으로 그려지며, 시장의 일중 시세 추이가 아닙니다.</div>`;
     const rows = fills.map((f, i) => `<div style="${T};display:flex;justify-content:space-between;gap:8px;align-items:center;padding:3px 0;border-bottom:1px solid #1e293b"><span>${esc(f.d || "이전 기록")} · ${esc(String(f.q))}주 × ${won(f.p)}</span><button type="button" onclick="stockLocalDelFill(${i})" style="${btn};padding:4px 10px" aria-label="이 체결 삭제">삭제</button></div>`).join("");
     top += svg + `<div style="margin-top:6px">${rows}</div><div style="${T};font-size:13px;margin-top:4px">체결 기록은 직접 넣은 값입니다. 수수료·세금 포함 여부는 앱 화면에 없어 반영하지 않았습니다.</div>`;
   } else {
