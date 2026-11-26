@@ -990,6 +990,38 @@
   .pr-rule { margin-top: 3px; font-size: 6.6px; line-height: 1.3; color: #8aa0b8; }
   .pr-rule b { color: #fde68a; font-weight: 900; }
 
+  /* 6F 임무 배분표 · 결재선 (2026-11-27 07:37 지시) */
+  .pent-assign { position: relative; z-index: 1; margin-top: 3px; padding: 4px 6px; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; background: linear-gradient(180deg, rgba(8, 47, 73, 0.45), rgba(8, 12, 20, 0.62)); box-shadow: inset 0 1px 0 rgba(125, 211, 252, 0.08); }
+  .as-head { display: flex; align-items: center; gap: 4px; margin-bottom: 3px; font-size: 8.2px; font-weight: 900; color: #e0f2fe; min-width: 0; }
+  .as-head em { margin-left: auto; font-style: normal; font-size: 6.2px; font-weight: 800; color: #7dd3fc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .as-rows { display: grid; gap: 2px; }
+  .as-row { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto auto; gap: 4px; align-items: center; padding: 2px 4px; border-radius: 6px; background: rgba(6, 11, 20, 0.66); border: 1px solid rgba(148, 163, 184, 0.18); font-size: 7px; line-height: 1.35; }
+  .as-row.work { border-color: rgba(56, 189, 248, 0.45); }
+  .as-row.wait { border-color: rgba(251, 191, 36, 0.36); }
+  .as-row.block { border-color: rgba(248, 113, 113, 0.42); }
+  .as-row.done { border-color: rgba(52, 211, 153, 0.45); }
+  .as-no { font-weight: 900; color: #7dd3fc; text-align: center; }
+  .as-tx { min-width: 0; display: flex; flex-direction: column; }
+  .as-tx b { font-size: 7.4px; font-weight: 900; color: #e8eef8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .as-tx i { font-style: normal; font-size: 6.4px; color: #93a7bf; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .as-own { font-size: 6.6px; font-weight: 900; color: #bae6fd; white-space: nowrap; }
+  .as-st { font-size: 6px; font-weight: 900; padding: 0 4px; border-radius: 999px; border: 1px solid #475569; color: #cbd5e1; white-space: nowrap; }
+  .as-row.work .as-st { border-color: #38bdf8; color: #bae6fd; background: rgba(8, 47, 73, 0.65); }
+  .as-row.wait .as-st { border-color: #fbbf24; color: #fef3c7; background: rgba(40, 28, 8, 0.6); }
+  .as-row.block .as-st { border-color: #f87171; color: #fecaca; background: rgba(60, 12, 12, 0.6); }
+  .as-row.done .as-st { border-color: #34d399; color: #a7f3d0; background: rgba(6, 78, 59, 0.6); }
+  .as-route { margin-top: 3px; padding-top: 3px; border-top: 1px dashed rgba(56, 189, 248, 0.32); font-size: 6.6px; line-height: 1.35; font-weight: 800; color: #cbd5e1; }
+
+  /* 6F 뮤즈 초대코드 카드 */
+  .pent-invite { position: relative; z-index: 1; margin-top: 3px; padding: 4px 6px; border: 1px solid rgba(251, 191, 36, 0.34); border-radius: 8px; background: linear-gradient(180deg, rgba(64, 43, 8, 0.45), rgba(8, 12, 20, 0.62)); }
+  .iv-head { display: flex; align-items: center; gap: 4px; margin-bottom: 3px; font-size: 8.2px; font-weight: 900; color: #fef3c7; min-width: 0; }
+  .iv-head em { margin-left: auto; font-style: normal; font-size: 6.2px; font-weight: 800; color: #fbbf24; white-space: nowrap; }
+  .iv-body { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+  .iv-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; font-weight: 900; letter-spacing: 1.5px; color: #fde68a; padding: 1px 7px; border-radius: 6px; border: 1px solid rgba(251, 191, 36, 0.55); background: rgba(30, 20, 4, 0.75); }
+  .iv-copy, .iv-link { font-size: 7px; font-weight: 900; padding: 1px 6px; border-radius: 999px; border: 1px solid rgba(251, 191, 36, 0.5); background: rgba(40, 28, 8, 0.7); color: #fef3c7; cursor: pointer; text-decoration: none; }
+  .iv-copy.ok { border-color: #34d399; color: #a7f3d0; }
+  .iv-note { margin-top: 3px; font-size: 6.4px; line-height: 1.35; color: #b9a882; }
+
   /* 대표 총괄 보고 모달 전용 */
   .rm-sum {
     display: flex;
@@ -2856,20 +2888,20 @@
     </div>
   </div>
 
-  <!-- 🗂️ 비서실(대표 보고 창구 · 결재): 비서실장(총괄)이 검토·지휘해 올린 미결·대기 통합 · 🔴 → 🔵 → 일반 대기 자동 정렬 -->
-  <section class="chief" id="chief" aria-label="비서실 보고 창구 · 대표 결재">
+  <!-- 🗂️ 경영진 보고·결재 창구: 담당 작성 → 관리자·부총괄 검토 → 총괄(투덜이) 팩트체크·승인 → 대표님 결재 · 🔴 → 🔵 → 일반 대기 자동 정렬 -->
+  <section class="chief" id="chief" aria-label="경영진 보고·결재 창구 · 대표 결재">
     <button class="chief-head" id="chief-head" type="button" onclick="toggleChief()" aria-expanded="true" aria-controls="chief-body">
       <span class="chief-ava" aria-hidden="true">💼</span>
-      <span class="chief-t"><b>🗂️ 비서실 · 보고·결재 창구</b></span>
+      <span class="chief-t"><b>🗂️ 보고·결재 창구 · 대표 승인</b></span>
       <span hidden class="chief-cnt" id="chief-cnt"></span>
       <span class="chief-caret" id="chief-caret">▾</span>
     </button>
-    <p class="chief-short-note">승인·불허·재심의 버튼을 누르면 GitHub 결재함(Issue)으로 즉시 접수되어 AI가 확인·실행합니다. (토큰 설정 시 새 창 없이 바로 접수)</p>
+    <p class="chief-short-note">승인·반려·재심의 버튼을 누르면 바로 접수됩니다 — 원터치 키가 저장돼 있으면 중계로 #피클지시 실행 감시(5분 간격)가 확인하고, 없으면 GitHub 결재함(Issue) 접수창이 열립니다.</p>
     <details class="chief-details"><summary>절차·전체 보고 보기</summary>
-    <p class="chief-route" id="chief-route"><b>비서실 창구</b> 비서실장(Instinct 총괄)이 부서 보고를 검토·지휘해 이 창구에 올리고, 대표님은 여기서 결재합니다.<br><b>결재 흐름</b> 부장 작성 → 비서실장(총괄) 팩트검토·지휘 → 대표님 결재<br><small>불허: 해당 안 진행 중단 · 삭제 범위 확정 전 원기록 보존<br>재심의: 부장 보완 → 총괄 팩트 재검토 → 대표님 재상신<br>승인 후: 실행 결과 별도 보고</small></p>
-    <div class="chief-tools"><button class="chief-report" id="chief-report" type="button" onclick="openReport('instinct')">💼 비서실장(총괄) 종합 보고 · 담당 부서 보기</button> <button class="chief-report" id="chief-gh-setup" type="button" onclick="setupGhToken()">⚙️ 원클릭 자동전송 설정</button> <a class="chief-report" href="https://github.com/shgmlwhd03-commits/-/issues?q=label%3Adecision" target="_blank" rel="noopener">📥 접수된 결재함 보기 ›</a></div>
-    <div hidden class="chief-say" id="chief-say">두 부장 미결·대기 건을 모으는 중…</div>
-    <p class="chief-receipt-note" id="chief-receipt-note"><strong>이 목록의 버튼은 이 브라우저에 선택만 저장합니다. 실제 접수는 위 "비서실 접수판" 링크에서 오너 확인으로 보냅니다.</strong><br>접수판은 별도 화면(Instinct 파일)으로 이동하며, 거기서 누른 결정·자유지시는 접수 요청으로 총괄에 도착합니다. 도착한 요청은 실행이 아니라 접수이고, 외부 발송·삭제·게시·지출 등 실행이 필요한 건은 총괄이 대화에서 안건과 범위를 다시 확인한 뒤 진행합니다. 전달 전에는 목록과 신호를 유지하며, 실제 완료로 처리하지 않습니다. 재심의 10분 검토 기준은 채널 도착 시각부터입니다.</p>
+    <p class="chief-route" id="chief-route"><b>결재선</b> 담당 작성 → 관리자(뮤즈)·부총괄(해병이) 검토 → 총괄(투덜이) 팩트체크·승인 → 대표님 결재(자금·최종)<br><b>버튼</b> 승인 · 반려 · 재심의<br><small>반려: 해당 안 진행 중단 · 삭제 범위 확정 전 원기록 보존<br>재심의: 담당 보완 → 관리자·부총괄 재검토 → 총괄 팩트 재검토 → 재상신(신호 유지)<br>승인 후: 실행 결과 별도 보고 · 🔴 자금·금융 인증은 대표님이 직접 실행</small></p>
+    <div class="chief-tools"><button class="chief-report" id="chief-report" type="button" onclick="openReport('ceo_tudeori')">💼 총괄(투덜이) 종합 보고 · 담당 부서 보기</button> <button class="chief-report" id="chief-gh-setup" type="button" onclick="setupGhToken()">⚙️ 원클릭 자동전송 설정</button> <a class="chief-report" href="https://github.com/shgmlwhd03-commits/-/issues?q=label%3Adecision" target="_blank" rel="noopener">📥 접수된 결재함 보기 ›</a></div>
+    <div hidden class="chief-say" id="chief-say">총괄 결재 항목을 모으는 중…</div>
+    <p class="chief-receipt-note" id="chief-receipt-note"><strong>버튼은 이 브라우저에서 바로 접수됩니다.</strong> 접수된 결정은 중계(ntfy) 또는 GitHub 결재함(Issue)으로 총괄(투덜이)에게 전달되고, #피클지시 실행 감시(5분 간격)가 확인해 실행·회신합니다.<br>접수 뒤에는 화면에서 되돌릴 수 없습니다(철회·변경은 새 결정으로 다시 접수). 외부 발송·삭제·게시·지출처럼 실행이 필요한 건은 총괄이 안건과 범위를 다시 확인한 뒤 진행하고, 처리 완료 전에는 목록과 신호를 유지합니다. 🔴 자금·금융 인증은 대표님이 직접 실행합니다.</p>
     </details>
     <div class="chief-body" id="chief-body"></div>
   </section>
@@ -2984,6 +3016,6 @@
 <script src="task-archive.js"></script>
 <script src="red-read.js"></script>
 <div id="runtime-load-error" role="alert" hidden style="position:fixed;top:8px;left:8px;right:8px;z-index:10000;padding:12px;background:#7f1d1d;color:#fff;border:1px solid #fecaca;border-radius:8px;font-size:14px">사무실 기능을 불러오지 못했습니다. 새로고침 후에도 같으면 이 대화에 알려주세요. 이 화면에서 결정은 전송되지 않았습니다.</div>
-<script src="office-runtime.js?v=792d6b022bb7" onerror="document.getElementById('runtime-load-error').hidden=false"></script>
+<script src="office-runtime.js?v=eb18d981912a" onerror="document.getElementById('runtime-load-error').hidden=false"></script>
 </body>
  </html>

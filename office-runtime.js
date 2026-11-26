@@ -1,7 +1,7 @@
 /* ================= 설정 ================= */
 const FLOORS = [
   { id: "f8", num: "8F", name: "대표실 · 👑 대표님", tone: "pent" },
- { id: "f6", num: "6F", name: "부장실 · 👑 부장 2명 + 🍉 수박이(위탁총괄)", tone: "pent" },
+ { id: "f6", num: "6F", name: "경영진 · 👑 총괄·부총괄·관리자·부관리자 + 🍉 수박이", tone: "pent" },
   { id: "f5", num: "5F", name: "해병이 · 수익·스토어층", tone: "cyan" },
   { id: "f4", num: "4F", name: "해병이 · 혜택·딜층", tone: "cyan" },
   { id: "f3", num: "3F", name: "투덜이 · 블로그·카페층", tone: "purple" },
@@ -14,42 +14,58 @@ const rooms = [
   {
     id: "owner", floor: "f8", zone: "instinct", tag: "오너", ceo: true,
     title: "👑 대표님", worker: "👑", name: "👑 대표님",
-    say: "전체 보고 받는 중!", foot: "조직도 최상단 · 보고 라인: 투덜이·해병이·수박이 → 비서실장(총괄) → 대표님",
+    say: "전체 보고 받는 중!", foot: "조직도 최상단 · 결재선: 관리자·부총괄 검토 → 총괄 팩트체크·승인 → 대표님",
     issue: "승인이 필요한 건이 있어요!",
     guide: "🔴 자금 건은 대표님이 직접 실행하고, 🔵 확인·승인 건은 비서실 창구에서 결정합니다.",
-    state: "working", ticker: "최종 승인권 · 보고 라인: 투덜이·해병이·수박이 → 비서실장(총괄) → 대표님", updated: "15:52"
+    state: "working", ticker: "최종 승인권 · 결재선: 관리자(뮤즈)·부총괄(해병이) 검토 → 총괄(투덜이) 팩트체크·승인 → 대표님 · 🔴 자금·금융 인증은 대표님 직접", updated: "07:58"
   },
   {
-    id: "instinct", floor: null, zone: "instinct", tag: "Instinct",
-    title: "💼 비서실장 · Instinct 총괄", worker: "💼", name: "💼 비서실장",
-    say: "검토·지휘 중 · 두 부장 보고 접수!", foot: "비서실장(총지휘) · 보고 라인: 투덜이·해병이·수박이 → 비서실장(총괄) → 대표님",
-    issue: "승인·확인 건을 모으는 중!",
-    guide: "승인·확인 건은 비서실 창구에 모아 둡니다.",
-    state: "working", ticker: "총지휘 · [총괄 지시 008] /6 최저임금 연도 정정 완료(13:56 · 15시 검증 대기) · [총괄 지시 010~014] 자녀 경제교육 8주 PWA 기획안·부모용 대본 12회분 완료 보고 접수 — 승인 6건 대표님 결재 대기 · [총괄 지시 007] 머니리포트 「맞벌이 연말정산」 13:29 공개 발행(공개 6편 · 9편 남음) · 색인 5/5 · 네이버 제휴 셋업·쿠팡 파트너스 가입 완료", updated: "14:06"
+    id: "instinct", floor: null, zone: "instinct", tag: "일꾼",
+    title: "🛠️ 일꾼 · Instinct", worker: "🛠️", name: "🛠️ 일꾼 Instinct",
+    say: "배정받은 조사·작성·검증 실행!", foot: "일꾼(구 총괄) · 조사·초안·수정·검증 실행 → 총괄 보고",
+    issue: "총괄 회신이 필요해요!",
+    guide: "Instinct는 기존 총괄 자리에서 일꾼으로 이동했습니다. 배정받은 조사·작성·수정·검증을 실행해 결과를 총괄(투덜이)에게 올리고, 업무 배분과 전체 보고는 총괄이 맡습니다.",
+    state: "working", ticker: "일꾼(구 총괄) · 배정: tudeori 애드센스 점검·소화기 3채널·브랜드커넥트 / 결과는 총괄에게 수평전개 보고", updated: "07:52"
   },
   {
-    id: "ceo_haebyeong", floor: "f6", zone: "direct", tag: "해병이", ceo: true,
-    title: "👑 해병이 부장", worker: "🫡", name: "👑 해병이 부장",
-    say: "7개 부서 보고 받는 중!", foot: "총괄 지휘 · 해병이 7개 부서",
+    id: "ceo_haebyeong", floor: "f6", zone: "direct", tag: "부총괄", ceo: true,
+    title: "👑 부총괄 · 해병이", worker: "🫡", name: "👑 부총괄 해병이",
+    say: "부서 7개 + 교차검토 맡았습니다!", foot: "부총괄 · 7개 부서 운영 + 관리자와 교차검토",
     issue: "승인 대기 중인 건이 있어요!",
     guide: "승인 대기 건을 확인해 주세요. 진행 여부만 알려주시면 바로 실행합니다.",
-    state: "working", ticker: "해병이 7개 부서 총괄 · 09:07 네이버 샷시 글 · 11:00 머니리포트 최저임금 · 13:29 머니리포트 맞벌이 연말정산(공개 6편 · 9편 남음) · 13:18 색인 요청 5/5 · 13:30 브랜드커넥트·쇼핑커넥트 가입·스페이스 개설 · 13:31 쿠팡 파트너스 가입 · 13:56 /6 최저임금 연도 정정 완료(2026년 10,320원 / 2027년 10,700원 병기) · 14:00 자녀 경제교육 8주 PWA 기획안·대본 12회분 완성(승인 대기)", updated: "14:06"
+    state: "working", ticker: "부총괄 · 7개 부서 + 교차검토 · 11:00 고향사랑기부제 교정본 발행·색인 대기 / 쿠팡파트너스 최종승인 스크린샷 채널 확정(보고 11:30)", updated: "07:52"
   },
   {
-    id: "ceo_tudeori", floor: "f6", zone: "partner", tag: "투덜이", ceo: true,
-    title: "👑 투덜이 부장", worker: "😤", name: "👑 투덜이 부장",
-    say: "5개 부서 + 전담 채널 2개 담당!", foot: "총괄 지휘 · 투덜이 5개 부서",
-    issue: "5개 부서 보고 받는 중!",
-    guide: "가동 중 · GitHub 연결(08:13) · 크레딧 잔량은 화면에서 확인할 수 없으니 필요할 때 바로 확인해 주세요.",
-    state: "working", ticker: "총괄 지휘 · 5개 부서 + 채널 2개 담당 · 가동 중 · GitHub 연결", updated: "08:22"
+    id: "ceo_tudeori", floor: "f6", zone: "partner", tag: "총괄", ceo: true,
+    title: "👑 총괄 · 투덜이", worker: "😤", name: "👑 총괄 투덜이",
+    say: "업무 배분·팩트체크·승인 중!", foot: "총괄 · 배분·팩트체크·전결 승인 → 대표님 상신",
+    issue: "결재로 올릴 안건이 있어요!",
+    guide: "총괄(투덜이)은 업무 배분·우선순위·팩트체크·전결 승인을 맡고, 관리자(뮤즈)·부총괄(해병이) 검토를 거친 안건을 승인해 대표님께 올립니다. 비상 승계 1순위입니다.",
+    state: "working", ticker: "총괄 · 07:37 지시로 임무 배분표·결재선 반영 · 관리자·부총괄 검토 → 총괄 팩트체크·승인 · 자금·금융 인증은 대표님 직접", updated: "07:58"
   },
   {
-    id: "director_subaki", floor: "f6", zone: "direct", tag: "총괄", director: true,
+    id: "director_subaki", floor: "f6", zone: "direct", tag: "위탁", director: true,
     title: "🍉 수박이 이사 · 위탁판매 총괄", worker: "🍉", name: "🍉 수박이 이사",
-    say: "위탁판매 총괄 · 실행 대기 중!", foot: "총괄 직속 · 실행 담당(사람)",
+    say: "위탁판매 총괄 · 실행 대기 중!", foot: "위탁판매·스마트스토어 실행 총괄 · 확정 건만 최소 알림",
     issue: "총괄 지시 확인이 필요해요!",
-    guide: "수박이 이사는 총괄(Instinct) 직속 위탁판매 총괄 담당이고, 실행은 실행 담당(사람)이 진행합니다. 보류 기간 동안 2축으로 움직입니다 — ① 위탁판매·사업자 준비(세무·계좌·실무 대기, 오너 확인 단계에서 멈춤) ② 저크레딧 수익 보조(1일 1회 이하, 투덜이 측과 겹치지 않는 살림·주방 배송 체험단과 고액 공식 경품). 확정 건만 최소 알림으로 전달합니다. 장부·위탁판매실은 보고 창에서 바로 열립니다.",
-    state: "working", ticker: "총괄 직속 · 위탁판매 총괄 담당 · 실행 담당(사람) · 보류 기간 2축 운영 — ① 위탁판매·사업자 준비(세무·계좌·실무 대기) + ② 저크레딧 수익 보조(1일 1회 이하 · 살림·주방 배송 체험단·고액 공식 경품) · 난방텐트 2건 철회·공개 도매가 0.70 기준 통과 0건 → 위탁 보류", updated: "--:--"
+    guide: "수박이 이사는 총괄(투덜이) 라인의 위탁판매 총괄 담당이고, 실행은 실행 담당(사람)이 진행합니다. 보류 기간 동안 2축으로 움직입니다 — ① 위탁판매·사업자 준비(세무·계좌·실무 대기, 오너 확인 단계에서 멈춤) ② 저크레딧 수익 보조(1일 1회 이하, 투덜이 측과 겹치지 않는 살림·주방 배송 체험단과 고액 공식 경품). 확정 건만 최소 알림으로 전달합니다. 장부·위탁판매실은 보고 창에서 바로 열립니다.",
+    state: "working", ticker: "위탁판매·스토어 실행 총괄 · 확정 건만 최소 알림 · 보류 기간 2축 운영(위탁·사업자 준비 + 저크레딧 수익 보조)", updated: "07:52"
+  },
+  {
+    id: "manager_muse", floor: "f6", zone: "instinct", tag: "관리자",
+    title: "🧠 관리자 · 뮤즈", worker: "🧠", name: "🧠 관리자 뮤즈",
+    say: "관리자 검토·회의록 정리!", foot: "관리자 검토(1차) · 회의록·아카이브 · 전 업무 숙지",
+    issue: "검토할 안건이 있어요!",
+    guide: "뮤즈(관리자)는 06번 업무계정으로 Slack에 연결돼 있습니다. 관리자 검토(1차)와 회의록·아카이브, 전 업무 현황 숙지를 맡고 비상 승계는 3순위입니다. 07:52 기준 채널 참여는 확인됐지만 자동 응답은 아직 검증되지 않았습니다.",
+    state: "idle", ticker: "관리자 검토(1차) · 회의록·아카이브 · 전 업무 숙지 · 06번 Slack 연결 · 자동 응답 미검증", updated: "07:52"
+  },
+  {
+    id: "deputy_manus", floor: "f6", zone: "instinct", tag: "부관리자",
+    title: "🤖 부관리자 · 큐", worker: "🤖", name: "🤖 부관리자 큐(Manus)",
+    say: "30초 AI 영상 시범안 준비!", foot: "부관리자 · 30초 AI 영상·카드뉴스 · 검수 보조",
+    issue: "수임 확인이 필요해요!",
+    guide: "큐(Manus)는 08번 계정으로 연결됐고, 대표님 계정 멘션에서만 왕복 응답이 확인됐습니다. 30초 AI 영상·카드뉴스 시범안(무료 범위 · 유료 결제 없음)과 소화기·애드센스 보조 자료를 맡습니다. 수임·계획 보고는 14:00입니다.",
+    state: "idle", ticker: "부관리자 · 08번 연결 · 대표님 계정 멘션에서만 응답 확인 · 30초 AI 영상 시범안·검수 보조(보고 14:00)", updated: "07:52"
   },
   {
     id: "naver", floor: "f5", zone: "direct", tag: "해병이",
@@ -362,7 +378,9 @@ function floorHTML(f) {
            <span class="cred td" id="cred-td">🟣 투덜이: 가동 미확인</span>
          </div>
        </div>
-       <div class="pent-roster" id="pent-roster" aria-label="6F 분장표"></div>`
+       <div class="pent-assign" id="pent-assign" aria-label="임무 배분표"></div>
+       <div class="pent-roster" id="pent-roster" aria-label="6F 분장표"></div>
+       <div class="pent-invite" id="pent-invite" aria-label="뮤즈 초대코드"></div>`
     : "";
   return `
     <section class="floor tone-${f.tone}" id="floor-${f.id}">
@@ -396,6 +414,8 @@ function render() {
   renderSignals(null);
   renderChief(null);
   renderRoster(null);
+  renderAssignments(null);
+  renderInvite(null);
   applyCorridor();
   requestAnimationFrame(() => { liftPark(); buildTicks(); });
 }
@@ -717,9 +737,9 @@ function roomSignals(id, all, scopeIds = []) {
   return { blue: pick("blue"), red: pick("red") };
 }
 
-/* 총괄 결정(승인·불허)과 신호등을 잇는 열쇠: 총괄 항목 id와 같은 규칙이다 */
+/* 총괄 결정(승인·반려)과 신호등을 잇는 열쇠: 총괄 항목 id와 같은 규칙이다 */
 
-/* 그 신호가 이미 결정(승인·불허)되어 신호등에서 내려갔는지 — 재심의(re)는 결론 전이라 불을 켠 채로 둔다 */
+/* 그 신호가 이미 결정(승인·반려)되어 신호등에서 내려갔는지 — 재심의(re)는 결론 전이라 불을 켠 채로 둔다 */
 function signalCleared(lane, it, base, dec) {
   // Only a matching source-completed task can leave the active signal view.
   return !!(CHIEF && CHIEF.items.some(x => x.room === it.room && x.title === it.title && TaskArchive.bucket(x) === "archived"));
@@ -844,8 +864,8 @@ function chiefData(raw) {
   merged.sort((a, b) => (CHIEF_LANE[a.lane] - CHIEF_LANE[b.lane]));
   merged.forEach(it => { it.id = it.lane + "|" + it.room + "|" + it.title; });
   return {
-    title: str(src.title, "총괄 · 총괄 보고 · 긴급 처리"),
-    note: str(src.note, "두 부장 미결·대기 통합 · 🔴 자금 최우선 → 🔵 승인 → ⏳ 대기"),
+    title: str(src.title, "총괄 · 보고·결재 창구"),
+    note: str(src.note, "관리자·부총괄 검토 → 총괄 팩트체크·승인 · 🔴 자금 최우선 → 🔵 승인 → ⏳ 대기"),
     updated: str(src.updated, ""),
     items: merged
   };
@@ -881,7 +901,8 @@ function chiefClick(e, room) {
   if (room) openReport(room);
 }
 
-/* 승인·불허·재심의 결정: 정적 페이지라 localStorage에 선택만 저장하고 문구는 참고용으로 복사한다. 실제 접수·처리 연결은 준비 중이며 버튼 클릭은 어디에도 전달되지 않는다. */
+/* 승인·반려·재심의 결정: 원터치 중계 키(ntfy)가 있으면 바로 접수되고, 없으면 GitHub 결재함(Issue)으로 접수된다.
+   접수 결과는 #피클지시 실행 감시(5분 간격)가 확인해 처리하며, 화면은 접수 번호와 상태를 보존한다. */
 let CHIEF_DEC = null;
 // One ordered transport per agenda item. Selections stay editable while sending.
 const CHIEF_SENDS = new Map();
@@ -914,7 +935,7 @@ function chiefPhrase(it, state) {
   const rr = rooms.find(r => r.id === it.room);
   const who = rr ? " · " + rr.tag : "";
   const where = rr ? " (" + rr.title + ")" : "";
-  const head = (state === "ok" ? "[총괄 승인" : state === "re" ? "[총괄 재심의" : "[총괄 불허") + who + "] ";
+  const head = (state === "ok" ? "[총괄 승인" : state === "re" ? "[총괄 재심의" : "[총괄 반려") + who + "] ";
   const nm = it.title + where;
   if (state === "ok") {
     return it.lane === "red"
@@ -925,8 +946,8 @@ function chiefPhrase(it, state) {
     return head + nm + " — 재심의합니다. 근거·대안·비용·일정을 보완해서 다시 상신해 주세요. 결론이 날 때까지 신호는 켜 둡니다.";
   }
   return it.lane === "red"
-    ? head + nm + " — 불허합니다. 해당 안건 내용을 삭제해 주세요. 자금·인증 건이니 진행을 중단하고 원기록은 보존해 주세요."
-    : head + nm + " — 불허합니다. 해당 안건 내용을 삭제해 주세요. 원기록은 보존합니다.";
+    ? head + nm + " — 반려합니다. 해당 안건 내용을 삭제해 주세요. 자금·인증 건이니 진행을 중단하고 원기록은 보존해 주세요."
+    : head + nm + " — 반려합니다. 해당 안건 내용을 삭제해 주세요. 원기록은 보존합니다.";
 }
 
 function setupRelayFromUrl() {
@@ -946,6 +967,10 @@ function hasRelayKey() {
   try { return !!(localStorage.getItem("liveoffice_relay_key") || "").trim(); } catch (e) { return false; }
 }
 
+function ghToken() {
+  try { return (localStorage.getItem("liveoffice_gh_token") || "").trim(); } catch (e) { return ""; }
+}
+
 function setupGhToken() {
   let cur = "";
   try { cur = localStorage.getItem("liveoffice_gh_token") || ""; } catch (e) {}
@@ -958,7 +983,7 @@ function setupGhToken() {
     const clean = val.trim();
     if (clean) {
       localStorage.setItem("liveoffice_gh_token", clean);
-      alert("원클릭 자동전송 설정 완료! 이제 승인·불허·재심의 버튼을 누르면 새 창 없이 바로 접수·실행됩니다.");
+      alert("원클릭 자동전송 설정 완료! 이제 승인·반려·재심의 버튼을 누르면 새 창 없이 바로 접수·실행됩니다.");
     } else {
       localStorage.removeItem("liveoffice_gh_token");
       alert("저장된 토큰을 삭제했습니다. 버튼 클릭 시 GitHub 접수창이 열립니다.");
@@ -967,7 +992,7 @@ function setupGhToken() {
 }
 
 function decisionLabel(s) {
-  return s === "ok" ? "승인" : s === "re" ? "재심의" : "불허";
+  return s === "ok" ? "승인" : s === "re" ? "재심의" : "반려";
 }
 
 function decisionBadge(d) {
@@ -1202,7 +1227,8 @@ function renderChief(raw) {
   if (cnt) cnt.innerHTML = `<span class="cc-red${unreadRedItems().length ? "" : " read"}">${unreadRedItems().length ? "🔴" : "⚪"} ${unreadRedItems().length}</span><span class="cc-blue">🔵 ${n.blue}</span><span class="cc-wait">⏳ ${n.wait}</span>`;
   const say = document.getElementById("chief-say");
   const localN = okN + noN + reN;
-  if (say) say.textContent = `기존 안건(팩트검토 미확인) · 접수·완료 확인 전 대기 🔴 ${n.red} · 🔵 ${n.blue} · ⏳ ${n.wait}` + (localN ? ` · 이 브라우저 선택 ${localN}건 (미접수)` : '') + ' · 버튼 작동 중 · 실제 접수 연결 준비 중(미접수)';
+  const route = hasRelayKey() ? '원터치 접수 연결됨(중계)' : (ghToken() ? '원터치 접수 연결됨(결재함)' : '접수 시 GitHub 결재함 접수창');
+  if (say) say.textContent = `관리자·부총괄 검토 → 총괄 팩트체크·승인 · 접수·처리 확인 전 대기 🔴 ${n.red} · 🔵 ${n.blue} · ⏳ ${n.wait}` + (localN ? ` · 이 브라우저 선택 ${localN}건` : '') + ' · ' + route;
   body.innerHTML = items.length ? items.map((it, idx) => {
     const sourceIdx = allItems.indexOf(it);
     const rr = rooms.find(r => r.id === it.room);
@@ -1212,7 +1238,7 @@ function renderChief(raw) {
     const ack = it.lane === "red" ? (redRead ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : `<button class="red-ack" type="button" onkeydown="event.stopPropagation()" onclick="acknowledgeRed(event, 'chief', ${sourceIdx})">확인</button>`) : "";
     const decBtns = (sel) =>
       `<button class="cr-ok${sel === "ok" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="승인 선택 저장 · 아직 접수 안 됨${sel === "ok" ? " · 현재 선택" : sel ? " · 누르면 승인으로 변경" : ""}">승인</button>` +
-      `<button class="cr-no${sel === "no" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="불허 선택 저장 · 아직 접수 안 됨${sel === "no" ? " · 현재 선택" : sel ? " · 누르면 불허로 변경" : ""}">불허</button>` +
+      `<button class="cr-no${sel === "no" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="반려 선택${sel === "no" ? " · 현재 선택" : sel ? " · 누르면 반려로 변경" : ""} · 원터치 키·토큰이 있으면 즉시 접수, 없으면 접수창 열림">반려</button>` +
       `<button class="cr-re${sel === "re" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 선택 저장 · 아직 접수 안 됨 · 신호 유지${sel === "re" ? " · 현재 선택" : sel ? " · 누르면 재심의로 변경" : ""}">재심의</button>`;
     const act = d
       ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${decisionBadge(d)}</span>` +
@@ -1295,12 +1321,16 @@ function renderBackup(raw) {
 /* ================= 🧩 6F 분장표 (2파트 역할 · 전담 채널) =================
    개인정보 없음: 역할 별칭·담당 업무·공개 채널만 담는다. */
 const ROSTER_DEFAULT = {
-  title: "6F 분장표 · 2파트",
+  title: "6F 경영진 분장표 · 5인 + 수박이",
   note: "역할 별칭으로만 표기 · status.json 동기화",
   rule: "큰 이미지·로고는 외부 AI(제미나이·클로드·챗GPT) 제작본 활용 · 불필요한 핑퐁 축소",
   items: [
-    { id: "td", name: "투덜이 부장", role: "투덜이 측 업무 운영 및 인수인계", state: "wait", chip: "가동 미확인" },
-    { id: "hb", name: "해병이 부장", role: "해병이 측 업무 운영 및 인수인계", state: "wait", chip: "가동 미확인" }
+    { id: "td", name: "👑 총괄 · 투덜이", role: "업무 배분·우선순위·팩트체크·전결 승인 → 대표님 상신", state: "wait", chip: "가동 미확인" },
+    { id: "hb", name: "👑 부총괄 · 해병이", role: "7개 부서 운영 + 관리자와 교차검토", state: "wait", chip: "가동 미확인" },
+    { id: "muse", name: "🧠 관리자 · 뮤즈", role: "관리자 검토(1차) · 회의록·아카이브 · 전 업무 숙지", state: "wait", chip: "연결 확인" },
+    { id: "manus", name: "🤖 부관리자 · 큐(Manus)", role: "30초 AI 영상·카드뉴스 시범 · 소화기·애드센스 보조 검수", state: "wait", chip: "08번 연결" },
+    { id: "inst", name: "🛠️ 일꾼 · Instinct", role: "조사·초안·수정·검증 실행 → 총괄 보고(기존 총괄)", state: "wait", chip: "#피클지시" },
+    { id: "subaki", name: "🍉 수박이 이사", role: "위탁판매·스마트스토어 실행 · 확정 건만 최소 알림", state: "wait", chip: "실행 담당(사람)" }
   ],
   channels: [
     { owner: "해병이", handle: "@daily.moneynote", url: "https://www.threads.com/@daily.moneynote", topic: "돈·세금·생활경제" },
@@ -1408,6 +1438,108 @@ function renderRoster(raw) {
   applyRosterState();
 }
 
+/* ================= 🧾 임무 배분표 (2026-11-27 07:37 지시 반영) =================
+   각자 맡은 임무·완료 기준·보고 시점과 결재선을 한 표로 보여 준다.
+   담당이 바뀌면 status.json(assignments)만 고치면 화면이 그대로 따라온다. */
+const ASSIGN_DEFAULT = {
+  title: "🧾 임무 배분표 · 07:37 지시 반영",
+  note: "담당 · 완료 기준 · 보고 시점",
+  route: "결재선: 담당 작성 → 관리자(뮤즈)·부총괄(해병이) 검토 → 총괄(투덜이) 팩트체크·승인 → 대표님(자금·최종)",
+  items: [
+    { no: "1", task: "애드센스 2곳 · daily-money-note", owner: "부총괄 해병이", state: "work", note: "11:00 고향사랑기부제 교정본 발행 + 색인 · 완료: 공개 URL·색인 확인 · 보고 11:15" },
+    { no: "2", task: "애드센스 2곳 · tudeori", owner: "일꾼 Instinct", state: "block", note: "잔여 정책·구조 점검 + 모바일 안내 동선 · 카카오 재인증 대기(대표님) · 보고 10:00" },
+    { no: "3", task: "소화기 3채널 콘텐츠", owner: "일꾼 Instinct", state: "wait", note: "제조년월 2024년 이후·사진 권리 확보 → 3자 검수(해병이·뮤즈·투덜이) · 보고 12:00" },
+    { no: "4", task: "쿠팡파트너스", owner: "부총괄 해병이", state: "work", note: "최종승인용 스크린샷 채널 확정 · 보고 11:30" },
+    { no: "5", task: "30초 AI 영상·카드뉴스", owner: "부관리자 큐", state: "wait", note: "무료 범위 시범안 1건(유료 결제 없음) · 수임·계획 보고 14:00" },
+    { no: "6", task: "브랜드커넥트", owner: "일꾼 Instinct", state: "wait", note: "연결·적용 상태 + 유입·수익 확인 · 보고 12:30" },
+    { no: "7", task: "관리자 검토·회의록", owner: "관리자 뮤즈", state: "work", note: "전 업무 숙지 · 교차검수 · 회의록·아카이브 · 비상 승계 3순위" },
+    { no: "8", task: "배분·팩트체크·승인", owner: "총괄 투덜이", state: "work", note: "배분표 유지 · 결재선 준수 · 대표님 보고 · 비상 승계 1순위" }
+  ]
+};
+let ASSIGN = null;
+
+function assignData(raw) {
+  const src = (raw && typeof raw === "object" && !Array.isArray(raw)) ? raw : {};
+  const str = (v, d) => (typeof v === "string" && v.trim()) ? v.trim() : d;
+  const list = Array.isArray(src.items) ? src.items.filter(it => it && typeof it === "object" && typeof it.task === "string" && it.task.trim()) : [];
+  const st = (v) => (v === "work" || v === "wait" || v === "block" || v === "done") ? v : "wait";
+  const items = (list.length ? list : ASSIGN_DEFAULT.items).map((it, i) => ({
+    no: str(it.no, String(i + 1)),
+    task: it.task.trim(),
+    owner: str(it.owner, "미지정"),
+    state: st(it.state),
+    note: str(it.note, "")
+  }));
+  return {
+    title: str(src.title, ASSIGN_DEFAULT.title),
+    note: str(src.note, ASSIGN_DEFAULT.note),
+    route: str(src.route, ASSIGN_DEFAULT.route),
+    updated: str(src.updated, ""),
+    items
+  };
+}
+
+const ASSIGN_LABEL = { work: "진행", wait: "대기", block: "막힘", done: "완료" };
+
+function renderAssignments(raw) {
+  if (raw !== undefined) ASSIGN = assignData(raw);
+  if (!ASSIGN) ASSIGN = assignData(null);
+  const el = document.getElementById("pent-assign");
+  if (!el) return;
+  const d = ASSIGN;
+  el.innerHTML = `
+    <div class="as-head"><span>${esc(d.title)}</span><em>${esc(d.note)}</em></div>
+    <div class="as-rows">${d.items.map(it => `
+      <div class="as-row ${it.state}">
+        <span class="as-no">${esc(it.no)}</span>
+        <span class="as-tx"><b>${esc(it.task)}</b><i>${esc(it.note)}</i></span>
+        <span class="as-own">${esc(it.owner)}</span>
+        <span class="as-st">${esc(ASSIGN_LABEL[it.state] || it.state)}</span>
+      </div>`).join("")}</div>
+    <div class="as-route">${esc(d.route)}</div>`;
+}
+
+/* ================= 🎁 뮤즈(Muse) 초대코드 카드 =================
+   대표님 지시(2026-11-27 07:49~07:50)로 코드를 50KW4O로 반영한다.
+   초대 문구·토큰 지급은 Muse 측 안내이고, 한국 지역 지원 여부는 확인되지 않았으므로 그대로 밝힌다. */
+const INVITE_DEFAULT = {
+  title: "🎁 뮤즈(Muse) 초대코드",
+  code: "50KW4O",
+  url: "https://muse.ai/join",
+  note: "가입 후 48시간 이내 설정에서 코드 입력 시 10억 토큰(초대 프로그램 안내) · 초대 문구는 Muse 측 안내이며, 한국 지역 지원 여부는 확인되지 않았습니다.",
+  updated: "07:50"
+};
+let INVITE = null;
+
+function inviteData(raw) {
+  const src = (raw && typeof raw === "object" && !Array.isArray(raw)) ? raw : {};
+  const str = (v, d) => (typeof v === "string" && v.trim()) ? v.trim() : d;
+  const url = (typeof src.url === "string" && /^https?:\/\//.test(src.url)) ? src.url : INVITE_DEFAULT.url;
+  return {
+    title: str(src.title, INVITE_DEFAULT.title),
+    code: str(src.code, INVITE_DEFAULT.code),
+    url,
+    note: str(src.note, INVITE_DEFAULT.note),
+    updated: str(src.updated, INVITE_DEFAULT.updated)
+  };
+}
+
+function renderInvite(raw) {
+  if (raw !== undefined) INVITE = inviteData(raw);
+  if (!INVITE) INVITE = inviteData(null);
+  const el = document.getElementById("pent-invite");
+  if (!el) return;
+  const d = INVITE;
+  el.innerHTML = `
+    <div class="iv-head"><span>${esc(d.title)}</span><em>${esc(d.updated)} 반영</em></div>
+    <div class="iv-body">
+      <span class="iv-code" id="iv-code">${esc(d.code)}</span>
+      <button class="iv-copy" type="button" onclick="copyText(INVITE.code, this)" title="초대코드 복사">코드 복사</button>
+      <a class="iv-link" href="${esc(d.url)}" target="_blank" rel="noopener">muse.ai/join ↗</a>
+    </div>
+    <div class="iv-note">${esc(d.note)}</div>`;
+}
+
 /* ================= 상태 동기화 ================= */
 let STATUS = null;
 let lastSync = "";
@@ -1511,6 +1643,8 @@ function applyStatus(data) {
   renderCredit(src.credit);
   renderShop(src.commerce);
   renderRoster(src.roster);
+  renderAssignments(src.assignments);
+  renderInvite(src.invite);
   refreshReport();
   updatePill();
 }
@@ -1820,8 +1954,8 @@ function reportData(id) {
   const credit = (typeof base.credit === "string" && base.credit.trim()) ? base.credit.trim() : "";
   const now = arr(base.now);
   // Reporting scope follows the source's explicit department links, never ceo styling.
-  const coordinator = id === "instinct";
-  const manager = ["ceo_haebyeong", "ceo_tudeori"].includes(id);
+  const coordinator = id === "ceo_tudeori";          // 총괄(투덜이): 전체 종합 보고
+  const manager = ["ceo_haebyeong", "manager_muse", "deputy_manus"].includes(id);   // 부총괄·관리자·부관리자
   const overview = coordinator || manager || id === "owner";
   const roster = coordinator ? ROSTER : null;
   const signals = id === "owner" ? {red:[],blue:[]} : roomSignals(id, coordinator, depts.map(x => x.id));
@@ -1933,9 +2067,9 @@ function chiefIndexForSignal(x, lane) {
       ? `<span class="rs-rm">결재는 상단 결재 목록에서</span>`
       : dec
         ? `<span class="cr-dec ${dec.s === "ok" ? "ok" : dec.s === "re" ? "re" : "no"}">${decisionBadge(dec)}</span>` +
-          `<button class="cr-ok${dec.s === "ok" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="승인 선택·전달 요청${dec.s === "ok" ? " · 현재 선택" : ""}">승인</button><button class="cr-no${dec.s === "no" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="불허 선택·전달 요청${dec.s === "no" ? " · 현재 선택" : ""}">불허</button><button class="cr-re${dec.s === "re" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 're')" title="재심의 선택·전달 요청${dec.s === "re" ? " · 현재 선택" : ""}">재심의</button>` +
+          `<button class="cr-ok${dec.s === "ok" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="승인 선택·전달 요청${dec.s === "ok" ? " · 현재 선택" : ""}">승인</button><button class="cr-no${dec.s === "no" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="반려 선택·전달 요청${dec.s === "no" ? " · 현재 선택" : ""}">반려</button><button class="cr-re${dec.s === "re" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${ci}, 're')" title="재심의 선택·전달 요청${dec.s === "re" ? " · 현재 선택" : ""}">재심의</button>` +
           (chiefUndoable(CHIEF.items[ci]) ? `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${ci})" title="미접수 선택 지우기">↺</button>` : "")
-        : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="승인 선택·전달 요청">승인</button><button class="cr-no" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="불허 선택·전달 요청">불허</button><button class="cr-re" type="button" onclick="chiefDecide(event, ${ci}, 're')" title="재심의 선택·전달 요청">재심의</button>`;
+        : `<button class="cr-ok" type="button" onclick="chiefDecide(event, ${ci}, 'ok')" title="승인 선택·전달 요청">승인</button><button class="cr-no" type="button" onclick="chiefDecide(event, ${ci}, 'no')" title="반려 선택·전달 요청">반려</button><button class="cr-re" type="button" onclick="chiefDecide(event, ${ci}, 're')" title="재심의 선택·전달 요청">재심의</button>`;
     const row = `<div class="rm-sig ${lane}${lane === "red" && !redGroupUnread(x) ? " read" : ""}"><span class="rs-lane">${lane === "red" ? (redGroupUnread(x) ? "🔴" : "⚪") : "🔵"}</span><span class="rs-tx"><b>${esc(x.title)}</b>${x.detail ? `<i>${esc(x.detail)}</i>` : ""}</span>${lane === "red" && !redGroupUnread(x) ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : ""}${act}${d.overview && x.room ? `<span class="rs-rm">${esc(roomTitle(x.room))}</span>` : ""}</div>`;
     return ci >= 0 && chiefCanCompact(CHIEF.items[ci], dec) ? compactDecisionReport(x.title, dec, row) : row;
   };
@@ -3417,7 +3551,7 @@ document.addEventListener("keydown", (e) => {
   }
 });
 window.addEventListener("resize", () => { buildTicks(); liftPark(); });
-// 다른 탭·창에서 승인·불허를 바꾸면 이 화면의 신호등·방 불빛도 같이 따라간다
+// 다른 탭·창에서 승인·반려를 바꾸면 이 화면의 신호등·방 불빛도 같이 따라간다
 window.addEventListener("storage", (e) => {
   if (e.key !== "liveoffice_chief_dec") return;
   CHIEF_DEC = null;
