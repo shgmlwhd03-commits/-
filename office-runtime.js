@@ -1953,9 +1953,16 @@ function stockLocalDelete() {
   stockLocalRefresh("이 기기의 저장 데이터를 삭제했습니다.");
 }
 
+const STOCK_NAVER_URL = "https://finance.naver.com/item/main.naver?code=360750";
+const STOCK_GOOGLE_URL = "https://www.google.com/finance/quote/360750:KRX";
+function stockMarketHtml() {
+  const T = "font-size:14px;line-height:1.5;color:#cbd5e1";
+  const lk = "color:#7dd3fc;text-decoration:underline";
+  return `<div id="stock-market" style="margin-bottom:10px"><div style="${T};font-weight:700">현재 시세 · 시장 차트 (TIGER 미국S&amp;P500 · KRX 360750)</div><div style="${T};font-size:13px;margin:2px 0 4px">아래는 Naver 증권 화면을 이 기기에서 직접 불러온 것입니다. 가격과 기준시각은 그 화면의 표시를 따르며, 이 사이트는 시세를 저장·가공·재게시하지 않습니다. 화면이 비어 있으면 새 탭으로 여세요.</div><iframe title="Naver 증권 TIGER 미국S&amp;P500 시세와 차트" src="${STOCK_NAVER_URL}" loading="eager" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups" style="width:100%;height:430px;border:1px solid #334155;border-radius:8px;background:#fff"></iframe><div style="${T};font-size:14px;margin-top:4px"><a href="${STOCK_NAVER_URL}" target="_blank" rel="noopener noreferrer" style="${lk}">Naver 증권에서 열기</a> · <a href="${STOCK_GOOGLE_URL}" target="_blank" rel="noopener noreferrer" style="${lk}">Google Finance에서 열기</a></div></div>`;
+}
 function renderStockPanel() {
   const d = (STATUS && STATUS.invest_sp500 && STATUS.invest_sp500.chart) || null;
-  if (!d) return `<section class="stock-panel"><h3>📈 주식 손익 · 내 기기 전용 입력</h3><div style="font-size:14px;line-height:1.5;color:#cbd5e1;margin-bottom:6px">공개 화면에는 올리지 않고, 이 브라우저에만 저장합니다(서버 전송 없음).</div><div id="stock-local">${stockLocalHtml()}</div></section>`;
+  if (!d) return `<section class="stock-panel"><h3>📈 주식 시세 · 손익</h3>${stockMarketHtml()}<div style="font-size:15px;font-weight:700;color:#e2e8f0;margin:6px 0 2px">내 체결 · 손익 (내 기기 전용)</div><div style="font-size:14px;line-height:1.5;color:#cbd5e1;margin-bottom:6px">공개 화면에는 올리지 않고, 이 브라우저에만 저장합니다(서버 전송 없음).</div><div id="stock-local">${stockLocalHtml()}</div></section>`;
   const shares = Number(d.shares) || 0;
   const cost = Number(d.cost_per_share_krw) * shares;
   const value = Number(d.price_per_share_krw) * shares;
@@ -2091,6 +2098,8 @@ function roomTap(e, el, id) {
 
 /* 동기화 후 열려 있는 보고가 있으면 최신 내용으로 다시 그린다 */
 function refreshReport() {
+  /* 주식 시세 화면이 열려 있으면 1분마다 다시 불러오지 않는다(깜빡임·불필요한 외부 요청 방지) */
+  if (REPORT_ID === "invest_sp500" && document.getElementById("stock-market")) return;
   if (REPORT_ID) openReport(REPORT_ID);
 }
 
