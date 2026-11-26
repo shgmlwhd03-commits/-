@@ -1828,7 +1828,7 @@ function renderPrizePanel(id) {
 const STOCK_LS_KEY = "office_stock_local_v1";
 const STOCK_LS_KEY2 = "office_stock_local_v2";
 /* 내 기기 전용(v2): 체결 내역 목록 + 현재가(직접 입력). 서버·저장소로 전송하지 않는다.
-   #sf=YYYYMMDD:수량:가격,... 형태의 주소 조각(fragment)은 서버로 전송되지 않으며, 읽은 즉시 저장하고 주소창에서 지운다. */
+   #sf=YYYYMMDD:수량:가격[:HHMM[:수수료]],... 형태의 주소 조각(fragment)은 서버로 전송되지 않으며, 읽은 즉시 저장하고 주소창에서 지운다. */
 function stockV2Load() {
   try {
     const v = JSON.parse(localStorage.getItem(STOCK_LS_KEY2) || "null");
@@ -1842,6 +1842,7 @@ function stockV2Load() {
   } catch (e) {}
   return null;
 }
+function stockFillCmp(a, b) { const x = (a.d || "") + " " + (a.t || ""), y = (b.d || "") + " " + (b.t || ""); return x < y ? -1 : x > y ? 1 : 0; }
 function stockV2Save(v) { localStorage.setItem(STOCK_LS_KEY2, JSON.stringify(v)); }
 function stockLocalSeed() {
   try {
@@ -1850,16 +1851,18 @@ function stockLocalSeed() {
     const add = [];
     m[1].split(",").forEach(seg => {
       const p = seg.split(":");
-      if (p.length !== 3 || !/^\d{8}$/.test(p[0])) return;
+      if (p.length < 3 || p.length > 5 || !/^\d{8}$/.test(p[0])) return;
       const q = Number(p[1]), pr = Number(p[2]);
       if (!(q > 0 && q <= 100000) || !(pr > 0 && pr <= 100000000)) return;
-      add.push({ d: p[0].slice(0, 4) + "-" + p[0].slice(4, 6) + "-" + p[0].slice(6, 8), q, p: pr });
+      const t = /^\d{4}$/.test(p[3] || "") ? p[3].slice(0, 2) + ":" + p[3].slice(2) : "";
+      const fe = Number(p[4] || 0);
+      add.push({ d: p[0].slice(0, 4) + "-" + p[0].slice(4, 6) + "-" + p[0].slice(6, 8), t, q, p: pr, fee: fe >= 0 && fe <= 1000000 ? fe : 0 });
     });
     if (add.length) {
       const cur = stockV2Load() || { fills: [], price: 0, asof: "" };
       cur.fills = cur.fills.filter(f => !f.legacy);
-      add.forEach(a => { if (!cur.fills.some(f => f.d === a.d && f.q === a.q && f.p === a.p)) cur.fills.push(a); });
-      cur.fills.sort((a, b) => (a.d < b.d ? -1 : a.d > b.d ? 1 : 0));
+      add.forEach(a => { const k = cur.fills.findIndex(f => f.d === a.d && f.q === a.q && f.p === a.p && (!f.t || !a.t || f.t === a.t)); if (k < 0) cur.fills.push(a); else cur.fills[k] = a; });
+      cur.fills.sort(stockFillCmp);
       stockV2Save(cur);
     }
     history.replaceState(null, "", location.pathname + location.search);
@@ -1878,16 +1881,19 @@ function stockLocalHtml(msg) {
   const shares = fills.reduce((s, f) => s + f.q, 0);
   const cost = fills.reduce((s, f) => s + f.q * f.p, 0);
   const avg = shares ? cost / shares : 0;
+  const fee = fills.reduce((s, f) => s + (Number(f.fee) || 0), 0);
+  const costFee = cost + fee, avgFee = shares ? costFee / shares : 0;
   const price = v && Number(v.price) > 0 ? Number(v.price) : 0;
   let top = "";
   if (shares > 0) {
     const value = shares * price, profit = value - cost, pct = cost ? profit / cost * 100 : 0;
-    top = `<div style="${T};display:flex;flex-wrap:wrap;gap:4px 14px"><span>보유 ${esc(String(shares))}주</span><span>매수합계 ${won(cost)}</span><span>평균단가 ${won2(avg)}</span></div>`;
+    top = `<div style="${T};display:flex;flex-wrap:wrap;gap:4px 14px"><span>보유 ${esc(String(shares))}주</span><span>매수합계 ${won(cost)}</span><span>평균단가 ${won2(avg)}</span></div><div style="${T};display:flex;flex-wrap:wrap;gap:4px 14px"><span>수수료 ${won(fee)}</span><span>수수료 포함 ${won(costFee)}</span><span>포함 평균 ${won2(avgFee)}</span></div>`;
     if (price) {
       const t = new Date(v.asof), ok = v.asof && !Number.isNaN(t.getTime());
       const stamp = ok ? t.toLocaleString("ko-KR", { timeZone: "Asia/Seoul", hour12: false }) : "시각 미입력";
       const stale = !ok || (Date.now() - t.getTime() > 24 * 3600 * 1000);
-      top += `<div class="${profit < 0 ? "down" : "up"}" style="font-size:20px;font-weight:700;margin:4px 0">손익 ${profit < 0 ? "−" : "+"}${won(Math.abs(profit))} (${pct.toFixed(2)}%)</div><div style="${T}">입력한 현재가 ${won(price)} · 기준 ${esc(stamp)} KST · <b>실시간 시세 아님</b></div>${stale ? `<div style="font-size:14px;line-height:1.5;color:#fbbf24;margin-top:4px">⚠️ 현재가 기준 시각이 없거나 24시간이 지났습니다. 새 값으로 바꾸기 전까지 현재 손익으로 보지 마세요.</div>` : ""}`;
+      const profitF = value - costFee, pctF = costFee ? profitF / costFee * 100 : 0;
+      top += `<div class="${profit < 0 ? "down" : "up"}" style="font-size:20px;font-weight:700;margin:4px 0">손익(수수료 제외) ${profit < 0 ? "−" : "+"}${won(Math.abs(profit))} (${pct.toFixed(2)}%)</div><div class="${profitF < 0 ? "down" : "up"}" style="font-size:15px;margin:2px 0">수수료 포함 손익 ${profitF < 0 ? "−" : "+"}${won(Math.abs(profitF))} (${pctF.toFixed(2)}%)</div><div style="${T}">입력한 현재가 ${won(price)} · 기준 ${esc(stamp)} KST · <b>실시간 시세 아님</b></div>${stale ? `<div style="font-size:14px;line-height:1.5;color:#fbbf24;margin-top:4px">⚠️ 현재가 기준 시각이 없거나 24시간이 지났습니다. 새 값으로 바꾸기 전까지 현재 손익으로 보지 마세요.</div>` : ""}`;
     } else {
       top += `<div style="${T};margin-top:4px">현재가를 입력하면 손익을 계산합니다. 자동 실시간 시세는 연결되어 있지 않습니다.</div>`;
     }
@@ -1906,13 +1912,13 @@ function stockLocalHtml(msg) {
     if (n > 1) svg += `<polyline fill="none" stroke="#64748b" stroke-width="1" points="${fills.map((f, i) => X(i).toFixed(1) + "," + Y(f.p).toFixed(1)).join(" ")}"/>`;
     fills.forEach((f, i) => { svg += `<circle cx="${X(i).toFixed(1)}" cy="${Y(f.p).toFixed(1)}" r="4" fill="#f472b6"/><text x="${X(i).toFixed(1)}" y="${H - 12}" font-size="11" fill="#e2e8f0" text-anchor="middle">${esc(lbl(f))}</text><text x="${X(i).toFixed(1)}" y="${H - 2}" font-size="11" fill="#94a3b8" text-anchor="middle">${Math.round(f.p).toLocaleString("ko-KR")}</text>`; });
     svg += `</svg><div style="${T};font-size:13px;margin-top:3px">점은 내 체결가이고 가로 간격은 체결 순서일 뿐 시간에 비례하지 않습니다. 같은 날 두 체결도 등간격으로 그려지며, 시장의 일중 시세 추이가 아닙니다.</div>`;
-    const rows = fills.map((f, i) => `<div style="${T};display:flex;justify-content:space-between;gap:8px;align-items:center;padding:3px 0;border-bottom:1px solid #1e293b"><span>${esc(f.d || "이전 기록")} · ${esc(String(f.q))}주 × ${won(f.p)}</span><button type="button" onclick="stockLocalDelFill(${i})" style="${btn};padding:4px 10px" aria-label="이 체결 삭제">삭제</button></div>`).join("");
-    top += svg + `<div style="margin-top:6px">${rows}</div><div style="${T};font-size:13px;margin-top:4px">체결 기록은 직접 넣은 값입니다. 수수료·세금 포함 여부는 앱 화면에 없어 반영하지 않았습니다.</div>`;
+    const rows = fills.map((f, i) => `<div style="${T};display:flex;justify-content:space-between;gap:8px;align-items:center;padding:3px 0;border-bottom:1px solid #1e293b"><span>${esc(f.d || "이전 기록")}${f.t ? " " + esc(f.t) : ""} · ${esc(String(f.q))}주 × ${won(f.p)}${Number(f.fee) ? " · 수수료 " + won(f.fee) : ""}</span><button type="button" onclick="stockLocalDelFill(${i})" style="${btn};padding:4px 10px" aria-label="이 체결 삭제">삭제</button></div>`).join("");
+    top += svg + `<div style="margin-top:6px">${rows}</div><div style="${T};font-size:13px;margin-top:4px">체결 기록은 직접 넣은 값입니다. 수수료는 입력된 값만 반영하며 세금은 반영하지 않았습니다. 매수 평균(수수료 제외)과 수수료 포함 값은 따로 표시합니다.</div>`;
   } else {
     top = `<div style="${T}">체결 내역이 없습니다. 아래에서 매수한 날짜·수량·체결가를 넣으면 보유, 평균단가, 그래프가 계산됩니다. 자동 실시간 시세는 연결되어 있지 않습니다.</div>`;
   }
   const today = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
-  const addForm = `<details style="margin-top:8px"${shares ? "" : " open"}><summary style="cursor:pointer;font-size:14px;color:#7dd3fc;padding:4px 0">체결 추가 (매주 1주)</summary><label style="${lab}">체결일<input id="sl-fd" type="date" style="${inp}" value="${today}"></label><label style="${lab}">수량(주)<input id="sl-fq" type="number" step="1" min="1" inputmode="numeric" style="${inp}" value="1"></label><label style="${lab}">체결가(주당 원)<input id="sl-fp" type="number" step="any" min="0" inputmode="decimal" style="${inp}"></label><div style="margin-top:10px"><button type="button" onclick="stockLocalAddFill()" style="${btn}">체결 추가</button></div></details>`;
+  const addForm = `<details style="margin-top:8px"${shares ? "" : " open"}><summary style="cursor:pointer;font-size:14px;color:#7dd3fc;padding:4px 0">체결 추가 (매주 1주)</summary><label style="${lab}">체결일<input id="sl-fd" type="date" style="${inp}" value="${today}"></label><label style="${lab}">체결 시각(선택)<input id="sl-ft" type="time" style="${inp}"></label><label style="${lab}">수수료(원, 선택)<input id="sl-ffee" type="number" step="any" min="0" inputmode="decimal" style="${inp}" value="0"></label><label style="${lab}">수량(주)<input id="sl-fq" type="number" step="1" min="1" inputmode="numeric" style="${inp}" value="1"></label><label style="${lab}">체결가(주당 원)<input id="sl-fp" type="number" step="any" min="0" inputmode="decimal" style="${inp}"></label><div style="margin-top:10px"><button type="button" onclick="stockLocalAddFill()" style="${btn}">체결 추가</button></div></details>`;
   const pf = `<details style="margin-top:8px"><summary style="cursor:pointer;font-size:14px;color:#7dd3fc;padding:4px 0">현재가 입력(직접)</summary><label style="${lab}">현재가(원)<input id="sl-price" type="number" step="any" min="0" inputmode="decimal" style="${inp}" value="${price ? esc(String(price)) : ""}"></label><label style="${lab}">가격 기준 시각<input id="sl-asof" type="datetime-local" style="${inp}" value="${v ? esc(v.asof || "") : ""}"></label><div style="margin-top:10px"><button type="button" onclick="stockLocalSavePrice()" style="${btn}">현재가 저장</button></div></details>`;
   const del = `<div style="margin-top:8px"><button type="button" onclick="stockLocalDelete()" style="${btn}">이 기기에서 데이터 모두 삭제</button></div>`;
   return `${top}${addForm}${pf}${del}<div id="sl-msg" role="status" style="font-size:14px;line-height:1.5;color:#fbbf24;margin-top:6px">${msg ? esc(msg) : ""}</div><div style="${T};margin-top:8px">이 기기·브라우저에만 저장됩니다. 폰과 PC는 연동되지 않고, 사이트 데이터를 지우면 사라집니다. 공용 기기에서는 입력 후 꼭 삭제하세요. 로그인 보안이 아닙니다.</div>`;
@@ -1927,8 +1933,8 @@ function stockLocalAddFill() {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(d) || !(q > 0) || !(p > 0)) { const m = g("sl-msg"); if (m) m.textContent = "날짜, 수량(1 이상), 체결가(0보다 큼)를 모두 넣어 주세요."; return; }
   const cur = stockV2Load() || { fills: [], price: 0, asof: "" };
   cur.fills = cur.fills.filter(f => !f.legacy);
-  cur.fills.push({ d, q, p });
-  cur.fills.sort((a, b) => (a.d < b.d ? -1 : a.d > b.d ? 1 : 0));
+  cur.fills.push({ d, t: g("sl-ft").value || "", q, p, fee: Math.max(0, Number(g("sl-ffee").value) || 0) });
+  cur.fills.sort(stockFillCmp);
   try { stockV2Save(cur); } catch (e) { const m = g("sl-msg"); if (m) m.textContent = "이 브라우저에서 저장할 수 없습니다(저장 차단 상태)."; return; }
   stockLocalRefresh("체결을 추가했습니다. 이 기기에만 저장됩니다.");
 }
@@ -1960,7 +1966,7 @@ function stockMarketHtml() {
   const T = "font-size:14px;line-height:1.5;color:#cbd5e1";
   const lk = "color:#7dd3fc;text-decoration:underline";
   const btn = "display:inline-block;padding:10px 14px;margin:4px 6px 4px 0;border-radius:8px;background:#0ea5e9;color:#04121f;font-weight:700;text-decoration:none;font-size:15px";
-  return `<div id="stock-market" style="margin-bottom:10px"><div style="${T};font-weight:700">현재 시세 (TIGER 미국S&amp;P500 · KRX 360750)</div><div style="${T};font-size:13px;margin:2px 0 6px">아래 가격은 Daum 금융 화면을 이 기기에서 직접 불러온 것이며, 기준시각은 Daum 화면의 표시를 따릅니다(이 사이트의 확인 시각이 아님). 이 사이트는 시세를 저장·가공·재게시하지 않습니다. 차트는 사무실 안에 표시되지 않으니 아래 버튼으로 원본 차트를 여세요.</div><div style="height:190px;overflow:hidden;border:1px solid #334155;border-radius:8px;background:#fff"><iframe title="Daum 금융 TIGER 미국S&amp;P500 현재가" src="${STOCK_DAUM_URL}" loading="eager" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups" scrolling="no" style="width:100%;height:700px;margin-top:-125px;border:0;background:#fff;pointer-events:none"></iframe></div><div style="margin-top:6px"><a href="${STOCK_DAUM_URL}" target="_blank" rel="noopener noreferrer" style="${btn}">📈 원본 차트 열기 (Daum 금융)</a></div><div style="${T};font-size:14px;margin-top:2px">다른 화면: <a href="${STOCK_NAVER_URL}" target="_blank" rel="noopener noreferrer" style="${lk}">Naver 증권</a> · <a href="${STOCK_GOOGLE_URL}" target="_blank" rel="noopener noreferrer" style="${lk}">Google Finance</a></div></div>`;
+  return `<div id="stock-market" style="margin-bottom:10px"><div style="${T};font-weight:700">현재 시세 (TIGER 미국S&amp;P500 · KRX 360750)</div><div style="${T};font-size:13px;margin:2px 0 6px">아래 가격은 Daum 금융 화면을 이 기기에서 직접 불러온 것이며, 기준시각은 Daum 화면의 표시를 따릅니다(이 사이트의 확인 시각이 아님). 이 사이트는 시세를 저장·가공·재게시하지 않습니다. 차트는 사무실 안에 표시되지 않으니 아래 버튼으로 원본 차트를 여세요.</div><div style="height:215px;overflow:hidden;border:1px solid #334155;border-radius:8px;background:#fff"><iframe title="Daum 금융 TIGER 미국S&amp;P500 현재가" src="${STOCK_DAUM_URL}" loading="eager" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups" scrolling="no" style="width:100%;height:700px;margin-top:-125px;border:0;background:#fff;pointer-events:none"></iframe></div><div style="margin-top:6px"><a href="${STOCK_DAUM_URL}" target="_blank" rel="noopener noreferrer" style="${btn}">📈 원본 차트 열기 (Daum 금융)</a></div><div style="${T};font-size:14px;margin-top:2px">다른 화면: <a href="${STOCK_NAVER_URL}" target="_blank" rel="noopener noreferrer" style="${lk}">Naver 증권</a> · <a href="${STOCK_GOOGLE_URL}" target="_blank" rel="noopener noreferrer" style="${lk}">Google Finance</a></div></div>`;
 }
 function renderStockPanel() {
   const d = (STATUS && STATUS.invest_sp500 && STATUS.invest_sp500.chart) || null;
