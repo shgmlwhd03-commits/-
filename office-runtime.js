@@ -3,7 +3,7 @@ const FLOORS = [
   { id: "f8", num: "8F", name: "대표실 · 👑 대표님", tone: "pent" },
  { id: "f6", num: "6F", name: "부장실 · 👑 부장 2명 + 🍉 수박이(위탁총괄)", tone: "pent" },
   { id: "f5", num: "5F", name: "해병이 · 수익·스토어층", tone: "cyan" },
-  { id: "f4", num: "4F", name: "해병이 · 혜택·딜층", tone: "cyan" },
+  { id: "f4", num: "4F", name: "해병이 · 혜택·딜·여행층", tone: "cyan" },
   { id: "f3", num: "3F", name: "투덜이 · 블로그·카페층", tone: "purple" },
   { id: "f2", num: "2F", name: "투덜이 · 퀴즈·B2B층", tone: "purple" },
 
@@ -54,16 +54,16 @@ const rooms = [
   {
     id: "naver", floor: "f5", zone: "direct", tag: "해병이",
     title: "✍️ 네이버 블로그팀", worker: "🧑‍💻", name: "박작가 과장",
-    say: "제휴 셋업 완료! 첫 링크 글 준비~", foot: "브랜드커넥트·쇼핑커넥트 가입 · 쿠팡 파트너스 가입 · 매일 09:00 발행",
-    issue: "네이버 재로그인 필요!",
-    guide: "네이버 제휴 셋업은 끝났습니다 — 브랜드커넥트·쇼핑커넥트 가입과 크리에이터 스페이스 개설(정산 유형 개인), 쿠팡 파트너스 가입(활동 사이트 네이버 블로그 등록)까지 완료했습니다. 다음은 첫 제휴 링크 적용 글 발행이고, 발행 후 최종 승인용 스크린샷을 등록합니다. 배송형 체험단(리뷰노트)은 계정당 블로그 1개 제한으로 투덜이 전담을 유지합니다.",
-    state: "working", ticker: "13:30 네이버 브랜드커넥트·쇼핑커넥트 가입 및 크리에이터 스페이스 개설 완료(정산 유형 개인 · 광고성 정보 수신 거부) · 13:31 쿠팡 파트너스 가입 완료(활동 사이트 네이버 블로그 등록) · 리뷰노트는 슬롯 제한으로 투덜이 전담 유지 · 다음: 첫 제휴 링크 글 발행 → 최종 승인 스크린샷 · 09:07 샷시 글 발행 완료", updated: "13:32"
+    say: "새 발행은 멈춘 상태예요", foot: "네이버 제휴 글 새 발행·재공개 중단 · 수익 연결·지급 설정은 미확인",
+    issue: "새 발행·재공개 중단 상태",
+    guide: "11/24 배수구 제휴 글은 15:55 공개했다가 사용자 16:00 지시로 비공개 전환했고(22:01 독립 확인), 새 제휴 글 발행과 재공개는 중단한 상태입니다. 파트너스 수익 연결·최종 승인·지급 설정은 확인되지 않았습니다. 다음 큐는 보류입니다.",
+    state: "idle", ticker: "11/23 겨울 온습도·결로 글 공개 발행 · 11/24 욕실 배수구·트랩 제휴 글 15:55 공개 → 사용자 16:00 지시로 비공개 전환 완료(22:01 블로그 담당 비로그인 독립 확인) · 새 제휴 발행·재공개 중단 · 파트너스 수익 연결·최종 승인·지급 설정은 미확인 · 다음 큐 보류", updated: "13:32"
   },
   {
     id: "haebyeongi_adsense", floor: "f5", zone: "direct", tag: "해병이",
     title: "💵 해병이 애드센스팀", worker: "🧑‍🚀", name: "해병이 팀장",
-    say: "공개 6편! 9편 더 채우고 애드센스 사이트 추가", foot: "티스토리 애드센스 · 매일 11:00 · 다음 애드센스 '+ 새 사이트' 신청",
-    issue: "색인 요청 5/5 완료 — 편입 집계 대기 중",
+    say: "공개 9편! 애드센스 심사 검토 중", foot: "티스토리 애드센스 · 공개 15~20편까지 6편 남음 · 추가 심사 검토 중(미승인)",
+    issue: "애드센스 심사 검토 중(미승인)",
     guide: "13:29 「맞벌이 부부 연말정산」까지 공개 6편입니다(총 7건 중 AI 안경 글은 비공개 유지). 15~20편 목표까지 9편 남았습니다. 공개 5편은 13:18 구글 색인 생성 요청을 모두 넣었고(5/5), 서치콘솔·사이트맵 제출도 완료해 색인·실적은 며칠 뒤부터 집계됩니다. 새 글은 발행 후 색인 생성 요청을 이어서 넣습니다. 13:56 [총괄 지시 008]로 /6 「2026년 최저임금」 글의 연도 표기를 정정했습니다 — 2026년 10,320원·월 2,156,880원은 2026년 12월 31일까지 적용, 2027년은 10,700원·월 2,236,300원(2027년 1월 1일부터 · 고용노동부 2026-08-05 발표)으로 병기했고, 12,384원은 법정 시급이 아니라 주휴수당을 포함한 주 40시간 환산치임을 명시했습니다.",
     state: "working", ticker: "13:29 「맞벌이 부부 연말정산, 공제는 누가 받아야 유리할까」 공개 발행 완료(/7 · 4,186자 · 도해 2장) · 공개 6편(총 7건 · /2 비공개 유지) · 15~20편까지 9편 남음 · 13:18 공개 5편(/1·/3·/4·/5·/6) 구글 색인 생성 요청 5/5 완료 · [총괄 지시 007] #피클지시 보고 완료 · 13:56 [총괄 지시 008] /6 최저임금 연도 표기 정정 완료 — 2026년 10,320원·2,156,880원(12/31까지 적용) vs 2027년 10,700원·2,236,300원(1/1부터) 병기 · 12,384원은 법정 시급 아닌 주휴 포함 환산치 명시 · #피클지시 보고 완료", updated: "14:06"
   },
@@ -108,6 +108,14 @@ const rooms = [
     state: "idle", ticker: "탐색 범위 확대 — 항공권·자동차·대형가전·숙박/여행권 등 고액 공식 경품까지 · 1만+/3만+ 기준 유지 · 매일 15:00", updated: "11:56"
   },
   {
+    id: "travel_blog", floor: "f4", zone: "direct", tag: "해병이",
+    title: "🧳 영문 여행 블로그팀", worker: "🧳", name: "여행 안내 주임",
+    say: "영문 방한 여행글 2편 공개 중!", foot: "Blogger 무료 · 담당 해병이(내용·출처 검토는 총괄) · 수익 확인 없음",
+    issue: "다음 글 계획·수익은 아직 없어요",
+    guide: "영문 방한 여행 블로그(Korea Travel Note)입니다. 공개 2편(11/25 13:05 인천공항→서울 교통, 13:19 서울 3일 루트)을 블로그 피드에서 직접 확인했습니다. 담당은 해병이이고 내용·출처 검토는 총괄이 합니다. 이후 글 일정과 수익은 확인된 것이 없습니다.",
+    state: "idle", ticker: "영문 여행 블로그 Korea Travel Note · 공개 2편(11/25 13:05·13:19 발행, 11/26 10:38 블로그 피드로 직접 확인) · 담당 해병이 · 수익·다음 글 일정 확인된 것 없음", updated: "10:40"
+  },
+  {
     id: "tistory", floor: "f3", zone: "partner", tag: "투덜이",
     title: "💵 투덜이 티스토리팀", worker: "🤵", name: "투덜이 팀장",
     say: "발행 기록 확인 · 심사 대기", foot: "매일 13:00 · 애드센스 심사 대기",
@@ -118,7 +126,7 @@ const rooms = [
   {
     id: "cafe", floor: "f3", zone: "partner", tag: "투덜이",
     title: "🛡️ EOKC 카페팀", worker: "🧑‍🚀", name: "정스탭 매니저",
-    say: "회칙 초안·쇼핑커넥트!", foot: "회칙 18조 초안 · 쇼핑커넥트 가동",
+    say: "카페 점검 기록은 과거분이에요", foot: "11/21 16:00 정기 점검 기록 · 이후 점검은 확인 안 됨",
     issue: "총괄 계정 확인이 필요해요!",
     guide: "총괄에 카페·블로그 계정 상태를 확인 요청해 주세요.",
     state: "idle", ticker: "EOKC 회칙 18조 초안 + 블로그 쇼핑커넥트 가동", updated: "22:50"
@@ -1818,50 +1826,130 @@ function renderPrizePanel(id) {
 }
 
 const STOCK_LS_KEY = "office_stock_local_v1";
-function stockLocalLoad() {
-  try { const v = JSON.parse(localStorage.getItem(STOCK_LS_KEY) || "null"); return v && typeof v === "object" ? v : null; } catch (e) { return null; }
+const STOCK_LS_KEY2 = "office_stock_local_v2";
+/* 내 기기 전용(v2): 체결 내역 목록 + 현재가(직접 입력). 서버·저장소로 전송하지 않는다.
+   #sf=YYYYMMDD:수량:가격,... 형태의 주소 조각(fragment)은 서버로 전송되지 않으며, 읽은 즉시 저장하고 주소창에서 지운다. */
+function stockV2Load() {
+  try {
+    const v = JSON.parse(localStorage.getItem(STOCK_LS_KEY2) || "null");
+    if (v && typeof v === "object" && Array.isArray(v.fills)) return v;
+  } catch (e) {}
+  try {
+    const o = JSON.parse(localStorage.getItem(STOCK_LS_KEY) || "null");
+    if (o && Number(o.shares) > 0 && Number.isFinite(Number(o.avg))) {
+      return { fills: [{ d: "", q: Number(o.shares), p: Number(o.avg), legacy: true }], price: Number(o.price) || 0, asof: o.asof || "" };
+    }
+  } catch (e) {}
+  return null;
 }
+function stockV2Save(v) { localStorage.setItem(STOCK_LS_KEY2, JSON.stringify(v)); }
+function stockLocalSeed() {
+  try {
+    const m = /(?:^|[#&])sf=([0-9:,.]+)/.exec(location.hash || "");
+    if (!m) return;
+    const add = [];
+    m[1].split(",").forEach(seg => {
+      const p = seg.split(":");
+      if (p.length !== 3 || !/^\d{8}$/.test(p[0])) return;
+      const q = Number(p[1]), pr = Number(p[2]);
+      if (!(q > 0 && q <= 100000) || !(pr > 0 && pr <= 100000000)) return;
+      add.push({ d: p[0].slice(0, 4) + "-" + p[0].slice(4, 6) + "-" + p[0].slice(6, 8), q, p: pr });
+    });
+    if (add.length) {
+      const cur = stockV2Load() || { fills: [], price: 0, asof: "" };
+      cur.fills = cur.fills.filter(f => !f.legacy);
+      add.forEach(a => { if (!cur.fills.some(f => f.d === a.d && f.q === a.q && f.p === a.p)) cur.fills.push(a); });
+      cur.fills.sort((a, b) => (a.d < b.d ? -1 : a.d > b.d ? 1 : 0));
+      stockV2Save(cur);
+    }
+    history.replaceState(null, "", location.pathname + location.search);
+  } catch (e) {}
+}
+stockLocalSeed();
 function stockLocalHtml(msg) {
-  const v = stockLocalLoad();
+  const v = stockV2Load();
   const won = n => "₩" + Math.round(n).toLocaleString("ko-KR");
+  const won2 = n => "₩" + (Math.round(n * 100) / 100).toLocaleString("ko-KR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const T = "font-size:14px;line-height:1.5;color:#cbd5e1";
   const lab = "display:block;font-size:14px;color:#e2e8f0;margin-top:8px";
   const inp = "display:block;width:100%;box-sizing:border-box;font-size:16px;padding:8px 10px;margin-top:3px;background:#0b1220;color:#f1f5f9;border:1px solid #475569;border-radius:6px";
   const btn = "font-size:14px;padding:8px 12px;border-radius:6px;cursor:pointer";
+  const fills = v ? v.fills : [];
+  const shares = fills.reduce((s, f) => s + f.q, 0);
+  const cost = fills.reduce((s, f) => s + f.q * f.p, 0);
+  const avg = shares ? cost / shares : 0;
+  const price = v && Number(v.price) > 0 ? Number(v.price) : 0;
   let top = "";
-  if (v) {
-    const shares = Number(v.shares), avg = Number(v.avg), price = Number(v.price);
-    const cost = shares * avg, value = shares * price, profit = value - cost, pct = cost ? profit / cost * 100 : 0;
-    const t = new Date(v.asof), ok = !Number.isNaN(t.getTime());
-    const stale = !ok || (Date.now() - t.getTime() > 24 * 3600 * 1000);
-    const stamp = ok ? t.toLocaleString("ko-KR", { timeZone: "Asia/Seoul", hour12: false }) : "시각 미입력";
-    top = `<div style="${T};display:flex;flex-wrap:wrap;gap:4px 14px"><span>보유 ${esc(String(shares))}주</span><span>매수 ${won(cost)}</span><span>입력 시세 ${won(value)}</span></div><div class="${profit < 0 ? "down" : "up"}" style="font-size:20px;font-weight:700;margin:4px 0">손익 ${profit < 0 ? "−" : "+"}${won(Math.abs(profit))} (${pct.toFixed(2)}%)</div><div style="${T}">직접 입력한 값 · 가격 기준 ${esc(stamp)} KST · <b>실시간 시세 아님</b></div>${stale ? `<div style="font-size:14px;line-height:1.5;color:#fbbf24;margin-top:4px">⚠️ 24시간이 지났거나 기준시각이 없는 값입니다. 현재가로 보지 마세요.</div>` : ""}`;
+  if (shares > 0) {
+    const value = shares * price, profit = value - cost, pct = cost ? profit / cost * 100 : 0;
+    top = `<div style="${T};display:flex;flex-wrap:wrap;gap:4px 14px"><span>보유 ${esc(String(shares))}주</span><span>매수합계 ${won(cost)}</span><span>평균단가 ${won2(avg)}</span></div>`;
+    if (price) {
+      const t = new Date(v.asof), ok = v.asof && !Number.isNaN(t.getTime());
+      const stamp = ok ? t.toLocaleString("ko-KR", { timeZone: "Asia/Seoul", hour12: false }) : "시각 미입력";
+      const stale = !ok || (Date.now() - t.getTime() > 24 * 3600 * 1000);
+      top += `<div class="${profit < 0 ? "down" : "up"}" style="font-size:20px;font-weight:700;margin:4px 0">손익 ${profit < 0 ? "−" : "+"}${won(Math.abs(profit))} (${pct.toFixed(2)}%)</div><div style="${T}">입력한 현재가 ${won(price)} · 기준 ${esc(stamp)} KST · <b>실시간 시세 아님</b></div>${stale ? `<div style="font-size:14px;line-height:1.5;color:#fbbf24;margin-top:4px">⚠️ 현재가 기준 시각이 없거나 24시간이 지났습니다. 새 값으로 바꾸기 전까지 현재 손익으로 보지 마세요.</div>` : ""}`;
+    } else {
+      top += `<div style="${T};margin-top:4px">현재가를 입력하면 손익을 계산합니다. 자동 실시간 시세는 연결되어 있지 않습니다.</div>`;
+    }
+    /* 체결 그래프: 체결가(점) · 평균단가(점선) · 입력 현재가(실선) */
+    const W = 300, H = 130, L = 8, R = 8, Tp = 16, B = 26;
+    const ys = fills.map(f => f.p).concat([avg]).concat(price ? [price] : []);
+    let lo = Math.min(...ys), hi = Math.max(...ys);
+    const pad = Math.max(5, (hi - lo) * 0.18); lo -= pad; hi += pad;
+    const Y = p => Tp + (hi - p) / (hi - lo) * (H - Tp - B);
+    const n = fills.length;
+    const X = i => n === 1 ? W / 2 : L + 16 + i * (W - L - R - 32) / (n - 1);
+    const lbl = f => f.d ? f.d.slice(5).replace("-", "/") : "기존";
+    let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="체결가와 평균단가 그래프" style="display:block;margin-top:8px;background:#0b1220;border:1px solid #334155;border-radius:8px">`;
+    svg += `<line x1="${L}" x2="${W - R}" y1="${Y(avg).toFixed(1)}" y2="${Y(avg).toFixed(1)}" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="5 3"/><text x="${L + 2}" y="${(Y(avg) - 3).toFixed(1)}" font-size="11" fill="#7dd3fc">평균 ${won2(avg)}</text>`;
+    if (price) svg += `<line x1="${L}" x2="${W - R}" y1="${Y(price).toFixed(1)}" y2="${Y(price).toFixed(1)}" stroke="#fbbf24" stroke-width="1.5"/><text x="${W - R - 2}" y="${(Y(price) - 3).toFixed(1)}" font-size="11" fill="#fcd34d" text-anchor="end">입력가 ${won(price)}</text>`;
+    if (n > 1) svg += `<polyline fill="none" stroke="#64748b" stroke-width="1" points="${fills.map((f, i) => X(i).toFixed(1) + "," + Y(f.p).toFixed(1)).join(" ")}"/>`;
+    fills.forEach((f, i) => { svg += `<circle cx="${X(i).toFixed(1)}" cy="${Y(f.p).toFixed(1)}" r="4" fill="#f472b6"/><text x="${X(i).toFixed(1)}" y="${H - 12}" font-size="11" fill="#e2e8f0" text-anchor="middle">${esc(lbl(f))}</text><text x="${X(i).toFixed(1)}" y="${H - 2}" font-size="11" fill="#94a3b8" text-anchor="middle">${Math.round(f.p).toLocaleString("ko-KR")}</text>`; });
+    svg += `</svg>`;
+    const rows = fills.map((f, i) => `<div style="${T};display:flex;justify-content:space-between;gap:8px;align-items:center;padding:3px 0;border-bottom:1px solid #1e293b"><span>${esc(f.d || "이전 기록")} · ${esc(String(f.q))}주 × ${won(f.p)}</span><button type="button" onclick="stockLocalDelFill(${i})" style="${btn};padding:4px 10px" aria-label="이 체결 삭제">삭제</button></div>`).join("");
+    top += svg + `<div style="margin-top:6px">${rows}</div><div style="${T};font-size:13px;margin-top:4px">체결 기록은 직접 넣은 값입니다. 수수료·세금 포함 여부는 앱 화면에 없어 반영하지 않았습니다.</div>`;
   } else {
-    top = `<div style="${T}">입력된 값이 없습니다. 증권사 화면의 값을 직접 입력하세요. 자동 실시간 시세는 연결되어 있지 않습니다.</div>`;
+    top = `<div style="${T}">체결 내역이 없습니다. 아래에서 매수한 날짜·수량·체결가를 넣으면 보유, 평균단가, 그래프가 계산됩니다. 자동 실시간 시세는 연결되어 있지 않습니다.</div>`;
   }
-  const dv = v ? v.asof : "";
-  const form = `<details style="margin-top:8px"${v ? "" : " open"}><summary style="cursor:pointer;font-size:14px;color:#7dd3fc;padding:4px 0">${v ? "값 수정" : "값 입력"}</summary><label style="${lab}">보유 수량(주)<input id="sl-shares" type="number" step="any" min="0" inputmode="decimal" style="${inp}" value="${v ? esc(String(v.shares)) : ""}"></label><label style="${lab}">평균 매수가(원)<input id="sl-avg" type="number" step="any" min="0" inputmode="decimal" style="${inp}" value="${v ? esc(String(v.avg)) : ""}"></label><label style="${lab}">현재가(원, 직접 입력)<input id="sl-price" type="number" step="any" min="0" inputmode="decimal" style="${inp}" value="${v ? esc(String(v.price)) : ""}"></label><label style="${lab}">가격 기준 시각<input id="sl-asof" type="datetime-local" style="${inp}" value="${esc(dv)}"></label><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px"><button type="button" onclick="stockLocalSave()" style="${btn}">저장</button><button type="button" onclick="stockLocalDelete()" style="${btn}">이 기기에서 데이터 삭제</button></div></details>`;
-  return `${top}${form}<div id="sl-msg" role="status" style="font-size:14px;line-height:1.5;color:#fbbf24;margin-top:6px">${msg ? esc(msg) : ""}</div><div style="${T};margin-top:8px">이 기기·브라우저에만 저장됩니다. 폰과 PC는 연동되지 않고, 사이트 데이터를 지우면 사라집니다. 공용 기기에서는 입력 후 꼭 삭제하세요. 로그인 보안이 아닙니다.</div>`;
+  const today = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+  const addForm = `<details style="margin-top:8px"${shares ? "" : " open"}><summary style="cursor:pointer;font-size:14px;color:#7dd3fc;padding:4px 0">체결 추가 (매주 1주)</summary><label style="${lab}">체결일<input id="sl-fd" type="date" style="${inp}" value="${today}"></label><label style="${lab}">수량(주)<input id="sl-fq" type="number" step="1" min="1" inputmode="numeric" style="${inp}" value="1"></label><label style="${lab}">체결가(주당 원)<input id="sl-fp" type="number" step="any" min="0" inputmode="decimal" style="${inp}"></label><div style="margin-top:10px"><button type="button" onclick="stockLocalAddFill()" style="${btn}">체결 추가</button></div></details>`;
+  const pf = `<details style="margin-top:8px"><summary style="cursor:pointer;font-size:14px;color:#7dd3fc;padding:4px 0">현재가 입력(직접)</summary><label style="${lab}">현재가(원)<input id="sl-price" type="number" step="any" min="0" inputmode="decimal" style="${inp}" value="${price ? esc(String(price)) : ""}"></label><label style="${lab}">가격 기준 시각<input id="sl-asof" type="datetime-local" style="${inp}" value="${v ? esc(v.asof || "") : ""}"></label><div style="margin-top:10px"><button type="button" onclick="stockLocalSavePrice()" style="${btn}">현재가 저장</button></div></details>`;
+  const del = `<div style="margin-top:8px"><button type="button" onclick="stockLocalDelete()" style="${btn}">이 기기에서 데이터 모두 삭제</button></div>`;
+  return `${top}${addForm}${pf}${del}<div id="sl-msg" role="status" style="font-size:14px;line-height:1.5;color:#fbbf24;margin-top:6px">${msg ? esc(msg) : ""}</div><div style="${T};margin-top:8px">이 기기·브라우저에만 저장됩니다. 폰과 PC는 연동되지 않고, 사이트 데이터를 지우면 사라집니다. 공용 기기에서는 입력 후 꼭 삭제하세요. 로그인 보안이 아닙니다.</div>`;
 }
 function stockLocalRefresh(msg) {
   const el = document.getElementById("stock-local");
   if (el) el.innerHTML = stockLocalHtml(msg);
 }
-function stockLocalSave() {
+function stockLocalAddFill() {
   const g = id => document.getElementById(id);
-  const raw = { shares: g("sl-shares").value, avg: g("sl-avg").value, price: g("sl-price").value };
-  const shares = Number(raw.shares), avg = Number(raw.avg), price = Number(raw.price);
-  if (raw.shares === "" || raw.avg === "" || raw.price === "" || !(shares > 0) || !Number.isFinite(avg) || avg < 0 || !Number.isFinite(price) || price < 0) {
-    const m = g("sl-msg"); if (m) m.textContent = "수량은 0보다 큰 숫자, 가격은 0 이상 숫자로 모두 입력하세요.";
-    return;
-  }
-  try {
-    localStorage.setItem(STOCK_LS_KEY, JSON.stringify({ shares, avg, price, asof: g("sl-asof").value || "", saved_at: new Date().toISOString() }));
-  } catch (e) { const m = g("sl-msg"); if (m) m.textContent = "이 브라우저에서 저장할 수 없습니다(저장 차단 상태)."; return; }
-  stockLocalRefresh("저장했습니다. 이 기기에만 저장됩니다.");
+  const d = g("sl-fd").value, q = Number(g("sl-fq").value), p = Number(g("sl-fp").value);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(d) || !(q > 0) || !(p > 0)) { const m = g("sl-msg"); if (m) m.textContent = "날짜, 수량(1 이상), 체결가(0보다 큼)를 모두 넣어 주세요."; return; }
+  const cur = stockV2Load() || { fills: [], price: 0, asof: "" };
+  cur.fills = cur.fills.filter(f => !f.legacy);
+  cur.fills.push({ d, q, p });
+  cur.fills.sort((a, b) => (a.d < b.d ? -1 : a.d > b.d ? 1 : 0));
+  try { stockV2Save(cur); } catch (e) { const m = g("sl-msg"); if (m) m.textContent = "이 브라우저에서 저장할 수 없습니다(저장 차단 상태)."; return; }
+  stockLocalRefresh("체결을 추가했습니다. 이 기기에만 저장됩니다.");
+}
+function stockLocalDelFill(i) {
+  const cur = stockV2Load(); if (!cur) return;
+  cur.fills.splice(i, 1);
+  try { stockV2Save(cur); } catch (e) {}
+  stockLocalRefresh("체결 1건을 삭제했습니다.");
+}
+function stockLocalSavePrice() {
+  const g = id => document.getElementById(id);
+  const price = Number(g("sl-price").value);
+  if (g("sl-price").value === "" || !(price > 0)) { const m = g("sl-msg"); if (m) m.textContent = "현재가는 0보다 큰 숫자로 넣어 주세요."; return; }
+  const cur = stockV2Load() || { fills: [], price: 0, asof: "" };
+  cur.fills = cur.fills.filter(f => !f.legacy || true);
+  cur.price = price; cur.asof = g("sl-asof").value || "";
+  try { stockV2Save(cur); } catch (e) { const m = g("sl-msg"); if (m) m.textContent = "이 브라우저에서 저장할 수 없습니다(저장 차단 상태)."; return; }
+  stockLocalRefresh("현재가를 저장했습니다. 이 기기에만 저장됩니다.");
 }
 function stockLocalDelete() {
-  try { localStorage.removeItem(STOCK_LS_KEY); } catch (e) {}
+  try { localStorage.removeItem(STOCK_LS_KEY); localStorage.removeItem(STOCK_LS_KEY2); } catch (e) {}
   stockLocalRefresh("이 기기의 저장 데이터를 삭제했습니다.");
 }
 
