@@ -14,15 +14,15 @@ const rooms = [
   {
     id: "owner", floor: "f8", zone: "instinct", tag: "오너", ceo: true,
     title: "👑 대표님", worker: "👑", name: "👑 대표님",
-    say: "전체 보고 받는 중!", foot: "조직도 최상단 · 보고 라인: 투덜이·해병이·수박이 → 비서실장(총괄) → 대표님",
+    say: "전체 보고 받는 중!", foot: "조직도 최상단 · 보고 라인: 해병이(부총괄)·뮤즈(관리자)·수박이·일꾼 → 총괄 투덜이 → 대표님",
     issue: "승인이 필요한 건이 있어요!",
     guide: "🔴 자금 건은 대표님이 직접 실행하고, 🔵 확인·승인 건은 이 대표님 보고의 결재 큐에서 결정합니다.",
-    state: "working", ticker: "최종 승인권 · 보고 라인: 투덜이·해병이·수박이 → 비서실장(총괄) → 대표님", updated: "15:52"
+    state: "working", ticker: "최종 승인권 · 보고 라인: 해병이(부총괄)·뮤즈(관리자)·수박이·일꾼 → 총괄 투덜이 → 대표님", updated: "15:52"
   },
   {
     id: "instinct", floor: null, zone: "instinct", tag: "Instinct",
-    title: "💼 비서실장 · Instinct 총괄", worker: "💼", name: "💼 비서실장",
-    say: "검토·지휘 중 · 두 부장 보고 접수!", foot: "비서실장(총지휘) · 보고 라인: 투덜이·해병이·수박이 → 비서실장(총괄) → 대표님",
+    title: "💼 일꾼 · 전 총괄 Instinct", worker: "💼", name: "💼 일꾼",
+    say: "실행·정리 중 · 보고 접수!", foot: "일꾼(전 총괄 Instinct) · 보고 라인: 해병이(부총괄)·뮤즈(관리자)·수박이·일꾼 → 총괄 투덜이 → 대표님",
     issue: "승인·확인 건을 모으는 중!",
     guide: "승인·확인 건은 비서실 창구에 모아 둡니다.",
     state: "working", ticker: "총지휘 · [총괄 지시 008] /6 최저임금 연도 정정 완료(13:56 · 15시 검증 대기) · [총괄 지시 010~014] 자녀 경제교육 8주 PWA 기획안·부모용 대본 12회분 완료 보고 접수 — 승인 6건 대표님 결재 대기 · [총괄 지시 007] 머니리포트 「맞벌이 연말정산」 13:29 공개 발행(공개 6편 · 9편 남음) · 색인 5/5 · 네이버 제휴 셋업·쿠팡 파트너스 가입 완료", updated: "14:06"
@@ -48,7 +48,7 @@ const rooms = [
     title: "🍉 수박이 이사 · 위탁판매 총괄", worker: "🍉", name: "🍉 수박이 이사",
     say: "위탁판매 총괄 · 실행 대기 중!", foot: "총괄 직속 · 실행 담당(사람)",
     issue: "총괄 지시 확인이 필요해요!",
-    guide: "수박이 이사는 총괄(Instinct) 직속 위탁판매 총괄 담당이고, 실행은 실행 담당(사람)이 진행합니다. 보류 기간 동안 2축으로 움직입니다 — ① 위탁판매·사업자 준비(세무·계좌·실무 대기, 오너 확인 단계에서 멈춤) ② 저크레딧 수익 보조(1일 1회 이하, 투덜이 측과 겹치지 않는 살림·주방 배송 체험단과 고액 공식 경품). 확정 건만 최소 알림으로 전달합니다. 장부·위탁판매실은 보고 창에서 바로 열립니다.",
+    guide: "수박이 이사는 위탁판매 총괄 담당이고, 실행은 실행 담당(사람)이 진행합니다. 보류 기간 동안 2축으로 움직입니다 — ① 위탁판매·사업자 준비(세무·계좌·실무 대기, 오너 확인 단계에서 멈춤) ② 저크레딧 수익 보조(1일 1회 이하, 투덜이 측과 겹치지 않는 살림·주방 배송 체험단과 고액 공식 경품). 확정 건만 최소 알림으로 전달합니다. 장부·위탁판매실은 보고 창에서 바로 열립니다.",
     state: "working", ticker: "총괄 직속 · 위탁판매 총괄 담당 · 실행 담당(사람) · 보류 기간 2축 운영 — ① 위탁판매·사업자 준비(세무·계좌·실무 대기) + ② 저크레딧 수익 보조(1일 1회 이하 · 살림·주방 배송 체험단·고액 공식 경품) · 난방텐트 2건 철회·공개 도매가 0.70 기준 통과 0건 → 위탁 보류", updated: "--:--"
   },
   {
@@ -223,7 +223,7 @@ function roomHTML(r, i) {
         <div class="room-head">
           <span class="room-title">${esc(r.title)}</span>
           <span class="room-lanes" id="lanes-${r.id}" aria-hidden="true"></span>
-          <span class="room-tag${partner ? " partner" : instinct ? " instinct" : ""}" title="${instinct ? "Instinct 총괄이 지휘하는 방" : director ? "총괄 직속 위탁판매 총괄 · 실행 담당(사람)" : partner ? "투덜이 부장이 전담 운영하는 방" : "해병이 부장이 직접 운영하는 방"}">${r.tag}</span>
+          <span class="room-tag${partner ? " partner" : instinct ? " instinct" : ""}" title="${instinct ? "일꾼(전 총괄 Instinct)이 맡은 방" : director ? "위탁판매 총괄 · 실행 담당(사람)" : partner ? "투덜이 부장이 전담 운영하는 방" : "해병이 부장이 직접 운영하는 방"}">${r.tag}</span>
           <span class="room-open">${r.id === "prize" ? "응모결과▸" : r.id === "owner" ? "결재▸" : shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : "보고"}</span>
           <span class="status-dot" aria-hidden="true"></span>
         </div>
@@ -1172,7 +1172,7 @@ function renderChief(raw) {
   if (cnt) cnt.innerHTML = `<span class="cc-red${unreadRedItems().length ? "" : " read"}">${unreadRedItems().length ? "🔴" : "⚪"} ${unreadRedItems().length}</span><span class="cc-blue">🔵 ${n.blue}</span><span class="cc-wait">⏳ ${n.wait}</span>`;
   const say = document.getElementById("chief-say");
   const localN = okN + noN + reN;
-  if (say) say.textContent = `총괄 진행 보고 전용 · 승인·결재는 👑 대표님(8F)에서 · 🔴 ${n.red} · 🔵 ${n.blue} · ⏳ ${n.wait}` + (localN ? ` · 이 브라우저 결정 기록 ${localN}건 (실제 접수 연결 미확인)` : '');
+  if (say) say.textContent = `일꾼 진행 보고 전용 · 승인·결재는 👑 대표님(8F)에서 · 🔴 ${n.red} · 🔵 ${n.blue} · ⏳ ${n.wait}` + (localN ? ` · 이 브라우저 결정 기록 ${localN}건 (실제 접수 연결 미확인)` : '');
   body.innerHTML = items.length ? items.map((it) => {
     const sourceIdx = allItems.indexOf(it);
     return chiefRowHtml(it, sourceIdx, chiefProgressActions(it, dec[it.id]));
@@ -2036,7 +2036,7 @@ function chiefIndexForSignal(x, lane) {
       d.id === "invest_sp500" ? renderStockPanel() : "",
       d.summary ? `<div class="rm-sum"><span>👑</span><span>${esc(d.summary)}</span></div>` : "",
       d.ticker ? `<div class="rm-live"><span class="rm-live-h">📺 전광판</span><span class="rm-live-t">${esc(d.ticker)}</span><span class="rm-live-u">${esc(d.updated)}</span></div>` : "",
-      d.overview ? `<div class="report-scope-note">${d.coordinator ? "종합·검토 목록과 담당 보고 바로가기입니다. 개별 업무 상세는 담당 보고에서 확인하세요." : d.manager ? "이 부장이 맡은 부서의 신호와 보고만 모았습니다. 다른 부서 신호·공통 역할표는 총괄에서 확인하세요." : "승인·결재 안건은 아래 대표님 결재에서 결정하고, 총괄 진행 보고는 비서실 창구에서 확인하세요."}<div class="report-scope-actions">${d.coordinator || id === "owner" ? `<button type="button" onclick="openChiefFromReport()">비서실 창구 보기</button>` : ""}${!d.coordinator ? `<button type="button" onclick="openReport('instinct')">비서실장 종합 보고</button>` : ""}</div></div>` : "",
+      d.overview ? `<div class="report-scope-note">${d.coordinator ? "종합·검토 목록과 담당 보고 바로가기입니다. 개별 업무 상세는 담당 보고에서 확인하세요." : d.manager ? "이 부장이 맡은 부서의 신호와 보고만 모았습니다. 다른 부서 신호·공통 역할표는 일꾼(Instinct) 보고에서 확인하세요." : "승인·결재 안건은 아래 대표님 결재에서 결정하고, 일꾼 진행 보고는 비서실 창구에서 확인하세요."}<div class="report-scope-actions">${d.coordinator || id === "owner" ? `<button type="button" onclick="openChiefFromReport()">비서실 창구 보기</button>` : ""}${!d.coordinator ? `<button type="button" onclick="openReport('instinct')">일꾼 종합 보고</button>` : ""}</div></div>` : "",
       d.id === "owner" ? ownerApprovalsHtml() : "",
       d.credit ? `<div class="rm-credit"><span>⚡ 크레딧</span><span>${esc(d.credit)}</span></div>` : "",
       (d.signals.red.length || d.signals.blue.length) ? `<div class="rm-sec"><div class="rm-h">🚦 미결 신호 · 🔵 ${d.signals.blue.length} · 빨간 알림 ${d.signals.red.filter(redGroupUnread).length} / 미결 ${d.signals.red.length}</div>${d.signals.red.length ? `<div class="rm-sig-note">🔴 자금·계좌·이체·결제는 AI가 실행하지 않습니다. 오너가 직접 처리해 주세요.</div>` : ""}<div class="rm-sigs">${d.signals.red.map(x => sigRow(x, "red")).join("")}${reportSignals.map(x => sigRow(x, "blue")).join("")}</div></div>` : "",

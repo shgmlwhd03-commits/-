@@ -2867,20 +2867,20 @@
     </div>
   </div>
 
-  <!-- 🗂️ 비서실(총괄 진행 보고): 비서실장(총괄)이 검토·지휘한 진행사항 통합 · 승인·결재는 👑 대표님(8F)에서 · 🔴 → 🔵 → 일반 대기 자동 정렬 -->
-  <section class="chief" id="chief" aria-label="비서실 보고 · 총괄 진행사항">
+  <!-- 🗂️ 비서실(일꾼 진행 보고): 일꾼(전 총괄 Instinct)이 정리한 진행사항 통합 · 승인·결재는 👑 대표님(8F)에서 · 🔴 → 🔵 → 일반 대기 자동 정렬 -->
+  <section class="chief" id="chief" aria-label="비서실 보고 · 일꾼 진행사항">
     <button class="chief-head" id="chief-head" type="button" onclick="toggleChief()" aria-expanded="true" aria-controls="chief-body">
       <span class="chief-ava" aria-hidden="true">💼</span>
-      <span class="chief-t"><b>🗂️ 비서실 · 총괄 진행 보고</b></span>
+      <span class="chief-t"><b>🗂️ 비서실 · 일꾼 진행 보고</b></span>
       <span hidden class="chief-cnt" id="chief-cnt"></span>
       <span class="chief-caret" id="chief-caret">▾</span>
     </button>
-    <p class="chief-short-note">비서실장(총괄)의 진행사항만 모은 보고입니다. 승인·불허·재심의 결재는 8F 👑 대표님 캐릭터를 눌러 진행합니다.</p>
+    <p class="chief-short-note">일꾼(전 총괄 Instinct)의 진행사항만 모은 보고입니다. 업무 총괄은 투덜이입니다. 승인·불허·재심의 결재는 8F 👑 대표님 캐릭터를 눌러 진행합니다.</p>
     <details class="chief-details"><summary>절차·전체 보고 보기</summary>
-    <p class="chief-route" id="chief-route"><b>비서실 창구</b> 비서실장(Instinct 총괄)이 부서 보고를 검토·지휘해 진행사항을 이 창구에 모아 보고합니다. 승인·결재는 8F 👑 대표님 캐릭터에서 받습니다.<br><b>결재 흐름</b> 부장 작성 → 비서실장(총괄) 팩트검토·지휘 → 대표님 결재(👑 대표님 보고의 결재 큐)<br><small>불허: 해당 안 진행 중단 · 삭제 범위 확정 전 원기록 보존<br>재심의: 부장 보완 → 총괄 팩트 재검토 → 대표님 재상신<br>승인 후: 실행 결과 별도 보고</small></p>
-    <div class="chief-tools"><button class="chief-report" id="chief-report" type="button" onclick="openReport('instinct')">💼 비서실장(총괄) 종합 보고 · 담당 부서 보기</button> <a class="chief-report" href="https://github.com/shgmlwhd03-commits/-/issues?q=label%3Adecision" target="_blank" rel="noopener">📥 접수된 결재함 보기 ›</a></div>
+    <p class="chief-route" id="chief-route"><b>비서실 창구</b> 일꾼(전 총괄 Instinct)이 부서 보고를 정리해 진행사항을 이 창구에 모아 보고합니다(업무 총괄은 투덜이). 승인·결재는 8F 👑 대표님 캐릭터에서 받습니다.<br><b>결재 흐름</b> 담당 작성 → 총괄(투덜이) 검토·지휘 → 대표님 결재(👑 대표님 보고의 결재 큐)<br><small>불허: 해당 안 진행 중단 · 삭제 범위 확정 전 원기록 보존<br>재심의: 부장 보완 → 총괄 팩트 재검토 → 대표님 재상신<br>승인 후: 실행 결과 별도 보고</small></p>
+    <div class="chief-tools"><button class="chief-report" id="chief-report" type="button" onclick="openReport('instinct')">💼 일꾼(Instinct) 종합 보고 · 담당 부서 보기</button> <a class="chief-report" href="https://github.com/shgmlwhd03-commits/-/issues?q=label%3Adecision" target="_blank" rel="noopener">📥 접수된 결재함 보기 ›</a></div>
     <div hidden class="chief-say" id="chief-say">두 부장 미결·대기 건을 모으는 중…</div>
-    <p class="chief-receipt-note" id="chief-receipt-note"><strong>이 목록은 총괄 진행 보고 전용으로 결정 버튼이 없습니다. 승인·불허·재심의는 👑 대표님 보고의 결재 큐에서 접수합니다.</strong><br>결재 큐에서 누른 결정·자유지시는 접수 요청이며 실행이 아닙니다. 외부 발송·삭제·게시·지출 등 실행이 필요한 건은 총괄이 대화에서 안건과 범위를 다시 확인한 뒤 진행합니다. 전달 전에는 목록과 신호를 유지하며, 실제 완료로 처리하지 않습니다. 재심의 10분 검토 기준은 채널 도착 시각부터입니다.</p>
+    <p class="chief-receipt-note" id="chief-receipt-note"><strong>이 목록은 일꾼 진행 보고 전용으로 결정 버튼이 없습니다. 승인·불허·재심의는 👑 대표님 보고의 결재 큐에서 접수합니다.</strong><br>결재 큐에서 누른 결정·자유지시는 접수 요청이며 실행이 아닙니다. 외부 발송·삭제·게시·지출 등 실행이 필요한 건은 일꾼이 대화에서 안건과 범위를 다시 확인한 뒤 진행합니다. 전달 전에는 목록과 신호를 유지하며, 실제 완료로 처리하지 않습니다. 재심의 10분 검토 기준은 채널 도착 시각부터입니다.</p>
     </details>
     <div class="chief-body" id="chief-body"></div>
   </section>
@@ -2995,6 +2995,6 @@
 <script src="task-archive.js"></script>
 <script src="red-read.js"></script>
 <div id="runtime-load-error" role="alert" hidden style="position:fixed;top:8px;left:8px;right:8px;z-index:10000;padding:12px;background:#7f1d1d;color:#fff;border:1px solid #fecaca;border-radius:8px;font-size:14px">사무실 기능을 불러오지 못했습니다. 새로고침 후에도 같으면 이 대화에 알려주세요. 이 화면에서 결정은 전송되지 않았습니다.</div>
-<script src="office-runtime.js?v=2025c0042b8d" onerror="document.getElementById('runtime-load-error').hidden=false"></script>
+<script src="office-runtime.js?v=2026roles1127" onerror="document.getElementById('runtime-load-error').hidden=false"></script>
 </body>
                            </html>
