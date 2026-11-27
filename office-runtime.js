@@ -220,7 +220,6 @@ function workerHTML(r) {
         <div class="badge-alert">!</div>
         <div class="avatar"${["public_quiz"].includes(r.id) ? `role="button" tabindex="0" aria-label="${esc(r.name)} · 응모 진행결과 보기" title="캐릭터를 누르면 업무 보고 보기" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();openReport('${r.id}')}"` : r.id === "invest_sp500" ? 'role="button" tabindex="0" aria-label="주식 그래프와 손익 보기" title="클릭하면 주식 그래프와 손익 보기" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();event.stopPropagation();openReport(\'invest_sp500\')}"' : ""}>${r.worker}</div>
         <div class="nametag">${esc(r.name)}</div>
-        <div class="nowchip ${r.taskState || "wait"}" id="now-${r.id}" title="현재 담당 업무"><i></i>${esc(r.task || r.foot)}</div>
         <span class="life-icons" aria-hidden="true"><i>💻</i><i>📝</i><i>🔍</i><i>📊</i></span>
       </div>`;
 }
@@ -247,6 +246,7 @@ function roomHTML(r, i) {
           <span class="status-dot" aria-hidden="true"></span>
         </div>
         ${stage}
+        <div class="nowchip ${r.taskState || "wait"}" id="now-${r.id}" title="현재 담당 업무"><i></i>${esc(r.task || r.foot)}</div>
         <div class="led-board" id="led-${r.id}">
           <span class="led-tag"><i></i><span id="tag-${r.id}">${STATE_LABEL[r.state]}</span></span>
           <span class="led-viewport" id="vp-${r.id}"><span class="led-track" id="track-${r.id}"></span></span>
@@ -1429,7 +1429,7 @@ function renderChief(raw) {
       ? `<span class="rs-rm">오너 직접 처리 건 · 버튼 없음</span>`
       : decBtns(null);
     const row = `<div class="chief-row ${it.lane}${redRead ? " read" : ""}${d ? " decided " + (d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no") : ""}" data-room="${esc(it.room)}">
-        <div class="cr-main"><b>${esc(it.title)}</b><p class="cr-review">총괄 팩트검토: 미확인</p></div>
+        <div class="cr-main"><b>${esc(it.title)}</b><p class="cr-review">대표 결정 대기 · 총괄이 팩트·저작권·약관 검수 후 실행</p></div>
         <span class="cr-act">${act}</span>
         <details class="cr-detail"${chiefCanCompact(it, d) ? " open" : ""}><summary>상세 보기${rm ? " · " + esc(rm) : ""}</summary>
           ${it.detail ? `<p>${esc(it.detail)}</p>` : ""}
