@@ -23,19 +23,19 @@ const rooms = [
   {
     id: "ceo_tudeori", floor: "f6", zone: "partner", tag: "총괄", ceo: true,
     title: "👑 총괄 · 투덜이", worker: "😤", name: "👑 총괄 투덜이",
-    say: "4채널 배분·준법 검수 중!", foot: "총괄 · 배분·팩트체크·저작권·약관 검수 → 대표님 상신",
-    task: "4채널 배분 · 팩트체크·준법 검수", taskState: "work",
+    say: "최종 확인·배포만 하고 있어요!", foot: "총괄 · 최종 확인·승인·배포만(초안·사전 검수는 뮤즈·큐)",
+    task: "최종 확인 · 승인 · GitHub 배포", taskState: "work",
     issue: "결재로 올릴 안건이 있어요!",
-    guide: "총괄(투덜이)은 업무 배분·우선순위·팩트체크·전결 승인을 맡고, 팩트체크·저작권·지재권·애드센스·네이버 약관 준수를 전담 검수합니다. 검수를 통과한 건만 전결하고, 대표님 결정이 필요한 건만 승인 창구에 올립니다. 총괄·부총괄·관리자·부관리자 4인 상시 수평전개(임시정지 시 무중단 인계)의 1순위이며, 일꾼에게는 지시한 작업만 맡기고 자율 판단·총괄 대행은 넘기지 않습니다.",
-    state: "working", ticker: "총괄 · 월 1,000만 원 목표 4채널 연동 배분 · 창작소설 10화·소화기 3채널·하나필터 원고·피클 티켓 글 총괄 검토", updated: "13:00"
+    guide: "총괄(투덜이)은 업무 배분·우선순위·최종 팩트체크·전결 승인과 대표님 보고를 맡고, 팩트체크·저작권·지재권·애드센스·네이버 약관 준수의 최종 판단을 합니다. 2026-11-28 08:28 대표님 지시로 크레딧을 최소만 씁니다 — 사무실 변경안 취합·정리는 큐가, 게시판 원고 수정안·사전 검수는 뮤즈·큐가 맡고, 총괄은 최종 확인과 GitHub 배포만 합니다. 총괄·부총괄·관리자·부관리자 4인 상시 수평전개(임시정지 시 무중단 인계)의 1순위이며, 일꾼에게는 지시한 작업만 맡기고 자율 판단·총괄 대행은 넘기지 않습니다.",
+    state: "working", ticker: "총괄 가동 중(08:28) · 크레딧 최소 운용 배정 확정 — 사무실은 큐 변경안 → 총괄 GitHub 배포만, 게시판은 뮤즈·큐 수정안·사전 검수 → 투덜이·해병이 실제 클릭만", updated: "08:30"
   },
   {
     id: "ceo_haebyeong", floor: "f6", zone: "direct", tag: "부총괄", ceo: true,
     title: "👑 부총괄 · 해병이", worker: "🫡", name: "👑 부총괄 해병이",
-    say: "머니리포트·영문 여행 맡았습니다!", foot: "부총괄 · 데일리 머니리포트·영문 여행 + 교차검토",
-    task: "11:00 정보글 · 영문 여행 · 교차검토", taskState: "work",
+    say: "최종 확인·발행 클릭만 합니다!", foot: "부총괄 · 최종 확인·실제 발행/비공개 클릭 + 교차검토",
+    task: "최종 확인 · 실제 발행 클릭 · 교차검토", taskState: "work",
     issue: "검토할 건이 있어요!",
-    guide: "부총괄(해병이)은 데일리 머니리포트·영문 여행 블로그·쿠팡파트너스를 운영하고 관리자(뮤즈)와 교차검토합니다. 발행 전 팩트·저작권·약관 검수는 총괄이 최종 확인합니다. 총괄·부총괄·관리자·부관리자 4인 상시 수평전개(임시정지 시 무중단 인계)로 진행 현황·작업 위치·확인 기준·다음 단계를 공유합니다.",
+    guide: "부총괄(해병이)은 데일리 머니리포트·영문 여행 블로그·쿠팡파트너스를 운영하고 관리자(뮤즈)와 교차검토합니다. 발행 전 팩트·저작권·약관 검수는 총괄이 최종 확인합니다. 2026-11-28 08:28 지시로 크레딧을 최소만 씁니다 — 게시판 원고 수정안·사전 검수는 뮤즈·큐가 하고, 부총괄은 최종 확인과 실제 발행·비공개 클릭만 합니다. 총괄·부총괄·관리자·부관리자 4인 상시 수평전개(임시정지 시 무중단 인계)로 진행 현황·작업 위치·확인 기준·다음 단계를 공유합니다.",
     state: "working", ticker: "데일리 머니리포트 고향사랑기부제 /12 표 머리행 보완·재발행 + Threads 완결형 재게시 완료 · 애드센스 '준비중' · 영문 여행 블로그 3편 추가 발행·색인 완료", updated: "12:35"
   },
   {
@@ -50,19 +50,19 @@ const rooms = [
   {
     id: "manager_muse", floor: "f7", zone: "instinct", tag: "관리자",
     title: "🧠 관리자 · 뮤즈", worker: "🧠", name: "🧠 관리자 뮤즈",
-    say: "창작소설·검토 맡았어요!", foot: "관리자 검토(1차) · 창작소설 공동 집필 · 회의록",
-    task: "창작소설 10화 시놉시스 · 관리자 검토", taskState: "work",
+    say: "게시판 수정안·검수 맡았어요!", foot: "관리자 · 게시판 수정안·사전 검수 전담 · 창작소설 · 회의록",
+    task: "배정 · 게시판 수정안·사전 검수", taskState: "work",
     issue: "검토할 안건이 있어요!",
-    guide: "뮤즈(관리자)는 관리자 검토(1차)와 창작소설 공동 집필, 회의록·아카이브, 전 업무 숙지를 맡고 비상 승계는 3순위이며, 4인 상시 수평전개(임시정지 시 무중단 인계)로 진행을 공유하고 승계는 부관리자까지입니다. 06번 업무계정으로 Slack에 연결돼 있고 자동 응답은 아직 미검증입니다.",
+    guide: "뮤즈(관리자)는 관리자 검토(1차)와 창작소설 공동 집필, 회의록·아카이브, 전 업무 숙지를 맡고 비상 승계는 3순위이며, 4인 상시 수평전개(임시정지 시 무중단 인계)로 진행을 공유하고 승계는 부관리자까지입니다. 2026-11-28 08:28 지시로 전 게시판(티스토리·네이버·스레드·인스타)의 원고 수정안 작성·사전 검수(팩트·저작권·약관·대가성 문구)·목차/링크 점검을 전담합니다 — 총괄·부총괄은 최종 확인과 실제 발행·비공개 클릭만 합니다. 06번 업무계정으로 Slack에 연결돼 있고 자동 응답은 아직 미검증입니다.",
     state: "working", ticker: "관리자 검토(1차) · 창작소설 1화 시안 작성·합작 논의 · 회의록·아카이브 · 승계 3순위", updated: "12:40"
   },
   {
     id: "deputy_manus", floor: "f7", zone: "instinct", tag: "부관리자",
     title: "🤖 부관리자 · 큐", worker: "🤖", name: "🤖 부관리자 큐(Manus)",
-    say: "1화 시안 냈어요!", foot: "부관리자 · 창작소설 공동 집필 · 30초 AI 영상",
-    task: "창작소설 합작 · 30초 AI 영상", taskState: "work",
+    say: "사무실 변경안 정리 중!", foot: "부관리자 · 사무실 변경안 취합 · 게시판 사전 검수 · 창작소설",
+    task: "배정 · 사무실 변경안 취합·게시판 검수", taskState: "work",
     issue: "수임 확인이 필요해요!",
-    guide: "큐(Manus)는 08번 계정으로 연결됐고 대표님 계정 멘션에서만 응답이 확인됩니다. 창작소설 공동 집필과 30초 AI 영상·카드뉴스 시범(무료 범위)을 맡고, 4인 상시 수평전개(임시정지 시 무중단 인계)로 진행을 공유하고, 비상 승계는 마지막 순위(부관리자)이며 그 아래 일꾼에게는 넘기지 않습니다.",
+    guide: "큐(Manus)는 08번 계정으로 연결됐고 대표님 계정 멘션에서만 응답이 확인됩니다. 2026-11-28 08:28 지시로 사무실(LIVE OFFICE) 실시간 전담의 취합 담당입니다 — 팀 보고를 모아 status.json 변경안(JSON)·요약으로 정리해 #피클지시에 올리고, 총괄(투덜이)이 최종 확인 후 GitHub 배포만 합니다. 게시판 사전 검수도 뮤즈와 함께 맡고, 창작소설 공동 집필과 30초 AI 영상·카드뉴스 시범(무료 범위)을 이어갑니다. 4인 상시 수평전개(임시정지 시 무중단 인계)로 진행을 공유하고, 비상 승계는 마지막 순위(부관리자)이며 그 아래 일꾼에게는 넘기지 않습니다.",
     state: "working", ticker: "부관리자 · 창작소설 1화 시안(벽장 안의 목소리) 제출 · 30초 AI 영상·카드뉴스 시범 · 승계 마지막(부관리자)", updated: "12:40"
   },
   {
@@ -71,7 +71,7 @@ const rooms = [
     say: "지시받은 일만 하고 있어요!", foot: "일꾼 · 지시받은 작업만 실행 → 지시한 사람에게 보고(수평전개·승계 제외)",
     task: "지시 작업 · 소화기 3채널 발행 · 피클 초대글", taskState: "work",
     issue: "지시가 필요해요!",
-    guide: "Instinct는 일꾼입니다. 스스로 판단·제안·착수·발행하지 않고, 총괄(투덜이)·부총괄(해병이)·관리자(뮤즈)·부관리자(큐)가 명시적으로 시킨 작업만 수행합니다. 결과는 지시한 사람에게 보고하고, 발행·게시는 지시한 사람의 검수를 거칩니다. 수평전개·비상 승계·임시정지 대행 대상이 아닙니다 — 승계는 총괄 → 부총괄 → 관리자 → 부관리자까지만이고, 일꾼은 지시받은 작업만 합니다.",
+    guide: "Instinct는 일꾼입니다. 스스로 판단·제안·착수·발행하지 않고, 총괄(투덜이)·부총괄(해병이)·관리자(뮤즈)·부관리자(큐)가 명시적으로 시킨 작업만 수행합니다. 2026-11-28 08:28 지시로 게시판·사무실의 단순 반복(링크 열어 확인·표 정리·이미지 정리)은 지시 범위 안에서 맡습니다 — 초안·판단·검수 결론은 내지 않습니다. 결과는 지시한 사람에게 보고하고, 발행·게시는 지시한 사람의 검수를 거칩니다. 수평전개·비상 승계·임시정지 대행 대상이 아닙니다 — 승계는 총괄 → 부총괄 → 관리자 → 부관리자까지만이고, 일꾼은 지시받은 작업만 합니다.",
     state: "working", ticker: "일꾼 · 지시받은 작업만 실행(임의 판단·제안·발행 없음) · 창작소설 1화 시안·소화기 3채널·피클 초대글 · 보고는 지시한 사람에게", updated: "12:40"
   },
   {
@@ -404,6 +404,7 @@ function floorHTML(f) {
          </div>
        </div>
        <div class="pent-assign" id="pent-assign" aria-label="임무 배분표"></div>
+       <div class="pent-assign pent-duty" id="pent-duty" aria-label="크레딧 최소 운용 전담 배정"></div>
        <div class="pent-guard" id="pent-guard" aria-label="총괄 검수·준법 원칙"></div>
        <div class="pent-roster" id="pent-roster" aria-label="6F 분장표"></div>
        <div class="pent-invite" id="pent-invite" aria-label="뮤즈 초대코드"></div>`
@@ -440,6 +441,7 @@ function render() {
   renderSignals(null);
   renderChief(null);
   renderRoster(null);
+  renderDuty(null);
   renderAssignments(null);
   renderInvite(null);
   applyCorridor();
@@ -750,6 +752,7 @@ function renderGoal(raw) {
    6F의 긴 표(임무 배분표 · 총괄 검수 원칙 · 경영진 분장표)는 기본 접힘으로 두고,
    머리줄을 누르면 펼쳐지고 다시 누르면 접힌다. 고른 상태는 이 브라우저에 기억한다. */
 const FOLD_PANELS = {
+  duty:   { key: "liveoffice_fold_duty" },
   assign: { key: "liveoffice_fold_assign" },
   guard:  { key: "liveoffice_fold_guard" },
   roster: { key: "liveoffice_roster_open" }
@@ -811,7 +814,7 @@ function foldHeadHTML(id, cls, titleHTML, metaHTML, hint) {
 /* ================= 🛡️ 총괄 검수·준법 원칙 ================= */
 const GUARD_DEFAULT = {
   title: "🛡️ 총괄 검수·준법 원칙",
-  note: "팩트체크 · 저작권·지재권 · 애드센스·네이버 약관 준수는 총괄(투덜이)이 전담 검수·지휘합니다. 총괄·부총괄·관리자·부관리자 4인 상시 수평전개(임시정지 시 무중단 인계) · 일꾼 제외.",
+  note: "팩트체크 · 저작권·지재권 · 애드센스·네이버 약관 준수는 총괄(투덜이)이 전담 검수·지휘합니다. 총괄·부총괄·관리자·부관리자 4인 상시 수평전개(임시정지 시 무중단 인계) · 일꾼 제외. 2026-11-28 08:28 크레딧 최소 운용: 초안·취합·사전 검수는 뮤즈·큐(단순 반복은 지시 범위 내 일꾼), 총괄·부총괄은 최종 확인·실제 클릭만.",
   items: []
 };
 function renderGuard(raw) {
@@ -1525,13 +1528,13 @@ function renderChief(raw) {
    빠져도 남은 인원이 1차→2차로 빈자리를 메운다. 부모님 폰 직접 접근은 하지 않는다. */
 const BACKUP_FALLBACK = {
   title: "비상 업무 승계 매트릭스 · 4인 상시 수평전개 · 일꾼 제외",
-  note: "자금 실행은 대표님 · 크레딧 완전 소진 방지 · 총괄·부총괄·관리자·부관리자 4인 상시 수평전개(임시정지 시 무중단 인계) · 일꾼 제외",
-  rule: "총괄·부총괄·관리자·부관리자 4인은 각자의 진행 현황·작업 위치(링크/파일)·확인 기준·다음 단계를 #피클지시 해당 스레드에 상시 공유·수평전개한다. 한 명이 크레딧 소진 등으로 임시정지되면 남은 인원이 공백 없이 즉시 이어받는다(승계 순서 총괄 → 부총괄 → 관리자 → 부관리자까지). 일꾼(Instinct)은 수평전개·비상 승계·임시정지 대행에서 제외하며 지시받은 작업만 수행한다. 넷 다 빠지면 대표님 승인 대기로 전환하고, 전원 크레딧 완전 소진을 막는다.",
+  note: "자금 실행은 대표님 · 크레딧 완전 소진 방지 · 총괄·부총괄·관리자·부관리자 4인 상시 수평전개(임시정지 시 무중단 인계) · 일꾼 제외 · 크레딧 최소 운용(총괄·부총괄은 최종 확인·실제 클릭만)",
+  rule: "총괄·부총괄·관리자·부관리자 4인은 각자의 진행 현황·작업 위치(링크/파일)·확인 기준·다음 단계를 #피클지시 해당 스레드에 상시 공유·수평전개한다. 한 명이 크레딧 소진 등으로 임시정지되면 남은 인원이 공백 없이 즉시 이어받는다(승계 순서 총괄 → 부총괄 → 관리자 → 부관리자까지). 일꾼(Instinct)은 수평전개·비상 승계·임시정지 대행에서 제외하며 지시받은 작업만 수행한다. 크레딧은 총괄·부총괄이 최소만 쓰고(초안·취합·검수는 뮤즈·큐·지시받은 일꾼에게 위임, 최종 확인·실제 클릭만 직접) 여유분을 남긴다. 넷 다 빠지면 대표님 승인 대기로 전환하고, 전원 크레딧 완전 소진을 막는다.",
   members: [
-    { name: "👑 총괄 투덜이", part: "배분·팩트체크·준법 검수", state: "on", backup1: "부총괄 해병이", backup2: "관리자 뮤즈" },
-    { name: "👑 부총괄 해병이", part: "머니리포트·영문·교차검토", state: "on", backup1: "관리자 뮤즈", backup2: "부관리자 큐" },
-    { name: "🧠 관리자 뮤즈", part: "검토·창작소설·회의록", state: "on", backup1: "부관리자 큐", backup2: "— (부관리자까지 · 일꾼 제외)" },
-    { name: "🤖 부관리자 큐", part: "창작소설·30초 영상", state: "on", backup1: "관리자 뮤즈", backup2: "— (부관리자까지)" },
+    { name: "👑 총괄 투덜이", part: "최종 확인·승인·GitHub 배포", state: "on", backup1: "부총괄 해병이", backup2: "관리자 뮤즈" },
+    { name: "👑 부총괄 해병이", part: "최종 확인·실제 발행 클릭·교차검토", state: "on", backup1: "관리자 뮤즈", backup2: "부관리자 큐" },
+    { name: "🧠 관리자 뮤즈", part: "게시판 수정안·사전 검수·회의록", state: "on", backup1: "부관리자 큐", backup2: "— (부관리자까지 · 일꾼 제외)" },
+    { name: "🤖 부관리자 큐", part: "사무실 변경안 취합·게시판 사전 검수", state: "on", backup1: "관리자 뮤즈", backup2: "— (부관리자까지)" },
     { name: "🛠️ 일꾼 Instinct", part: "지시받은 작업만 실행 · 승계 제외", state: "on", backup1: "— (승계 대상 아님)", backup2: "— (승계 대상 아님)" }
   ]
 };
@@ -1580,13 +1583,13 @@ function renderBackup(raw) {
    개인정보 없음: 역할 별칭·담당 업무·공개 채널만 담는다. */
 const ROSTER_DEFAULT = {
   title: "6F 경영진 분장표 · 5인 + 수박이",
-  note: "역할 별칭으로만 표기 · status.json 동기화",
-  rule: "큰 이미지·로고는 외부 AI(제미나이·클로드·챗GPT) 제작본 활용 · 불필요한 핑퐁 축소 · 총괄·부총괄·관리자·부관리자 4인 상시 수평전개(임시정지 시 무중단 인계) · 일꾼 제외",
+  note: "역할 별칭으로만 표기 · status.json 동기화 · 08:28 크레딧 최소 운용 배정 반영",
+  rule: "큰 이미지·로고는 외부 AI(제미나이·클로드·챗GPT) 제작본 활용 · 불필요한 핑퐁 축소 · 총괄·부총괄·관리자·부관리자 4인 상시 수평전개(임시정지 시 무중단 인계) · 일꾼 제외 · 총괄·부총괄은 크레딧 소모 최소(초안·검수는 뮤즈·큐·지시받은 일꾼)",
   items: [
-    { id: "td", name: "👑 총괄 · 투덜이", role: "업무 배분·우선순위·팩트체크·전결 승인 → 대표님 상신", state: "wait", chip: "가동 미확인" },
-    { id: "hb", name: "👑 부총괄 · 해병이", role: "7개 부서 운영 + 관리자와 교차검토", state: "wait", chip: "가동 미확인" },
-    { id: "muse", name: "🧠 관리자 · 뮤즈", role: "관리자 검토(1차) · 회의록·아카이브 · 전 업무 숙지", state: "wait", chip: "연결 확인" },
-    { id: "manus", name: "🤖 부관리자 · 큐(Manus)", role: "30초 AI 영상·카드뉴스 시범 · 소화기·애드센스 보조 검수", state: "wait", chip: "08번 연결" },
+    { id: "td", name: "👑 총괄 · 투덜이", role: "최종 확인·승인·GitHub 배포만(사무실 변경안 취합은 큐)", state: "wait", chip: "가동 미확인" },
+    { id: "hb", name: "👑 부총괄 · 해병이", role: "게시판 최종 확인·실제 발행/비공개 클릭 + 교차검토", state: "wait", chip: "가동 미확인" },
+    { id: "muse", name: "🧠 관리자 · 뮤즈", role: "게시판 원고 수정안·사전 검수·목차/링크 점검 전담 · 회의록·아카이브", state: "wait", chip: "연결 확인" },
+    { id: "manus", name: "🤖 부관리자 · 큐(Manus)", role: "사무실 변경안 취합·정리(총괄 배포 전) · 게시판 사전 검수 · 창작소설·30초 영상", state: "wait", chip: "08번 연결" },
     { id: "inst", name: "🛠️ 일꾼 · Instinct", role: "지시받은 작업만 실행(임의 판단·제안·착수·발행 금지) → 지시한 사람에게 보고", state: "wait", chip: "지시 작업만" },
     { id: "subaki", name: "🍉 수박이 이사", role: "위탁판매·스마트스토어 실행 · 확정 건만 최소 알림", state: "wait", chip: "실행 담당(사람)" }
   ],
@@ -1667,22 +1670,24 @@ function renderRoster(raw) {
    각자 맡은 임무·완료 기준·보고 시점과 결재선을 한 표로 보여 준다.
    담당이 바뀌면 status.json(assignments)만 고치면 화면이 그대로 따라온다. */
 const ASSIGN_DEFAULT = {
-  title: "🧾 임무 배분표 · 11/27 수익화 4채널 편성",
+  title: "🧾 임무 배분표 · 11/27 수익화 4채널 + 11/28 크레딧 최소 운용",
   note: "담당 · 완료 기준 · 보고 시점",
-  route: "결재선: 담당 작성 → 관리자(뮤즈)·부총괄(해병이) 검토 → 총괄(투덜이) 팩트체크·승인 → 대표님(자금·최종) · 총괄·부총괄·관리자·부관리자 4인 상시 수평전개(임시정지 시 무중단 인계) · 일꾼 제외",
+  route: "결재선: 담당 작성(뮤즈·큐) → 총괄(투덜이, 임시정지 시 가동 중인 대행) 최종 확인·승인 → 대표님(자금·최종) · 일꾼은 지시받은 작업만 수행 · 총괄·부총괄·관리자·부관리자 4인 상시 수평전개(임시정지 시 무중단 인계) · 일꾼 제외 · 08:28 크레딧 최소 운용: 초안·취합·사전 검수는 뮤즈·큐(단순 반복은 지시 범위 내 일꾼), 총괄·부총괄은 최종 확인·실제 클릭만",
   items: [
     { no: "1", task: "스마트스토어 심사·위탁 재상신", owner: "수박이 이사", state: "wait", note: "서류 2/2 제출 완료 → 심사중(3영업일) · 재상신 #24·#25 1안/2안/보류 선택 대기" },
-    { no: "2", task: "브랜드커넥트 하나필터", owner: "총괄 투덜이·일꾼", state: "work", note: "원고·링크 세트 완료 → 네이버 블로그 임시저장 → 대표님 발행 1회 → 클릭·수익 확인" },
+    { no: "2", task: "브랜드커넥트 하나필터", owner: "뮤즈·큐 작성·검수 → 투덜이 발행 확인", state: "work", note: "원고·링크 세트 완료 → 네이버 블로그 임시저장 → 대표님 발행 1회 → 클릭·수익 확인 · 수정·재검수는 뮤즈·큐, 최종 확인·발행은 투덜이" },
     { no: "3", task: "창작소설 10화 연재", owner: "일꾼·뮤즈·큐", state: "work", note: "1화 합작본·10화 시놉시스 → 총괄 최종 검토·승인 → 카테고리 개설·1화 발행 → 하루 2편×5일" },
-    { no: "4", task: "차량용 소화기 3채널", owner: "일꾼 Instinct", state: "wait", note: "총괄 승인 완료 · 발행 대기(블로그·Threads·인스타 카드뉴스 6장) → URL·색인 요청" },
+    { no: "4", task: "차량용 소화기 3채널", owner: "뮤즈·큐 검수 → 투덜이·해병이 발행/비공개", state: "wait", note: "총괄 승인 완료 · 발행 대기(블로그·Threads·인스타 카드뉴스 6장) → 수정안·사전 검수는 뮤즈·큐, 실제 발행·비공개 클릭은 투덜이·해병이" },
     { no: "5", task: "tudeori 모바일·애드센스", owner: "일꾼 Instinct", state: "done", note: "모바일웹 자동연결 해제·모바일 루트 검증 완료 · 애드센스 '준비중' 2시간 감시" },
     { no: "6", task: "데일리 머니리포트", owner: "부총괄 해병이", state: "done", note: "고향사랑기부제 /12 발행·표 머리행 보완·Threads 재게시 완료 · 다음 11:00 고단가 글" },
     { no: "7", task: "영문 여행 블로그", owner: "부총괄 해병이", state: "wait", note: "3편 추가 발행·색인 요청 완료 · 서울 글 모바일 표 배치 보완(승인 대기)" },
-    { no: "8", task: "인스타·스레드 활용", owner: "총괄 투덜이", state: "work", note: "@tudeori.carlife 활성 확인 · 프로필 사진·소개 세팅 → 소화기 카드뉴스 첫 게시물" },
+    { no: "8", task: "인스타·스레드 활용", owner: "큐 검수 → 투덜이 게시", state: "work", note: "@tudeori.carlife 활성 확인 · 프로필 사진·소개 세팅 → 소화기 카드뉴스 첫 게시물 · 문구·검수는 큐, 게시 클릭은 투덜이" },
     { no: "9", task: "피클 리셋 티켓·초대글", owner: "일꾼·뮤즈·큐", state: "work", note: "투덜이용·해병이용 각각 작성 → 총괄 검토·게시 → 게시 URL 전달(대표님 링크 1회)" },
     { no: "10", task: "공공 퀴즈·지원금 자동 응모", owner: "총괄 투덜이", state: "work", note: "1일 2회(10:30·16:30) · 오늘 축사로 낱말퍼즐 응모 완료 · 새 목록 수박이 공유" },
     { no: "11", task: "관리자 검토·회의록", owner: "관리자 뮤즈", state: "work", note: "전 업무 숙지 · 교차검수 · 회의록·아카이브 · 승계 3순위" },
-    { no: "12", task: "배분·팩트체크·승인", owner: "총괄 투덜이", state: "work", note: "수익화 4채널 연동 · 결재선 준수 · 대표님 보고 · 승계 1순위" }
+    { no: "12", task: "배분·팩트체크·승인", owner: "총괄 투덜이", state: "work", note: "수익화 4채널 연동 · 결재선 준수 · 대표님 보고 · 승계 1순위" },
+    { no: "13", task: "사무실 실시간 전담 유지", owner: "큐 → 투덜이", state: "work", note: "큐가 팀 보고 취합·status.json 변경안(JSON)·요약 정리 → 투덜이 최종 확인 후 GitHub 배포(main·gh-pages)만" },
+    { no: "14", task: "전 게시판 관리·유지 변경", owner: "뮤즈·큐 → 투덜이·해병이", state: "work", note: "원고 수정안·사전 검수·목차/링크 점검은 뮤즈·큐(단순 반복은 지시 범위 내 일꾼) · 실제 발행·비공개 클릭만 투덜이·해병이" }
   ]
 };
 let ASSIGN = null;
@@ -1737,6 +1742,63 @@ function renderAssignments(raw) {
     <div class="as-route">${esc(d.route)}</div>
     </div></div>`;
   applyFold("assign");
+}
+
+/* ================= ⚡ 크레딧 최소 운용 · 전담 배정 (2026-11-28 08:28 대표님 확정) =================
+   "총괄과 부총괄은 크레딧 소모 최대한으로 줄이는 쪽으로 다른 애들 시켜서 최적의 크레딧 유지"
+   → 사무실은 큐가 변경안 취합 → 총괄은 확인 후 배포만 / 게시판은 뮤즈·큐가 수정안·사전 검수 → 총괄·부총괄은 실제 클릭만. */
+const DUTY_DEFAULT = {
+  title: "크레딧 최소 운용 · 전담 배정",
+  note: "초안·취합·사전 검수는 뮤즈·큐(단순 반복은 지시 범위 내 일꾼) → 최종 확인·실제 클릭만 총괄·부총괄",
+  rule: "총괄·부총괄이 직접 하는 일은 최종 판단·승인, 실제 클릭(배포·발행·비공개), 대표님 보고, 🔴 금융·계정 확인뿐입니다. 넘긴 작업도 결과 확인 책임은 지시한 사람에게 있고, 초안 그대로 발행하지 않습니다. 승계 순서(총괄→부총괄→관리자→부관리자)와 일꾼 지시 범위 원칙은 그대로입니다.",
+  items: [
+    { no: "사무실", task: "LIVE OFFICE 실시간 전담 유지", owner: "큐 → 투덜이", state: "work", note: "큐가 팀 보고 취합·status.json 변경안(JSON)·요약 정리 → 투덜이가 최종 확인 후 GitHub 배포(main·gh-pages)만" },
+    { no: "게시판", task: "전 게시판(티스토리·네이버·스레드·인스타) 관리·유지", owner: "뮤즈·큐 → 투덜이·해병이", state: "work", note: "뮤즈·큐가 원고 수정안·사전 검수·목차/링크 점검 전담(단순 반복은 지시 범위 내 일꾼) → 투덜이·해병이는 최종 확인과 실제 발행·비공개 클릭만" },
+    { no: "원칙", task: "총괄·부총괄 크레딧 최소화", owner: "전원", state: "work", note: "조사·초안·검수·반복 확인은 뮤즈·큐·지시받은 일꾼에게 넘기고, 총괄·부총괄은 판단·승인·클릭만 — 최적 크레딧 유지" },
+    { no: "유지", task: "기존 원칙 그대로", owner: "전원", state: "wait", note: "승계 총괄→부총괄→관리자→부관리자 · 일꾼은 지시받은 작업만 · 4인 상시 수평전개 · 🔴 금융은 대표님 직접" }
+  ]
+};
+let DUTY = null;
+
+function dutyData(raw) {
+  const src = (raw && typeof raw === "object" && !Array.isArray(raw)) ? raw : {};
+  const str = (v, d) => (typeof v === "string" && v.trim()) ? v.trim() : d;
+  const list = Array.isArray(src.items) ? src.items.filter(it => it && typeof it === "object" && typeof it.task === "string" && it.task.trim()) : [];
+  const items = (list.length ? list : DUTY_DEFAULT.items).map((it, i) => ({
+    no: str(it.no, String(i + 1)),
+    task: it.task.trim(),
+    owner: str(it.owner, "미지정"),
+    state: (it.state === "work" || it.state === "wait" || it.state === "done") ? it.state : "wait",
+    note: str(it.note, "")
+  }));
+  return {
+    title: str(src.title, DUTY_DEFAULT.title),
+    note: str(src.note, DUTY_DEFAULT.note),
+    rule: str(src.rule, DUTY_DEFAULT.rule),
+    updated: str(src.updated, ""),
+    items
+  };
+}
+
+function renderDuty(raw) {
+  if (raw !== undefined) DUTY = dutyData(raw);
+  if (!DUTY) DUTY = dutyData(null);
+  const el = document.getElementById("pent-duty");
+  if (!el) return;
+  const d = DUTY;
+  el.innerHTML = `
+    ${foldHeadHTML("duty", "as-head", "⚡ " + esc(d.title), esc(d.note), "눌러서 전담 배정 접기·펼치기")}
+    <div class="fold-body" id="fold-duty-body"><div class="fold-inner">
+    <div class="as-rows">${d.items.map(it => `
+      <div class="as-row ${it.state}">
+        <span class="as-no">${esc(it.no)}</span>
+        <span class="as-tx"><b>${esc(it.task)}</b><i>${esc(it.note)}</i></span>
+        <span class="as-own">${esc(it.owner)}</span>
+        <span class="as-st">${it.state === "work" ? "진행" : "유지"}</span>
+      </div>`).join("")}</div>
+    ${d.rule ? `<div class="as-route">${esc(d.rule)}</div>` : ""}
+    </div></div>`;
+  applyFold("duty");
 }
 
 /* ================= 🎁 뮤즈(Muse) 초대코드 카드 =================
@@ -1890,6 +1952,7 @@ function applyStatus(data) {
   renderCredit(src.credit);
   renderShop(src.commerce);
   renderRoster(src.roster);
+  renderDuty(src.duty);
   renderAssignments(src.assignments);
   renderInvite(src.invite);
   renderGoal(src.goal);
