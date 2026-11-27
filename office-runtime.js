@@ -763,7 +763,7 @@ function foldIsOpen(id) {
   if (!(id in FOLD_OPEN)) {
     let v = null;
     try { v = localStorage.getItem(FOLD_PANELS[id].key); } catch (e) {}
-    FOLD_OPEN[id] = (v === "1");
+    FOLD_OPEN[id] = (v === "1") || (v === null && id === "duty");   // 전담 배정표는 첫 방문에 펼쳐 둔다
   }
   return FOLD_OPEN[id];
 }
