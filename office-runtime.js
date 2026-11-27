@@ -246,12 +246,12 @@ function roomHTML(r, i) {
           <span class="status-dot" aria-hidden="true"></span>
         </div>
         ${stage}
-        <div class="nowchip ${r.taskState || "wait"}" id="now-${r.id}" title="현재 담당 업무"><i></i>${esc(r.task || r.foot)}</div>
         <div class="led-board" id="led-${r.id}">
           <span class="led-tag"><i></i><span id="tag-${r.id}">${STATE_LABEL[r.state]}</span></span>
           <span class="led-viewport" id="vp-${r.id}"><span class="led-track" id="track-${r.id}"></span></span>
           <span class="led-time" id="time-${r.id}" title="마지막 갱신">--:--</span>
         </div>
+        <div class="nowchip ${r.taskState || "wait"}" id="now-${r.id}" title="현재 담당 업무"><i></i>${esc(r.task || r.foot)}</div>
         <div class="room-foot"><span class="foot-txt" id="foot-${r.id}">${esc(r.foot)}</span></div>
         <div class="alert-box" id="alertbox-${r.id}">
           <div class="alert-guide" id="guide-${r.id}"><span class="guide-tag">해결</span>${esc(r.guide)}</div>
