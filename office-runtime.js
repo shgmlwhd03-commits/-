@@ -15,10 +15,10 @@ const rooms = [
     id: "owner", floor: "f8", zone: "instinct", tag: "오너", ceo: true,
     title: "👑 대표님", worker: "👑", name: "👑 대표님",
     say: "결정할 것만 보고받는 중!", foot: "조직도 최상단 · 대표 승인 필요 건만 표시",
-    task: "승인 필요 3건 · 나머지는 총괄 검수·전결", taskState: "approve",
+    task: "승인 대기 0건 · 대기 2건(발행 버튼·게시 URL)", taskState: "approve",
     issue: "대표 결정이 필요해요!",
     guide: "대표님께는 승인·결정이 필요한 건만 올립니다. 총괄이 팩트체크·저작권·약관 검수를 마친 건은 총괄 전결로 처리하고 결과만 보고합니다. 🔴 자금·금융 인증은 대표님이 직접 실행합니다.",
-    state: "working", ticker: "🎯 월 1,000만 원 · 전 채널 수익화 연동 · 승인 필요 3건(위탁 1안/2안 · 하나필터 발행 · 피클 티켓 링크) · 🔴 금융 인증은 직접", updated: "13:00"
+    state: "working", ticker: "🎯 월 1,000만 원 · 전 채널 수익화 연동 · 위탁 1안 확정(수박이 소싱 진행) · 대기 2건(하나필터 발행 버튼·피클 티켓 URL) · 🔴 금융 인증은 직접", updated: "13:00"
   },
   {
     id: "ceo_tudeori", floor: "f6", zone: "partner", tag: "총괄", ceo: true,
@@ -95,11 +95,11 @@ const rooms = [
   {
     id: "invest_sp500", floor: "f5", zone: "direct", tag: "해병이",
     title: "📈 미국 S&P500 적립투자부", worker: "📈", name: "오적립 주임",
-    say: "월요일 적립 알림 대기!", foot: "매주 월요일 1주 적립 알림 · 보유·손익 본인 전용",
-    task: "월요일 적립 알림 대기", taskState: "wait",
-    issue: "기록은 본인 전용",
-    guide: "매주 월요일 09:05 S&P500 ETF 1주 적립 알림을 보냅니다. 주문·체결은 대표님이 직접 하고, 보유·손익 기록은 공개 화면에 표시하지 않습니다.",
-    state: "idle", ticker: "매주 월요일 1주 적립 알림(다음 11/30 09:05) · 보유·손익은 본인 전용(공개 화면 미표시) · 주문은 대표님 직접", updated: "07:00"
+    say: "실시간 시세 보고 있어요!", foot: "매주 월요일 1주 적립 · 실시간 공개 시세(계좌 연동 없음)",
+    task: "실시간 공개 시세 표시", taskState: "work",
+    issue: "",
+    guide: "매주 월요일 09:05 S&P500 ETF 1주 적립 알림을 보냅니다. 캐릭터를 누르면 공개 시세(현재가·전일 대비 등락률·장중/장마감)와 1주 적립 현황(평단 23,755원 기준 평가손익)이 60초마다 갱신되는 주식창이 열립니다. 계좌·증권사 연동은 하지 않고, 주문·체결은 대표님이 직접 합니다.",
+    state: "working", ticker: "TIGER 미국S&P500(360750) 실시간 공개 시세 · 매주 월요일 1주 적립(다음 11/30 09:05) · 계좌 연동 없음 · 주문은 대표님 직접", updated: "13:20"
   },
   {
     id: "tistory", floor: "f4", zone: "partner", tag: "투덜이",
@@ -144,7 +144,19 @@ const rooms = [
     task: "1화 합작 · 10화 시놉시스", taskState: "work",
     issue: "총괄 검토 대기!",
     guide: "일꾼·뮤즈·큐 3인이 함께 쓰는 창작소설 팀입니다. 하루 2편(오전·저녁) × 5일 = 10화 완결로 연재하고, tudeori '창작소설' 카테고리와 Threads로 유입을 붙입니다. 노골적 성묘사·잔혹한 신체훼손은 쓰지 않고 애드센스 정책선을 지키며, 총괄이 최종 검토·승인합니다.",
-    state: "working", ticker: "1화 비교 시안 3편 완성(큐·뮤즈·일꾼) → 3인 합작 자극적 스릴러 통합본·10화 시놉시스 조율 중 · 하루 2편×5일=10화 완결 · 총괄 최종 검토 후 연재", updated: "12:40"
+    state: "working", ticker: "1화 비교 시안 3편 완성(큐·뮤즈·일꾼) → 3인 합작 자극적 스릴러 통합본·10화 시놉시스 조율 중 · 하루 2편×5일=10화 완결 · 총괄 최종 검토 후 연재", updated: "12:40",
+    site: "https://tudeori.tistory.com/category/창작소설", siteLabel: "창작소설 연재 보기"
+  },
+  {
+    id: "novel_writer", floor: "f3", zone: "partner", tag: "투덜이",
+    title: "✍️ 연재 작가 · 404호", worker: "✍️", name: "연재 작가",
+    say: "404호 10화 쓰는 중!",
+    foot: "404호 연재 · tudeori '창작소설' 카테고리",
+    task: "404호 10화 연재 중", taskState: "work",
+    issue: "",
+    guide: "창작소설 '404호'를 연재하는 작가 자리입니다. 하루 2편(09:00·20:00) × 5일 = 10화로 끊기지 않게 올리고, 초안은 총괄·관리자 검수를 거쳐 tudeori '창작소설' 카테고리에 발행합니다. 캐릭터나 방을 누르면 연재 목록이 새 창으로 열립니다.",
+    state: "working", ticker: "404호 10화 연재 중 · 1화 발행 준비(총괄 검수 통과분부터 공개) · 하루 2편 09:00·20:00 · 읽으러 가기: tudeori '창작소설'", updated: "13:20",
+    site: "https://tudeori.tistory.com/category/창작소설", siteLabel: "창작소설 연재 보기"
   },
   {
     id: "ticket", floor: "f2", zone: "instinct", tag: "공동",
@@ -232,17 +244,19 @@ function roomHTML(r, i) {
   const shop = r.id === "commerce";
   const ceo = r.ceo === true;
   const director = r.director === true;
+  const site = typeof r.site === "string" && /^https?:\/\//.test(r.site) ? r.site : "";
   const stage = `<div class="room-stage">${workerHTML(r)}${LAPTOP}</div>`;
 
   return `
-      <div class="room ${r.state}${partner ? " partner" : ""}${ceo ? " ceo" : ""}${director ? " director" : ""} link" id="room-${r.id}" role="button" tabindex="0" aria-label="${esc(r.title)} 업무 보고 열기"
+      <div class="room ${r.state}${partner ? " partner" : ""}${ceo ? " ceo" : ""}${director ? " director" : ""}${site ? " site-link" : ""} link" id="room-${r.id}" role="button" tabindex="0" aria-label="${esc(site ? r.title + " · " + (r.siteLabel || "새 창으로 열기") : r.title + " 업무 보고 열기")}"
            style="--wd:${(i * 0.23).toFixed(2)}s;--ic:${(-(0.9 * i + i * i * 0.17)).toFixed(2)}s"
-           onclick="roomTap(event, this, '${r.id}')" title="눌러서 업무 보고 열기">
+           onclick="roomTap(event, this, '${r.id}')" title="${esc(site ? (r.siteLabel || "새 창으로 열기") + " (새 창)" : "눌러서 업무 보고 열기")}">
         <div class="room-head">
           <span class="room-title">${esc(r.title)}</span>
           <span class="room-lanes" id="lanes-${r.id}" aria-hidden="true"></span>
           <span class="room-tag${partner ? " partner" : instinct ? " instinct" : ""}" title="${instinct ? "대표님·경영진 직할 방" : director ? "위탁판매·스토어 실행 담당(사람)" : partner ? "총괄(투덜이) 측 운영 방" : "부총괄(해병이) 측 운영 방"}">${r.tag}</span>
-          <span class="room-open">${r.id === "public_quiz" ? "응모결과▸" : shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : "보고"}</span>
+          <span class="room-open">${r.id === "public_quiz" ? "응모결과▸" : shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : site ? "연재▸" : "보고"}</span>
+          ${site ? `<button class="room-open ro-btn" type="button" onclick="event.stopPropagation();openReport('${r.id}')" title="업무 보고·연재 현황 열기">보고</button>` : ""}
           <span class="status-dot" aria-hidden="true"></span>
         </div>
         ${stage}
@@ -1824,6 +1838,7 @@ function applyStatus(data) {
     }
     if (before !== undefined && before !== ticker) flashBoard(r.id);
   });
+  paintStockBoard();
 
   const collab = src.collab;
   COLLAB_ACTIVE = !!(collab === true || (collab && typeof collab === "object" && collab.active));
@@ -2203,23 +2218,197 @@ function renderPrizePanel(id) {
   return `<section class="prize-progress" aria-label="응모 진행결과"><h3>🎯 응모 진행결과</h3><p class="pp-note">기록 정리: ${esc(stamp)} KST<br>${esc(data.notice)}</p><div class="pp-stats"><span>응모 상태 ≠ 당첨 결과</span><span>이 기록에서 당첨 확인 없음</span></div>${groups.map(g=>`<section class="pp-group"><h4>${esc(g.title)}</h4><p class="pp-note">${esc(g.note || "")}</p><div class="pp-items">${(Array.isArray(g.items)?g.items:[]).map(item).join("")}</div></section>`).join("")}<p class="pp-note">이 창은 조회 전용입니다. 클릭해도 응모·승인·계정 사용이나 업무 상태 변경은 일어나지 않습니다.</p></section>`;
 }
 
+/* ================= 📈 실시간 공개 시세 (계좌 연동 없음) ================= */
+/* 대표님 계좌·증권사 API는 연결하지 않는다. 공개 시세만 읽어 현재가·등락률·평가손익·장 상태를 보여 준다. */
+const STOCK = {
+  code: "360750", name: "TIGER 미국S&P500", shares: 1, avg: 23755, fallback: 23755,
+  quote: null, at: 0, state: "idle", err: "", busy: false, timer: null
+};
+const STOCK_API = "https://polling.finance.naver.com/api/realtime/domestic/stock/" + STOCK.code;
+/* 브라우저에서 공개 시세를 읽기 위한 공개 경로 — 계좌·로그인 정보는 어디에도 보내지 않는다 */
+const STOCK_ROUTES = [
+  { name: "네이버 금융", url: "https://r.jina.ai/" + STOCK_API },
+  { name: "allorigins", url: "https://api.allorigins.win/raw?url=" + encodeURIComponent(STOCK_API) },
+  { name: "codetabs", url: "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(STOCK_API) }
+];
+const KST_FMT = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Seoul", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23", weekday: "short" });
+
+function kstNow() {
+  const p = {};
+  KST_FMT.formatToParts(new Date()).forEach(x => { p[x.type] = x.value; });
+  return { y: p.year, mo: p.month, d: p.day, hh: p.hour, mm: p.minute, ss: p.second, wd: p.weekday, mins: Number(p.hour) * 60 + Number(p.minute) };
+}
+
+function fmtNum(n) { return Number.isFinite(Number(n)) ? Number(n).toLocaleString("ko-KR") : "—"; }
+
+function stockNextMonday() {
+  const k = kstNow();
+  const base = new Date(Date.UTC(Number(k.y), Number(k.mo) - 1, Number(k.d)));
+  let add = (8 - base.getUTCDay()) % 7;
+  if (add === 0) add = 7;
+  base.setUTCDate(base.getUTCDate() + add);
+  return String(base.getUTCMonth() + 1) + "/" + String(base.getUTCDate());
+}
+
+/* 네이버 금융 공개 시세 응답(프록시가 감싼 텍스트 포함)에서 숫자만 뽑는다 */
+function stockParseNaver(text, routeName) {
+  const s = String(text || "");
+  const a = s.indexOf("{"), b = s.lastIndexOf("}");
+  if (a < 0 || b <= a) throw new Error("JSON 없음");
+  const json = JSON.parse(s.slice(a, b + 1));
+  const d = json && Array.isArray(json.datas) ? json.datas[0] : null;
+  if (!d) throw new Error("시세 데이터 없음");
+  const num = (v) => {
+    const n = Number(String(v == null ? "" : v).replace(/[^0-9.\-]/g, ""));
+    return Number.isFinite(n) ? n : null;
+  };
+  const price = num(d.closePriceRaw != null ? d.closePriceRaw : d.closePrice);
+  if (price == null) throw new Error("현재가 없음");
+  const change = num(d.compareToPreviousClosePriceRaw != null ? d.compareToPreviousClosePriceRaw : d.compareToPreviousClosePrice) || 0;
+  return {
+    price: price,
+    change: change,
+    ratio: num(d.fluctuationsRatioRaw != null ? d.fluctuationsRatioRaw : d.fluctuationsRatio) || 0,
+    open: num(d.openPriceRaw != null ? d.openPriceRaw : d.openPrice),
+    high: num(d.highPriceRaw != null ? d.highPriceRaw : d.highPrice),
+    low: num(d.lowPriceRaw != null ? d.lowPriceRaw : d.lowPrice),
+    volume: num(d.accumulatedTradingVolumeRaw != null ? d.accumulatedTradingVolumeRaw : d.accumulatedTradingVolume),
+    market: String(d.marketStatus || "").toUpperCase(),
+    tradedAt: String(d.localTradedAt || ""),
+    name: String(d.stockName || STOCK.name),
+    source: routeName
+  };
+}
+
+async function stockFetchOnce(route) {
+  const ctl = (typeof AbortController === "function") ? new AbortController() : null;
+  const timer = setTimeout(() => { if (ctl) ctl.abort(); }, 8000);
+  try {
+    const res = await fetch(route.url, ctl ? { cache: "no-store", signal: ctl.signal } : { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    return stockParseNaver(await res.text(), route.name);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function stockRefresh(manual) {
+  if (STOCK.busy) return;
+  STOCK.busy = true;
+  if (!STOCK.quote) STOCK.state = "loading";
+  stockPaint();
+  let got = null;
+  const fails = [];
+  for (const route of STOCK_ROUTES) {
+    try { got = await stockFetchOnce(route); break; }
+    catch (e) { fails.push(route.name + " " + (e && e.name === "AbortError" ? "시간초과" : (e && e.message) || "실패")); }
+  }
+  STOCK.busy = false;
+  if (got) { STOCK.quote = got; STOCK.at = Date.now(); STOCK.state = "live"; STOCK.err = ""; }
+  else { STOCK.state = STOCK.quote ? "stale" : "fail"; STOCK.err = fails.join(" · "); }
+  stockPaint();
+  if (manual) {
+    const btn = document.getElementById("sp-refresh");
+    if (btn) { btn.classList.remove("ok"); void btn.offsetWidth; btn.classList.add("ok"); setTimeout(() => btn.classList.remove("ok"), 1600); }
+  }
+}
+
+function stockAutoStart() {
+  stockRefresh(false);
+  if (STOCK.timer) clearInterval(STOCK.timer);
+  STOCK.timer = setInterval(() => {
+    if (document.hidden) return;                 // 화면이 꺼져 있으면 쉰다
+    stockRefresh(false);
+  }, 60000);
+}
+
+function stockMarketState(q) {
+  const m = q ? String(q.market || "").toUpperCase() : "";
+  if (m === "OPEN") return { on: true, txt: "장중" };
+  if (m === "PRE" || m === "PREOPEN" || m === "PRE_OPEN") return { on: false, txt: "장 시작 전" };
+  if (m === "CLOSE" || m === "CLOSED" || m === "AFTER") return { on: false, txt: "장마감" };
+  const k = kstNow();
+  const weekday = k.wd !== "Sat" && k.wd !== "Sun";
+  return (weekday && k.mins >= 540 && k.mins < 930)
+    ? { on: true, txt: "장중" }
+    : { on: false, txt: "장마감" };
+}
+
 function renderStockPanel() {
-  const d = (STATUS && STATUS.invest_sp500 && STATUS.invest_sp500.chart) || null;
-  if (!d) return `<section class="stock-panel"><h3>📈 주식 손익</h3><p>보유·손익 기록은 공개 화면에서 제외했습니다(본인 전용).</p></section>`;
-  const shares = Number(d.shares) || 0;
-  const cost = Number(d.cost_per_share_krw) * shares;
-  const value = Number(d.price_per_share_krw) * shares;
-  const profit = value - cost;
-  const pct = cost ? (profit / cost * 100) : 0;
-  const prices = [Number(d.cost_per_share_krw), Number(d.price_per_share_krw)];
-  const min = Math.min(...prices), max = Math.max(...prices), span = Math.max(1, max - min);
-  const xy = prices.map((price,i) => `${24 + i*152},${58 - ((price-min)/span)*38}`);
-  return `<section class="stock-panel" aria-label="주식 그래프와 손익"><h3>📈 ${esc(d.label || "주식 손익")}</h3><div class="stock-summary"><span>보유 ${shares}주</span><span>매수 ₩${cost.toLocaleString("ko-KR")}</span><span>기록 시세 ₩${value.toLocaleString("ko-KR")}</span></div><div class="stock-profit ${profit < 0 ? "down" : "up"}">손익 ${profit < 0 ? "−" : "+"}₩${Math.abs(profit).toLocaleString("ko-KR")} (${pct.toFixed(2)}%)</div><svg class="stock-chart" viewBox="0 0 200 78" role="img" aria-label="매수가와 기록 시세 비교 그래프"><line x1="8" y1="20" x2="192" y2="20"/><line x1="8" y1="40" x2="192" y2="40"/><line x1="8" y1="60" x2="192" y2="60"/><polyline points="${xy.join(" ")}"/><circle cx="${xy[0].split(",")[0]}" cy="${xy[0].split(",")[1]}" r="3"/><circle cx="${xy[1].split(",")[0]}" cy="${xy[1].split(",")[1]}" r="3"/><text x="24" y="74">매수</text><text x="176" y="74" text-anchor="end">기록 시세</text></svg><small>기록 기준: ${esc(d.as_of || "날짜 미상")} · 과거 기록이며 실시간 시세가 아닙니다.</small></section>`;
+  const q = STOCK.quote;
+  const chart = (STATUS && STATUS.invest_sp500 && STATUS.invest_sp500.chart) || null;
+  const shares = Number(STOCK.shares) || 1;
+  const avg = Number(STOCK.avg) || 23755;
+  const price = q ? q.price : ((chart && Number(chart.price_per_share_krw)) || STOCK.fallback);
+  const cost = avg * shares;
+  const value = price * shares;
+  const pnl = value - cost;
+  const pnlPct = cost ? (pnl / cost) * 100 : 0;
+  const change = q ? Number(q.change) || 0 : 0;
+  const ratio = q ? Number(q.ratio) || 0 : 0;
+  const dir = change > 0 ? "up" : change < 0 ? "down" : "flat";
+  const arrow = change > 0 ? "▲" : change < 0 ? "▼" : "–";
+  const mkt = stockMarketState(q);
+  const stamp = q ? new Intl.DateTimeFormat("ko-KR", { timeZone: "Asia/Seoul", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }).format(new Date(STOCK.at)) : "";
+  const age = q ? Math.max(0, Math.round((Date.now() - STOCK.at) / 1000)) : 0;
+  const ageTxt = q ? (age < 60 ? age + "초 전" : Math.round(age / 60) + "분 전") : "";
+  const range = (q && q.high && q.low && q.high > q.low) ? Math.min(100, Math.max(0, ((price - q.low) / (q.high - q.low)) * 100)) : null;
+  const statusTxt = STOCK.state === "live" ? "실시간 수신" : STOCK.state === "loading" ? "수신 중…" : STOCK.state === "stale" ? "마지막 값 유지(수신 지연)" : "수신 실패";
+  const detail = q
+    ? `<div class="sp-ohlc"><span>시가 <b>${fmtNum(q.open)}</b></span><span>고가 <b>${fmtNum(q.high)}</b></span><span>저가 <b>${fmtNum(q.low)}</b></span><span>거래량 <b>${fmtNum(q.volume)}</b></span></div>`
+      + (range !== null ? `<div class="sp-range" title="오늘 저가~고가 범위에서 현재가 위치"><span class="sp-range-bar"><i style="left:${range.toFixed(1)}%"></i></span><span class="sp-range-lb">저 ${fmtNum(q.low)} · 고 ${fmtNum(q.high)}</span></div>` : "")
+    : `<p class="sp-note">${STOCK.state === "loading" ? "공개 시세를 받아오는 중입니다." : "공개 시세를 받지 못해 최근 실체결 기준가(11/20 · 23,755원)로 표시합니다."}${STOCK.err ? `<br><small>${esc(STOCK.err)}</small>` : ""}</p>`;
+  return `<section class="stock-panel live" aria-label="실시간 공개 시세와 적립 현황">
+    <div class="sp-head">
+      <h3>📈 <b>${esc(q ? q.name : STOCK.name)}</b> <span class="sp-code">${STOCK.code}</span></h3>
+      <span class="sp-mkt ${mkt.on ? "on" : "off"}">${mkt.on ? "● " + mkt.txt : "○ " + mkt.txt}</span>
+    </div>
+    <div class="sp-price">
+      <b class="sp-now ${dir}">${fmtNum(price)}</b><span class="sp-won">원</span>
+      <span class="sp-chg ${dir}">${arrow} ${fmtNum(Math.abs(change))} (${ratio > 0 ? "+" : ""}${ratio.toFixed(2)}%)</span>
+    </div>
+    <div class="sp-vs">전일 종가 ${q ? fmtNum(price - change) : "—"} 대비 · ${statusTxt} ${stamp ? "· " + esc(stamp) + " (" + ageTxt + ")" : ""}</div>
+    ${detail}
+    <div class="sp-mine">
+      <span class="sp-mine-h">내 적립 ${shares}주 · 평단 ${fmtNum(avg)}원</span>
+      <span>평가금액 <b>${fmtNum(value)}원</b></span>
+      <span class="sp-pnl ${pnl > 0 ? "up" : pnl < 0 ? "down" : "flat"}">평가손익 ${pnl > 0 ? "+" : pnl < 0 ? "−" : ""}${fmtNum(Math.abs(pnl))}원 (${pnlPct > 0 ? "+" : pnlPct < 0 ? "−" : ""}${Math.abs(pnlPct).toFixed(2)}%)</span>
+    </div>
+    <div class="sp-foot">
+      <span class="sp-src">${q ? "출처 " + esc(q.source) + " 공개 시세" : "출처 최근 실체결 기준가"} · 다음 적립 ${stockNextMonday()}(월) 09:05</span>
+      <button type="button" class="sp-refresh" id="sp-refresh" onclick="stockRefresh(true)" title="지금 공개 시세를 다시 받아옵니다">⟳ 새로고침</button>
+    </div>
+    <small>계좌·증권사 연동 없음 · 공개 데이터만 표시 · 60초마다 자동 갱신 · 주문·체결은 대표님이 직접</small>
+  </section>`;
+}
+
+/* 5F 방 전광판·현재 업무 칩도 같은 시세로 맞춘다 */
+function paintStockBoard() {
+  const el = document.getElementById("room-invest_sp500");
+  if (!el) return;
+  const q = STOCK.quote;
+  const chip = document.getElementById("now-invest_sp500");
+  if (q) {
+    const arrow = q.change > 0 ? "▲" : q.change < 0 ? "▼" : "–";
+    const mkt = stockMarketState(q);
+    const k = kstNow();
+    setBoardText("invest_sp500", `📈 ${STOCK.name} ${fmtNum(q.price)}원 ${arrow}${fmtNum(Math.abs(q.change))}(${q.ratio > 0 ? "+" : ""}${Number(q.ratio).toFixed(2)}%) · ${mkt.on ? "장중" : "장마감"} · 공개 시세 ${k.hh}:${k.mm}:${k.ss}`, k.hh + ":" + k.mm, mkt.on ? "working" : "idle");
+    if (chip) chip.lastChild.textContent = `${fmtNum(q.price)}원 ${arrow}${Number(q.ratio).toFixed(2)}% · ${mkt.on ? "장중" : "장마감"}`;
+  } else {
+    if (chip) chip.lastChild.textContent = STOCK.state === "loading" ? "공개 시세 수신 중" : "실시간 시세 수신 대기";
+  }
+}
+
+function stockPaint() {
+  const host = document.getElementById("stock-panel-live");
+  if (host) host.innerHTML = renderStockPanel();
+  paintStockBoard();
 }
 
 function openReport(id) {
   const sourceOpen = REPORT_ID === id && !!document.getElementById("report-source-details")?.open;
   const d = reportData(id);
+  const sameReport = REPORT_ID === id;
   REPORT_ID = id;
   const t = document.getElementById("rm-title");
   if (t) t.textContent = d.title;
@@ -2269,7 +2458,7 @@ function chiefIndexForSignal(x, lane) {
   if (body) {
     body.innerHTML = [
       ["public_quiz"].includes(d.id) ? renderPrizePanel(d.id) : "",
-      d.id === "invest_sp500" ? renderStockPanel() : "",
+      d.id === "invest_sp500" ? `<div id="stock-panel-live">${renderStockPanel()}</div>` : "",
       d.summary ? `<div class="rm-sum"><span>👑</span><span>${esc(d.summary)}</span></div>` : "",
       d.ticker ? `<div class="rm-live"><span class="rm-live-h">📺 전광판</span><span class="rm-live-t">${esc(d.ticker)}</span><span class="rm-live-u">${esc(d.updated)}</span></div>` : "",
       d.overview ? `<div class="report-scope-note">${d.coordinator ? "종합·검토 목록과 담당 보고 바로가기입니다. 개별 업무 상세는 담당 보고에서 확인하세요." : d.manager ? "이 담당이 맡은 부서의 신호와 보고만 모았습니다. 다른 부서 신호·공통 역할표는 총괄 보고에서 확인하세요." : "검토·결재 안건은 보고·결재 창구에서, 개별 업무 상세는 각 담당 보고에서 확인하세요."}<div class="report-scope-actions">${d.coordinator || id === "owner" ? `<button type="button" onclick="openChiefFromReport()">보고·결재 창구 보기</button>` : ""}${!d.coordinator ? `<button type="button" onclick="openReport('ceo_tudeori')">총괄 종합 보고</button>` : ""}</div></div>` : "",
@@ -2287,7 +2476,7 @@ function chiefIndexForSignal(x, lane) {
       d.overview ? `</details>` : "",
       d.links.length ? `<div class="rm-sec"><div class="rm-h">🔗 바로가기<em class="rm-hint">새 창으로 열립니다</em></div><div class="rm-links">${d.links.map(l => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</div></div>` : ""
     ].join("");
-    body.scrollTop = 0;
+    if (!sameReport) body.scrollTop = 0;
   }
 
   const shopBtn = document.getElementById("rm-shop");
@@ -2336,6 +2525,12 @@ function openLedgerFromReport() {
 /* 방 클릭: 업무 보고만 연다 (상태 변경 없음) */
 function roomTap(e, el, id) {
   if (e && e.target && e.target.closest && e.target.closest("button, a")) return;
+  const r = rooms.find(x => x.id === id);
+  /* 사이트가 연결된 캐릭터·방은 새 창으로 그 사이트를 연다 */
+  if (r && typeof r.site === "string" && /^https?:\/\//.test(r.site)) {
+    window.open(r.site, "_blank", "noopener");
+    return;
+  }
   openReport(id);
 }
 
@@ -3712,6 +3907,7 @@ paintClock();
 setInterval(paintClock, 1000);
 loadStatus();
 loadPrizeProgress();
+stockAutoStart();
 setInterval(loadStatus, 60000);
 /* 화면 전환: 주소(?view=shop) → 저장된 선택 → 기본 전체 빌딩 */
 (function initView() {
