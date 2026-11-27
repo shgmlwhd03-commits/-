@@ -1723,7 +1723,7 @@ function renderAssignments(raw) {
     cnt.wait ? `대기 ${cnt.wait}` : "",
     cnt.block ? `막힘 ${cnt.block}` : "",
     cnt.done ? `완료 ${cnt.done}` : ""
-  ].filter(Boolean).join(" · ") + ` · 총 ${d.items.length}건`;
+  ].filter(Boolean).join(" · ");
   el.innerHTML = `
     ${foldHeadHTML("assign", "as-head", esc(d.title), esc(summary), "눌러서 임무 배분표 접기·펼치기")}
     <div class="fold-body" id="fold-assign-body"><div class="fold-inner">
