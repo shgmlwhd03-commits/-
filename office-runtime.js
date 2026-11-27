@@ -745,6 +745,69 @@ function renderGoal(raw) {
   if (note) note.textContent = d.note;
 }
 
+/* ================= 🧷 6F 업무분장·배분 표 접기/펼치기 =================
+   대표님 지시(2026-11-27 13:30) "대시보드 업무분장표는 접을수 있게 만들어. 너무길어"
+   6F의 긴 표(임무 배분표 · 총괄 검수 원칙 · 경영진 분장표)는 기본 접힘으로 두고,
+   머리줄을 누르면 펼쳐지고 다시 누르면 접힌다. 고른 상태는 이 브라우저에 기억한다. */
+const FOLD_PANELS = {
+  assign: { key: "liveoffice_fold_assign" },
+  guard:  { key: "liveoffice_fold_guard" },
+  roster: { key: "liveoffice_roster_open" }
+};
+const FOLD_OPEN = {};
+
+function foldIsOpen(id) {
+  if (!(id in FOLD_OPEN)) {
+    let v = null;
+    try { v = localStorage.getItem(FOLD_PANELS[id].key); } catch (e) {}
+    FOLD_OPEN[id] = (v === "1");
+  }
+  return FOLD_OPEN[id];
+}
+
+function applyFold(id) {
+  if (!FOLD_PANELS[id]) return;
+  const open = foldIsOpen(id);
+  const head = document.getElementById("fold-" + id + "-head");
+  const body = document.getElementById("fold-" + id + "-body");
+  const btn = document.getElementById("fold-" + id + "-btn");
+  if (body) {
+    body.classList.toggle("collapsed", !open);
+    body.setAttribute("aria-hidden", open ? "false" : "true");
+  }
+  if (head) head.setAttribute("aria-expanded", open ? "true" : "false");
+  if (btn) btn.textContent = open ? "접기 ▴" : "펼치기 ▾";
+}
+
+/* 표 높이가 바뀌면 엘리베이터 눈금·정지 위치도 다시 맞춘다 */
+function foldSyncLift() {
+  clearTimeout(foldSyncLift.t);
+  foldSyncLift.t = setTimeout(() => {
+    if (typeof buildTicks === "function") buildTicks();
+    if (typeof liftPark === "function") liftPark();
+  }, 320);
+}
+
+function toggleFold(id) {
+  if (!FOLD_PANELS[id]) return;
+  FOLD_OPEN[id] = !foldIsOpen(id);
+  try { localStorage.setItem(FOLD_PANELS[id].key, FOLD_OPEN[id] ? "1" : "0"); } catch (e) {}
+  applyFold(id);
+  foldSyncLift();
+}
+
+function foldKey(e, id) {
+  if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") { e.preventDefault(); toggleFold(id); }
+}
+
+/* 머리줄 HTML: 제목 + 요약 + 펼치기/접기 버튼 (titleHTML·metaHTML은 이미 escape된 값) */
+function foldHeadHTML(id, cls, titleHTML, metaHTML, hint) {
+  const open = foldIsOpen(id);
+  return `<div class="${cls} fold-head" id="fold-${id}-head" role="button" tabindex="0" aria-expanded="${open ? "true" : "false"}" aria-controls="fold-${id}-body" title="${esc(hint || "눌러서 접기·펼치기")}" onclick="toggleFold('${id}')" onkeydown="foldKey(event,'${id}')">
+      <span class="fold-title">${titleHTML}</span>${metaHTML ? `<em class="fold-meta">${metaHTML}</em>` : ""}<span class="fold-btn" id="fold-${id}-btn">${open ? "접기 ▴" : "펼치기 ▾"}</span>
+    </div>`;
+}
+
 /* ================= 🛡️ 총괄 검수·준법 원칙 ================= */
 const GUARD_DEFAULT = {
   title: "🛡️ 총괄 검수·준법 원칙",
@@ -759,9 +822,12 @@ function renderGuard(raw) {
   const items = (Array.isArray(src.items) ? src.items : [])
     .filter(it => it && typeof it === "object" && typeof it.title === "string" && it.title.trim());
   el.innerHTML = `
-    <div class="gd-head"><span>${esc(str(src.title, GUARD_DEFAULT.title))}</span></div>
-    <p class="gd-note">${esc(str(src.note, GUARD_DEFAULT.note))}</p>
-    <div class="gd-items">${items.map(it => `<span class="gd-item"><b>${esc(it.title.trim())}</b>${esc(typeof it.text === "string" ? it.text : "")}</span>`).join("")}</div>`;
+    ${foldHeadHTML("guard", "gd-head", esc(str(src.title, GUARD_DEFAULT.title)), esc(items.length ? items.length + "원칙" : "펼쳐서 보기"), "눌러서 총괄 검수·준법 원칙 접기·펼치기")}
+    <div class="fold-body" id="fold-guard-body"><div class="fold-inner">
+      <p class="gd-note">${esc(str(src.note, GUARD_DEFAULT.note))}</p>
+      <div class="gd-items">${items.map(it => `<span class="gd-item"><b>${esc(it.title.trim())}</b>${esc(typeof it.text === "string" ? it.text : "")}</span>`).join("")}</div>
+    </div></div>`;
+  applyFold("guard");
 }
 
 function renderCredit(raw) {
@@ -1566,36 +1632,6 @@ function rosterData(raw) {
   };
 }
 
-let ROSTER_OPEN = null;
-
-function rosterOpenState() {
-  if (ROSTER_OPEN === null) {
-    let v = null;
-    try { v = localStorage.getItem("liveoffice_roster_open"); } catch (e) {}
-    ROSTER_OPEN = (v === "1");
-  }
-  return ROSTER_OPEN;
-}
-
-function applyRosterState() {
-  const open = rosterOpenState();
-  const head = document.getElementById("pr-toggle");
-  const body = document.getElementById("pr-body");
-  const caret = document.getElementById("pr-caret");
-  if (body) {
-    body.classList.toggle("collapsed", !open);
-    body.setAttribute("aria-hidden", open ? "false" : "true");
-  }
-  if (head) head.setAttribute("aria-expanded", open ? "true" : "false");
-  if (caret) caret.textContent = open ? "▾" : "▸";
-}
-
-function toggleRoster() {
-  ROSTER_OPEN = !rosterOpenState();
-  try { localStorage.setItem("liveoffice_roster_open", ROSTER_OPEN ? "1" : "0"); } catch (e) {}
-  applyRosterState();
-}
-
 function renderRoster(raw) {
   const d = rosterData(raw);
   d.items.forEach(it => {
@@ -1611,11 +1647,8 @@ function renderRoster(raw) {
   if (!el) return;
   const isTd = (c) => /투덜이|tudeori/i.test(c.owner + " " + c.handle);
   el.innerHTML = `
-    <div class="pr-head pr-toggle" id="pr-toggle" role="button" tabindex="0" aria-expanded="false" aria-controls="pr-body" title="눌러서 6F 분장표 접기·펼치기"
-      onclick="toggleRoster()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleRoster();}">
-      <span>🧩 ${esc(d.title)}</span><em>${esc(d.note)}</em><span class="pr-caret" id="pr-caret">▸</span>
-    </div>
-    <div class="pr-body collapsed" id="pr-body">
+    ${foldHeadHTML("roster", "pr-head", "🧩 " + esc(d.title), esc(d.note), "눌러서 6F 분장표 접기·펼치기")}
+    <div class="fold-body" id="fold-roster-body"><div class="fold-inner">
     <div class="pr-grid">${d.items.map(it => `
       <div class="pr-item ${it.state}" title="${esc(it.name + " · " + it.role)}">
         <span class="pr-name"><span>${esc(it.name)}</span><span class="pr-st">${esc(it.chip)}</span></span>
@@ -1625,9 +1658,9 @@ function renderRoster(raw) {
     ${d.sites.length ? `<div class="pr-chan pr-sites">${d.sites.map(s => `<a class="site" href="${esc(s.url)}" target="_blank" rel="noopener">🌐 ${esc(s.label)} ↗</a>`).join("")}</div>` : ""}
     <div class="pr-rule"><b>⚡ 크레딧 절감</b> ${esc(d.rule)}</div>
     <div class="pr-backup" id="pent-backup" aria-label="비상 업무 백업 매트릭스"></div>
-    </div>`;
+    </div></div>`;
   renderBackup(undefined);
-  applyRosterState();
+  applyFold("roster");
 }
 
 /* ================= 🧾 임무 배분표 (2026-11-27 07:37 지시 반영) =================
@@ -1683,8 +1716,17 @@ function renderAssignments(raw) {
   const el = document.getElementById("pent-assign");
   if (!el) return;
   const d = ASSIGN;
+  const cnt = { work: 0, wait: 0, block: 0, done: 0 };
+  d.items.forEach(it => { cnt[it.state] = (cnt[it.state] || 0) + 1; });
+  const summary = [
+    cnt.work ? `진행 ${cnt.work}` : "",
+    cnt.wait ? `대기 ${cnt.wait}` : "",
+    cnt.block ? `막힘 ${cnt.block}` : "",
+    cnt.done ? `완료 ${cnt.done}` : ""
+  ].filter(Boolean).join(" · ") + ` · 총 ${d.items.length}건`;
   el.innerHTML = `
-    <div class="as-head"><span>${esc(d.title)}</span><em>${esc(d.note)}</em></div>
+    ${foldHeadHTML("assign", "as-head", esc(d.title), esc(summary), "눌러서 임무 배분표 접기·펼치기")}
+    <div class="fold-body" id="fold-assign-body"><div class="fold-inner">
     <div class="as-rows">${d.items.map(it => `
       <div class="as-row ${it.state}">
         <span class="as-no">${esc(it.no)}</span>
@@ -1692,7 +1734,9 @@ function renderAssignments(raw) {
         <span class="as-own">${esc(it.owner)}</span>
         <span class="as-st">${esc(ASSIGN_LABEL[it.state] || it.state)}</span>
       </div>`).join("")}</div>
-    <div class="as-route">${esc(d.route)}</div>`;
+    <div class="as-route">${esc(d.route)}</div>
+    </div></div>`;
+  applyFold("assign");
 }
 
 /* ================= 🎁 뮤즈(Muse) 초대코드 카드 =================

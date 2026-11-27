@@ -966,12 +966,26 @@
   }
   .pr-head { display: flex; align-items: center; gap: 4px; margin-bottom: 3px; font-size: 8.2px; font-weight: 900; color: #ede9fe; min-width: 0; }
   .pr-head em { margin-left: auto; font-style: normal; font-size: 6.2px; font-weight: 800; color: #c4b5fd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  /* 6F 분장표: 눌러서 접기/펼치기 (기본은 접힘) */
-  .pr-toggle { cursor: pointer; touch-action: manipulation; }
-  .pr-toggle:focus-visible { outline: 2px solid #38bdf8; outline-offset: 1px; border-radius: 5px; }
-  .pr-caret { flex: none; margin-left: 3px; font-size: 8px; color: #fbbf24; }
-  .pr-body { overflow: hidden; max-height: 1400px; opacity: 1; visibility: visible; transition: max-height 0.32s ease, opacity 0.22s ease, visibility 0s; }
-  .pr-body.collapsed { max-height: 0; opacity: 0; pointer-events: none; visibility: hidden; transition: max-height 0.32s ease, opacity 0.22s ease, visibility 0s linear 0.32s; }
+  /* 6F 업무분장·배분 표 공통 접기/펼치기 (2026-11-27 13:30 지시 · 기본은 접힘) */
+  .fold-head {
+    display: flex; align-items: center; gap: 4px; min-width: 0;
+    margin: -2px -4px 2px; padding: 2px 4px; border-radius: 6px;
+    cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  }
+  .fold-head:hover { background: rgba(148, 163, 184, 0.1); }
+  .fold-head:focus-visible { outline: 2px solid #38bdf8; outline-offset: 1px; }
+  .fold-title { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .fold-meta { flex: 0 1 auto; min-width: 0; margin-left: auto; font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .fold-btn {
+    flex: none; display: inline-flex; align-items: center; gap: 2px; line-height: 1.6;
+    font-size: 6.8px; font-weight: 900; padding: 0 6px; border-radius: 999px; white-space: nowrap;
+    border: 1px solid rgba(148, 163, 184, 0.5); background: rgba(15, 23, 42, 0.85); color: #cbd5e1;
+  }
+  .fold-head[aria-expanded="true"] .fold-btn { border-color: #38bdf8; background: rgba(8, 47, 73, 0.8); color: #bae6fd; }
+  /* 높이를 모르는 표도 부드럽게 접히도록 grid 행(1fr↔0fr)로 여닫는다 */
+  .fold-body { display: grid; grid-template-rows: 1fr; opacity: 1; transition: grid-template-rows 0.28s ease, opacity 0.2s ease; }
+  .fold-body > .fold-inner { min-height: 0; overflow: hidden; }
+  .fold-body.collapsed { grid-template-rows: 0fr; opacity: 0; pointer-events: none; }
   .pr-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px; }
   .pr-item { display: flex; flex-direction: column; gap: 1px; min-width: 0; padding: 2px 4px; border-radius: 6px; background: rgba(6, 11, 20, 0.66); border: 1px solid rgba(148, 163, 184, 0.18); }
   .pr-item.on { border-color: rgba(56, 189, 248, 0.45); }
@@ -2342,6 +2356,17 @@
     .pent-roster { padding: 5px 8px; margin-top: 6px; }
     .pr-head { font-size: 9.5px; }
     .pr-head em { font-size: 7px; }
+    .fold-head { margin: -3px -5px 3px; padding: 3px 5px; gap: 5px; }
+    .fold-btn { font-size: 8px; padding: 0 7px; line-height: 1.9; }
+    .fold-meta { font-size: 7px; }
+    .as-head { font-size: 9.5px; }
+    .as-row { font-size: 8.4px; }
+    .as-tx b { font-size: 8.8px; }
+    .as-tx i { font-size: 7.6px; }
+    .as-own { font-size: 7.8px; }
+    .as-st { font-size: 7px; }
+    .as-route { font-size: 7.6px; }
+    .gd-head .fold-title { font-size: 11px; }
     .pr-grid { gap: 4px; }
     .pr-item { padding: 3px 5px; }
     .pr-name { font-size: 9px; }
@@ -2920,7 +2945,7 @@
 
   /* ===== 🛡️ 총괄 검수·준법 원칙 ===== */
   .pent-guard { margin: 6px 8px 0; padding: 6px 8px; border-radius: 8px; border: 1px solid rgba(74, 222, 128, 0.35); background: rgba(6, 24, 16, 0.82); }
-  .gd-head span { color: #bbf7d0; font-size: 10px; font-weight: 700; }
+  .gd-head .fold-title { color: #bbf7d0; font-size: 10px; font-weight: 700; }
   .gd-note { margin: 2px 0 4px; color: #d1fae5; font-size: 8.6px; line-height: 1.45; }
   .gd-items { display: flex; flex-wrap: wrap; gap: 3px; }
   .gd-item { flex: 1 1 45%; min-width: 0; padding: 3px 5px; border-radius: 6px; background: rgba(20, 83, 45, 0.35); font-size: 8px; line-height: 1.4; color: #e2e8f0; }
@@ -3139,6 +3164,6 @@
 <script src="red-read.js"></script>
 <script src="decision-guard.js?v=16a015885d8b"></script>
 <div id="runtime-load-error" role="alert" hidden style="position:fixed;top:8px;left:8px;right:8px;z-index:10000;padding:12px;background:#7f1d1d;color:#fff;border:1px solid #fecaca;border-radius:8px;font-size:14px">사무실 기능을 불러오지 못했습니다. 새로고침 후에도 같으면 이 대화에 알려주세요. 이 화면에서 결정은 전송되지 않았습니다.</div>
-<script src="office-runtime.js?v=fc7d1240dc97" onerror="document.getElementById('runtime-load-error').hidden=false"></script>
+<script src="office-runtime.js?v=85229374af66" onerror="document.getElementById('runtime-load-error').hidden=false"></script>
 </body>
  </html>
