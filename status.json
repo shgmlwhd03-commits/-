@@ -680,7 +680,8 @@
         { "time": "09:00·20:00", "task": "2편씩 5일 연재 → 10화 완결" }
       ],
       "links": [
-        { "label": "창작소설 연재 보기", "url": "https://tudeori.tistory.com/category/창작소설" }
+        { "label": "창작소설 연재 보기", "url": "https://tudeori.tistory.com/category/창작소설" },
+        { "label": "투덜이 티스토리 홈", "url": "https://tudeori.tistory.com" }
       ]
     },
     "ticket": {
