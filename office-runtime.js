@@ -255,8 +255,8 @@ function roomHTML(r, i) {
           <span class="room-title">${esc(r.title)}</span>
           <span class="room-lanes" id="lanes-${r.id}" aria-hidden="true"></span>
           <span class="room-tag${partner ? " partner" : instinct ? " instinct" : ""}" title="${instinct ? "대표님·경영진 직할 방" : director ? "위탁판매·스토어 실행 담당(사람)" : partner ? "총괄(투덜이) 측 운영 방" : "부총괄(해병이) 측 운영 방"}">${r.tag}</span>
-          <span class="room-open">${r.id === "public_quiz" ? "응모결과▸" : shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : site ? "연재▸" : "보고"}</span>
-          ${site ? `<button class="room-open ro-btn" type="button" onclick="event.stopPropagation();openReport('${r.id}')" title="업무 보고·연재 현황 열기">보고</button>` : ""}
+          <span class="room-open">${r.id === "public_quiz" ? "응모결과▸" : shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : "보고"}</span>
+          ${site ? `<a class="room-open ro-btn" href="${esc(site)}" target="_blank" rel="noopener" title="${esc((r.siteLabel || "새 창으로 열기") + " (새 창)")}">연재▸</a><button class="room-open ro-btn" type="button" onclick="event.stopPropagation();openReport('${r.id}')" title="업무 보고·연재 현황 열기">보고</button>` : ""}
           <span class="status-dot" aria-hidden="true"></span>
         </div>
         ${stage}
