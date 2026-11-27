@@ -1,13 +1,12 @@
 /* ================= 설정 ================= */
 const FLOORS = [
-  { id: "f8", num: "8F", name: "대표실 · 👑 대표님", tone: "pent" },
+  { id: "f8", num: "8F", name: "대표실 · 👑 대표님 · 🎯 월 1,000만 원", tone: "pent" },
   { id: "f7", num: "7F", name: "관리자실 · 🧠 관리자 뮤즈 · 🤖 부관리자 큐", tone: "cyan" },
-  { id: "f6", num: "6F", name: "경영진 · 👑 총괄·부총괄 + 🍉 수박이", tone: "pent" },
-  { id: "f5", num: "5F", name: "해병이 · 수익·스토어층", tone: "cyan" },
-  { id: "f4", num: "4F", name: "해병이 · 혜택·딜층", tone: "cyan" },
-  { id: "f3", num: "3F", name: "투덜이 · 블로그·카페층", tone: "purple" },
-  { id: "f2", num: "2F", name: "투덜이 · 퀴즈·B2B층", tone: "purple" },
-
+  { id: "f6", num: "6F", name: "경영진 · 👑 총괄·부총괄 · 🍉 수박이 · 🛠️ 일꾼", tone: "pent" },
+  { id: "f5", num: "5F", name: "커머스·수익층 · 🛍️ 스마트스토어·위탁 · 🤝 브랜드커넥트 · 📈 적립", tone: "cyan" },
+  { id: "f4", num: "4F", name: "블로그·애드센스층 · 💵 tudeori · 📚 머니리포트 · ✈️ 영문 · 📸 SNS", tone: "purple" },
+  { id: "f3", num: "3F", name: "창작소설층 · 📖 10화 연재(3인 공동 집필)", tone: "cyan" },
+  { id: "f2", num: "2F", name: "응모·티켓층 · 🎟️ 피클 티켓 · 🎁 공공 퀴즈·지원금 · 🏭 큐맥스", tone: "purple" }
 ];
 
 // 개인정보 없음: 부서 이름과 상태 문구만 담는다.
@@ -15,154 +14,164 @@ const rooms = [
   {
     id: "owner", floor: "f8", zone: "instinct", tag: "오너", ceo: true,
     title: "👑 대표님", worker: "👑", name: "👑 대표님",
-    say: "전체 보고 받는 중!", foot: "조직도 최상단 · 결재선: 관리자·부총괄 검토 → 총괄 팩트체크·승인 → 대표님",
-    issue: "승인이 필요한 건이 있어요!",
-    guide: "🔴 자금 건은 대표님이 직접 실행하고, 🔵 확인·승인 건은 보고·결재 창구에서 결정합니다(승인·반려·재심의).",
-    state: "working", ticker: "최종 승인권 · 결재선: 관리자(뮤즈)·부총괄(해병이) 검토 → 총괄(투덜이) 팩트체크·승인 → 대표님 · 🔴 자금·금융 인증은 대표님 직접", updated: "07:58"
-  },
-  {
-    id: "instinct", floor: null, zone: "instinct", tag: "일꾼",
-    title: "🛠️ 일꾼 · Instinct", worker: "🛠️", name: "🛠️ 일꾼 Instinct",
-    say: "배정받은 조사·작성·검증 실행!", foot: "일꾼(구 총괄) · 조사·초안·수정·검증 실행 → 총괄 보고",
-    issue: "총괄 회신이 필요해요!",
-    guide: "Instinct는 기존 총괄 자리에서 일꾼으로 이동했습니다. 배정받은 조사·작성·수정·검증을 실행해 결과를 총괄(투덜이)에게 올리고, 업무 배분과 전체 보고는 총괄이 맡습니다.",
-    state: "working", ticker: "일꾼(구 총괄) · 배정: tudeori 애드센스 점검·소화기 3채널·브랜드커넥트 / 결과는 총괄에게 수평전개 보고", updated: "07:52"
-  },
-  {
-    id: "ceo_haebyeong", floor: "f6", zone: "direct", tag: "부총괄", ceo: true,
-    title: "👑 부총괄 · 해병이", worker: "🫡", name: "👑 부총괄 해병이",
-    say: "부서 7개 + 교차검토 맡았습니다!", foot: "부총괄 · 7개 부서 운영 + 관리자와 교차검토",
-    issue: "승인 대기 중인 건이 있어요!",
-    guide: "승인 대기 건을 확인해 주세요. 진행 여부만 알려주시면 바로 실행합니다.",
-    state: "working", ticker: "부총괄 · 7개 부서 + 교차검토 · 11:00 고향사랑기부제 교정본 발행·색인 대기 / 쿠팡파트너스 최종승인 스크린샷 채널 확정(보고 11:30)", updated: "07:52"
+    say: "결정할 것만 보고받는 중!", foot: "조직도 최상단 · 대표 승인 필요 건만 표시",
+    task: "승인 필요 3건 · 나머지는 총괄 검수·전결", taskState: "approve",
+    issue: "대표 결정이 필요해요!",
+    guide: "대표님께는 승인·결정이 필요한 건만 올립니다. 총괄이 팩트체크·저작권·약관 검수를 마친 건은 총괄 전결로 처리하고 결과만 보고합니다. 🔴 자금·금융 인증은 대표님이 직접 실행합니다.",
+    state: "working", ticker: "🎯 월 1,000만 원 · 전 채널 수익화 연동 · 승인 필요 3건(위탁 1안/2안 · 하나필터 발행 · 피클 티켓 링크) · 🔴 금융 인증은 직접", updated: "13:00"
   },
   {
     id: "ceo_tudeori", floor: "f6", zone: "partner", tag: "총괄", ceo: true,
     title: "👑 총괄 · 투덜이", worker: "😤", name: "👑 총괄 투덜이",
-    say: "업무 배분·팩트체크·승인 중!", foot: "총괄 · 배분·팩트체크·전결 승인 → 대표님 상신",
+    say: "4채널 배분·준법 검수 중!", foot: "총괄 · 배분·팩트체크·저작권·약관 검수 → 대표님 상신",
+    task: "4채널 배분 · 팩트체크·준법 검수", taskState: "work",
     issue: "결재로 올릴 안건이 있어요!",
-    guide: "총괄(투덜이)은 업무 배분·우선순위·팩트체크·전결 승인을 맡고, 관리자(뮤즈)·부총괄(해병이) 검토를 거친 안건을 승인해 대표님께 올립니다. 비상 승계 1순위입니다.",
-    state: "working", ticker: "총괄 · 07:37 지시로 임무 배분표·결재선 반영 · 관리자·부총괄 검토 → 총괄 팩트체크·승인 · 자금·금융 인증은 대표님 직접", updated: "07:58"
+    guide: "총괄(투덜이)은 업무 배분·우선순위·팩트체크·전결 승인을 맡고, 팩트체크·저작권·지재권·애드센스·네이버 약관 준수를 전담 검수합니다. 검수를 통과한 건만 전결하고, 대표님 결정이 필요한 건만 승인 창구에 올립니다. 비상 승계 1순위입니다.",
+    state: "working", ticker: "총괄 · 월 1,000만 원 목표 4채널 연동 배분 · 창작소설 10화·소화기 3채널·하나필터 원고·피클 티켓 글 총괄 검토", updated: "13:00"
+  },
+  {
+    id: "ceo_haebyeong", floor: "f6", zone: "direct", tag: "부총괄", ceo: true,
+    title: "👑 부총괄 · 해병이", worker: "🫡", name: "👑 부총괄 해병이",
+    say: "머니리포트·영문 여행 맡았습니다!", foot: "부총괄 · 데일리 머니리포트·영문 여행 + 교차검토",
+    task: "11:00 정보글 · 영문 여행 · 교차검토", taskState: "work",
+    issue: "검토할 건이 있어요!",
+    guide: "부총괄(해병이)은 데일리 머니리포트·영문 여행 블로그·쿠팡파트너스를 운영하고 관리자(뮤즈)와 교차검토합니다. 발행 전 팩트·저작권·약관 검수는 총괄이 최종 확인합니다.",
+    state: "working", ticker: "데일리 머니리포트 고향사랑기부제 /12 표 머리행 보완·재발행 + Threads 완결형 재게시 완료 · 애드센스 '준비중' · 영문 여행 블로그 3편 추가 발행·색인 완료", updated: "12:35"
   },
   {
     id: "director_subaki", floor: "f6", zone: "direct", tag: "위탁", director: true,
     title: "🍉 수박이 이사 · 위탁판매 총괄", worker: "🍉", name: "🍉 수박이 이사",
-    say: "위탁판매 총괄 · 실행 대기 중!", foot: "위탁판매·스마트스토어 실행 총괄 · 확정 건만 최소 알림",
-    issue: "총괄 지시 확인이 필요해요!",
-    guide: "수박이 이사는 총괄(투덜이) 라인의 위탁판매 총괄 담당이고, 실행은 실행 담당(사람)이 진행합니다. 보류 기간 동안 2축으로 움직입니다 — ① 위탁판매·사업자 준비(세무·계좌·실무 대기, 오너 확인 단계에서 멈춤) ② 저크레딧 수익 보조(1일 1회 이하, 투덜이 측과 겹치지 않는 살림·주방 배송 체험단과 고액 공식 경품). 확정 건만 최소 알림으로 전달합니다. 장부·위탁판매실은 보고 창에서 바로 열립니다.",
-    state: "working", ticker: "위탁판매·스토어 실행 총괄 · 확정 건만 최소 알림 · 보류 기간 2축 운영(위탁·사업자 준비 + 저크레딧 수익 보조)", updated: "07:52"
+    say: "스마트스토어 심사 진행 중!", foot: "위탁·스마트스토어 실행 총괄 · 확정 건만 최소 알림",
+    task: "스마트스토어 심사 · 위탁 등급가 준비", taskState: "work",
+    issue: "실행 확인이 필요해요!",
+    guide: "수박이 이사는 스마트스토어·위탁 실행을 맡습니다. 서류 2/2건 제출로 정식 심사중이고, 위탁은 무재고 낱개 단일 트랙 재상신(#24·#25) 결과를 기다립니다. 등급가 실측은 수박이 이사 로그인 세션 협조가 필요하고, 계좌·금융 인증은 직접 처리합니다. 확정 건만 최소 알림으로 전달합니다.",
+    state: "working", ticker: "스마트스토어 서류 2/2건 제출 완료 → 정식 심사중(3영업일) · 위탁 재상신(#24·#25) 1안/2안/보류 선택 대기 · 확정 건만 최소 알림", updated: "12:20"
   },
   {
     id: "manager_muse", floor: "f7", zone: "instinct", tag: "관리자",
     title: "🧠 관리자 · 뮤즈", worker: "🧠", name: "🧠 관리자 뮤즈",
-    say: "관리자 검토·회의록 정리!", foot: "관리자 검토(1차) · 회의록·아카이브 · 전 업무 숙지",
+    say: "창작소설·검토 맡았어요!", foot: "관리자 검토(1차) · 창작소설 공동 집필 · 회의록",
+    task: "창작소설 10화 시놉시스 · 관리자 검토", taskState: "work",
     issue: "검토할 안건이 있어요!",
-    guide: "뮤즈(관리자)는 06번 업무계정으로 Slack에 연결돼 있습니다. 관리자 검토(1차)와 회의록·아카이브, 전 업무 현황 숙지를 맡고 비상 승계는 3순위입니다. 07:52 기준 채널 참여는 확인됐지만 자동 응답은 아직 검증되지 않았습니다.",
-    state: "idle", ticker: "관리자 검토(1차) · 회의록·아카이브 · 전 업무 숙지 · 06번 Slack 연결 · 자동 응답 미검증", updated: "07:52"
+    guide: "뮤즈(관리자)는 관리자 검토(1차)와 창작소설 공동 집필, 회의록·아카이브, 전 업무 숙지를 맡고 비상 승계는 3순위입니다. 06번 업무계정으로 Slack에 연결돼 있고 자동 응답은 아직 미검증입니다.",
+    state: "working", ticker: "관리자 검토(1차) · 창작소설 1화 시안 작성·합작 논의 · 회의록·아카이브 · 승계 3순위", updated: "12:40"
   },
   {
     id: "deputy_manus", floor: "f7", zone: "instinct", tag: "부관리자",
     title: "🤖 부관리자 · 큐", worker: "🤖", name: "🤖 부관리자 큐(Manus)",
-    say: "30초 AI 영상 시범안 준비!", foot: "부관리자 · 30초 AI 영상·카드뉴스 · 검수 보조",
+    say: "1화 시안 냈어요!", foot: "부관리자 · 창작소설 공동 집필 · 30초 AI 영상",
+    task: "창작소설 합작 · 30초 AI 영상", taskState: "work",
     issue: "수임 확인이 필요해요!",
-    guide: "큐(Manus)는 08번 계정으로 연결됐고, 대표님 계정 멘션에서만 왕복 응답이 확인됐습니다. 30초 AI 영상·카드뉴스 시범안(무료 범위 · 유료 결제 없음)과 소화기·애드센스 보조 자료를 맡습니다. 수임·계획 보고는 14:00입니다.",
-    state: "idle", ticker: "부관리자 · 08번 연결 · 대표님 계정 멘션에서만 응답 확인 · 30초 AI 영상 시범안·검수 보조(보고 14:00)", updated: "07:52"
+    guide: "큐(Manus)는 08번 계정으로 연결됐고 대표님 계정 멘션에서만 응답이 확인됩니다. 창작소설 공동 집필과 30초 AI 영상·카드뉴스 시범(무료 범위)을 맡고, 비상 승계는 4순위입니다.",
+    state: "working", ticker: "부관리자 · 창작소설 1화 시안(벽장 안의 목소리) 제출 · 30초 AI 영상·카드뉴스 시범 · 승계 4순위", updated: "12:40"
   },
   {
-    id: "naver", floor: "f5", zone: "direct", tag: "해병이",
-    title: "✍️ 네이버 블로그팀", worker: "🧑‍💻", name: "박작가 과장",
-    say: "제휴 셋업 완료! 첫 링크 글 준비~", foot: "브랜드커넥트·쇼핑커넥트 가입 · 쿠팡 파트너스 가입 · 매일 09:00 발행",
-    issue: "네이버 재로그인 필요!",
-    guide: "네이버 제휴 셋업은 끝났습니다 — 브랜드커넥트·쇼핑커넥트 가입과 크리에이터 스페이스 개설(정산 유형 개인), 쿠팡 파트너스 가입(활동 사이트 네이버 블로그 등록)까지 완료했습니다. 다음은 첫 제휴 링크 적용 글 발행이고, 발행 후 최종 승인용 스크린샷을 등록합니다. 배송형 체험단(리뷰노트)은 계정당 블로그 1개 제한으로 투덜이 전담을 유지합니다.",
-    state: "working", ticker: "13:30 네이버 브랜드커넥트·쇼핑커넥트 가입 및 크리에이터 스페이스 개설 완료(정산 유형 개인 · 광고성 정보 수신 거부) · 13:31 쿠팡 파트너스 가입 완료(활동 사이트 네이버 블로그 등록) · 리뷰노트는 슬롯 제한으로 투덜이 전담 유지 · 다음: 첫 제휴 링크 글 발행 → 최종 승인 스크린샷 · 09:07 샷시 글 발행 완료", updated: "13:32"
+    id: "instinct", floor: "f6", zone: "instinct", tag: "일꾼",
+    title: "🛠️ 일꾼 · Instinct", worker: "🛠️", name: "🛠️ 일꾼 Instinct",
+    say: "발행·초대글 준비 중!", foot: "일꾼(구 총괄) · 조사·초안·수정·검증 실행 → 총괄 보고",
+    task: "소화기 3채널 발행 · 피클 초대글", taskState: "work",
+    issue: "총괄 회신이 필요해요!",
+    guide: "Instinct는 기존 총괄 자리에서 일꾼으로 이동했습니다. 배정받은 조사·작성·수정·검증을 실행해 결과를 총괄(투덜이)에게 올리고, 발행·게시는 총괄 검수를 거칩니다.",
+    state: "working", ticker: "일꾼(구 총괄) · 창작소설 1화 시안·소화기 3채널·tudeori 애드센스 점검·피클 초대글 작성 · 결과는 총괄에 보고", updated: "12:40"
   },
   {
-    id: "haebyeongi_adsense", floor: "f5", zone: "direct", tag: "해병이",
-    title: "💵 해병이 애드센스팀", worker: "🧑‍🚀", name: "해병이 팀장",
-    say: "공개 6편! 9편 더 채우고 애드센스 사이트 추가", foot: "티스토리 애드센스 · 매일 11:00 · 다음 애드센스 '+ 새 사이트' 신청",
-    issue: "색인 요청 5/5 완료 — 편입 집계 대기 중",
-    guide: "13:29 「맞벌이 부부 연말정산」까지 공개 6편입니다(총 7건 중 AI 안경 글은 비공개 유지). 15~20편 목표까지 9편 남았습니다. 공개 5편은 13:18 구글 색인 생성 요청을 모두 넣었고(5/5), 서치콘솔·사이트맵 제출도 완료해 색인·실적은 며칠 뒤부터 집계됩니다. 새 글은 발행 후 색인 생성 요청을 이어서 넣습니다. 13:56 [총괄 지시 008]로 /6 「2026년 최저임금」 글의 연도 표기를 정정했습니다 — 2026년 10,320원·월 2,156,880원은 2026년 12월 31일까지 적용, 2027년은 10,700원·월 2,236,300원(2027년 1월 1일부터 · 고용노동부 2026-08-05 발표)으로 병기했고, 12,384원은 법정 시급이 아니라 주휴수당을 포함한 주 40시간 환산치임을 명시했습니다.",
-    state: "working", ticker: "13:29 「맞벌이 부부 연말정산, 공제는 누가 받아야 유리할까」 공개 발행 완료(/7 · 4,186자 · 도해 2장) · 공개 6편(총 7건 · /2 비공개 유지) · 15~20편까지 9편 남음 · 13:18 공개 5편(/1·/3·/4·/5·/6) 구글 색인 생성 요청 5/5 완료 · [총괄 지시 007] #피클지시 보고 완료 · 13:56 [총괄 지시 008] /6 최저임금 연도 표기 정정 완료 — 2026년 10,320원·2,156,880원(12/31까지 적용) vs 2027년 10,700원·2,236,300원(1/1부터) 병기 · 12,384원은 법정 시급 아닌 주휴 포함 환산치 명시 · #피클지시 보고 완료", updated: "14:06"
+    id: "commerce", floor: "f5", zone: "direct", tag: "수박이",
+    title: "🛍️ 스마트스토어·위탁팀", worker: "👩‍💼", name: "서스토어 대리",
+    say: "심사 결과 기다려요!", foot: "스마트스토어 심사중 · 무재고 낱개 위탁 단일 트랙",
+    task: "심사중 · 위탁 1안/2안 대기", taskState: "wait",
+    issue: "대표님 선택이 필요해요!",
+    guide: "스마트스토어는 사업자·본인인증·정산계좌·증빙서류 2/2건 제출을 마치고 정식 심사중입니다(3영업일 이내). 위탁은 무재고 낱개 단일 트랙으로 재상신(#24·#25)되어 1안(세 곳 등급가 비교)/2안(오너클랜 단독)/보류 선택을 기다립니다. 소량 사입은 11/24 지시로 제외했습니다.",
+    state: "working", ticker: "스마트스토어 사업자·본인인증·정산계좌·서류 2/2건 제출 완료 → 정식 심사중(3영업일) · 무재고 낱개 위탁 단일 트랙 재상신(#24·#25) 1안/2안/보류 선택 대기 · 재고·선결제 0원", updated: "12:20"
+  },
+  {
+    id: "brandconnect", floor: "f5", zone: "partner", tag: "투덜이",
+    title: "🤝 브랜드커넥트·제휴팀", worker: "🤝", name: "제휴 매니저",
+    say: "하나필터 원고 완성!", foot: "하나필터 18% · 원고·링크 세트 · 네이버 임시저장 중",
+    task: "하나필터 네이버 임시저장", taskState: "work",
+    issue: "발행 버튼 1회 필요!",
+    guide: "브랜드커넥트(쇼핑 커넥트) 수익화 팀입니다. 하나필터 차량용 에어컨필터 1+1(18,900원·수수료 18%)로 원고·제휴 링크·대가성 문구·해시태그 세트를 완성했고, 네이버 블로그에 임시저장 중입니다. 발행은 대표님 버튼 1회이며, 사진은 직접 촬영본만 사용합니다.",
+    state: "working", ticker: "하나필터 차량용 에어컨필터 1+1(18,900원·수수료 18%=건당 3,402원) · 제휴 링크+1,582자 원고+해시태그 세트 완료 → 네이버 블로그 임시저장 진행 중 · 발행은 대표님 버튼 1회", updated: "12:45"
   },
   {
     id: "invest_sp500", floor: "f5", zone: "direct", tag: "해병이",
     title: "📈 미국 S&P500 적립투자부", worker: "📈", name: "오적립 주임",
-    say: "보유·손익 기록은 본인 전용", foot: "공개 화면에는 보유·손익을 표시하지 않습니다",
+    say: "월요일 적립 알림 대기!", foot: "매주 월요일 1주 적립 알림 · 보유·손익 본인 전용",
+    task: "월요일 적립 알림 대기", taskState: "wait",
     issue: "기록은 본인 전용",
-    guide: "보유·적립 내역은 공개 화면에서 제외했습니다. 본인 전용으로 관리합니다.",
-    state: "working", ticker: "보유·손익 기록은 공개 화면에서 제외했습니다(본인 전용) · 실시간 시세 연결은 미구현", updated: "12:56"
+    guide: "매주 월요일 09:05 S&P500 ETF 1주 적립 알림을 보냅니다. 주문·체결은 대표님이 직접 하고, 보유·손익 기록은 공개 화면에 표시하지 않습니다.",
+    state: "idle", ticker: "매주 월요일 1주 적립 알림(다음 11/30 09:05) · 보유·손익은 본인 전용(공개 화면 미표시) · 주문은 대표님 직접", updated: "07:00"
   },
   {
-    id: "commerce", floor: "f5", zone: "direct", tag: "해병이",
-    title: "🛍️ 위탁판매·스토어팀", worker: "👩‍💼", name: "서스토어 대리",
-    say: "공개 도매가 위탁은 보류, 방향 전환!", foot: "개인 판매자 기준 · 난방텐트 철회 · 0.70 기준 통과 0건",
-    issue: "정산계좌 등록은 직접 진행!",
-    guide: "사업자등록(간이과세자 525101 · 자택(자가))은 추후로 미루고, 먼저 개인 판매자 기준으로 준비합니다(① 판매 자격·수수료·정산 구조 확인 → ② 스마트스토어 개설·구매안전서비스 이용확인증 → ③ 사업자등록·통신판매업 신고는 추후). 정산 계좌는 수박이 이사 본인 명의 카카오뱅크 계좌로 확정됐고, 센터 등록과 금융 인증은 오너/수박이가 직접 합니다. 위탁 아이템은 3사 검색량 1~4위 공동 검증에서 1~3위가 쿠팡 PB 최저가와 겹쳐 보류됐고, 4위 난방텐트는 3~4인용 실제 공급가(37,700~43,030원)가 쿠팡 동일 OEM 소매가(32,630~37,900원)보다 비싼 적자 구조로 2건 모두 철회 확정했습니다. 공급가(무료배송) ≤ 인기 실거래가 × 0.70 기준으로 대체 후보 11개 품목(30여 상품)을 더 확인했지만 통과 0건이라, 비로그인 공개 도매가 기반 위탁 후보는 전면 철회·보류합니다. 다음 단계는 사업자 등록 후 도매 사이트 사업자 등급 할인가 직접 확인, 또는 니치 품목·소량 사입으로 소싱 전략 재검토입니다. 국내 위탁처 중심으로 운영하고 판매 부진 품목부터 순차 교체합니다. 위탁판매실 현황판의 [지시 복사]를 채팅에 붙여넣으면 바로 진행합니다.",
-    state: "working", ticker: "난방텐트 2건 철회 · 공개 도매가 0.70 기준 통과 0건 → 공개 도매가 위탁 보류 · 다음: 사업자 등록 후 등급가 확인 또는 니치·소량 사입 · 국내 위탁처 중심 · 정산 계좌는 수박이 이사(본인) 명의 카카오뱅크 확정 · 사업자등록(525101)은 추후 진행", updated: "12:27"
-  },
-  {
-    id: "grant", floor: "f4", zone: "direct", tag: "해병이",
-    title: "🏛️ 환급금·다자녀팀", worker: "👩‍🔬", name: "김조사 대리",
-    say: "다자녀 환급금 스캔!", foot: "매일 08:30/10:00 · 환급금·다자녀",
-    issue: "다자녀 신청 페이지 확인 필요!",
-    guide: "환급금·다자녀 신청 페이지에서 확인이 필요한 항목을 열어 주세요.",
-    state: "idle", ticker: "3자녀 다자녀 1차 스캔 완료 · 매일 08:30/10:00", updated: "22:50"
-  },
-  {
-    id: "deal", floor: "f4", zone: "direct", tag: "해병이",
-    title: "🛒 핫딜·앱테크팀", worker: "🕵️", name: "이탐지 주임",
-    say: "특가·앱테크 체크!", foot: "매일 12:30 · 특가·무위험 앱테크",
-    issue: "이벤트 링크 변경됨!",
-    guide: "이벤트 링크가 바뀌었어요. 새 링크로 다시 확인할지 알려주세요.",
-    state: "idle", ticker: "핫딜·앱테크 전담 · 다음 실행 내일 12:30", updated: "22:25"
-  },
-  {
-    id: "prize", floor: "f4", zone: "direct", tag: "해병이",
-    title: "🎯 경품·이벤트팀", worker: "🧙", name: "최응모 사원",
-    say: "고액 공식 경품까지 훑는 중~", foot: "매일 15:00 · 무료 + 고액 공식 경품",
-    issue: "본인인증 팝업 떴어요!",
-    guide: "항공권·자동차·대형가전·숙박/여행권 등 고액 공식 경품까지 탐색합니다. 대기업·공공기관 공식 경품만, 간단한 기본정보만 요구 시 1만 원 이상·추가 정보나 절차 요구 시 3만 원 이상, 금융권 제외, 선택 마케팅 동의는 모두 뺀 최소 필수 정보로만 응모합니다. 개인정보 입력·본인인증이 필요한 건은 입력 전에 먼저 알려 주세요.",
-    state: "idle", ticker: "탐색 범위 확대 — 항공권·자동차·대형가전·숙박/여행권 등 고액 공식 경품까지 · 1만+/3만+ 기준 유지 · 매일 15:00", updated: "11:56"
-  },
-  {
-    id: "tistory", floor: "f3", zone: "partner", tag: "투덜이",
+    id: "tistory", floor: "f4", zone: "partner", tag: "투덜이",
     title: "💵 투덜이 티스토리팀", worker: "🤵", name: "투덜이 팀장",
-    say: "발행 기록 확인 · 심사 대기", foot: "매일 13:00 · 애드센스 심사 대기",
-    issue: "총괄 확인이 필요해요!",
-    guide: "총괄에 티스토리·애드센스 상태를 확인 요청해 주세요.",
-    state: "working", ticker: "18편 발행 완료 (tudeori.tistory.com/18) · 애드센스 심사 대기 · 매일 13:00", updated: "15:52"
+    say: "소화기 글 발행 준비!", foot: "모바일웹 해제 완료 · 소화기 3채널 · 애드센스 준비중",
+    task: "소화기 3채널 발행 · 애드센스 대기", taskState: "wait",
+    issue: "발행 지시 대기 중!",
+    guide: "tudeori.tistory.com 수익화 팀입니다. 모바일웹 자동연결을 해제해 모바일 루트가 PC 반응형 스킨으로 열리고, 차량용 소화기 3채널은 총괄 승인 후 발행을 기다립니다. 창작소설 '창작소설' 카테고리를 신설해 연재 유입을 붙입니다.",
+    state: "working", ticker: "모바일웹 자동연결 해제 완료(모바일 루트=PC 반응형 스킨) · 차량용 소화기 3채널 총괄 승인→발행 대기 · 애드센스 '준비중'(2시간 감시) · 창작소설 카테고리 신설 예정", updated: "12:50"
   },
   {
-    id: "cafe", floor: "f3", zone: "partner", tag: "투덜이",
-    title: "🛡️ EOKC 카페팀", worker: "🧑‍🚀", name: "정스탭 매니저",
-    say: "회칙 초안·쇼핑커넥트!", foot: "회칙 18조 초안 · 쇼핑커넥트 가동",
-    issue: "총괄 계정 확인이 필요해요!",
-    guide: "총괄에 카페·블로그 계정 상태를 확인 요청해 주세요.",
-    state: "idle", ticker: "EOKC 회칙 18조 초안 + 블로그 쇼핑커넥트 가동", updated: "22:50"
+    id: "haebyeongi_adsense", floor: "f4", zone: "direct", tag: "해병이",
+    title: "📚 데일리 머니리포트팀", worker: "🧑‍🚀", name: "해병이 팀장",
+    say: "11시 정보글 올렸어요!", foot: "데일리 머니리포트 · 매일 11:00 · 애드센스 준비중",
+    task: "매일 11:00 정보글 · 애드센스 대기", taskState: "work",
+    issue: "애드센스 회신 대기!",
+    guide: "daily-money-note.tistory.com 돈·세금 고단가 정보글 팀입니다. 고향사랑기부제 /12를 발행·보완했고 애드센스는 '준비중'입니다. 발행 전 팩트·출처·저작권 검수는 총괄이 확인합니다.",
+    state: "working", ticker: "고향사랑기부제 /12 공개 발행(11:05) · 표 머리행 보완 재발행·Threads 완결형 재게시 완료 · 애드센스 '준비중' · 다음 11:00 고단가 정보글", updated: "12:35"
   },
   {
-    id: "blog", floor: "f3", zone: "partner", tag: "투덜이",
-    title: "📝 투덜이 블로그·콘텐츠팀", worker: "📝", name: "체험단 매니저",
-    say: "체험단 4건 신청 완료! 발표 대기~", foot: "메모글 172개 정리 · 리뷰노트 4건 신청 · 12/1(화) 발표",
-    issue: "당첨 발표 12/1(화) 확인!",
-    guide: "리뷰노트 첫 체험단(배송형·반납 없음) 4건 신청을 마쳤습니다 — 간젓장 350g · 편백탈취제 · 바르는 향수 키링 · 뉴젠랩 올리브오일 캡슐. 네이버 블로그의 과거 메모글 172개와 구형 글은 비공개로 정리해 최신 2편만 공개로 남겼습니다. 다음은 12/1(화) 당첨 발표 확인이고, 당첨된 건은 12/14(월) 마감에 맞춰 가이드 확인 → 실물 사진 촬영 → 리뷰 작성·발행까지 진행합니다. 배송지·연락처 입력이 필요한 새 캠페인은 개별 승인 후 신청합니다.",
-    state: "idle", ticker: "과거 메모글 172개·구형 글 비공개 정리 완료(최신 2편만 공개) · 리뷰노트 첫 체험단(배송형·반납 없음) 4건 신청 완료 · 다음: 12/1(화) 당첨 발표 확인 → 당첨 시 12/14(월) 리뷰 마감", updated: "12:05"
+    id: "travel", floor: "f4", zone: "direct", tag: "해병이",
+    title: "✈️ 영문 여행 블로그팀", worker: "✈️", name: "여행글 매니저",
+    say: "영문 3편 색인 완료!", foot: "Korea Travel Note · 영문 애드센스",
+    task: "서울 글 표 보완 승인 대기", taskState: "wait",
+    issue: "표 배치 보완 승인 대기!",
+    guide: "영문 여행 블로그(koreatravelnote2026)로 해외 검색 유입과 애드센스 수익을 노립니다. 3편을 추가 발행하고 색인을 요청했으며, 서울 글 모바일 표 배치 보완만 승인을 기다립니다.",
+    state: "idle", ticker: "Korea Travel Note 3편 추가 공개 발행·색인 요청 완료 · 다음: 서울 글 모바일 표 배치 보완(승인 대기) · 다음 영문 글 11:00 슬롯", updated: "11:30"
+  },
+  {
+    id: "sns", floor: "f4", zone: "partner", tag: "투덜이",
+    title: "📸 인스타·스레드팀", worker: "📸", name: "SNS 매니저",
+    say: "프로필부터 채울게요!", foot: "인스타·스레드 @tudeori.carlife · 블로그 유입",
+    task: "프로필 세팅 · 첫 게시물 준비", taskState: "work",
+    issue: "첫 게시물 준비 중!",
+    guide: "인스타·스레드(@tudeori.carlife)는 블로그·창작소설·소화기 콘텐츠의 유입 채널입니다. 계정은 제한 없이 활성이고 Threads 연동도 정상이라, 프로필 사진·소개를 채우고 첫 게시물(소화기 카드뉴스)을 올립니다.",
+    state: "working", ticker: "인스타 @tudeori.carlife 활성 확인(제한 없음·Threads 연동 정상) · 프로필 사진·소개글 세팅 중 · 첫 게시물 차량용 소화기 카드뉴스 6장 준비", updated: "12:50"
+  },
+  {
+    id: "novel", floor: "f3", zone: "instinct", tag: "공동",
+    title: "📖 창작소설 연재팀", worker: "📖", name: "집필 3인",
+    say: "10화, 3인 합작 중!", foot: "하루 2편(오전·저녁) × 5일 = 10화 · tudeori '창작소설'",
+    task: "1화 합작 · 10화 시놉시스", taskState: "work",
+    issue: "총괄 검토 대기!",
+    guide: "일꾼·뮤즈·큐 3인이 함께 쓰는 창작소설 팀입니다. 하루 2편(오전·저녁) × 5일 = 10화 완결로 연재하고, tudeori '창작소설' 카테고리와 Threads로 유입을 붙입니다. 노골적 성묘사·잔혹한 신체훼손은 쓰지 않고 애드센스 정책선을 지키며, 총괄이 최종 검토·승인합니다.",
+    state: "working", ticker: "1화 비교 시안 3편 완성(큐·뮤즈·일꾼) → 3인 합작 자극적 스릴러 통합본·10화 시놉시스 조율 중 · 하루 2편×5일=10화 완결 · 총괄 최종 검토 후 연재", updated: "12:40"
+  },
+  {
+    id: "ticket", floor: "f2", zone: "instinct", tag: "공동",
+    title: "🎟️ 피클 리셋 티켓·초대글팀", worker: "🎟️", name: "초대글 매니저",
+    say: "초대·후기 글 쓰는 중!", foot: "피클 초기화 티켓 · 친구 초대 + SNS 후기",
+    task: "초대·후기 글 3인 작성", taskState: "work",
+    issue: "총괄 검토 후 게시!",
+    guide: "피클 무료 초기화 티켓을 확보하는 팀입니다. 일꾼·뮤즈·큐가 투덜이용·해병이용 초대·후기 글을 각각 따로 쓰고, 총괄이 검토·게시한 뒤 게시 URL을 대표님께 전달합니다. 개인정보·사업자·가족 정보는 넣지 않습니다.",
+    state: "working", ticker: "일꾼·뮤즈·큐가 투덜이용·해병이용 초대·후기 글 각각 작성 중 → 총괄 검토·게시 → 대표님은 앱에 게시 URL 붙여넣기 1회", updated: "12:45"
   },
   {
     id: "public_quiz", floor: "f2", zone: "partner", tag: "투덜이",
-    title: "🧩 공공퀴즈·대응·B2B팀", worker: "🎲", name: "한B2B 과장",
-    say: "퀴즈 응모·B2B 발굴 중!", foot: "공공퀴즈 5건 · 공동대응·B2B 발굴",
-    issue: "총괄 확인이 필요해요!",
-    guide: "총괄에 공공퀴즈·대응 상태를 확인 요청해 주세요.",
-    state: "idle", ticker: "퀴즈 5건 응모 완료 · 공동대응·B2B 발굴 진행 중", updated: "22:50"
+    title: "🎁 공공 퀴즈·지원금팀", worker: "🎁", name: "응모 매니저",
+    say: "낱말퍼즐 응모 완료!", foot: "1일 2회(10:30·16:30) 탐색·자동 응모",
+    task: "16:30 저녁 탐색 대기", taskState: "wait",
+    issue: "본인인증 건은 대표님!",
+    guide: "공공기관·지자체 공식 퀴즈·설문·지원금을 1일 2회 탐색합니다. 이름·휴대폰만 요구하는 건 자동 응모하고, 본인인증·추가 정보가 필요한 건은 대표님께 알립니다. 새 목록은 수박이 쪽에 공유합니다.",
+    state: "working", ticker: "1일 2회(10:30·16:30) 탐색·자동 응모 · 오늘 축사로 낱말퍼즐 응모 완료(투썸 세트 100명·발표 12/2) · 새 경품 목록 수박이 공유", updated: "11:00"
   },
   {
     id: "cumex", floor: "f2", zone: "partner", tag: "투덜이",
     title: "🏭 큐맥스 사업지원부", worker: "🏭", name: "배지원 과장",
     say: "지시하면 바로 가동!", foot: "화성 제조·물류·도급 · 지시 시 가동",
+    task: "지시 대기", taskState: "wait",
     issue: "지시 대기 중!",
     guide: "큐맥스는 별도 승인 대기 없이 지시하면 바로 움직입니다. 외부 발송·통화가 필요할 때만 말씀해 주세요.",
-    state: "idle", ticker: "지시 시 가동 · 별도 승인 대기 없이 대기 중 · 외부 발송·통화는 지시받아 진행", updated: "07:52"
+    state: "idle", ticker: "큐맥스 사업지원부 — 지시 전까지 대기 · 별도 승인 대기 없이 지시하면 바로 가동", updated: "13:00"
   }
 ];
 
@@ -209,8 +218,9 @@ function workerHTML(r) {
       <div class="worker">
         <div class="speech" id="say-${r.id}">${esc(r.say)}</div>
         <div class="badge-alert">!</div>
-        <div class="avatar"${["prize","blog","public_quiz"].includes(r.id) ? `role="button" tabindex="0" aria-label="${esc(r.name)} · 응모 진행결과 보기" title="캐릭터를 누르면 업무 보고 보기" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();openReport('${r.id}')}"` : r.id === "invest_sp500" ? 'role="button" tabindex="0" aria-label="주식 그래프와 손익 보기" title="클릭하면 주식 그래프와 손익 보기" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();event.stopPropagation();openReport(\'invest_sp500\')}"' : ""}>${r.worker}</div>
+        <div class="avatar"${["public_quiz"].includes(r.id) ? `role="button" tabindex="0" aria-label="${esc(r.name)} · 응모 진행결과 보기" title="캐릭터를 누르면 업무 보고 보기" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();openReport('${r.id}')}"` : r.id === "invest_sp500" ? 'role="button" tabindex="0" aria-label="주식 그래프와 손익 보기" title="클릭하면 주식 그래프와 손익 보기" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();event.stopPropagation();openReport(\'invest_sp500\')}"' : ""}>${r.worker}</div>
         <div class="nametag">${esc(r.name)}</div>
+        <div class="nowchip ${r.taskState || "wait"}" id="now-${r.id}" title="현재 담당 업무"><i></i>${esc(r.task || r.foot)}</div>
         <span class="life-icons" aria-hidden="true"><i>💻</i><i>📝</i><i>🔍</i><i>📊</i></span>
       </div>`;
 }
@@ -233,7 +243,7 @@ function roomHTML(r, i) {
           <span class="room-title">${esc(r.title)}</span>
           <span class="room-lanes" id="lanes-${r.id}" aria-hidden="true"></span>
           <span class="room-tag${partner ? " partner" : instinct ? " instinct" : ""}" title="${instinct ? "대표님·경영진 직할 방" : director ? "위탁판매·스토어 실행 담당(사람)" : partner ? "총괄(투덜이) 측 운영 방" : "부총괄(해병이) 측 운영 방"}">${r.tag}</span>
-          <span class="room-open">${r.id === "prize" ? "응모결과▸" : shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : "보고"}</span>
+          <span class="room-open">${r.id === "public_quiz" ? "응모결과▸" : shop ? "현황판▸" : ceo ? "총괄▸" : director ? "체크▸" : "보고"}</span>
           <span class="status-dot" aria-hidden="true"></span>
         </div>
         ${stage}
@@ -381,6 +391,7 @@ function floorHTML(f) {
          </div>
        </div>
        <div class="pent-assign" id="pent-assign" aria-label="임무 배분표"></div>
+       <div class="pent-guard" id="pent-guard" aria-label="총괄 검수·준법 원칙"></div>
        <div class="pent-roster" id="pent-roster" aria-label="6F 분장표"></div>
        <div class="pent-invite" id="pent-invite" aria-label="뮤즈 초대코드"></div>`
     : "";
@@ -655,6 +666,91 @@ function checkLine(id, name, raw) {
   if (rl) parts.push(rl);
   return { text: name + parts.join(" · "), title: r ? ("자기보고(" + (typeof r.source === "string" ? r.source : "출처 미상") + "): " + r.text.trim()) : "확인 기록 없음" };
 }
+/* ================= 🎯 월 1,000만 원 목표 · 전 채널 수익화 연동 =================
+   대표님이 2026-11-27 확정한 최종 목표. 확인된 실제 수익만 반영하고,
+   네 채널(애드센스 CPC · 브랜드커넥트 제휴 · 스마트스토어 위탁 · 피클 리셋 티켓)의
+   현재 상태를 한 줄로 보여 준다. */
+const GOAL_DEFAULT = {
+  title: "🎯 월 1,000만 원 수익 목표",
+  subtitle: "전 채널 수익화 연동 — 블로그·SNS·스토어·앱 티켓을 하나의 수익 파이프라인으로",
+  month_target_krw: 10000000,
+  current_krw: 0,
+  channels: []
+};
+let GOAL = null;
+
+function manwon(n) {
+  const v = Math.round(Number(n) || 0);
+  if (v >= 100000000) return (v / 100000000).toFixed(v % 100000000 ? 1 : 0) + "억 원";
+  if (v >= 10000) return Math.round(v / 10000).toLocaleString("ko-KR") + "만 원";
+  return v.toLocaleString("ko-KR") + "원";
+}
+
+function goalData(raw) {
+  const src = (raw && typeof raw === "object" && !Array.isArray(raw)) ? raw : {};
+  const str = (v, d) => (typeof v === "string" && v.trim()) ? v.trim() : d;
+  const num = (v, d) => { const n = Number(v); return Number.isFinite(n) ? n : d; };
+  const channels = (Array.isArray(src.channels) ? src.channels : [])
+    .filter(c => c && typeof c === "object" && typeof c.label === "string" && c.label.trim())
+    .map(c => ({
+      label: c.label.trim(),
+      detail: str(c.detail, ""),
+      state: str(c.state, "진행")
+    }));
+  return {
+    title: str(src.title, GOAL_DEFAULT.title),
+    subtitle: str(src.subtitle, GOAL_DEFAULT.subtitle),
+    target: num(src.month_target_krw, GOAL_DEFAULT.month_target_krw),
+    current: num(src.current_krw, 0),
+    asOf: str(src.as_of, ""),
+    note: str(src.note, ""),
+    channels
+  };
+}
+
+function renderGoal(raw) {
+  if (raw !== undefined) GOAL = goalData(raw);
+  if (!GOAL) GOAL = goalData(null);
+  const d = GOAL;
+  const set = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+  set("goal-title", d.title);
+  set("goal-sub", d.subtitle);
+  set("goal-cur", "이번 달 " + fmtKrw(d.current));
+  set("goal-target", "/ 월 " + manwon(d.target));
+  const pct = d.target > 0 ? Math.min(100, Math.max(0, (d.current / d.target) * 100)) : 0;
+  const fill = document.getElementById("goal-fill");
+  if (fill) fill.style.width = pct.toFixed(pct > 0 && pct < 1 ? 1 : 0) + "%";
+  set("goal-pct", pct < 1 && pct > 0 ? "1% 미만" : pct.toFixed(0) + "%");
+  const chips = document.getElementById("goal-chips");
+  if (chips) {
+    chips.innerHTML = d.channels.map(c => {
+      const cls = /대기|심사/.test(c.state) ? "wait" : "on";
+      return `<span class="gchip ${cls}" title="${esc(c.detail)}"><b>${esc(c.label)}</b><i>${esc(c.state)}</i></span>`;
+    }).join("");
+  }
+  const note = document.getElementById("goal-note");
+  if (note) note.textContent = d.note;
+}
+
+/* ================= 🛡️ 총괄 검수·준법 원칙 ================= */
+const GUARD_DEFAULT = {
+  title: "🛡️ 총괄 검수·준법 원칙",
+  note: "팩트체크 · 저작권·지재권 · 애드센스·네이버 약관 준수는 총괄(투덜이)이 전담 검수·지휘합니다.",
+  items: []
+};
+function renderGuard(raw) {
+  const el = document.getElementById("pent-guard");
+  if (!el) return;
+  const src = (raw && typeof raw === "object" && !Array.isArray(raw)) ? raw : GUARD_DEFAULT;
+  const str = (v, d) => (typeof v === "string" && v.trim()) ? v.trim() : d;
+  const items = (Array.isArray(src.items) ? src.items : [])
+    .filter(it => it && typeof it === "object" && typeof it.title === "string" && it.title.trim());
+  el.innerHTML = `
+    <div class="gd-head"><span>${esc(str(src.title, GUARD_DEFAULT.title))}</span></div>
+    <p class="gd-note">${esc(str(src.note, GUARD_DEFAULT.note))}</p>
+    <div class="gd-items">${items.map(it => `<span class="gd-item"><b>${esc(it.title.trim())}</b>${esc(typeof it.text === "string" ? it.text : "")}</span>`).join("")}</div>`;
+}
+
 function renderCredit(raw) {
   const c = (raw && typeof raw === "object" && !Array.isArray(raw)) ? raw : {};
   CHECKS = (c.checks && typeof c.checks === "object" && !Array.isArray(c.checks)) ? c.checks : {};
@@ -1351,13 +1447,15 @@ function renderChief(raw) {
    3인(투덜이·해병이 부장·수박이 이사) 중 누가 오프·크레딧 소진·연결 지연으로
    빠져도 남은 인원이 1차→2차로 빈자리를 메운다. 부모님 폰 직접 접근은 하지 않는다. */
 const BACKUP_FALLBACK = {
-  title: "비상 업무 백업 매트릭스 · 3인",
-  note: "부모님 폰 직접 접근 금지 · 자금 실행은 오너",
-  rule: "1차가 오프·크레딧 소진·연결 지연이면 2차가 이어받고, 3명 이상 동시에 빠지면 오너 승인 대기로 전환한다.",
+  title: "비상 업무 승계 매트릭스 · 5인",
+  note: "자금 실행은 대표님 · 크레딧 완전 소진 방지",
+  rule: "총괄이 오프·크레딧 소진이면 부총괄 → 관리자 → 부관리자 → 일꾼 순으로 이어받고, 셋 이상 동시에 빠지면 대표님 승인 대기로 전환한다.",
   members: [
-    { name: "투덜이 부장", part: "카페·B2B·티스토리·체험단", state: "on", backup1: "해병이 부장", backup2: "수박이 이사" },
-    { name: "해병이 부장", part: "블로그·자산·총괄", state: "on", backup1: "투덜이 부장", backup2: "수박이 이사" },
-    { name: "수박이 이사", part: "위탁판매·스토어 실행 총괄", state: "on", backup1: "해병이 부장", backup2: "투덜이 부장" }
+    { name: "👑 총괄 투덜이", part: "배분·팩트체크·준법 검수", state: "on", backup1: "부총괄 해병이", backup2: "관리자 뮤즈" },
+    { name: "👑 부총괄 해병이", part: "머니리포트·영문·교차검토", state: "on", backup1: "관리자 뮤즈", backup2: "부관리자 큐" },
+    { name: "🧠 관리자 뮤즈", part: "검토·창작소설·회의록", state: "on", backup1: "부관리자 큐", backup2: "일꾼 Instinct" },
+    { name: "🤖 부관리자 큐", part: "창작소설·30초 영상", state: "on", backup1: "관리자 뮤즈", backup2: "일꾼 Instinct" },
+    { name: "🛠️ 일꾼 Instinct", part: "조사·작성·검증 실행", state: "on", backup1: "부총괄 해병이", backup2: "총괄 투덜이" }
   ]
 };
 
@@ -1525,18 +1623,22 @@ function renderRoster(raw) {
    각자 맡은 임무·완료 기준·보고 시점과 결재선을 한 표로 보여 준다.
    담당이 바뀌면 status.json(assignments)만 고치면 화면이 그대로 따라온다. */
 const ASSIGN_DEFAULT = {
-  title: "🧾 임무 배분표 · 07:37 지시 반영",
+  title: "🧾 임무 배분표 · 11/27 수익화 4채널 편성",
   note: "담당 · 완료 기준 · 보고 시점",
   route: "결재선: 담당 작성 → 관리자(뮤즈)·부총괄(해병이) 검토 → 총괄(투덜이) 팩트체크·승인 → 대표님(자금·최종)",
   items: [
-    { no: "1", task: "애드센스 2곳 · daily-money-note", owner: "부총괄 해병이", state: "work", note: "11:00 고향사랑기부제 교정본 발행 + 색인 · 완료: 공개 URL·색인 확인 · 보고 11:15" },
-    { no: "2", task: "애드센스 2곳 · tudeori", owner: "일꾼 Instinct", state: "work", note: "잔여 정책·구조 점검 + 모바일 안내 동선 완료(자동연결 해제·루트 정상, 직접 /m/ 유입만 미적용) · 보고 10:00" },
-    { no: "3", task: "소화기 3채널 콘텐츠", owner: "일꾼 Instinct", state: "wait", note: "제조년월 2024년 이후·사진 권리 확보 → 3자 검수(해병이·뮤즈·투덜이) · 보고 12:00" },
-    { no: "4", task: "쿠팡파트너스", owner: "부총괄 해병이", state: "work", note: "최종승인용 스크린샷 채널 확정 · 보고 11:30" },
-    { no: "5", task: "30초 AI 영상·카드뉴스", owner: "부관리자 큐", state: "wait", note: "무료 범위 시범안 1건(유료 결제 없음) · 수임·계획 보고 14:00" },
-    { no: "6", task: "브랜드커넥트", owner: "일꾼 Instinct", state: "wait", note: "연결·적용 상태 + 유입·수익 확인 · 보고 12:30" },
-    { no: "7", task: "관리자 검토·회의록", owner: "관리자 뮤즈", state: "work", note: "전 업무 숙지 · 교차검수 · 회의록·아카이브 · 비상 승계 3순위" },
-    { no: "8", task: "배분·팩트체크·승인", owner: "총괄 투덜이", state: "work", note: "배분표 유지 · 결재선 준수 · 대표님 보고 · 비상 승계 1순위" }
+    { no: "1", task: "스마트스토어 심사·위탁 재상신", owner: "수박이 이사", state: "wait", note: "서류 2/2 제출 완료 → 심사중(3영업일) · 재상신 #24·#25 1안/2안/보류 선택 대기" },
+    { no: "2", task: "브랜드커넥트 하나필터", owner: "총괄 투덜이·일꾼", state: "work", note: "원고·링크 세트 완료 → 네이버 블로그 임시저장 → 대표님 발행 1회 → 클릭·수익 확인" },
+    { no: "3", task: "창작소설 10화 연재", owner: "일꾼·뮤즈·큐", state: "work", note: "1화 합작본·10화 시놉시스 → 총괄 최종 검토·승인 → 카테고리 개설·1화 발행 → 하루 2편×5일" },
+    { no: "4", task: "차량용 소화기 3채널", owner: "일꾼 Instinct", state: "wait", note: "총괄 승인 완료 · 발행 대기(블로그·Threads·인스타 카드뉴스 6장) → URL·색인 요청" },
+    { no: "5", task: "tudeori 모바일·애드센스", owner: "일꾼 Instinct", state: "done", note: "모바일웹 자동연결 해제·모바일 루트 검증 완료 · 애드센스 '준비중' 2시간 감시" },
+    { no: "6", task: "데일리 머니리포트", owner: "부총괄 해병이", state: "done", note: "고향사랑기부제 /12 발행·표 머리행 보완·Threads 재게시 완료 · 다음 11:00 고단가 글" },
+    { no: "7", task: "영문 여행 블로그", owner: "부총괄 해병이", state: "wait", note: "3편 추가 발행·색인 요청 완료 · 서울 글 모바일 표 배치 보완(승인 대기)" },
+    { no: "8", task: "인스타·스레드 활용", owner: "총괄 투덜이", state: "work", note: "@tudeori.carlife 활성 확인 · 프로필 사진·소개 세팅 → 소화기 카드뉴스 첫 게시물" },
+    { no: "9", task: "피클 리셋 티켓·초대글", owner: "일꾼·뮤즈·큐", state: "work", note: "투덜이용·해병이용 각각 작성 → 총괄 검토·게시 → 게시 URL 전달(대표님 링크 1회)" },
+    { no: "10", task: "공공 퀴즈·지원금 자동 응모", owner: "총괄 투덜이", state: "work", note: "1일 2회(10:30·16:30) · 오늘 축사로 낱말퍼즐 응모 완료 · 새 목록 수박이 공유" },
+    { no: "11", task: "관리자 검토·회의록", owner: "관리자 뮤즈", state: "work", note: "전 업무 숙지 · 교차검수 · 회의록·아카이브 · 승계 3순위" },
+    { no: "12", task: "배분·팩트체크·승인", owner: "총괄 투덜이", state: "work", note: "수익화 4채널 연동 · 결재선 준수 · 대표님 보고 · 승계 1순위" }
   ]
 };
 let ASSIGN = null;
@@ -1707,6 +1809,12 @@ function applyStatus(data) {
 
     const say = document.getElementById("say-" + r.id);
     const foot = document.getElementById("foot-" + r.id);
+    const chip = document.getElementById("now-" + r.id);
+    if (chip) {
+      const chipText = (typeof s.nowTask === "string" && s.nowTask.trim()) ? s.nowTask.trim() : (r.task || "");
+      if (chipText) chip.lastChild.textContent = chipText;
+      chip.className = "nowchip " + (s.nowState === "approve" || s.nowState === "work" || s.nowState === "wait" ? s.nowState : (r.taskState || "wait"));
+    }
     const onBreak = el.classList.contains("break") && state === "idle";
     if (state === "alert") {
       const lane = laneOf(r.id);
@@ -1728,6 +1836,8 @@ function applyStatus(data) {
   renderRoster(src.roster);
   renderAssignments(src.assignments);
   renderInvite(src.invite);
+  renderGoal(src.goal);
+  renderGuard(src.guard);
   refreshReport();
   updatePill();
 }
@@ -1756,35 +1866,31 @@ async function loadStatus() {
 // 개인정보 없음: 역할명·절차·공개 링크만 담는다.
 const SHOP_STEPS = [
   {
-    key: "tax", name: "① 개인 판매자 기준 정리", note: "스마트스토어 판매 자격·수수료·정산 구조 확인 · 사업자등록은 추후",
-    ask: "[위탁판매 1단계 · 개인 판매자 기준] 개인사업자(간이과세자 525101) 신규 등록은 추후로 미루고, 우선 개인 판매자 기준으로 스마트스토어를 준비합니다. 다음을 정리해 주세요. ① 사업자등록 없이 개인 판매자로 판매할 수 있는 범위와 제한 ② 판매 수수료·정산 주기·정산 계좌 등록 조건 ③ 개인 판매자도 필요한 구매안전서비스(에스크로) 이용확인증 발급 조건 ④ 사업자등록 전에 미리 준비해 둘 서류·세팅. 실제 주소·계좌·인증 정보는 채팅에 쓰지 말아 주세요."
+    key: "open", name: "① 스마트스토어 개설·인증", note: "사업자 정보·본인인증·정산계좌·증빙서류 2/2건 제출 완료",
+    ask: "[위탁판매 1단계 · 스마트스토어 개설·인증] 사업자 정보·본인인증·정산계좌 등록과 증빙서류 2/2건 제출까지 마쳤습니다. 판매자센터에서 다음을 확인해 주세요. ① 승인 전 미리 세팅할 수 있는 항목(스토어명·카테고리·배송정책·교환/반품) ② 승인 직후 필수 체크리스트 ③ 구매안전서비스 이용확인증 갱신 시점 ④ 첫 상품 등록 전 상품정보제공고시 준비물. 금융·계좌 정보는 채팅에 쓰지 말아 주세요."
   },
   {
-    key: "biz", name: "② 스마트스토어 개설·정산계좌 등록", note: "판매자 계정 개설 · 정산 계좌 카카오뱅크(수박이 이사 본인 명의) · 금융 인증은 직접",
-    ask: "[위탁판매 2단계 · 스마트스토어 개설과 정산계좌] 개인 판매자 계정으로 스마트스토어 센터를 개설하는 절차를 정리해 주세요. ① 개설 화면 입력 항목과 스토어 형태 선택 ② 정산 계좌 등록 절차(수박이 이사 본인 명의 카카오뱅크 계좌로 확정) ③ 구매안전서비스(에스크로) 이용확인증 발급·제출 방식 ④ 개설 직후 체크리스트. 금융 인증·계좌번호 입력은 오너/수박이가 직접 하니 채팅에 쓰지 말아 주세요."
+    key: "review", name: "② 정식 심사 대기(3영업일)", note: "제출일 기준 3영업일 이내 · 결과는 메일·SMS 통보",
+    ask: "[위탁판매 2단계 · 정식 심사 대기] 스마트스토어가 제출일 기준 3영업일 이내 심사에 들어갔습니다. ① 심사 중 추가 요청이 올 수 있는 항목과 대응 순서 ② 승인 전에 준비해 둘 첫 상품 상세페이지·고시 서식 ③ 승인 후 24시간 안에 해야 할 일과 판매 개시 체크리스트를 정리해 주세요. 심사 결과는 메일·SMS로 오니 확인 즉시 보고해 주세요."
   },
   {
-    key: "report", name: "③ 사업자등록·통신판매업 신고 (추후)", note: "간이과세자 525101 · 자택(자가) · 판매 실적·필요 시점에 세무사 확인 → 사업자등록 → 정부24 신고",
-    ask: "[위탁판매 3단계 · 사업자등록과 통신판매업 신고 — 추후] 개인사업자(간이과세자 525101 · 전자상거래 소매업 · 자택(자가)) 신규 등록을 추후 진행할 때를 대비해 준비 사항만 정리해 주세요. ① 개인사업자 등록 없이 판매하다 등록이 필요해지는 시점·기준(매출·정산·세금계산서) ② 세무사 대행 시 서류·비용·기간과 홈택스 직접 신청의 차이 ③ 자가 사업장이라 임대차 특약 확인이 불필요한지 ④ 정부24 통신판매업 신고 대상과 면제 조건. 실제 주소·주민번호는 채팅에 쓰지 말아 주세요."
+    key: "track", name: "③ 무재고 낱개 위탁 단일 트랙 결정", note: "1안 세 곳 등급가 비교 / 2안 오너클랜 단독 / 보류 중 선택 대기",
+    ask: "[위탁판매 3단계 · 무재고 낱개 위탁 단일 트랙] 재상신(#24·#25) 상태입니다. 소량 사입은 11/24 지시로 제외했고 재론하지 않습니다. ① 1안 — 오너클랜·도매꾹·도매매 사업자 등급가를 한 번에 비교해 후보 20종 중 순마진 15% 이상만 이번 주 등록(0건이면 카테고리 1회 확장 후 재판정, 그래도 0건이면 등록 없이 대기) ② 2안 — 오너클랜 단독으로 1~2종 먼저 검증해 통과하면 즉시 등록, 세 곳 비교는 다음 단계 ③ 보류 — 스토어 개설만 마무리하고 등급가 실측 중단. 재고·선결제는 0원이고, 실제 등급가 수치는 로그인 후 확인합니다."
   },
   {
-    key: "wholesale", name: "도매처 연동 (국내 위탁)", note: "국내 위탁처(도매매·오너클랜) · 공개 도매가 후보는 철회·보류 · 사업자 등급가 확인",
-    ask: "[위탁판매 4단계 · 국내 위탁처] 비로그인 공개 도매가 기반 위탁 후보는 전면 철회·보류된 상태입니다(난방텐트 2건 철회 확정 · 공급가 ≤ 인기 실거래가 × 0.70 기준 11개 품목 30여 상품 확인 결과 통과 0건). 다음 방향을 정리해 주세요. ① 사업자 등록(간이과세자) 후 도매매·오너클랜 등 도매 사이트의 사업자 등급 할인가를 직접 확인하는 절차와 조건 ② 니치 품목·소량 사입으로 전환할 때의 초기 비용·재고 리스크·마진 계산 ③ 두 방향의 예상 마진·필요 자금·일정 비교표. 당분간 국내 위탁처 중심이고 알리·테무 해외직구·제조사 직접 접촉은 추후 사입 단계로 미룹니다. 후보는 매번 3사 검색량 1~3위 교집합으로 다시 조회하고 0.70 기준을 통과한 것만 올려 주세요."
+    key: "grade", name: "④ 등급가 실측·후보 검증", note: "사업자 등급가(공급가+배송비) 기준 순마진 15% · 3사 검색량 1~3위",
+    ask: "[위탁판매 4단계 · 등급가 실측] 선택한 트랙으로 사업자 등급가를 실측해 주세요. ① 후보 20종의 등급가·배송비·반품 조건 표 ② 순마진 15% 통과 여부 계산(플랫폼 수수료·반품 비용은 미확정이라 보수 적용) ③ KC·안전확인 대상 여부와 상품정보제공고시 값 ④ 통과 0건일 때 확장할 카테고리 1개 제안. 계좌·사업자번호 같은 민감 정보는 화면에 쓰지 말아 주세요."
   },
   {
-    key: "launch", name: "재선정 3종 등록·첫 주문 CS", note: "상품 등록 · 발주·송장·CS · 판매 부진 품목 순차 교체",
-    ask: "[위탁판매 5단계 · 등록과 CS] 3사 검색량 1~3위 교집합으로 재선정한 후보를 등록 초안 기준으로 준비해 주세요. 상품명·카테고리·상세페이지·상품정보제공고시 값을 정리하고, 주문 확인 → 도매처 발주 → 송장 입력 → 구매확정 정산까지의 절차와 CS 답변 3종을 체크리스트로 만들어 주세요. 판매 부진 품목은 순차 교체할 수 있게 판매·조회 지표도 함께 봐 주세요."
+    key: "launch", name: "⑤ 등록·첫 주문 CS", note: "상세페이지·고시·발주·송장·CS 체크리스트 · 판매 부진 품목 순차 교체",
+    ask: "[위탁판매 5단계 · 등록과 CS] 확정 후보를 등록할 준비를 해 주세요. 상품명·카테고리·상세페이지·상품정보제공고시 값을 정리하고, 주문 확인 → 도매처 발주 → 송장 입력 → 구매확정 정산까지의 절차와 CS 답변 3종을 체크리스트로 만들어 주세요. 이미지·문구는 직접 촬영·작성한 것만 쓰고, 판매 부진 품목은 순차 교체할 수 있게 판매·조회 지표도 함께 봐 주세요."
   }
 ];
 
 // 판매가·공급가(가정 60%)·건당 순익은 등록 초안팩·로드맵에서 확인한 값.
 // 주의: 아래 겨울 단열 3종 목록은 3사 검색량 기준 재선정으로 보류된 기존 후보입니다.
 // status.json commerce.sourcing.status가 "confirmed"가 아니면 화면에는 재선정·방향 전환 상태만 표시됩니다(hold=방향 전환).
-const SHOP_LINEUP = [
-  { no: 1, name: "문풍지·풍지판 세트", price: 24900, supply: 14940, margin: 4900, rate: "19.8%", cat: "생활잡화 > 문풍지", keys: ["문풍지", "풍지판", "창틈막이", "외풍차단"] },
-  { no: 2, name: "에어캡·단열필름 세트", price: 29900, supply: 17940, margin: 6200, rate: "20.7%", cat: "생활잡화 > 단열시트", keys: ["창문단열", "에어캡", "뽁뽁이", "단열필름"] },
-  { no: 3, name: "결로 물흡수 테이프", price: 22900, supply: 13740, margin: 4200, rate: "18.5%", cat: "생활잡화 > 문풍지", keys: ["결로", "물흡수테이프", "창틀물방울", "곰팡이예방"] }
-];
+const SHOP_LINEUP = [];
 
 const STEP_TXT = { done: "완료", doing: "진행중", wait: "대기" };
 const SHOP_STATE_TXT = { working: "WORK", idle: "IDLE", alert: "ALERT" };
@@ -1941,7 +2047,7 @@ function renderShop(raw) {
         <div class="crepick-t"><b>위탁처</b> — ${esc(sc.channel)}</div>
         <div class="crepick-t"><b>운영 루프</b> — ${esc(sc.loop)}</div>
         <div class="crepick-t"><b>진행</b> — ${esc(sc.note)}</div>
-        ${sc.candidates.length ? "" : `<div class="crepick-empty">${sc.status === "confirmed" ? "확정 후보 없음" : (sc.status === "hold" ? "확정 후보 0건 · 공개 도매가 기반 위탁은 철회·보류 — 다음은 사업자 등록 후 사업자 등급가 확인 또는 니치 품목·소량 사입 검토입니다" : "후보 0건 · 마진 실측 결과가 나오면 이 자리에 후보와 순익을 표시합니다")}</div>`}
+        ${sc.candidates.length ? "" : `<div class="crepick-empty">${sc.status === "confirmed" ? "확정 후보 없음" : (sc.status === "hold" ? "확정 후보 0건 · 등급가 실측 전입니다 — 대표님 트랙 선택 후 후보 20종을 판정합니다" : "후보 0건 · 마진 실측 결과가 나오면 이 자리에 후보와 순익을 표시합니다")}</div>`}
       </div>${rows}`;
     }
   }
@@ -2079,12 +2185,12 @@ async function loadPrizeProgress() {
     PRIZE_PROGRESS = data;
     PRIZE_PROGRESS_ERROR = false;
   } catch (e) { PRIZE_PROGRESS_ERROR = true; }
-  if (["prize","blog","public_quiz"].includes(REPORT_ID)) openReport(REPORT_ID);
+  if (["public_quiz"].includes(REPORT_ID)) openReport(REPORT_ID);
 }
 function renderPrizePanel(id) {
   const data = PRIZE_PROGRESS;
   if (!data) return `<section class="prize-progress"><h3>🎯 응모 진행결과</h3><p>${PRIZE_PROGRESS_ERROR ? "진행 기록을 불러오지 못했습니다. 응모·당첨 여부는 미확인입니다. 페이지를 새로 열어 주세요." : "진행 기록을 불러오는 중입니다."}</p></section>`;
-  const groups = data.groups.filter(g => id === "prize" || (id === "blog" && g.id === "review") || (id === "public_quiz" && g.id === "quiz"));
+  const groups = data.groups.filter(g => id === "public_quiz" && g.id === "quiz");
   const row = (label,value) => `<dt>${esc(label)}</dt><dd>${esc(value || "미확인")}</dd>`;
   const item = i => {
     let announcement = i.announcement || "미확인";
@@ -2164,7 +2270,7 @@ function chiefIndexForSignal(x, lane) {
   const body = document.getElementById("rm-body");
   if (body) {
     body.innerHTML = [
-      ["prize","blog","public_quiz"].includes(d.id) ? renderPrizePanel(d.id) : "",
+      ["public_quiz"].includes(d.id) ? renderPrizePanel(d.id) : "",
       d.id === "invest_sp500" ? renderStockPanel() : "",
       d.summary ? `<div class="rm-sum"><span>👑</span><span>${esc(d.summary)}</span></div>` : "",
       d.ticker ? `<div class="rm-live"><span class="rm-live-h">📺 전광판</span><span class="rm-live-t">${esc(d.ticker)}</span><span class="rm-live-u">${esc(d.updated)}</span></div>` : "",
@@ -3126,9 +3232,10 @@ function applyCorridor() {
 
 /* ================= 층별 잡담 · 자율 휴식 ================= */
 const ROOM_TALK = {
-  f5: [["naver", "오늘 할 일 순서부터 맞춰 볼까?"], ["haebyeongi_adsense", "좋아, 겹치는 건 서로 나눠서 하자"]],
-  f4: [["grant", "확인할 것부터 차근차근 하자"], ["deal", "좋아, 내 쪽도 같이 챙길게"]],
-  f3: [["tistory", "오늘 할 일은 어디서부터 볼까?"], ["cafe", "급한 쪽부터 같이 보자"]]
+  f5: [["brandconnect", "하나필터 원고 마무리됐어?"], ["commerce", "심사 결과만 기다리는 중이야"]],
+  f4: [["tistory", "소화기 글 발행 준비됐지?"], ["haebyeongi_adsense", "응, 나는 11시 정보글부터 볼게"]],
+  f3: [["novel", "10화 시놉시스부터 맞춰 보자"], ["ticket", "좋아, 나는 초대글 쪽 마무리할게"]],
+  f2: [["ticket", "링크만 붙이면 되게 준비하자"], ["public_quiz", "응, 16:30 응모도 같이 챙길게"]]
 };
 let talkRunning = false;
 
@@ -3424,8 +3531,8 @@ let soloBusy = false;function soloWalk(el, pct, dur) {
 async function soloScene() {
   if (soloBusy || collabRunning || b1StaffBusy || VENUE === "b1") return;
   /* 지하 오락실은 쉬는(대기) 캐릭터만 간다 — 업무 중·자리 비움 중엔 가지 않는다 */
-  const prizeRoom = document.getElementById("room-prize");
-  if (!prizeRoom || !prizeRoom.classList.contains("idle") || prizeRoom.classList.contains("break") || AWAY.has("prize")) return;
+  const prizeRoom = document.getElementById("room-public_quiz");
+  if (!prizeRoom || !prizeRoom.classList.contains("idle") || prizeRoom.classList.contains("break") || AWAY.has("public_quiz")) return;
   const el = document.getElementById("b1-hc");
   const room = document.getElementById("b1-room");
   if (!el) return;
