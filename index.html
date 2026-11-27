@@ -2007,6 +2007,43 @@
   .stock-chart circle { fill:#fde68a; }
   .stock-chart text { fill:#94a3b8; font-size:8px; font-family:inherit; }
   .stock-panel small { color:#94a3b8; font-size:6.8px; }
+  /* 📈 실시간 공개 시세 주식창 */
+  .stock-panel.live { border-color:rgba(56,189,248,.55); box-shadow:inset 0 0 18px rgba(56,189,248,.08); }
+  .sp-head { display:flex; align-items:center; justify-content:space-between; gap:6px; }
+  .stock-panel .sp-head h3 { font-size:9px; color:#7dd3fc; margin:0; }
+  .sp-head h3 b { color:#e0f2fe; }
+  .sp-code { font-size:6.5px; color:#64748b; font-weight:700; }
+  .sp-mkt { font-size:6.8px; font-weight:900; border-radius:20px; padding:0 6px; line-height:1.8; border:1px solid; white-space:nowrap; }
+  .sp-mkt.on { color:#bbf7d0; border-color:rgba(74,222,128,.6); background:rgba(22,101,52,.35); }
+  .sp-mkt.off { color:#cbd5e1; border-color:rgba(148,163,184,.45); background:rgba(30,41,59,.5); }
+  .sp-price { display:flex; align-items:baseline; gap:4px; margin-top:3px; flex-wrap:wrap; }
+  .sp-now { font-size:17px; font-weight:900; letter-spacing:-0.01em; font-variant-numeric:tabular-nums; color:#f8fafc; }
+  .sp-now.up { color:#fca5a5; }
+  .sp-now.down { color:#93c5fd; }
+  .sp-won { font-size:8px; color:#cbd5e1; }
+  .sp-chg { font-size:9px; font-weight:900; font-variant-numeric:tabular-nums; }
+  .sp-chg.up, .sp-pnl.up { color:#fca5a5; }
+  .sp-chg.down, .sp-pnl.down { color:#93c5fd; }
+  .sp-chg.flat, .sp-pnl.flat { color:#cbd5e1; }
+  .sp-vs { font-size:6.8px; color:#94a3b8; margin-top:1px; }
+  .sp-ohlc { display:flex; flex-wrap:wrap; gap:1px 10px; font-size:6.8px; color:#94a3b8; margin-top:3px; }
+  .sp-ohlc b { color:#cbd5e1; font-weight:800; font-variant-numeric:tabular-nums; }
+  .sp-range { display:flex; align-items:center; gap:5px; margin-top:4px; }
+  .sp-range-bar { position:relative; flex:1 1 auto; height:4px; border-radius:3px; background:linear-gradient(90deg,rgba(147,197,253,.55),rgba(148,163,184,.25),rgba(252,165,165,.55)); }
+  .sp-range-bar i { position:absolute; top:-2px; width:2px; height:8px; margin-left:-1px; background:#fde68a; box-shadow:0 0 4px #fde68a; border-radius:1px; }
+  .sp-range-lb { flex:none; font-size:6.5px; color:#94a3b8; font-variant-numeric:tabular-nums; }
+  .sp-mine { margin-top:5px; padding-top:4px; border-top:1px dashed rgba(125,211,252,.28); display:flex; flex-wrap:wrap; gap:2px 10px; font-size:7.4px; color:#cbd5e1; }
+  .sp-mine-h { font-weight:900; color:#bae6fd; }
+  .sp-mine b { color:#f8fafc; font-variant-numeric:tabular-nums; }
+  .sp-pnl { font-weight:900; font-variant-numeric:tabular-nums; }
+  .sp-foot { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-top:4px; }
+  .sp-src { font-size:6.5px; color:#94a3b8; }
+  .sp-refresh { font:inherit; font-size:6.8px; font-weight:900; color:#bae6fd; background:rgba(8,47,73,.7); border:1px solid rgba(56,189,248,.5); border-radius:5px; padding:1px 6px; cursor:pointer; touch-action:manipulation; }
+  .sp-refresh.ok { background:rgba(22,101,52,.6); border-color:rgba(74,222,128,.7); color:#dcfce7; }
+  .sp-note { font-size:7.2px; color:#fbbf24; margin:3px 0 0; line-height:1.5; }
+  .room-open.ro-btn { font:inherit; cursor:pointer; }
+  .room.site-link .avatar { cursor:pointer; }
+  .room.site-link .avatar:hover, .room.site-link .avatar:focus-visible { filter:drop-shadow(0 0 7px #a78bfa); }
   .room#room-invest_sp500 .avatar { cursor:pointer; outline-offset:3px; }
   .room#room-invest_sp500 .avatar:hover, .room#room-invest_sp500 .avatar:focus-visible { filter:drop-shadow(0 0 7px #38bdf8); }
   .rm-h { font-size: 7.8px; font-weight: 900; color: #dbe9ff; margin-bottom: 2px; }
@@ -2675,6 +2712,7 @@
   #room-commerce .avatar { background-image: url(assets/ch8.png); }
   #room-ticket .avatar { background-image: url(assets/ch9.png); }
   #room-novel .avatar { background-image: url(assets/ch11.png); }
+  #room-novel_writer .avatar { background-image: url(assets/ch18.png); }
   #room-tistory .avatar { background-image: url(assets/ch12.png); }
   #room-sns .avatar { background-image: url(assets/ch13.png); }
   #room-travel .avatar { background-image: url(assets/ch14.png); }
@@ -2730,6 +2768,8 @@
   #room-ticket.working .avatar { background-image: url(assets/w9.png); width: 78px; height: 92px; }
   #room-novel.idle .avatar { background-image: url(assets/i11.png); }
   #room-novel.working .avatar { background-image: url(assets/w11.png); width: 78px; height: 92px; }
+  #room-novel_writer.idle .avatar { background-image: url(assets/i18.png); }
+  #room-novel_writer.working .avatar { background-image: url(assets/w18.png); width: 78px; height: 92px; }
   #room-tistory.idle .avatar { background-image: url(assets/i12.png); }
   #room-tistory.working .avatar { background-image: url(assets/w12.png); width: 78px; height: 92px; }
   #room-sns.idle .avatar { background-image: url(assets/i13.png); }
@@ -3097,6 +3137,6 @@
 <script src="red-read.js"></script>
 <script src="decision-guard.js?v=16a015885d8b"></script>
 <div id="runtime-load-error" role="alert" hidden style="position:fixed;top:8px;left:8px;right:8px;z-index:10000;padding:12px;background:#7f1d1d;color:#fff;border:1px solid #fecaca;border-radius:8px;font-size:14px">사무실 기능을 불러오지 못했습니다. 새로고침 후에도 같으면 이 대화에 알려주세요. 이 화면에서 결정은 전송되지 않았습니다.</div>
-<script src="office-runtime.js?v=0f92e79066c7" onerror="document.getElementById('runtime-load-error').hidden=false"></script>
+<script src="office-runtime.js?v=71db88ff4def" onerror="document.getElementById('runtime-load-error').hidden=false"></script>
 </body>
  </html>
