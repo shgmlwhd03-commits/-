@@ -1001,17 +1001,33 @@ function decisionBadge(d) {
   if (!d) return "";
   const lbl = decisionLabel(d.s);
   const icon = d.s === "ok" ? "✅" : d.s === "re" ? "🔁" : "⛔";
-  if (d.sending) return `⏳ ${lbl} 전송 중…`;
+  if (d.sending) return `⏳ ${lbl} 전송 중… · 버튼 잠금`;
   if (d.queued) return `⏳ ${lbl} 변경 전송 대기`;
+  if (d.dupBlocked) return `🛡️ ${lbl} 이미 접수됨${d.dupAt ? ` (${d.dupAt})` : ""} · 중복 접수 차단`;
   if (d.uncertain) return `⚠️ ${lbl} 수신 여부 미확인 · 확인 후 재시도`;
   if (d.error) return `⚠️ ${lbl} 미접수 · ${d.error}`;
   if (d.sent) {
-    return `${icon} ${lbl} 접수됨${d.issueNum ? ` (#${d.issueNum})` : ""} · 담당 확인·처리 대기`;
+    if (d.deduped) return `🛡️ ${lbl} 이미 접수됨${d.dupAt ? ` (${d.dupAt})` : ""}${d.issueNum ? ` (#${d.issueNum})` : ""} · 중복 접수 차단`;
+    return `${icon} ${lbl} 접수됨${d.issueNum ? ` (#${d.issueNum})` : ""}${d.sentClock ? ` · ${d.sentClock}` : ""} · 담당 확인·처리 대기`;
   }
   if (d.opened) {
     return `📤 ${lbl} 접수창 열림 · 아직 접수 확인 전`;
   }
   return `${icon} ${lbl} 선택 · 미접수`;
+}
+
+/* 🛡️ 중복 접수 차단: 접수 기록(decision-guard.js)과 중계 주제·열린 결재 이슈를 보고
+   이미 접수된 같은 안건은 다시 보내지 않는다. */
+function decisionGuardApi() {
+  return (typeof window !== "undefined" && window.LODecisionGuard) || null;
+}
+
+function guardRemember(it, state, channel, ref) {
+  const g = decisionGuardApi();
+  if (!g) return;
+  try {
+    g.remember(null, { id: it.id, title: it.title, state, channel, ref: ref || "", at: Date.now() });
+  } catch (e) {}
 }
 
 async function sendDecisionToGitHub(it, state, entry, revision) {
@@ -1039,12 +1055,25 @@ async function sendDecisionToGitHub(it, state, entry, revision) {
     `담당: ${who}${where ? ` (${where})` : ""}`,
     `시각: ${new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}`
   ].join("\n");
+  const guard = decisionGuardApi();
 
   let relayKey = "";
   try { relayKey = (localStorage.getItem("liveoffice_relay_key") || "").trim(); } catch (e) {}
   if (relayKey) {
     entry.sending = true;
     syncDecisionLights();
+    // 다른 기기·브라우저에서 이미 접수한 같은 안건인지, 중계 주제에 남은 최근 메시지로 먼저 확인한다.
+    let seen = null;
+    if (guard) {
+      try { seen = await guard.remoteRelay(relayKey, { id: it.id, state, timeoutMs: 4000 }); } catch (e) { seen = null; }
+    }
+    if (seen && seen.blocked) {
+      const at = guard.clockOf(seen.receipt && seen.receipt.at);
+      guardRemember(it, state, "ntfy", seen.receipt && seen.receipt.relayId);
+      mark({ sending: false, queued: false, sent: true, relay: true, opened: false, deduped: true,
+        dupAt: at, sentClock: at, relayId: (seen.receipt && seen.receipt.relayId) || "" });
+      return;
+    }
     try {
       const res = await fetch("https://ntfy.sh/" + encodeURIComponent(relayKey), {
         method: "POST",
@@ -1062,7 +1091,11 @@ async function sendDecisionToGitHub(it, state, entry, revision) {
         })
       });
       if (res.ok) {
-        mark({ sending: false, queued: false, sent: true, relay: true, opened: false });
+        let rid = "";
+        try { const data = await res.json(); rid = (data && data.id) || ""; } catch (e) {}
+        guardRemember(it, state, "ntfy", rid);
+        mark({ sending: false, queued: false, sent: true, relay: true, opened: false, deduped: false,
+          dupAt: "", dupBlocked: false, relayId: rid, sentClock: hhmm(), sentAt: new Date().toISOString() });
         return;
       }
       if (res.status >= 500) { markUncertain(); return; }
@@ -1080,6 +1113,28 @@ async function sendDecisionToGitHub(it, state, entry, revision) {
     entry.sending = true;
     syncDecisionLights();
     try {
+      // 열린 결재 이슈에 같은 안건·같은 결정이 이미 있으면 새 이슈를 만들지 않는다.
+      // (다른 기기·브라우저에서 먼저 눌렀거나 저장소가 초기화된 경우)
+      if (!entry.issueNum && guard) {
+        let found = null;
+        try {
+          const r = await fetch("https://api.github.com/repos/shgmlwhd03-commits/-/issues?labels=decision&state=open&per_page=100", {
+            headers: { "Accept": "application/vnd.github+json", "Authorization": "Bearer " + tok }
+          });
+          if (r.ok) found = guard.findOpenIssue(await r.json(), { id: it.id });
+        } catch (e) { found = null; }
+        if (found && found.number && found.decision && found.decision === lbl) {
+          const at = hhmm();
+          guardRemember(it, state, "github", String(found.number));
+          entry.issueNum = found.number;
+          entry.issueUrl = found.url;
+          mark({ sending: false, queued: false, sent: true, opened: false, deduped: true, dupAt: at,
+            sentClock: at, issueNum: found.number, issueUrl: found.url });
+          chiefSaveDecisions();
+          return;
+        }
+        // 결정이 바뀐 건은 새 이슈로 접수한다(감시가 새 번호를 처리할 수 있도록).
+      }
       const endpoint = entry.issueNum
         ? `https://api.github.com/repos/shgmlwhd03-commits/-/issues/${entry.issueNum}`
         : "https://api.github.com/repos/shgmlwhd03-commits/-/issues";
@@ -1101,7 +1156,9 @@ async function sendDecisionToGitHub(it, state, entry, revision) {
         // Preserve the receipt even if a newer choice was made while awaiting it.
         entry.issueNum = data.number;
         entry.issueUrl = data.html_url;
-        mark({ sending: false, queued: false, sent: true, opened: false });
+        guardRemember(it, state, "github", String(data.number || ""));
+        mark({ sending: false, queued: false, sent: true, opened: false, deduped: false, dupAt: "",
+          dupBlocked: false, sentClock: hhmm(), sentAt: new Date().toISOString() });
         chiefSaveDecisions();
         return;
       }
@@ -1124,7 +1181,7 @@ async function sendDecisionToGitHub(it, state, entry, revision) {
   window.open(url, "_blank", "noopener");
 }
 
-function chiefDecide(e, idx, state) {
+function chiefDecide(e, idx, state, force) {
   if (e) e.stopPropagation();
   const it = chiefItem(idx);
   if (!it || it.lane === "red" || !["ok", "no", "re"].includes(state)) return;
@@ -1137,10 +1194,32 @@ function chiefDecide(e, idx, state) {
     syncDecisionLights();
     return;
   }
-  if (entry.s === state && (entry.sending || entry.queued || entry.sent || entry.opened)) return;
+  if (entry.s === state && (entry.sending || entry.queued || entry.sent || entry.opened)) {
+    // 같은 결정을 다시 눌렀다(연타). 이미 접수된 건은 다시 접수하지 않고 안내만 남긴다.
+    Object.assign(entry, { dupBlocked: true, dupAt: entry.sentClock || entry.dupAt || entry.t || "" });
+    chiefSaveDecisions();
+    syncDecisionLights();
+    return;
+  }
+  if (!force) {
+    const g = decisionGuardApi();
+    let verdict = null;
+    if (g) {
+      try { verdict = g.check(null, { id: it.id, title: it.title, state, now: Date.now() }); } catch (err) { verdict = null; }
+    }
+    if (verdict && verdict.blocked) {
+      // 접수 기록에 같은 안건·같은 결정이 있다. 새로 보내지 않고 이미 접수됨을 알린다.
+      d[it.id] = Object.assign(entry, {
+        s: state, dupBlocked: true, dupAt: verdict.at || "", deduped: false
+      });
+      chiefSaveDecisions();
+      syncDecisionLights();
+      return;
+    }
+  }
   const revision = (Number.isSafeInteger(entry.revision) ? entry.revision : 0) + 1;
   Object.assign(entry, { s: state, t: hhmm(), revision, sent: false, opened: false,
-    sending: false, queued: true, error: "", uncertain: false });
+    sending: false, queued: true, error: "", uncertain: false, dupBlocked: false, dupAt: "", deduped: false });
   d[it.id] = entry;
   chiefSaveDecisions();
   syncDecisionLights();
@@ -1230,7 +1309,7 @@ function renderChief(raw) {
   const say = document.getElementById("chief-say");
   const localN = okN + noN + reN;
   const route = hasRelayKey() ? '원터치 접수 연결됨(중계)' : (ghToken() ? '원터치 접수 연결됨(결재함)' : '접수 시 GitHub 결재함 접수창');
-  if (say) say.textContent = `관리자·부총괄 검토 → 총괄 팩트체크·승인 · 접수·처리 확인 전 대기 🔴 ${n.red} · 🔵 ${n.blue} · ⏳ ${n.wait}` + (localN ? ` · 이 브라우저 선택 ${localN}건` : '') + ' · ' + route;
+  if (say) say.textContent = `관리자·부총괄 검토 → 총괄 팩트체크·승인 · 접수·처리 확인 전 대기 🔴 ${n.red} · 🔵 ${n.blue} · ⏳ ${n.wait}` + (localN ? ` · 이 브라우저 선택 ${localN}건` : '') + ' · ' + route + (decisionGuardApi() ? ' · 중복 접수 차단 켜짐' : '');
   body.innerHTML = items.length ? items.map((it, idx) => {
     const sourceIdx = allItems.indexOf(it);
     const rr = rooms.find(r => r.id === it.room);
@@ -1238,14 +1317,16 @@ function renderChief(raw) {
     const d = dec[it.id];
     const redRead = it.lane === "red" && !redGroupUnread(it);
     const ack = it.lane === "red" ? (redRead ? `<span class="red-read-tag">읽음 · 업무 대기</span>` : `<button class="red-ack" type="button" onkeydown="event.stopPropagation()" onclick="acknowledgeRed(event, 'chief', ${sourceIdx})">확인</button>`) : "";
+    const dis = d && d.sending ? " disabled" : "";
     const decBtns = (sel) =>
-      `<button class="cr-ok${sel === "ok" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="승인 선택 저장 · 아직 접수 안 됨${sel === "ok" ? " · 현재 선택" : sel ? " · 누르면 승인으로 변경" : ""}">승인</button>` +
-      `<button class="cr-no${sel === "no" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="반려 선택${sel === "no" ? " · 현재 선택" : sel ? " · 누르면 반려로 변경" : ""} · 원터치 키·토큰이 있으면 즉시 접수, 없으면 접수창 열림">반려</button>` +
-      `<button class="cr-re${sel === "re" ? " sel" : ""}" type="button" onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 선택 저장 · 아직 접수 안 됨 · 신호 유지${sel === "re" ? " · 현재 선택" : sel ? " · 누르면 재심의로 변경" : ""}">재심의</button>`;
+      `<button class="cr-ok${sel === "ok" ? " sel" : ""}" type="button"${dis} onclick="chiefDecide(event, ${sourceIdx}, 'ok')" title="승인 선택 저장 · 아직 접수 안 됨${sel === "ok" ? " · 현재 선택" : sel ? " · 누르면 승인으로 변경" : ""}">승인</button>` +
+      `<button class="cr-no${sel === "no" ? " sel" : ""}" type="button"${dis} onclick="chiefDecide(event, ${sourceIdx}, 'no')" title="반려 선택${sel === "no" ? " · 현재 선택" : sel ? " · 누르면 반려로 변경" : ""} · 원터치 키·토큰이 있으면 즉시 접수, 없으면 접수창 열림">반려</button>` +
+      `<button class="cr-re${sel === "re" ? " sel" : ""}" type="button"${dis} onclick="chiefDecide(event, ${sourceIdx}, 're')" title="재심의 선택 저장 · 아직 접수 안 됨 · 신호 유지${sel === "re" ? " · 현재 선택" : sel ? " · 누르면 재심의로 변경" : ""}">재심의</button>`;
     const act = d
       ? `<span class="cr-dec ${d.s === "ok" ? "ok" : d.s === "re" ? "re" : "no"}">${decisionBadge(d)}</span>` +
         (it.lane === "wait" ? "" : `<span class="cr-clr" title="실제 처리 완료 전이므로 신호와 대기 목록을 유지합니다">신호 유지</span>`) +
         (it.lane === "red" ? "" : decBtns(d.s)) +
+        (d.dupBlocked && d.s && !d.sending ? `<button class="cr-undo" type="button" onclick="chiefDecide(event, ${sourceIdx}, '${d.s}', true)" title="이미 접수된 안건입니다. 정말 다시 접수할 때만 누르세요.">그래도 접수</button>` : "") +
         (d.issueUrl ? `<a class="cr-cp" href="${esc(d.issueUrl)}" target="_blank" rel="noopener" title="접수된 GitHub 이슈 열기">🔗 #${d.issueNum}</a>` : `<button class="cr-cp" type="button" onclick="chiefCopyPhrase(event, ${sourceIdx})" title="결정 문구 복사">📋 문구</button>`) +
         (chiefUndoable(it) ? `<button class="cr-undo" type="button" onclick="chiefUndo(event, ${sourceIdx})" title="미접수 선택 지우기">↺</button>` : "")
       : it.lane === "red"

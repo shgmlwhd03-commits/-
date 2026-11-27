@@ -2130,6 +2130,9 @@
   .cr-no.sel { outline: 2px solid #f87171; font-weight: 700; }
   .cr-re.sel { outline: 2px solid #facc15; font-weight: 700; }
   .cr-undo { border: 1px solid #475569; background: rgba(15, 23, 42, 0.9); color: #cbd5e1; }
+  .cr-ok:disabled, .cr-no:disabled, .cr-re:disabled, .cr-undo:disabled, .cr-cp:disabled {
+    opacity: 0.45; cursor: progress; filter: saturate(0.6);
+  }
   .cr-cp { border: 1px solid rgba(56, 189, 248, 0.55); background: rgba(8, 47, 73, 0.8); color: #bae6fd; }
   .cr-dec { flex: none; align-self: center; font-size: 6.6px; font-weight: 900; padding: 1px 6px; border-radius: 999px; white-space: nowrap; }
   .cr-dec.ok { border: 1px solid rgba(74, 222, 128, 0.65); background: rgba(6, 45, 28, 0.9); color: #bbf7d0; }
@@ -3018,7 +3021,8 @@
 
 <script src="task-archive.js"></script>
 <script src="red-read.js"></script>
+<script src="decision-guard.js?v=16a015885d8b"></script>
 <div id="runtime-load-error" role="alert" hidden style="position:fixed;top:8px;left:8px;right:8px;z-index:10000;padding:12px;background:#7f1d1d;color:#fff;border:1px solid #fecaca;border-radius:8px;font-size:14px">사무실 기능을 불러오지 못했습니다. 새로고침 후에도 같으면 이 대화에 알려주세요. 이 화면에서 결정은 전송되지 않았습니다.</div>
-<script src="office-runtime.js?v=8ab309c3da4f" onerror="document.getElementById('runtime-load-error').hidden=false"></script>
+<script src="office-runtime.js?v=c22c981aac41" onerror="document.getElementById('runtime-load-error').hidden=false"></script>
 </body>
  </html>
