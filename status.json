@@ -1,6 +1,6 @@
 {
   "_note": "2026-11-27 실시간 전면 개편. 목표: 월 1,000만 원 수익 · 전 채널 수익화 연동(애드센스 CPC + 브랜드커넥트 제휴 + 스마트스토어 위탁 + 피클 리셋 티켓). 정지·완료·구식 업무(EOKC 카페 관리, 유튜브 쇼츠, 네이버 11시 자동발행/개인 판매자 기준 카드, 소량 사입 재검토, 이슈 #19 티커)는 화면에서 제거했습니다. 편성: 8F 대표실 / 7F 관리자실(뮤즈·큐) / 6F 경영진(총괄 투덜이·부총괄 해병이·수박이 이사·일꾼 Instinct) / 5F 커머스·수익층(스마트스토어·위탁·브랜드커넥트·적립투자) / 4F 블로그·애드센스층(tudeori·데일리 머니리포트·영문 여행·인스타·스레드) / 3F 창작소설층(10화 연재) / 2F 응모·티켓층(피클 리셋 티켓·공공 퀴즈·지원금·큐맥스 대기). 결재선: 담당 작성 → 관리자(뮤즈)·부총괄(해병이) 검토 → 총괄(투덜이) 팩트체크·승인 → 대표님(자금·최종). 개인정보 없음(실명·연락처·계정·계좌·사업자번호·상호 실명 미포함 · 역할 별칭만). 상태: working(집중) | idle(대기·휴게) | alert. 신호등: 🔵 파란불=일반 확인·승인 대기, 🔴 빨간불=자금·계좌·이체·결제·금융 인증(대표님 직접). 비상 승계: 총괄 → 부총괄 → 관리자 → 부관리자 → 일꾼.",
-  "updated": "2026-11-27T13:32:43+09:00",
+  "updated": "2026-11-27T14:00+09:00",
   "goal": {
     "title": "🎯 월 1,000만 원 수익 목표",
     "subtitle": "전 채널 수익화 연동 — 블로그·SNS·스토어·앱 티켓을 하나의 수익 파이프라인으로",
@@ -8,10 +8,26 @@
     "current_krw": 0,
     "as_of": "2026-11-27",
     "channels": [
-      { "label": "애드센스 CPC", "detail": "tudeori · 데일리 머니리포트 · 영문 여행 블로그", "state": "심사 대기" },
-      { "label": "브랜드커넥트 제휴", "detail": "네이버 블로그 원고·제휴 링크(하나필터 18%)", "state": "진행" },
-      { "label": "스마트스토어 위탁", "detail": "무재고 낱개 위탁 · 스마트스토어 심사중", "state": "진행" },
-      { "label": "피클 리셋 티켓", "detail": "초대·후기 글 → 무료 초기화 티켓", "state": "진행" }
+      {
+        "label": "애드센스 CPC",
+        "detail": "tudeori · 데일리 머니리포트 · 영문 여행 블로그",
+        "state": "심사 대기"
+      },
+      {
+        "label": "브랜드커넥트 제휴",
+        "detail": "네이버 블로그 원고·제휴 링크(하나필터 18%)",
+        "state": "진행"
+      },
+      {
+        "label": "스마트스토어 위탁",
+        "detail": "무재고 낱개 위탁 · 스마트스토어 심사중",
+        "state": "진행"
+      },
+      {
+        "label": "피클 리셋 티켓",
+        "detail": "초대·후기 글 → 무료 초기화 티켓",
+        "state": "진행"
+      }
     ],
     "note": "확인된 실제 수익만 반영합니다(현재 0원). 네 채널의 수익이 잡히면 이 자리에 합산되고, 창작소설 연재는 애드센스 유입·체류시간으로 간접 기여합니다."
   },
@@ -30,20 +46,35 @@
     "title": "🛡️ 총괄 검수·준법 원칙",
     "note": "팩트체크 · 저작권·지재권 · 애드센스·네이버 약관 준수는 총괄(투덜이) 전담 몫이며, 크레딧 소진 중에는 부총괄 해병이가 총괄 대행으로 검수·지휘합니다. 대표님께는 승인·결정이 필요한 건만 올립니다.",
     "items": [
-      { "title": "팩트체크", "text": "수치·법령·날짜·출처를 1차 자료로 대조합니다. 확인되지 않은 수치는 발행하지 않고, 틀린 값은 발견 즉시 정정·재발행합니다." },
-      { "title": "저작권·지재권", "text": "타사·제조사·판매자 이미지와 상표를 무단 복제하지 않습니다. 직접 촬영·직접 제작 카드뉴스·CC0만 사용하고, 인용은 출처를 표기합니다." },
-      { "title": "약관 준수", "text": "애드센스 정책(금지 콘텐츠·광고 배치), 티스토리·네이버·Threads·인스타 운영정책을 지키고, 제휴 글에는 대가성 문구를 첫 부분에 표기합니다." },
-      { "title": "개인정보", "text": "실명·연락처·계좌·사업자번호·상호 실명은 화면·글·영상에 남기지 않고 역할명으로만 표기합니다." },
-      { "title": "결재선", "text": "위 검수를 통과한 건만 총괄이 전결하고, 자금·계정·최종 결정이 필요한 건만 대표님 승인 창구에 올립니다." }
+      {
+        "title": "팩트체크",
+        "text": "수치·법령·날짜·출처를 1차 자료로 대조합니다. 확인되지 않은 수치는 발행하지 않고, 틀린 값은 발견 즉시 정정·재발행합니다."
+      },
+      {
+        "title": "저작권·지재권",
+        "text": "타사·제조사·판매자 이미지와 상표를 무단 복제하지 않습니다. 직접 촬영·직접 제작 카드뉴스·CC0만 사용하고, 인용은 출처를 표기합니다."
+      },
+      {
+        "title": "약관 준수",
+        "text": "애드센스 정책(금지 콘텐츠·광고 배치), 티스토리·네이버·Threads·인스타 운영정책을 지키고, 제휴 글에는 대가성 문구를 첫 부분에 표기합니다."
+      },
+      {
+        "title": "개인정보",
+        "text": "실명·연락처·계좌·사업자번호·상호 실명은 화면·글·영상에 남기지 않고 역할명으로만 표기합니다."
+      },
+      {
+        "title": "결재선",
+        "text": "위 검수를 통과한 건만 총괄이 전결하고, 자금·계정·최종 결정이 필요한 건만 대표님 승인 창구에 올립니다."
+      }
     ],
     "updated": "13:00"
   },
   "ceo_haebyeong": {
     "status": "working",
-    "ticker": "총괄 대행 인계(비상 승계 2순위) · 관제: 피클 후기 남은 3곳(daily-money-note·Threads @daily.moneynote·@tudeori.carlife) / 차량용 소화기 3채널 / 창작소설 「404호에는 내 사진이 있다」 2화(20:00 · 18:00 원고 검수) / 위탁 1안(#27) 수박이 이사 등록 준비",
+    "ticker": "피클 후기 /26 문단 교체·소화기 교차검수 중",
     "nowTask": "총괄 대행 · 검수·발행 관제",
     "nowState": "work",
-    "updated": "13:31"
+    "updated": "14:00"
   },
   "ceo_tudeori": {
     "status": "idle",
@@ -93,8 +124,15 @@
     "nowTask": "심사중 · 위탁 1안 소싱 진행",
     "nowState": "work",
     "updated": "13:20",
-    "orders": { "new": 0, "to_place": 0, "shipped": 0 },
-    "sku": { "registered": 0, "planned": 3 },
+    "orders": {
+      "new": 0,
+      "to_place": 0,
+      "shipped": 0
+    },
+    "sku": {
+      "registered": 0,
+      "planned": 3
+    },
     "sourcing": {
       "status": "repick",
       "criteria": "무재고 낱개 위탁 단일 트랙 · 사업자 등급가 기준 순마진 15% 이상(3사 검색량 1~3위 교집합 후보 20종)",
@@ -113,7 +151,10 @@
       "candidates": [],
       "updated": "12:20"
     },
-    "sales": { "revenue_krw": 0, "profit_krw": 0 },
+    "sales": {
+      "revenue_krw": 0,
+      "profit_krw": 0
+    },
     "pipeline": [
       {
         "key": "open",
@@ -165,15 +206,42 @@
       }
     ],
     "principles": [
-      { "title": "무재고 낱개 위탁 단일 트랙", "text": "재고·사입 선결제 0원. 소량 사입은 11/24 지시로 제외했고 재론하지 않습니다. 주문 확인 후 도매처에 발주하고 차액만 남깁니다." },
-      { "title": "등급가 15% 기준", "text": "사업자 등급가(공급가+배송비) 기준 순마진 15% 이상만 등록 후보로 인정합니다. 스마트스토어 실제 수수료율·반품 비용이 확정되지 않아 보수적으로 잡았습니다." },
-      { "title": "3사 검색량 1~3위", "text": "네이버(쇼핑·데이터랩)·구글·쿠팡 3사 검색량 평균 상위 1~3위에 함께 오른 품목만 후보 20종에 올립니다. 생활·계절·차량 잡화 내에서만 적용하고 대기업 브랜드·초저가 생필품은 제외합니다." },
-      { "title": "국내 위탁처 우선", "text": "오너클랜·도매꾹·도매매 사업자 등급가만 사용합니다. 알리·테무 해외직구와 제조사 직접 접촉은 추후 단계로 미룹니다." },
-      { "title": "실시간 선정·순차 교체", "text": "품목을 고정하지 않고 매 선정마다 3사 검색량을 다시 조회하며, 판매 부진 품목부터 순차 교체합니다." },
-      { "title": "규격·반품 방지", "text": "두께·길이·중량은 공급사 확인값만 표기하고, 재단·부착 후 반품 제한은 구매 전에 고지합니다." },
-      { "title": "정품·KC 확인", "text": "KC·안전확인 대상 여부를 공급사에 확인합니다. 생활화학제품(곰팡이·결로 스프레이)은 취급하지 않습니다." },
-      { "title": "표시광고·권리", "text": "타사 비교·결과 보장 표현 금지, 이미지·문구는 직접 촬영·작성. 도매 연동·AI 가공 시 저작권·상표권 리스크와 실제 수익성을 먼저 검증합니다." },
-      { "title": "개인정보", "text": "공개 페이지에 실명·연락처·계정·계좌번호·주소·사업자번호·상호 실명을 쓰지 않고 역할명으로만 표기합니다." }
+      {
+        "title": "무재고 낱개 위탁 단일 트랙",
+        "text": "재고·사입 선결제 0원. 소량 사입은 11/24 지시로 제외했고 재론하지 않습니다. 주문 확인 후 도매처에 발주하고 차액만 남깁니다."
+      },
+      {
+        "title": "등급가 15% 기준",
+        "text": "사업자 등급가(공급가+배송비) 기준 순마진 15% 이상만 등록 후보로 인정합니다. 스마트스토어 실제 수수료율·반품 비용이 확정되지 않아 보수적으로 잡았습니다."
+      },
+      {
+        "title": "3사 검색량 1~3위",
+        "text": "네이버(쇼핑·데이터랩)·구글·쿠팡 3사 검색량 평균 상위 1~3위에 함께 오른 품목만 후보 20종에 올립니다. 생활·계절·차량 잡화 내에서만 적용하고 대기업 브랜드·초저가 생필품은 제외합니다."
+      },
+      {
+        "title": "국내 위탁처 우선",
+        "text": "오너클랜·도매꾹·도매매 사업자 등급가만 사용합니다. 알리·테무 해외직구와 제조사 직접 접촉은 추후 단계로 미룹니다."
+      },
+      {
+        "title": "실시간 선정·순차 교체",
+        "text": "품목을 고정하지 않고 매 선정마다 3사 검색량을 다시 조회하며, 판매 부진 품목부터 순차 교체합니다."
+      },
+      {
+        "title": "규격·반품 방지",
+        "text": "두께·길이·중량은 공급사 확인값만 표기하고, 재단·부착 후 반품 제한은 구매 전에 고지합니다."
+      },
+      {
+        "title": "정품·KC 확인",
+        "text": "KC·안전확인 대상 여부를 공급사에 확인합니다. 생활화학제품(곰팡이·결로 스프레이)은 취급하지 않습니다."
+      },
+      {
+        "title": "표시광고·권리",
+        "text": "타사 비교·결과 보장 표현 금지, 이미지·문구는 직접 촬영·작성. 도매 연동·AI 가공 시 저작권·상표권 리스크와 실제 수익성을 먼저 검증합니다."
+      },
+      {
+        "title": "개인정보",
+        "text": "공개 페이지에 실명·연락처·계정·계좌번호·주소·사업자번호·상호 실명을 쓰지 않고 역할명으로만 표기합니다."
+      }
     ]
   },
   "brandconnect": {
@@ -259,21 +327,76 @@
     "updated": "13:31",
     "rule": "큰 이미지·로고는 외부 AI(제미나이·클로드·챗GPT) 제작본 활용 · 불필요한 핑퐁 축소 · 수익화 4채널은 서로 유입을 주고받는다",
     "items": [
-      { "id": "td", "name": "👑 총괄 · 투덜이", "role": "업무 배분·우선순위·팩트체크·전결 승인 → 대표님 상신 · 수익화 4채널 연동 총괄 · 총괄 대행: 해병이", "state": "wait", "chip": "크레딧 소진 · 대기" },
-      { "id": "hb", "name": "👑 부총괄 · 해병이", "role": "부총괄 업무 + 관리자 교차검토 · 승계 2순위 · 총괄 대행 중", "state": "on", "chip": "가동 중 · 총괄 대행(비상승계)" },
-      { "id": "muse", "name": "🧠 관리자 · 뮤즈", "role": "관리자 검토(1차) · 창작소설 공동 집필 · 회의록·아카이브 · 승계 3순위", "state": "on", "chip": "06번 연결 · 자동 응답 미검증" },
-      { "id": "manus", "name": "🤖 부관리자 · 큐(Manus)", "role": "창작소설 공동 집필 · 30초 AI 영상·카드뉴스 · 보조 검수 · 승계 4순위", "state": "on", "chip": "08번 연결 · 멘션 응답" },
-      { "id": "inst", "name": "🛠️ 일꾼 · Instinct", "role": "조사·초안·수정·검증 실행(애드센스·소화기·창작소설·피클 초대글) → 총괄 대행 보고", "state": "on", "chip": "가동 중 · #피클지시" },
-      { "id": "subaki", "name": "🍉 수박이 이사", "role": "스마트스토어·위탁 실행 · 확정 건만 최소 알림", "state": "on", "chip": "실행 담당(사람)" }
+      {
+        "id": "td",
+        "name": "👑 총괄 · 투덜이",
+        "role": "업무 배분·우선순위·팩트체크·전결 승인 → 대표님 상신 · 수익화 4채널 연동 총괄 · 총괄 대행: 해병이",
+        "state": "wait",
+        "chip": "크레딧 소진 · 대기"
+      },
+      {
+        "id": "hb",
+        "name": "👑 부총괄 · 해병이",
+        "role": "부총괄 업무 + 관리자 교차검토 · 승계 2순위 · 총괄 대행 중",
+        "state": "on",
+        "chip": "가동 중 · 총괄 대행(비상승계)"
+      },
+      {
+        "id": "muse",
+        "name": "🧠 관리자 · 뮤즈",
+        "role": "관리자 검토(1차) · 창작소설 공동 집필 · 회의록·아카이브 · 승계 3순위",
+        "state": "on",
+        "chip": "06번 연결 · 자동 응답 미검증"
+      },
+      {
+        "id": "manus",
+        "name": "🤖 부관리자 · 큐(Manus)",
+        "role": "창작소설 공동 집필 · 30초 AI 영상·카드뉴스 · 보조 검수 · 승계 4순위",
+        "state": "on",
+        "chip": "08번 연결 · 멘션 응답"
+      },
+      {
+        "id": "inst",
+        "name": "🛠️ 일꾼 · Instinct",
+        "role": "조사·초안·수정·검증 실행(애드센스·소화기·창작소설·피클 초대글) → 총괄 대행 보고",
+        "state": "on",
+        "chip": "가동 중 · #피클지시"
+      },
+      {
+        "id": "subaki",
+        "name": "🍉 수박이 이사",
+        "role": "스마트스토어·위탁 실행 · 확정 건만 최소 알림",
+        "state": "on",
+        "chip": "실행 담당(사람)"
+      }
     ],
     "channels": [
-      { "owner": "해병이", "handle": "@daily.moneynote", "url": "https://www.threads.com/@daily.moneynote", "topic": "돈·세금·생활경제" },
-      { "owner": "투덜이", "handle": "@tudeori.carlife", "url": "https://www.threads.com/@tudeori.carlife", "topic": "카라이프·차량관리·창작소설" }
+      {
+        "owner": "해병이",
+        "handle": "@daily.moneynote",
+        "url": "https://www.threads.com/@daily.moneynote",
+        "topic": "돈·세금·생활경제"
+      },
+      {
+        "owner": "투덜이",
+        "handle": "@tudeori.carlife",
+        "url": "https://www.threads.com/@tudeori.carlife",
+        "topic": "카라이프·차량관리·창작소설"
+      }
     ],
     "sites": [
-      { "label": "투덜이 티스토리", "url": "https://tudeori.tistory.com" },
-      { "label": "데일리 머니리포트", "url": "https://daily-money-note.tistory.com" },
-      { "label": "Korea Travel Note", "url": "https://koreatravelnote2026.blogspot.com/" }
+      {
+        "label": "투덜이 티스토리",
+        "url": "https://tudeori.tistory.com"
+      },
+      {
+        "label": "데일리 머니리포트",
+        "url": "https://daily-money-note.tistory.com"
+      },
+      {
+        "label": "Korea Travel Note",
+        "url": "https://koreatravelnote2026.blogspot.com/"
+      }
     ]
   },
   "signals": {
@@ -307,18 +430,90 @@
     "route": "결재선: 담당 작성 → 관리자(뮤즈)·부총괄(해병이) 검토 → 총괄 대행(해병이) 팩트체크·승인 → 대표님(자금·최종) · 총괄 투덜이 크레딧 소진 대행",
     "updated": "13:32",
     "items": [
-      { "no": "1", "task": "스마트스토어 심사·위탁 재상신", "owner": "수박이 이사", "state": "wait", "note": "서류 2/2 제출 완료 → 심사중(3영업일) · 1안 확정(대표님 승인) → 등급가 비교·소싱 진행" },
-      { "no": "2", "task": "브랜드커넥트 하나필터", "owner": "총괄 투덜이·일꾼", "state": "work", "note": "원고·링크 세트 완료 → 네이버 블로그 임시저장 → 대표님 발행 1회 → 클릭·수익 확인" },
-      { "no": "3", "task": "창작소설 10화 연재", "owner": "일꾼·뮤즈·큐", "state": "work", "note": "1화 합작본·10화 시놉시스 → 총괄 최종 검토·승인 → 카테고리 개설·1화 발행 → 하루 2편×5일" },
-      { "no": "4", "task": "차량용 소화기 3채널", "owner": "일꾼 Instinct", "state": "wait", "note": "총괄 승인 완료 · 발행 대기(블로그·Threads·인스타 카드뉴스 6장) → URL·색인 요청" },
-      { "no": "5", "task": "tudeori 모바일·애드센스", "owner": "일꾼 Instinct", "state": "done", "note": "모바일웹 자동연결 해제·모바일 루트 검증 완료 · 애드센스 '준비중' 2시간 감시" },
-      { "no": "6", "task": "데일리 머니리포트", "owner": "부총괄 해병이", "state": "done", "note": "고향사랑기부제 /12 발행·표 머리행 보완·Threads 재게시 완료 · 다음 11:00 고단가 글" },
-      { "no": "7", "task": "영문 여행 블로그", "owner": "부총괄 해병이", "state": "wait", "note": "3편 추가 발행·색인 요청 완료 · 서울 글 모바일 표 배치 보완(승인 대기)" },
-      { "no": "8", "task": "인스타·스레드 활용", "owner": "총괄 투덜이", "state": "work", "note": "@tudeori.carlife 활성 확인 · 프로필 사진·소개 세팅 → 소화기 카드뉴스 첫 게시물" },
-      { "no": "9", "task": "피클 리셋 티켓·초대글", "owner": "일꾼·뮤즈·큐", "state": "work", "note": "투덜이용·해병이용 각각 작성 → 총괄 검토·게시 → 게시 URL 전달(대표님 링크 1회)" },
-      { "no": "10", "task": "공공 퀴즈·지원금 자동 응모", "owner": "총괄 투덜이", "state": "work", "note": "1일 2회(10:30·16:30) · 오늘 축사로 낱말퍼즐 응모 완료 · 새 목록 수박이 공유" },
-      { "no": "11", "task": "관리자 검토·회의록", "owner": "관리자 뮤즈", "state": "work", "note": "전 업무 숙지 · 교차검수 · 회의록·아카이브 · 승계 3순위" },
-      { "no": "12", "task": "배분·팩트체크·승인", "owner": "총괄 투덜이", "state": "work", "note": "수익화 4채널 연동 · 결재선 준수 · 대표님 보고 · 승계 1순위" }
+      {
+        "no": "1",
+        "task": "스마트스토어 심사·위탁 재상신",
+        "owner": "수박이 이사",
+        "state": "wait",
+        "note": "서류 2/2 제출 완료 → 심사중(3영업일) · 1안 확정(대표님 승인) → 등급가 비교·소싱 진행"
+      },
+      {
+        "no": "2",
+        "task": "브랜드커넥트 하나필터",
+        "owner": "총괄 투덜이·일꾼",
+        "state": "work",
+        "note": "원고·링크 세트 완료 → 네이버 블로그 임시저장 → 대표님 발행 1회 → 클릭·수익 확인"
+      },
+      {
+        "no": "3",
+        "task": "창작소설 10화 연재",
+        "owner": "일꾼·뮤즈·큐",
+        "state": "work",
+        "note": "1화 합작본·10화 시놉시스 → 총괄 최종 검토·승인 → 카테고리 개설·1화 발행 → 하루 2편×5일"
+      },
+      {
+        "no": "4",
+        "task": "차량용 소화기 3채널",
+        "owner": "일꾼 Instinct",
+        "state": "wait",
+        "note": "총괄 승인 완료 · 발행 대기(블로그·Threads·인스타 카드뉴스 6장) → URL·색인 요청"
+      },
+      {
+        "no": "5",
+        "task": "tudeori 모바일·애드센스",
+        "owner": "일꾼 Instinct",
+        "state": "done",
+        "note": "모바일웹 자동연결 해제·모바일 루트 검증 완료 · 애드센스 '준비중' 2시간 감시"
+      },
+      {
+        "no": "6",
+        "task": "데일리 머니리포트",
+        "owner": "부총괄 해병이",
+        "state": "done",
+        "note": "고향사랑기부제 /12 발행·표 머리행 보완·Threads 재게시 완료 · 다음 11:00 고단가 글"
+      },
+      {
+        "no": "7",
+        "task": "영문 여행 블로그",
+        "owner": "부총괄 해병이",
+        "state": "wait",
+        "note": "3편 추가 발행·색인 요청 완료 · 서울 글 모바일 표 배치 보완(승인 대기)"
+      },
+      {
+        "no": "8",
+        "task": "인스타·스레드 활용",
+        "owner": "총괄 투덜이",
+        "state": "work",
+        "note": "@tudeori.carlife 활성 확인 · 프로필 사진·소개 세팅 → 소화기 카드뉴스 첫 게시물"
+      },
+      {
+        "no": "9",
+        "task": "피클 리셋 티켓·초대글",
+        "owner": "일꾼·뮤즈·큐",
+        "state": "work",
+        "note": "투덜이용·해병이용 각각 작성 → 총괄 검토·게시 → 게시 URL 전달(대표님 링크 1회)"
+      },
+      {
+        "no": "10",
+        "task": "공공 퀴즈·지원금 자동 응모",
+        "owner": "총괄 투덜이",
+        "state": "work",
+        "note": "1일 2회(10:30·16:30) · 오늘 축사로 낱말퍼즐 응모 완료 · 새 목록 수박이 공유"
+      },
+      {
+        "no": "11",
+        "task": "관리자 검토·회의록",
+        "owner": "관리자 뮤즈",
+        "state": "work",
+        "note": "전 업무 숙지 · 교차검수 · 회의록·아카이브 · 승계 3순위"
+      },
+      {
+        "no": "12",
+        "task": "배분·팩트체크·승인",
+        "owner": "총괄 투덜이",
+        "state": "work",
+        "note": "수익화 4채널 연동 · 결재선 준수 · 대표님 보고 · 승계 1순위"
+      }
     ]
   },
   "backup": {
@@ -327,11 +522,46 @@
     "updated": "13:00",
     "rule": "총괄이 오프·크레딧 소진이면 부총괄 → 관리자 → 부관리자 → 일꾼 순으로 이어받는다. 셋 이상 동시에 빠지면 대표님 승인 대기로 전환하고, 전원 크레딧 완전 소진을 막는다.",
     "members": [
-      { "id": "td", "name": "👑 총괄 투덜이", "part": "배분·팩트체크·승인", "state": "on", "backup1": "부총괄 해병이", "backup2": "관리자 뮤즈" },
-      { "id": "hb", "name": "👑 부총괄 해병이", "part": "데일리 머니리포트·영문·교차검토", "state": "on", "backup1": "관리자 뮤즈", "backup2": "부관리자 큐" },
-      { "id": "muse", "name": "🧠 관리자 뮤즈", "part": "검토·창작소설·회의록", "state": "on", "backup1": "부관리자 큐", "backup2": "일꾼 Instinct" },
-      { "id": "manus", "name": "🤖 부관리자 큐", "part": "창작소설·30초 영상·보조 검수", "state": "on", "backup1": "관리자 뮤즈", "backup2": "일꾼 Instinct" },
-      { "id": "inst", "name": "🛠️ 일꾼 Instinct", "part": "조사·작성·검증 실행", "state": "on", "backup1": "부총괄 해병이", "backup2": "총괄 투덜이" }
+      {
+        "id": "td",
+        "name": "👑 총괄 투덜이",
+        "part": "배분·팩트체크·승인",
+        "state": "on",
+        "backup1": "부총괄 해병이",
+        "backup2": "관리자 뮤즈"
+      },
+      {
+        "id": "hb",
+        "name": "👑 부총괄 해병이",
+        "part": "데일리 머니리포트·영문·교차검토",
+        "state": "on",
+        "backup1": "관리자 뮤즈",
+        "backup2": "부관리자 큐"
+      },
+      {
+        "id": "muse",
+        "name": "🧠 관리자 뮤즈",
+        "part": "검토·창작소설·회의록",
+        "state": "on",
+        "backup1": "부관리자 큐",
+        "backup2": "일꾼 Instinct"
+      },
+      {
+        "id": "manus",
+        "name": "🤖 부관리자 큐",
+        "part": "창작소설·30초 영상·보조 검수",
+        "state": "on",
+        "backup1": "관리자 뮤즈",
+        "backup2": "일꾼 Instinct"
+      },
+      {
+        "id": "inst",
+        "name": "🛠️ 일꾼 Instinct",
+        "part": "조사·작성·검증 실행",
+        "state": "on",
+        "backup1": "부총괄 해병이",
+        "backup2": "총괄 투덜이"
+      }
     ]
   },
   "reports": {
@@ -348,7 +578,10 @@
         "2026-11-27 12:48 대표님 지시로 정지·완료 업무를 사무실에서 빼고 실시간 업무로 전면 재편"
       ],
       "next": [
-        { "time": "수시", "task": "하나필터 발행 버튼 · 피클 티켓 게시 URL 제출 → 결과는 총괄이 보고" }
+        {
+          "time": "수시",
+          "task": "하나필터 발행 버튼 · 피클 티켓 게시 URL 제출 → 결과는 총괄이 보고"
+        }
       ],
       "links": []
     },
@@ -369,33 +602,102 @@
         "2026-11-27 12:20 스마트스토어 서류 2/2건 제출 완료 확인"
       ],
       "next": [
-        { "time": "수시", "task": "창작소설 1화·시놉시스 승인 → 카테고리 개설·연재 개시" },
-        { "time": "발행 후", "task": "소화기 3채널 URL·색인 확인 → 유입·수익 추적" },
-        { "time": "16:30", "task": "저녁 공공 퀴즈·지원금 탐색 결과 확인" }
+        {
+          "time": "수시",
+          "task": "창작소설 1화·시놉시스 승인 → 카테고리 개설·연재 개시"
+        },
+        {
+          "time": "발행 후",
+          "task": "소화기 3채널 URL·색인 확인 → 유입·수익 추적"
+        },
+        {
+          "time": "16:30",
+          "task": "저녁 공공 퀴즈·지원금 탐색 결과 확인"
+        }
       ],
       "depts": [
-        { "id": "ceo_haebyeong", "name": "👑 부총괄 · 해병이" },
-        { "id": "manager_muse", "name": "🧠 관리자 · 뮤즈" },
-        { "id": "deputy_manus", "name": "🤖 부관리자 · 큐" },
-        { "id": "instinct", "name": "🛠️ 일꾼 · Instinct" },
-        { "id": "director_subaki", "name": "🍉 수박이 이사" },
-        { "id": "commerce", "name": "🛍️ 스마트스토어·위탁" },
-        { "id": "brandconnect", "name": "🤝 브랜드커넥트" },
-        { "id": "tistory", "name": "💵 tudeori" },
-        { "id": "haebyeongi_adsense", "name": "📚 데일리 머니리포트" },
-        { "id": "travel", "name": "✈️ 영문 여행" },
-        { "id": "sns", "name": "📸 인스타·스레드" },
-        { "id": "novel", "name": "📖 창작소설" },
-        { "id": "novel_writer", "name": "✍️ 연재 작가·404호" },
-        { "id": "ticket", "name": "🎟️ 피클 리셋 티켓" },
-        { "id": "public_quiz", "name": "🎁 공공 퀴즈·지원금" },
-        { "id": "invest_sp500", "name": "📈 S&P500 적립" },
-        { "id": "cumex", "name": "🏭 큐맥스" }
+        {
+          "id": "ceo_haebyeong",
+          "name": "👑 부총괄 · 해병이"
+        },
+        {
+          "id": "manager_muse",
+          "name": "🧠 관리자 · 뮤즈"
+        },
+        {
+          "id": "deputy_manus",
+          "name": "🤖 부관리자 · 큐"
+        },
+        {
+          "id": "instinct",
+          "name": "🛠️ 일꾼 · Instinct"
+        },
+        {
+          "id": "director_subaki",
+          "name": "🍉 수박이 이사"
+        },
+        {
+          "id": "commerce",
+          "name": "🛍️ 스마트스토어·위탁"
+        },
+        {
+          "id": "brandconnect",
+          "name": "🤝 브랜드커넥트"
+        },
+        {
+          "id": "tistory",
+          "name": "💵 tudeori"
+        },
+        {
+          "id": "haebyeongi_adsense",
+          "name": "📚 데일리 머니리포트"
+        },
+        {
+          "id": "travel",
+          "name": "✈️ 영문 여행"
+        },
+        {
+          "id": "sns",
+          "name": "📸 인스타·스레드"
+        },
+        {
+          "id": "novel",
+          "name": "📖 창작소설"
+        },
+        {
+          "id": "novel_writer",
+          "name": "✍️ 연재 작가·404호"
+        },
+        {
+          "id": "ticket",
+          "name": "🎟️ 피클 리셋 티켓"
+        },
+        {
+          "id": "public_quiz",
+          "name": "🎁 공공 퀴즈·지원금"
+        },
+        {
+          "id": "invest_sp500",
+          "name": "📈 S&P500 적립"
+        },
+        {
+          "id": "cumex",
+          "name": "🏭 큐맥스"
+        }
       ],
       "links": [
-        { "label": "투덜이 티스토리", "url": "https://tudeori.tistory.com" },
-        { "label": "스레드 @tudeori.carlife", "url": "https://www.threads.com/@tudeori.carlife" },
-        { "label": "데일리 머니리포트", "url": "https://daily-money-note.tistory.com" }
+        {
+          "label": "투덜이 티스토리",
+          "url": "https://tudeori.tistory.com"
+        },
+        {
+          "label": "스레드 @tudeori.carlife",
+          "url": "https://www.threads.com/@tudeori.carlife"
+        },
+        {
+          "label": "데일리 머니리포트",
+          "url": "https://daily-money-note.tistory.com"
+        }
       ]
     },
     "ceo_haebyeong": {
@@ -412,21 +714,54 @@
         "2026-11-27 11:13 쿠팡파트너스 활동 사이트 추가·저장"
       ],
       "next": [
-        { "time": "매일 11:00", "task": "데일리 머니리포트 고단가 정보글 발행 → 색인 요청" },
-        { "time": "승인 시", "task": "애드센스 광고 배치(앵커·사이드레일·모바일 전면 0/3 유지)" }
+        {
+          "time": "매일 11:00",
+          "task": "데일리 머니리포트 고단가 정보글 발행 → 색인 요청"
+        },
+        {
+          "time": "승인 시",
+          "task": "애드센스 광고 배치(앵커·사이드레일·모바일 전면 0/3 유지)"
+        }
       ],
       "depts": [
-        { "id": "haebyeongi_adsense", "name": "📚 데일리 머니리포트" },
-        { "id": "travel", "name": "✈️ 영문 여행" },
-        { "id": "commerce", "name": "🛍️ 스마트스토어·위탁" },
-        { "id": "brandconnect", "name": "🤝 브랜드커넥트" },
-        { "id": "invest_sp500", "name": "📈 S&P500 적립" },
-        { "id": "public_quiz", "name": "🎁 공공 퀴즈·지원금" }
+        {
+          "id": "haebyeongi_adsense",
+          "name": "📚 데일리 머니리포트"
+        },
+        {
+          "id": "travel",
+          "name": "✈️ 영문 여행"
+        },
+        {
+          "id": "commerce",
+          "name": "🛍️ 스마트스토어·위탁"
+        },
+        {
+          "id": "brandconnect",
+          "name": "🤝 브랜드커넥트"
+        },
+        {
+          "id": "invest_sp500",
+          "name": "📈 S&P500 적립"
+        },
+        {
+          "id": "public_quiz",
+          "name": "🎁 공공 퀴즈·지원금"
+        }
       ],
       "links": [
-        { "label": "데일리 머니리포트", "url": "https://daily-money-note.tistory.com" },
-        { "label": "스레드 @daily.moneynote", "url": "https://www.threads.com/@daily.moneynote" },
-        { "label": "Korea Travel Note", "url": "https://koreatravelnote2026.blogspot.com/" }
+        {
+          "label": "데일리 머니리포트",
+          "url": "https://daily-money-note.tistory.com"
+        },
+        {
+          "label": "스레드 @daily.moneynote",
+          "url": "https://www.threads.com/@daily.moneynote"
+        },
+        {
+          "label": "Korea Travel Note",
+          "url": "https://koreatravelnote2026.blogspot.com/"
+        }
       ]
     },
     "director_subaki": {
@@ -443,14 +778,26 @@
         "2026-11-26 오너클랜·도매꾹·도매매 사업자 인증 완료"
       ],
       "next": [
-        { "time": "심사 결과 시", "task": "승인 확인 → 판매자센터 세팅 → 첫 상품 등록 준비" },
-        { "time": "선택 후", "task": "등급가 실측 → 후보 20종 판정" }
+        {
+          "time": "심사 결과 시",
+          "task": "승인 확인 → 판매자센터 세팅 → 첫 상품 등록 준비"
+        },
+        {
+          "time": "선택 후",
+          "task": "등급가 실측 → 후보 20종 판정"
+        }
       ],
       "depts": [
-        { "id": "commerce", "name": "🛍️ 스마트스토어·위탁" }
+        {
+          "id": "commerce",
+          "name": "🛍️ 스마트스토어·위탁"
+        }
       ],
       "links": [
-        { "label": "📊 스마트스토어 통합 장부", "url": "https://docs.google.com/spreadsheets/d/1yfZO4rKGpmItjV92Zq5IFLIWk6V56buyF2xrEK0hRD4/edit" }
+        {
+          "label": "📊 스마트스토어 통합 장부",
+          "url": "https://docs.google.com/spreadsheets/d/1yfZO4rKGpmItjV92Zq5IFLIWk6V56buyF2xrEK0hRD4/edit"
+        }
       ]
     },
     "manager_muse": {
@@ -465,11 +812,17 @@
         "2026-11-27 12:27 창작소설 1화 시안 제출"
       ],
       "next": [
-        { "time": "상시", "task": "검토 의견·회의록 취합 → 총괄 보고" }
+        {
+          "time": "상시",
+          "task": "검토 의견·회의록 취합 → 총괄 보고"
+        }
       ],
       "depts": [],
       "links": [
-        { "label": "Muse 초대 페이지", "url": "https://muse.ai/join" }
+        {
+          "label": "Muse 초대 페이지",
+          "url": "https://muse.ai/join"
+        }
       ]
     },
     "deputy_manus": {
@@ -484,7 +837,10 @@
         "2026-11-27 12:27 창작소설 1화 시안 제출"
       ],
       "next": [
-        { "time": "14:00", "task": "30초 AI 영상 시범안·수임 여부 보고" }
+        {
+          "time": "14:00",
+          "task": "30초 AI 영상 시범안·수임 여부 보고"
+        }
       ],
       "depts": [],
       "links": []
@@ -502,8 +858,14 @@
         "2026-11-27 08:04 모바일웹 자동연결 해제 검증(루트 정상·/m/ 직접 유입만 기존 스킨)"
       ],
       "next": [
-        { "time": "발행 지시 시", "task": "소화기 3채널 발행 → URL·색인 요청" },
-        { "time": "수시", "task": "피클 초대글 제출 → 총괄 검토" }
+        {
+          "time": "발행 지시 시",
+          "task": "소화기 3채널 발행 → URL·색인 요청"
+        },
+        {
+          "time": "수시",
+          "task": "피클 초대글 제출 → 총괄 검토"
+        }
       ],
       "depts": [],
       "links": []
@@ -522,12 +884,24 @@
         "오너클랜·도매꾹·도매매 사업자 인증 완료 → 등급가 조회 가능"
       ],
       "next": [
-        { "time": "심사 결과 시", "task": "승인 확인 → 판매자센터 세팅·첫 상품 등록 준비" },
-        { "time": "진행 중", "task": "등급가 실측 → 순마진 15% 재판정 → 이번 주 등록" },
-        { "time": "후보 확정 시", "task": "상세페이지·고시·CS 체크리스트 → 등록 → 첫 주문" }
+        {
+          "time": "심사 결과 시",
+          "task": "승인 확인 → 판매자센터 세팅·첫 상품 등록 준비"
+        },
+        {
+          "time": "진행 중",
+          "task": "등급가 실측 → 순마진 15% 재판정 → 이번 주 등록"
+        },
+        {
+          "time": "후보 확정 시",
+          "task": "상세페이지·고시·CS 체크리스트 → 등록 → 첫 주문"
+        }
       ],
       "links": [
-        { "label": "📊 스마트스토어 통합 장부", "url": "https://docs.google.com/spreadsheets/d/1yfZO4rKGpmItjV92Zq5IFLIWk6V56buyF2xrEK0hRD4/edit" }
+        {
+          "label": "📊 스마트스토어 통합 장부",
+          "url": "https://docs.google.com/spreadsheets/d/1yfZO4rKGpmItjV92Zq5IFLIWk6V56buyF2xrEK0hRD4/edit"
+        }
       ]
     },
     "brandconnect": {
@@ -544,12 +918,24 @@
         "상품 후보 4종 비교(하나필터·가습기·무선청소기·무선충전 거치대) → 수수료·리뷰 기준 하나필터 확정"
       ],
       "next": [
-        { "time": "임시저장 완료 후", "task": "대표님 발행 → 제휴 링크 클릭·수익 확인" },
-        { "time": "매주", "task": "수수료율·판매량 기준 다음 상품 1건 선정 → 원고 세트" }
+        {
+          "time": "임시저장 완료 후",
+          "task": "대표님 발행 → 제휴 링크 클릭·수익 확인"
+        },
+        {
+          "time": "매주",
+          "task": "수수료율·판매량 기준 다음 상품 1건 선정 → 원고 세트"
+        }
       ],
       "links": [
-        { "label": "하나필터 제휴 링크", "url": "https://naver.me/5g4VjW3d" },
-        { "label": "네이버 블로그", "url": "https://blog.naver.com/2800386" }
+        {
+          "label": "하나필터 제휴 링크",
+          "url": "https://naver.me/5g4VjW3d"
+        },
+        {
+          "label": "네이버 블로그",
+          "url": "https://blog.naver.com/2800386"
+        }
       ]
     },
     "invest_sp500": {
@@ -563,11 +949,20 @@
         "공개 시세 주식창(5F 적립 방·전용 위젯) 구현 — 시세 수신 실패 시 최근 실체결 기준가 23,755원 폴백 + 갱신 시각 표기"
       ],
       "next": [
-        { "time": "상시 60초", "task": "공개 시세 자동 갱신(장중 실시간 · 장마감 후 마지막 체결가)" },
-        { "time": "11/30 09:05", "task": "이번 주 1주 적립 알림" }
+        {
+          "time": "상시 60초",
+          "task": "공개 시세 자동 갱신(장중 실시간 · 장마감 후 마지막 체결가)"
+        },
+        {
+          "time": "11/30 09:05",
+          "task": "이번 주 1주 적립 알림"
+        }
       ],
       "links": [
-        { "label": "네이버 금융 360750 시세", "url": "https://finance.naver.com/item/main.naver?code=360750" }
+        {
+          "label": "네이버 금융 360750 시세",
+          "url": "https://finance.naver.com/item/main.naver?code=360750"
+        }
       ]
     },
     "tistory": {
@@ -583,12 +978,24 @@
         "차량용 소화기 3채널 원고·카드뉴스 6장·캡션 수정본 제출 → 총괄 승인"
       ],
       "next": [
-        { "time": "오늘", "task": "소화기 3채널 발행 → 발행 URL·색인 요청" },
-        { "time": "연재 시작 시", "task": "창작소설 카테고리 개설 + 1화 발행 + Threads 티저" }
+        {
+          "time": "오늘",
+          "task": "소화기 3채널 발행 → 발행 URL·색인 요청"
+        },
+        {
+          "time": "연재 시작 시",
+          "task": "창작소설 카테고리 개설 + 1화 발행 + Threads 티저"
+        }
       ],
       "links": [
-        { "label": "투덜이 티스토리", "url": "https://tudeori.tistory.com" },
-        { "label": "스레드 @tudeori.carlife", "url": "https://www.threads.com/@tudeori.carlife" }
+        {
+          "label": "투덜이 티스토리",
+          "url": "https://tudeori.tistory.com"
+        },
+        {
+          "label": "스레드 @tudeori.carlife",
+          "url": "https://www.threads.com/@tudeori.carlife"
+        }
       ]
     },
     "haebyeongi_adsense": {
@@ -603,12 +1010,24 @@
         "출처 URL·법령 소개 문구·산출세액 표현 3건 정리"
       ],
       "next": [
-        { "time": "매일 11:00", "task": "정보글 발행 → 색인 요청" },
-        { "time": "승인 시", "task": "애드센스 광고 배치" }
+        {
+          "time": "매일 11:00",
+          "task": "정보글 발행 → 색인 요청"
+        },
+        {
+          "time": "승인 시",
+          "task": "애드센스 광고 배치"
+        }
       ],
       "links": [
-        { "label": "데일리 머니리포트", "url": "https://daily-money-note.tistory.com" },
-        { "label": "스레드 @daily.moneynote", "url": "https://www.threads.com/@daily.moneynote" }
+        {
+          "label": "데일리 머니리포트",
+          "url": "https://daily-money-note.tistory.com"
+        },
+        {
+          "label": "스레드 @daily.moneynote",
+          "url": "https://www.threads.com/@daily.moneynote"
+        }
       ]
     },
     "travel": {
@@ -623,11 +1042,20 @@
         "Search Console 색인 요청 완료"
       ],
       "next": [
-        { "time": "승인 후", "task": "서울 글 모바일 표 배치 보완" },
-        { "time": "11:00 슬롯", "task": "다음 영문 여행 글 발행" }
+        {
+          "time": "승인 후",
+          "task": "서울 글 모바일 표 배치 보완"
+        },
+        {
+          "time": "11:00 슬롯",
+          "task": "다음 영문 여행 글 발행"
+        }
       ],
       "links": [
-        { "label": "Korea Travel Note", "url": "https://koreatravelnote2026.blogspot.com/" }
+        {
+          "label": "Korea Travel Note",
+          "url": "https://koreatravelnote2026.blogspot.com/"
+        }
       ]
     },
     "sns": {
@@ -641,11 +1069,20 @@
         "인스타·Threads 계정 활성·연동 상태 확인"
       ],
       "next": [
-        { "time": "세팅 후", "task": "소화기 카드뉴스 첫 게시물 → Threads 교차 게시" },
-        { "time": "매일", "task": "블로그 글 요약을 Threads에 게시 → 블로그 유입" }
+        {
+          "time": "세팅 후",
+          "task": "소화기 카드뉴스 첫 게시물 → Threads 교차 게시"
+        },
+        {
+          "time": "매일",
+          "task": "블로그 글 요약을 Threads에 게시 → 블로그 유입"
+        }
       ],
       "links": [
-        { "label": "스레드 @tudeori.carlife", "url": "https://www.threads.com/@tudeori.carlife" }
+        {
+          "label": "스레드 @tudeori.carlife",
+          "url": "https://www.threads.com/@tudeori.carlife"
+        }
       ]
     },
     "novel": {
@@ -660,12 +1097,24 @@
         "연재 화수·발행 주기 확정(10화)"
       ],
       "next": [
-        { "time": "총괄 승인 후", "task": "tudeori '창작소설' 카테고리 개설 → 1화 발행 + Threads 유입 링크" },
-        { "time": "매일 09:00·20:00", "task": "2편씩 5일 연재 → 10화 완결" }
+        {
+          "time": "총괄 승인 후",
+          "task": "tudeori '창작소설' 카테고리 개설 → 1화 발행 + Threads 유입 링크"
+        },
+        {
+          "time": "매일 09:00·20:00",
+          "task": "2편씩 5일 연재 → 10화 완결"
+        }
       ],
       "links": [
-        { "label": "창작소설 연재 보기", "url": "https://tudeori.tistory.com/category/창작소설" },
-        { "label": "투덜이 티스토리", "url": "https://tudeori.tistory.com" }
+        {
+          "label": "창작소설 연재 보기",
+          "url": "https://tudeori.tistory.com/category/창작소설"
+        },
+        {
+          "label": "투덜이 티스토리",
+          "url": "https://tudeori.tistory.com"
+        }
       ]
     },
     "novel_writer": {
@@ -677,11 +1126,20 @@
       ],
       "done": [],
       "next": [
-        { "time": "09:00·20:00", "task": "2편씩 5일 연재 → 10화 완결" }
+        {
+          "time": "09:00·20:00",
+          "task": "2편씩 5일 연재 → 10화 완결"
+        }
       ],
       "links": [
-        { "label": "창작소설 연재 보기", "url": "https://tudeori.tistory.com/category/창작소설" },
-        { "label": "투덜이 티스토리 홈", "url": "https://tudeori.tistory.com" }
+        {
+          "label": "창작소설 연재 보기",
+          "url": "https://tudeori.tistory.com/category/창작소설"
+        },
+        {
+          "label": "투덜이 티스토리 홈",
+          "url": "https://tudeori.tistory.com"
+        }
       ]
     },
     "ticket": {
@@ -696,7 +1154,10 @@
         "초기화 티켓 획득 경로 확인 — 친구 초대·SNS 후기 등록·구매, 일일 한도는 매일 04:00 자동 초기화"
       ],
       "next": [
-        { "time": "수시", "task": "총괄 검토 → 각 계정 발행 → 게시 URL 대표님 전달" }
+        {
+          "time": "수시",
+          "task": "총괄 검토 → 각 계정 발행 → 게시 URL 대표님 전달"
+        }
       ],
       "links": []
     },
@@ -712,8 +1173,14 @@
         "축사로 낱말퍼즐 응모 제출(마케팅 동의 제외)"
       ],
       "next": [
-        { "time": "16:30", "task": "저녁 공공 퀴즈·지원금 탐색" },
-        { "time": "매일", "task": "마감 임박 건 재확인" }
+        {
+          "time": "16:30",
+          "task": "저녁 공공 퀴즈·지원금 탐색"
+        },
+        {
+          "time": "매일",
+          "task": "마감 임박 건 재확인"
+        }
       ],
       "links": []
     },
@@ -725,7 +1192,10 @@
       ],
       "done": [],
       "next": [
-        { "time": "지시 시", "task": "협력사 후보 정리 → 제안서·메일 초안 → 인원투입 추적" }
+        {
+          "time": "지시 시",
+          "task": "협력사 후보 정리 → 제안서·메일 초안 → 인원투입 추적"
+        }
       ],
       "links": []
     }
@@ -736,14 +1206,38 @@
     "updated": "2026-11-27T13:31:00+09:00",
     "checks": {
       "td": {
-        "credit": { "state": "unknown", "checked_at": null, "by": null },
-        "ops": { "state": "verified", "checked_at": "2026-11-27T13:31:00+09:00", "by": "대표님 직접 통보(#피클지시 13:29) — 총괄 크레딧 소진" },
-        "report": { "text": "12:48 지시 접수 — 정지 업무 제거·실시간 편성", "source": "#피클지시", "reported_at": "2026-11-27T13:00+09:00" }
+        "credit": {
+          "state": "unknown",
+          "checked_at": null,
+          "by": null
+        },
+        "ops": {
+          "state": "verified",
+          "checked_at": "2026-11-27T13:31:00+09:00",
+          "by": "대표님 직접 통보(#피클지시 13:29) — 총괄 크레딧 소진"
+        },
+        "report": {
+          "text": "12:48 지시 접수 — 정지 업무 제거·실시간 편성",
+          "source": "#피클지시",
+          "reported_at": "2026-11-27T13:00+09:00"
+        }
       },
       "hb": {
-        "credit": { "state": "unknown", "checked_at": null, "by": null },
-        "ops": { "state": "verified", "checked_at": "2026-11-27T13:31:00+09:00", "by": "#피클지시 총괄 대행 인계 공지(해병이)" },
-        "report": { "text": "13:29 대표님 통보 접수 → 총괄 대행 인계 공지 게시·업무 4건 관제 시작", "source": "#피클지시 ts 1795753740.048069", "reported_at": "2026-11-27T13:31:00+09:00" }
+        "credit": {
+          "state": "unknown",
+          "checked_at": null,
+          "by": null
+        },
+        "ops": {
+          "state": "verified",
+          "checked_at": "2026-11-27T13:31:00+09:00",
+          "by": "#피클지시 총괄 대행 인계 공지(해병이)"
+        },
+        "report": {
+          "text": "13:29 대표님 통보 접수 → 총괄 대행 인계 공지 게시·업무 4건 관제 시작",
+          "source": "#피클지시 ts 1795753740.048069",
+          "reported_at": "2026-11-27T13:31:00+09:00"
+        }
       }
     }
   },
@@ -752,9 +1246,23 @@
     "start_date": "2026-11-19",
     "total_krw": 0,
     "today_krw": 0,
-    "haebyeongi": { "total_krw": 0, "today_krw": 0 },
-    "partner": { "total_krw": 0, "today_krw": 0 },
-    "history": [0, 0, 0, 0, 0, 0, 0],
+    "haebyeongi": {
+      "total_krw": 0,
+      "today_krw": 0
+    },
+    "partner": {
+      "total_krw": 0,
+      "today_krw": 0
+    },
+    "history": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
     "updated": "2026-11-27T13:00+09:00"
   },
   "invite": {
