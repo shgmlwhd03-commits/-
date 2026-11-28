@@ -2155,6 +2155,29 @@
   .chief-receipt-note strong { color: #fde68a; }
   .chief-body { display: flex; flex-direction: column; gap: 2px; padding: 0 5px 5px; }
   .chief-body[hidden] { display: none; }
+  /* 🗄️ 기록 보관함 탭 — 결재가 끝난 보고는 활성 대기 목록에서 빼고 여기에 기록으로 남긴다. */
+  .chief-tabs { display: flex; gap: 4px; padding: 0 6px 5px; }
+  .chief-tabs[hidden] { display: none; }
+  .ctab {
+    flex: 1 1 0; display: flex; align-items: center; justify-content: center; gap: 4px;
+    font-family: inherit; font-size: 10.5px; font-weight: 900; padding: 7px 8px; min-height: 34px;
+    border-radius: 7px; border: 1px solid rgba(148, 163, 184, 0.35); background: rgba(15, 23, 42, 0.7);
+    color: #cbd5e1; cursor: pointer; touch-action: manipulation;
+  }
+  .ctab.on { border-color: rgba(250, 204, 21, 0.7); background: rgba(56, 43, 4, 0.75); color: #fef3c7; }
+  .ctab:focus-visible { outline: 2px solid #38bdf8; outline-offset: 2px; }
+  .ctab-n { font-size: 9.5px; font-weight: 900; padding: 1px 6px; border-radius: 999px; background: rgba(2, 6, 23, 0.75); border: 1px solid rgba(148, 163, 184, 0.4); }
+  .chief-archive .arc-row { display: flex; flex-direction: column; gap: 3px; padding: 7px 8px; border-radius: 6px; background: rgba(6, 11, 20, 0.72); border: 1px solid rgba(148, 163, 184, 0.2); }
+  .chief-archive .arc-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .chief-archive .arc-no { font-size: 10px; font-weight: 900; color: #94a3b8; }
+  .chief-archive .arc-dec { font-size: 10px; font-weight: 900; padding: 1px 7px; border-radius: 999px; white-space: nowrap; }
+  .chief-archive .arc-dec.ok { border: 1px solid rgba(74, 222, 128, 0.6); background: rgba(6, 45, 28, 0.85); color: #bbf7d0; }
+  .chief-archive .arc-dec.re { border: 1px solid rgba(250, 204, 21, 0.6); background: rgba(56, 43, 4, 0.85); color: #fef08a; }
+  .chief-archive .arc-date { margin-left: auto; font-size: 9.5px; font-weight: 700; color: #94a3b8; }
+  .chief-archive .arc-title { font-size: 11.5px; font-weight: 900; color: #e8eef8; line-height: 1.45; overflow-wrap: anywhere; }
+  .chief-archive .arc-result { font-size: 10.5px; color: #a8b5c6; line-height: 1.55; overflow-wrap: anywhere; }
+  .chief-archive .arc-link { align-self: flex-start; font-size: 10px; font-weight: 900; color: #bae6fd; text-decoration: none; padding: 4px 0; }
+  .chief-archive .arc-empty { padding: 10px; font-size: 10.5px; color: #94a3b8; }
   .chief-row {
     display: flex; align-items: flex-start; gap: 4px; padding: 3px 5px; border-radius: 6px;
     background: rgba(6, 11, 20, 0.72); border: 1px solid rgba(148, 163, 184, 0.2);
@@ -3046,14 +3069,19 @@
       <span hidden class="chief-cnt" id="chief-cnt"></span>
       <span class="chief-caret" id="chief-caret">▾</span>
     </button>
-    <p class="chief-short-note">대표님 결정이 필요한 안건만 올라갑니다. 총괄이 팩트체크·저작권·약관 검수를 마치고 전결한 건(발행·심사·연재 검토 등)은 여기에 뜨지 않고 총괄 종합 보고에서 확인합니다. 승인·반려·재심의 버튼을 누르면 바로 접수됩니다 — 원터치 키가 저장돼 있으면 중계로 #피클지시 실행 감시(5분 간격)가 확인하고, 없으면 GitHub 결재함(Issue) 접수창이 열립니다.</p>
+    <p class="chief-short-note">대표님 결정이 필요한 안건만 올라갑니다. 총괄이 팩트체크·저작권·약관 검수를 마치고 전결한 건(발행·심사·연재 검토 등)은 여기에 뜨지 않고 총괄 종합 보고에서 확인합니다. 결재가 끝난 보고는 <b>🗄️ 기록 보관함</b> 탭으로 옮겨 활성 목록을 비웁니다. 승인·반려·재심의 버튼을 누르면 바로 접수됩니다 — 원터치 키가 저장돼 있으면 중계로 #피클지시 실행 감시(5분 간격)가 확인하고, 없으면 GitHub 결재함(Issue) 접수창이 열립니다.</p>
     <details class="chief-details"><summary>절차·전체 보고 보기</summary>
     <p class="chief-route" id="chief-route"><b>결재선</b> 담당 작성 → 관리자(뮤즈)·부총괄(해병이) 검토 → 총괄(투덜이) 팩트체크·승인 → 대표님 결재(자금·최종)<br><b>버튼</b> 승인 · 반려 · 재심의<br><small>반려: 해당 안 진행 중단 · 삭제 범위 확정 전 원기록 보존<br>재심의: 담당 보완 → 관리자·부총괄 재검토 → 총괄 팩트 재검토 → 재상신(신호 유지)<br>승인 후: 실행 결과 별도 보고 · 🔴 자금·금융 인증은 대표님이 직접 실행</small></p>
     <div class="chief-tools"><button class="chief-report" id="chief-report" type="button" onclick="openReport('ceo_tudeori')">💼 총괄(투덜이) 종합 보고 · 담당 부서 보기</button> <button class="chief-report" id="chief-gh-setup" type="button" onclick="setupGhToken()">⚙️ 원클릭 자동전송 설정</button> <a class="chief-report" href="https://github.com/shgmlwhd03-commits/-/issues?q=label%3Adecision" target="_blank" rel="noopener">📥 접수된 결재함 보기 ›</a></div>
     <div hidden class="chief-say" id="chief-say">총괄 결재 항목을 모으는 중…</div>
     <p class="chief-receipt-note" id="chief-receipt-note"><strong>버튼은 이 브라우저에서 바로 접수됩니다.</strong> 접수된 결정은 중계(ntfy) 또는 GitHub 결재함(Issue)으로 총괄(투덜이)에게 전달되고, #피클지시 실행 감시(5분 간격)가 확인해 실행·회신합니다.<br>접수 뒤에는 화면에서 되돌릴 수 없습니다(철회·변경은 새 결정으로 다시 접수). 외부 발송·삭제·게시·지출처럼 실행이 필요한 건은 총괄이 안건과 범위를 다시 확인한 뒤 진행하고, 처리 완료 전에는 목록과 신호를 유지합니다. 🔴 자금·금융 인증은 대표님이 직접 실행합니다.</p>
     </details>
-    <div class="chief-body" id="chief-body"></div>
+    <div class="chief-tabs" role="tablist" aria-label="결재 창구 · 기록 보관함">
+      <button class="ctab on" id="ctab-live" type="button" role="tab" aria-selected="true" aria-controls="chief-body" onclick="setChiefTab('live')">🗂️ 승인 대기 <span class="ctab-n" id="ctab-live-n">0</span></button>
+      <button class="ctab" id="ctab-arch" type="button" role="tab" aria-selected="false" aria-controls="chief-archive" onclick="setChiefTab('arch')">🗄️ 기록 보관함 <span class="ctab-n" id="ctab-arch-n">0</span></button>
+    </div>
+    <div class="chief-body" id="chief-body" role="tabpanel"></div>
+    <div class="chief-body chief-archive" id="chief-archive" role="tabpanel" hidden></div>
   </section>
 
   <!-- 🚦 신호등 요약 배너: 🔵 파란불(일반 확인·승인) / 🔴 빨간불(자금·결제, 오너 직접) -->
@@ -3097,7 +3125,7 @@
     <div class="cshop-head">
       <span class="cshop-title">🛍️ 위탁판매실</span>
       <span class="cstat idle" id="cshop-state">IDLE</span>
-      <span class="cshop-sub">무재고 낱개 위탁 단일 트랙 · 등급가 순마진 15% 기준</span>
+      <span class="cshop-sub">무재고 낱개 위탁 단일 트랙 · 수수료 6.63% 반영 순마진 15% 기준</span>
       <span class="cshop-time" id="cshop-time" title="status.json 마지막 갱신">--:--</span>
     </div>
 
@@ -3121,7 +3149,7 @@
     </div>
 
     <div class="csec">
-      <div class="csec-h">🔄 아이템 검증 <em>등급가 실측 전 · 재상신 #24·#25 1안/2안 선택 대기</em></div>
+      <div class="csec-h">🔄 아이템 검증 <em>등급가 실측 완료 — 방풍비닐 3사이즈 + 2in1 스크레이퍼 · 심사 통과 즉시 등록</em></div>
       <div class="lineup" id="lineup"></div>
     </div>
 
@@ -3167,6 +3195,6 @@
 <script src="red-read.js"></script>
 <script src="decision-guard.js?v=16a015885d8b"></script>
 <div id="runtime-load-error" role="alert" hidden style="position:fixed;top:8px;left:8px;right:8px;z-index:10000;padding:12px;background:#7f1d1d;color:#fff;border:1px solid #fecaca;border-radius:8px;font-size:14px">사무실 기능을 불러오지 못했습니다. 새로고침 후에도 같으면 이 대화에 알려주세요. 이 화면에서 결정은 전송되지 않았습니다.</div>
-<script src="office-runtime.js?v=bd622a07de6c" onerror="document.getElementById('runtime-load-error').hidden=false"></script>
+<script src="office-runtime.js?v=arch-20261128" onerror="document.getElementById('runtime-load-error').hidden=false"></script>
 </body>
  </html>

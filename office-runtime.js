@@ -78,9 +78,9 @@ const rooms = [
     id: "commerce", floor: "f5", zone: "direct", tag: "수박이",
     title: "🛍️ 스마트스토어·위탁팀", worker: "👩‍💼", name: "서스토어 대리",
     say: "심사 결과 기다려요!", foot: "스마트스토어 심사중 · 무재고 낱개 위탁 단일 트랙",
-    task: "심사중 · 위탁 1안/2안 대기", taskState: "wait",
-    issue: "대표님 선택이 필요해요!",
-    guide: "스마트스토어는 사업자·본인인증·정산계좌·증빙서류 2/2건 제출을 마치고 정식 심사중입니다(3영업일 이내). 위탁은 무재고 낱개 단일 트랙으로 재상신(#24·#25)되어 1안(세 곳 등급가 비교)/2안(오너클랜 단독)/보류 선택을 기다립니다. 소량 사입은 11/24 지시로 제외했습니다.",
+    task: "심사 결과 대기 · 등록 준비 완료", taskState: "work",
+    issue: "심사 결과 메일 확인이 필요해요!",
+    guide: "스마트스토어는 사업자·본인인증·정산계좌·증빙서류 2/2건 제출을 마치고 정식 심사 결과를 기다리고 있습니다(3영업일 이내 · 메일·SMS 통보). 위탁은 무재고 낱개 단일 트랙 1안으로 확정(#27)되어 방풍비닐 커튼 3사이즈와 2in1 스크레이퍼의 등급가 실측을 마쳤고, 판매채널 수수료 6.63% 기준으로 장부를 통일했습니다. 심사 통과 메일이 오면 즉시 상품을 등록합니다. 소량 사입은 11/24 지시로 제외했습니다.",
     state: "working", ticker: "스마트스토어 사업자·본인인증·정산계좌·서류 2/2건 제출 완료 → 정식 심사중(3영업일) · 무재고 낱개 위탁 단일 트랙 재상신(#24·#25) 1안/2안/보류 선택 대기 · 재고·선결제 0원", updated: "12:20"
   },
   {
@@ -852,7 +852,7 @@ const SIGNAL_FALLBACK = {
   note: "🔵 파란불=대표님 결정 필요 · 🔴 빨간불=자금·결제(대표님 직접) · 🏭 큐맥스는 지시 시 가동",
   updated: "--:--",
   blue: [
-    { room: "commerce", title: "위탁판매 재상신(#24·#25) — 무재고 낱개 위탁 단일 트랙 · 1안/2안 택1(보류 포함)", detail: "1안 세 곳 등급가 비교 / 2안 오너클랜 단독 / 보류 중 대표님 선택 · 재고·선결제 0원" }
+    { room: "commerce", title: "위탁판매 — 스마트스토어 심사 결과 대기 · 등록 준비 완료", detail: "방풍비닐 3사이즈 + 2in1 스크레이퍼 실측 · 수수료 6.63% 기준 정비 · 심사 통과 즉시 등록" }
   ],
   red: []
 };
@@ -1041,11 +1041,25 @@ function chiefData(raw) {
   const merged = items.length ? items : fallback();
   merged.sort((a, b) => (CHIEF_LANE[a.lane] - CHIEF_LANE[b.lane]));
   merged.forEach(it => { it.id = it.lane + "|" + it.room + "|" + it.title; });
+  // 🗄️ 기록 보관함: 결재가 끝나 종결된 보고(승인·반려·재심의 결과 포함)를 옮겨 두는 자리.
+  const archive = (Array.isArray(src.archive) ? src.archive : [])
+    .filter(a => a && typeof a === "object" && typeof a.title === "string" && a.title.trim())
+    .map(a => ({
+      no: str(a.no, ""),
+      title: a.title.trim(),
+      decision: str(a.decision, "승인"),
+      state: a.state === "re" ? "re" : "ok",
+      result: str(a.result || a.detail, ""),
+      date: str(a.date || a.completed_at, ""),
+      room: (typeof a.room === "string" && rooms.some(r => r.id === a.room)) ? a.room : "",
+      url: (typeof a.url === "string" && /^https?:\/\//.test(a.url)) ? a.url : ""
+    }));
   return {
     title: str(src.title, "총괄 · 보고·결재 창구"),
     note: str(src.note, "관리자·부총괄 검토 → 총괄 팩트체크·승인 · 🔴 자금 최우선 → 🔵 승인 → ⏳ 대기"),
     updated: str(src.updated, ""),
-    items: merged
+    items: merged,
+    archive
   };
 }
 
@@ -1060,10 +1074,19 @@ function chiefOpenState() {
 
 function applyChiefState() {
   const open = chiefOpenState();
+  const tab = chiefTabState();
   const body = document.getElementById("chief-body");
+  const arch = document.getElementById("chief-archive");
   const head = document.getElementById("chief-head");
   const caret = document.getElementById("chief-caret");
-  if (body) body.hidden = !open;
+  const tabs = document.querySelector(".chief-tabs");
+  if (body) body.hidden = !open || tab !== "live";
+  if (arch) arch.hidden = !open || tab !== "arch";
+  if (tabs) tabs.hidden = !open;
+  const bLive = document.getElementById("ctab-live");
+  const bArch = document.getElementById("ctab-arch");
+  if (bLive) { bLive.classList.toggle("on", tab === "live"); bLive.setAttribute("aria-selected", tab === "live" ? "true" : "false"); }
+  if (bArch) { bArch.classList.toggle("on", tab === "arch"); bArch.setAttribute("aria-selected", tab === "arch" ? "true" : "false"); }
   if (head) head.setAttribute("aria-expanded", open ? "true" : "false");
   if (caret) caret.textContent = open ? "▾" : "▸";
 }
@@ -1519,7 +1542,51 @@ function renderChief(raw) {
         </details>
       </div>`;
     return chiefCanCompact(it, d) ? compactDecisionReport(it.title, d, row) : row;
-  }).join("") : `<div class="chief-row wait"><span class="cr-lane">✅</span><span class="cr-tx"><b>지금 대기 중인 건이 없습니다</b></span></div>`;
+  }).join("") : `<div class="chief-row wait"><span class="cr-lane">✅</span><span class="cr-tx"><b>지금 대기 중인 건이 없습니다</b><i>결재가 끝난 보고는 🗄️ 기록 보관함 탭에서 볼 수 있습니다</i></span></div>`;
+  const liveN = document.getElementById("ctab-live-n");
+  if (liveN) liveN.textContent = String(items.length);
+  renderChiefArchive();
+  applyChiefState();
+}
+
+/* 🗄️ 기록 보관함 탭 — 결재가 끝나 종결된 보고를 활성 대기 목록에서 빼서 여기에 기록으로 남긴다(대표님 지시 2026-11-28). */
+let CHIEF_TAB = null;
+
+function chiefTabState() {
+  if (CHIEF_TAB === null) {
+    let v = null;
+    try { v = localStorage.getItem("liveoffice_chief_tab"); } catch (e) {}
+    CHIEF_TAB = (v === "arch") ? "arch" : "live";
+  }
+  return CHIEF_TAB;
+}
+
+function setChiefTab(tab) {
+  CHIEF_TAB = tab === "arch" ? "arch" : "live";
+  try { localStorage.setItem("liveoffice_chief_tab", CHIEF_TAB); } catch (e) {}
+  applyChiefState();
+}
+
+function renderChiefArchive() {
+  const box = document.getElementById("chief-archive");
+  const list = (CHIEF && Array.isArray(CHIEF.archive)) ? CHIEF.archive : [];
+  const archN = document.getElementById("ctab-arch-n");
+  if (archN) archN.textContent = String(list.length);
+  if (!box) return;
+  box.innerHTML = list.length ? list.map(a => {
+    const r = rooms.find(x => x.id === a.room);
+    return `<div class="arc-row">
+      <div class="arc-top">
+        ${a.no ? `<span class="arc-no">${esc(a.no)}</span>` : ""}
+        <span class="arc-dec ${a.state === "re" ? "re" : "ok"}">${esc(a.decision)}</span>
+        ${r ? `<span class="arc-no">${esc(r.title)}</span>` : ""}
+        ${a.date ? `<span class="arc-date">${esc(a.date)}</span>` : ""}
+      </div>
+      <span class="arc-title">${esc(a.title)}</span>
+      ${a.result ? `<span class="arc-result">${esc(a.result)}</span>` : ""}
+      ${a.url ? `<a class="arc-link" href="${esc(a.url)}" target="_blank" rel="noopener">↗ 결재 기록 보기</a>` : ""}
+    </div>`;
+  }).join("") : `<div class="arc-empty">아직 보관된 결재 기록이 없습니다.</div>`;
   applyChiefState();
 }
 
@@ -1993,12 +2060,12 @@ const SHOP_STEPS = [
     ask: "[위탁판매 2단계 · 정식 심사 대기] 스마트스토어가 제출일 기준 3영업일 이내 심사에 들어갔습니다. ① 심사 중 추가 요청이 올 수 있는 항목과 대응 순서 ② 승인 전에 준비해 둘 첫 상품 상세페이지·고시 서식 ③ 승인 후 24시간 안에 해야 할 일과 판매 개시 체크리스트를 정리해 주세요. 심사 결과는 메일·SMS로 오니 확인 즉시 보고해 주세요."
   },
   {
-    key: "track", name: "③ 무재고 낱개 위탁 단일 트랙 결정", note: "1안 세 곳 등급가 비교 / 2안 오너클랜 단독 / 보류 중 선택 대기",
-    ask: "[위탁판매 3단계 · 무재고 낱개 위탁 단일 트랙] 재상신(#24·#25) 상태입니다. 소량 사입은 11/24 지시로 제외했고 재론하지 않습니다. ① 1안 — 오너클랜·도매꾹·도매매 사업자 등급가를 한 번에 비교해 후보 20종 중 순마진 15% 이상만 이번 주 등록(0건이면 카테고리 1회 확장 후 재판정, 그래도 0건이면 등록 없이 대기) ② 2안 — 오너클랜 단독으로 1~2종 먼저 검증해 통과하면 즉시 등록, 세 곳 비교는 다음 단계 ③ 보류 — 스토어 개설만 마무리하고 등급가 실측 중단. 재고·선결제는 0원이고, 실제 등급가 수치는 로그인 후 확인합니다."
+    key: "track", name: "③ 무재고 낱개 위탁 단일 트랙 확정", note: "1안 확정(대표님 승인 #27) · 판매채널 수수료 6.63% 기준 장부 통일",
+    ask: "[위탁판매 3단계 · 무재고 낱개 위탁 단일 트랙] 1안(오너클랜·도매꾹·도매매 사업자 등급가 비교, 순마진 15% 이상만 등록)으로 확정됐습니다(#27). 소량 사입은 11/24 지시로 제외했고 재론하지 않습니다. 판매채널 수수료는 Npay 3.63% + 판매수수료 3% = 6.63% 기준으로 장부를 통일해 주세요. 재고·선결제는 0원이고, 실제 등급가·마진 금액은 화면에 쓰지 않습니다."
   },
   {
     key: "grade", name: "④ 등급가 실측·후보 검증", note: "사업자 등급가(공급가+배송비) 기준 순마진 15% · 3사 검색량 1~3위",
-    ask: "[위탁판매 4단계 · 등급가 실측] 선택한 트랙으로 사업자 등급가를 실측해 주세요. ① 후보 20종의 등급가·배송비·반품 조건 표 ② 순마진 15% 통과 여부 계산(플랫폼 수수료·반품 비용은 미확정이라 보수 적용) ③ KC·안전확인 대상 여부와 상품정보제공고시 값 ④ 통과 0건일 때 확장할 카테고리 1개 제안. 계좌·사업자번호 같은 민감 정보는 화면에 쓰지 말아 주세요."
+    ask: "[위탁판매 4단계 · 등급가 실측] 방풍비닐 커튼 3사이즈(100×210·120×210 주력·150×230)와 2in1 스크레이퍼 실측에 이어, ① 120×210 주력 상품의 상세페이지·상품정보제공고시 값 ② KC·안전확인 대상 여부 ③ 반품·교환 고지 문구 ④ 심사 통과 즉시 등록할 순서와 담당을 정리해 주세요. 수수료는 6.63% 기준, 계좌·사업자번호 같은 민감 정보는 화면에 쓰지 말아 주세요."
   },
   {
     key: "launch", name: "⑤ 등록·첫 주문 CS", note: "상세페이지·고시·발주·송장·CS 체크리스트 · 판매 부진 품목 순차 교체",
